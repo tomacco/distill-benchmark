@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your vault, here's how to set up Flyway migrations for the new service (assuming this is the payment-processing extraction Sofia is leading):\n\n## Project structure\n\n```\npayment-processing/\n  src/main/resources/db/migration/\n    V1__create_payments_table.sql\n    V1.1__create_payment_status_enum.sql\n    V2__create_transactions_table.sql\n```\n\n## Flyway config\n\n`application.yml`:\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    schemas: payment\n    baseline-on-migrate: false\n    validate-on-migrate: true\n```\n\nUse a **dedicated schema** (`payment`) rather than sharing `public` \u2014 keeps service boundaries clean during the monolith extraction.\n\n## Migration conventions (matching your existing services)\n\n1. **Naming**: `V{version}__{description}.sql` \u2014 double underscore, snake_case description\n2. **One migration per change** \u2014 don't bundle unrelated DDL\n3. **Always use transactions** \u2014 Flyway wraps each migration in a tx on PostgreSQL by default\n4. **No `IF EXISTS` / `IF NOT EXISTS`** \u2014 Flyway tracks state, these hide bugs\n5. **Separate schema from data migrations** \u2014 e.g. `V3__add_currency_column.sql` then `V3.1__backfill_currency.sql`\n\n## Example first migration\n\n```sql\n-- V1__create_payments_table.sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\nCREATE TABLE payment.payments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id UUID NOT NULL,\n    amount NUMERIC(19,4) NOT NULL,\n    currency VARCHAR(3) NOT NULL DEFAULT 'USD',\n    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment.payments(account_id);\nCREATE INDEX idx_payments_status ON payment.payments(status);\n```\n\n## CI integration\n\nAdd to your GitHub Actions workflow (you already have the pattern from auth-service/account-service):\n\n```yaml\n- name: Run Flyway validate\n  run: ./gradlew flywayValidate\n```\n\n## Key things to avoid\n\n- Don't use a separate migration tool \u2014 stick with **Flyway** (team decision, already in auth-service and account-service)\n- Don't reach for DynamoDB or MongoDB \u2014 PostgreSQL 14 with a dedicated schema is the right call here\n- Consider PG extensions (e.g. `pg_partman`) if you anticipate high transaction volume, rather than adding new infra\n\nWant me to scaffold the actual migration files or the Flyway Gradle config?",
+  "timestamp": "2026-05-17T15:27:51Z",
+  "latency_ms": 26559,
+  "exit_code": 0,
+  "output_length_chars": 2424,
+  "output_length_tokens_approx": 606,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "R2"
+}

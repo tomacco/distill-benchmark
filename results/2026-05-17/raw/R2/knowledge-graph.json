@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack, use **Flyway** (same as your other services) with PostgreSQL 14. Here's the setup:\n\n### Project structure\n\n```\npayment-processing/\n\u2514\u2500\u2500 src/main/resources/\n    \u2514\u2500\u2500 db/migration/\n        \u251c\u2500\u2500 V1__create_payments_table.sql\n        \u251c\u2500\u2500 V2__add_payment_status_index.sql\n        \u2514\u2500\u2500 ...\n```\n\n### Flyway config (`application.yml`)\n\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false\n    validate-on-migrate: true\n  datasource:\n    url: jdbc:postgresql://${DB_HOST}:5432/payment_processing\n    username: ${DB_USER}\n    password: ${DB_PASSWORD}\n```\n\n### Migration conventions\n\n- **Naming**: `V{version}__{description}.sql` (double underscore). Use integer versions to avoid merge conflicts vs. timestamps.\n- **Each migration is immutable** \u2014 never edit a migration that's been applied. Add a new one instead.\n- **Always use transactions** \u2014 Flyway wraps each migration in a transaction by default with PG, so DDL is atomic.\n- **Additive changes first** \u2014 when deploying to EKS, the new migration runs before the old code is fully drained. Add columns as nullable or with defaults, backfill, then add constraints in a follow-up migration.\n\n### Example first migration\n\n```sql\n-- V1__create_payments_table.sql\nCREATE TABLE payments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id UUID NOT NULL,\n    amount NUMERIC(19, 4) NOT NULL,\n    currency VARCHAR(3) NOT NULL DEFAULT 'USD',\n    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payments (account_id);\nCREATE INDEX idx_payments_status ON payments (status) WHERE status IN ('PENDING', 'PROCESSING');\n```\n\n### Key things to coordinate with Sofia on\n\n- **Schema ownership** \u2014 payment-processing should own its own DB, not share with account-service. Keeps the extraction clean.\n- **Cross-service references** \u2014 use `account_id` as a logical reference, not a foreign key to another service's DB.\n- **CI gate** \u2014 run `flyway validate` in your pipeline so broken migrations fail the build before hitting staging.\n\nWant me to scaffold the actual migration files or the Flyway Gradle/Maven config?",
+  "timestamp": "2026-05-17T17:13:43Z",
+  "latency_ms": 19184,
+  "exit_code": 0,
+  "output_length_chars": 2276,
+  "output_length_tokens_approx": 569,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "R2"
+}

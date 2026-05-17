@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes \u2014 straightforward call. You already run Redis, the access pattern is pure key-value with TTL, and session tokens don't need transactional guarantees or complex queries. No reason to add infrastructure or overthink this.\n\nA few things to nail down:\n\n- **Key format**: `session:{userId}:{tokenId}` \u2014 lets you invalidate per-user or per-token.\n- **TTL**: Set on write (e.g. `SETEX` / `SET ... EX`), match your session expiry policy. Avoid relying on application-side cleanup.\n- **Eviction policy**: Confirm your Redis instance uses `volatile-ttl` or `volatile-lru` so session keys with TTLs get evicted first under memory pressure, not random production keys.\n- **Serialization**: Keep it minimal \u2014 token string + issued-at + user ID. Don't stash full user objects in the session value; fetch those separately.\n- **Invalidation**: On logout/password change, delete the key explicitly rather than waiting for TTL.\n\nNo need for Postgres here \u2014 it'd just be polling or wasteful writes for ephemeral data. Redis is the right tool.",
+  "timestamp": "2026-05-17T17:30:31Z",
+  "latency_ms": 12271,
+  "exit_code": 0,
+  "output_length_chars": 1027,
+  "output_length_tokens_approx": 256,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "B1"
+}

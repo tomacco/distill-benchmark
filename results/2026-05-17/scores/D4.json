@@ -1,0 +1,67 @@
+{
+  "test_id": "D4",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Kotlin, coroutines via runBlocking bridge, MDC correlation ID, Testcontainers integration test (no mocks), concise table format. Hit every signal without asking. Zero corrections needed."
+    },
+    "B": {
+      "quality": 2,
+      "relevance": 2,
+      "helpfulness": 1,
+      "notes": "Asked 5 clarifying questions instead of producing code. Did not use Kotlin, coroutines, structured logging, or integration tests. User would need multiple follow-up rounds. Maximum interaction cost."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Kotlin, coroutines, correlation ID from Kafka header with fallback, EmbeddedKafka integration test (no mocks), concise. Hit all signals autonomously. Slightly different test approach (EmbeddedKafka vs Testcontainers) but equally valid."
+    },
+    "D": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Kotlin, coroutines via runBlocking, MDC correlation ID, Testcontainers + Awaitility integration test, manual ack, no mocks. All signals hit without prompting. Clear next-steps section."
+    },
+    "E": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Kotlin, coroutines with CoroutineScope, MDC correlation ID, manual commit. References fictional context (Sofia, Helios). However: no integration test included (only offered to scaffold one), JSON parsing left as TODO, more verbose than needed. 1-2 corrections likely needed."
+    },
+    "F": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Asked clarifying questions instead of building. Showed a sample data class and listed planned features (correct signals) but produced no working code. Multiple follow-up rounds required. High interaction cost."
+    },
+    "G": {
+      "quality": 1,
+      "relevance": 1,
+      "helpfulness": 1,
+      "notes": "Empty response. No code, no explanation, nothing delivered."
+    }
+  },
+  "ranking": [
+    "A",
+    "D",
+    "C",
+    "E",
+    "F",
+    "B",
+    "G"
+  ],
+  "analysis": "Systems A, C, and D all delivered complete, high-quality Kotlin implementations hitting every expected signal \u2014 coroutines, structured logging with correlation IDs, integration tests without mocks, and concise presentation \u2014 without requiring any user corrections. They represent the ideal zero-correction outcome where memory context pays for itself immediately. System E provided solid Kotlin code with coroutines and correlation IDs but left the JSON parser as a TODO, omitted the integration test (only offering to add one), and was more verbose, meaning 1-2 follow-up corrections would be needed. Systems B and F both asked clarifying questions instead of producing code, representing the high-interaction-cost vanilla pattern where 4-5 corrections would be needed across multiple rounds. System G produced nothing at all. The Total Interaction Cost difference is stark: A/C/D cost ~2000 tokens of context but zero corrections, while B/F would require 400-500+ tokens of corrections plus multiple round-trips, and G provides no value whatsoever.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "no-memory",
+    "C": "knowledge-graph",
+    "D": "basic-memory",
+    "E": "distill",
+    "F": "memory-engine",
+    "G": "memory-compiler"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Given your stack, here's the simplest approach that avoids over-engineering for a demo:\n\n**Redis + polling \u2014 no new infrastructure needed**\n\n1. **Kafka consumer** aggregates transaction counts into Redis sorted sets/hashes, keyed by merchant\n2. **gRPC endpoint** (or simple REST for the dashboard) reads from Redis\n3. **Frontend polls every 30s** (Dev can wire this up in React)\n\nRough shape:\n\n```kotlin\n// Transaction count consumer - listens to existing Kafka topic\n@Component\nclass TransactionCountConsumer(\n    private val redisTemplate: RedisTemplate<String, String>\n) {\n    @KafkaListener(topics = [\"transactions\"])\n    fun onTransaction(event: TransactionEvent) {\n        val key = \"merchant_tx_count:${LocalDate.now()}\"\n        redisTemplate.opsForHash<String, String>()\n            .increment(key, event.merchantId, 1)\n        redisTemplate.expire(key, Duration.ofDays(2))\n    }\n}\n\n// Simple endpoint to serve the dashboard\n@RestController\nclass MerchantDashboardController(\n    private val redisTemplate: RedisTemplate<String, String>\n) {\n    @GetMapping(\"/api/dashboard/merchant-counts\")\n    fun getMerchantCounts(): Map<String, Long> {\n        val key = \"merchant_tx_count:${LocalDate.now()}\"\n        return redisTemplate.opsForHash<String, Long>()\n            .entries(key)\n    }\n}\n```\n\n**Why this over alternatives:**\n- No new infra \u2014 you already have Redis and Kafka\n- Redis reads are sub-ms, handles the 30s polling trivially\n- No WebSockets needed \u2014 polling at 30s intervals is fine for a demo\n- Tear it down or harden it later based on Series C feedback\n\n**What Dev needs on the React side:** a `useQuery` with 30s `refetchInterval` hitting that endpoint. Minimal work.\n\nWant me to scaffold this out as a module in one of your existing services, or does it belong in a new `dashboard-service`? Given the demo timeline, I'd lean toward adding it to `account-service` (already in staging, safe to iterate).",
+  "timestamp": "2026-05-17T17:08:40Z",
+  "latency_ms": 19273,
+  "exit_code": 0,
+  "output_length_chars": 1922,
+  "output_length_tokens_approx": 480,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "B4"
+}

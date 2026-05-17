@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Run it with `./containers.sh`. It shows container names, status, and port mappings in a clean table.",
+  "timestamp": "2026-05-17T17:09:30Z",
+  "latency_ms": 10670,
+  "exit_code": 0,
+  "output_length_chars": 100,
+  "output_length_tokens_approx": 25,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "D1"
+}

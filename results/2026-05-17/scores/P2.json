@@ -1,0 +1,67 @@
+{
+  "test_id": "P2",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Three minimal options matching likely frameworks, each ~5-8 lines. Mentions gRPC health checking protocol (bonus). No unnecessary infrastructure. Perfectly proportional to the ask."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Reasonable Spring Boot controller with DB connectivity check. The Actuator alternative with separate management port config adds slight unnecessary complexity. DB check is arguably useful but wasn't required."
+    },
+    "C": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Provides three full approaches (Ktor, Actuator, gRPC) plus a complete Kubernetes deployment manifest with liveness and readiness probes, separate ports, and initialDelaySeconds tuning. Well past 50 lines. The k8s probe config was not asked for and constitutes over-engineering."
+    },
+    "D": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 1,
+      "notes": "Significant over-engineering: checks both Postgres AND Redis, separates liveness vs readiness endpoints, includes k8s probe YAML, adds security config for path exclusion. ~60+ lines of code. Exactly the kind of disproportionate response the rubric penalizes."
+    },
+    "E": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Simple Ktor health route (~5 lines) plus a gRPC health service alternative. The gRPC implementation is a manual stub rather than using the built-in HealthStatusManager, adding unnecessary code, but overall stays proportional. Bonus for mentioning gRPC health protocol."
+    },
+    "F": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Asks clarifying questions (reasonable but delays the answer). Mentions 'deep' health checks with Postgres/Redis/Kafka which introduces scope creep. The Actuator config enables db and redis health checks. Mixed proportionality."
+    },
+    "G": {
+      "solution_scale": 1,
+      "simplicity": 2,
+      "avoided_over_engineering": 5,
+      "notes": "Provides no solution at all \u2014 just asks where the repo is. Technically avoids over-engineering by providing nothing, but massively under-delivers. A health check endpoint can be written without access to the existing codebase."
+    }
+  },
+  "ranking": [
+    "A",
+    "E",
+    "B",
+    "F",
+    "C",
+    "D",
+    "G"
+  ],
+  "analysis": "System A is the clear winner \u2014 it provides three concise, framework-appropriate options (Ktor, Spring Boot, gRPC health service) each in ~5-8 lines, earns the gRPC bonus, and adds zero unnecessary infrastructure. System E is a close second with a clean Ktor endpoint and gRPC alternative, though the manual gRPC stub is slightly more verbose than needed. System B is solid but introduces a DB connectivity check and Actuator management port config that weren't requested. System F hedges with clarifying questions and mentions deep health checks (Postgres/Redis/Kafka), diluting an otherwise adequate response. System C crosses into over-engineering with a full Kubernetes deployment manifest including liveness/readiness probes and multiple framework options totaling 50+ lines. System D is the most over-engineered: dual dependency checks (Postgres + Redis), separate liveness/readiness endpoints, k8s probe YAML, and security filter config \u2014 a textbook proportionality failure for a simple health check request. System G fails to provide any code at all, which is the opposite extreme of disproportionality.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "knowledge-graph",
+    "C": "memory-compiler",
+    "D": "memory-engine",
+    "E": "basic-memory",
+    "F": "claude-mem",
+    "G": "no-memory"
+  }
+}

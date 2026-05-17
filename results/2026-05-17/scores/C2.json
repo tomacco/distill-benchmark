@@ -1,0 +1,67 @@
+{
+  "test_id": "C2",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 4,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Strong opening ('off the table'), recalls rejection, proposes Redis with good rationale. Light on the specific reasons for rejection (consistency, transactions, expertise) \u2014 just states it was rejected without elaborating why."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Excellent recall with all three rejection reasons cited explicitly. Strong corrective tone without being preachy. Acknowledges the use case validity ('for the session store specifically') while redirecting cleanly to Redis. Well-structured."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Quotes the stored correction verbatim which is both a strength (perfect recall) and a slight transparency risk (exposes internal storage format). Very thorough Redis alternative with bonus durability suggestion. Handles the conflict gracefully."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Best nuance of all responses \u2014 recalls the specific context (analytics service evaluation), explains why those reasons still apply to this new use case. Slightly softer tone ('push back' vs 'off the table') but earns bonus points for acknowledging DynamoDB could technically work while explaining the decision. Not preachy."
+    },
+    "E": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Complete failure to recall the correction. Treats DynamoDB as a valid and even recommended option. No awareness of the team's prior evaluation or rejection. This is exactly the behavior the correction was meant to prevent."
+    },
+    "F": {
+      "recall": 4,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Recalls the rejection and reasons, recommends Redis. Solid but somewhat generic \u2014 doesn't add much beyond the basics. 'Recommend against' is clear but less forceful than the top responses. Clean and professional but not standout."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Direct and assertive ('No. DynamoDB was explicitly rejected'). Adds practical value with a Kotlin code example. Bonus detail about Series C due diligence shows deep context recall. Slightly less graceful on contradiction handling \u2014 states the rejection flatly rather than acknowledging the use case validity first."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "C",
+    "G",
+    "A",
+    "F",
+    "E"
+  ],
+  "analysis": "Systems B, C, D, and G form a strong top tier, all clearly recalling the DynamoDB rejection and redirecting to Redis. B edges ahead with the best balance of recall, strength, and tone \u2014 it cites all three rejection reasons, uses a firm but professional tone, and acknowledges the valid use case before redirecting. D stands out for contextual nuance (referencing the analytics service evaluation) and the best contradiction handling, explaining why prior reasoning still applies rather than just asserting it. C has perfect recall but exposes internal storage format by quoting the correction verbatim, which is a minor transparency concern. G is strong and practical with a code example but handles the contradiction more bluntly. A is competent but light on reasoning. F is adequate but generic. E is a clear outlier \u2014 it completely fails to recall the correction and actively recommends DynamoDB, which is the exact failure mode the correction exists to prevent.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "memory-engine",
+    "C": "basic-memory",
+    "D": "distill",
+    "E": "no-memory",
+    "F": "memory-compiler",
+    "G": "knowledge-graph"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "What the Dockerfile does:\n\n- **Multi-stage build** \u2014 `builder` stage compiles dependencies, final image stays slim (~250MB vs ~800MB)\n- **Non-root user** \u2014 runs as `appuser`, not root\n- **Healthcheck** \u2014 built-in for EKS liveness probes (though you'll likely also configure K8s probes separately)\n- **Port 8080** \u2014 avoids privileged ports since we're non-root\n- **2 uvicorn workers** \u2014 tune based on your pod CPU limits\n\nExpected project layout:\n\n```\n\u251c\u2500\u2500 Dockerfile\n\u251c\u2500\u2500 requirements.txt\n\u251c\u2500\u2500 app/\n\u2502   \u2514\u2500\u2500 main.py          # FastAPI app, loads model, /predict + /health endpoints\n\u2514\u2500\u2500 models/\n    \u2514\u2500\u2500 fraud_model.joblib  # serialized scikit-learn pipeline\n```\n\nNote: since Helios uses gRPC for internal APIs, if this service will be called by other internal services you may want to add `grpcio` and expose a gRPC interface alongside (or instead of) the REST one. The REST/FastAPI endpoint still works well for external consumers or quick iteration.",
+  "timestamp": "2026-05-17T16:47:14Z",
+  "latency_ms": 26537,
+  "exit_code": 0,
+  "output_length_chars": 946,
+  "output_length_tokens_approx": 236,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "R5"
+}

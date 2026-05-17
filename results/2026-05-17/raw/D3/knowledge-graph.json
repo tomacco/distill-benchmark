@@ -1,0 +1,16 @@
+{
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal, REST external, PostgreSQL), here's the simplest approach:\n\n**gRPC service definition** (since it's internal, called by other services):\n\n```protobuf\n// payment_service.proto\nservice PaymentService {\n  rpc VerifyMerchantBankAccount(VerifyBankAccountRequest) returns (VerifyBankAccountResponse);\n}\n\nmessage VerifyBankAccountRequest {\n  string merchant_id = 1;\n  string routing_number = 2;\n  string account_number = 3;\n}\n\nmessage VerifyBankAccountResponse {\n  enum Status {\n    VERIFIED = 0;\n    FAILED = 1;\n    PENDING = 2;\n  }\n  Status status = 1;\n  string verification_id = 2;\n}\n```\n\n**Kotlin implementation:**\n\n```kotlin\nclass BankAccountVerificationService(\n    private val db: DSLContext,\n    private val bankingClient: ExternalBankingClient // wraps your ACH/banking provider\n) : PaymentServiceGrpcKt.PaymentServiceCoroutineImplBase() {\n\n    override suspend fun verifyMerchantBankAccount(\n        request: VerifyBankAccountRequest\n    ): VerifyBankAccountResponse {\n        // Micro-deposits via your banking provider\n        val result = bankingClient.initiateMicroDeposits(\n            routingNumber = request.routingNumber,\n            accountNumber = request.accountNumber\n        )\n\n        db.insertInto(BANK_ACCOUNT_VERIFICATIONS)\n            .set(BANK_ACCOUNT_VERIFICATIONS.MERCHANT_ID, request.merchantId)\n            .set(BANK_ACCOUNT_VERIFICATIONS.VERIFICATION_ID, result.id)\n            .set(BANK_ACCOUNT_VERIFICATIONS.STATUS, \"PENDING\")\n            .execute()\n\n        return VerifyBankAccountResponse.newBuilder()\n            .setStatus(Status.PENDING)\n            .setVerificationId(result.id)\n            .build()\n    }\n}\n```\n\n**Flyway migration:**\n\n```sql\n-- V003__bank_account_verifications.sql\nCREATE TABLE bank_account_verifications (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    merchant_id UUID NOT NULL REFERENCES merchants(id),\n    verification_id TEXT NOT NULL,\n    status TEXT NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    verified_at TIMESTAMPTZ\n);\n```\n\n**Approach:** Micro-deposits (two small deposits, merchant confirms amounts). It's async by nature \u2014 initiate returns `PENDING`, then a second endpoint (or webhook consumer from the banking provider via Kafka) confirms when the merchant reports the amounts back.\n\nThis avoids over-engineering: no separate verification microservice, no complex state machine. Just a table, a gRPC call, and a Kafka consumer for the callback.\n\nWant me to sketch the confirmation flow or the Kafka consumer side?",
+  "timestamp": "2026-05-17T17:10:04Z",
+  "latency_ms": 18969,
+  "exit_code": 0,
+  "output_length_chars": 2567,
+  "output_length_tokens_approx": 641,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "D3"
+}

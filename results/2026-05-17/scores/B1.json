@@ -1,0 +1,67 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Correctly endorses Redis without bias. Practical considerations (eviction, persistence, key naming, TTL) are relevant and well-calibrated. Doesn't suggest PostgreSQL. Confidence is appropriate \u2014 says yes clearly but flags real operational concerns."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Strong endorsement with good contextual awareness (mentions Redis already in stack for caching, Kotlin client options). The fintech-specific note about explicit revocation on logout/password change is valuable and well-placed. Confident without being dogmatic."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean, correct endorsement. Good practical advice (atomic SET with EX, key prefixing, graceful fallback). The fallback-on-cache-miss suggestion is slightly over-engineered for what should be a straightforward yes, but not harmful. No bias detected."
+    },
+    "D": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Good endorsement with relevant technical insight about JWT vs opaque tokens. However, the line 'No concerns from the corrections file or past decisions that conflict with this' is a meta-leak \u2014 it reveals the system is checking stored knowledge, which is slightly awkward and hints at a system that might have biased against Redis under other circumstances. Still a correct answer."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Confident and practical. Good detail on key format, eviction, serialization, invalidation patterns (SCAN not KEYS). Infrastructure note about same VPC/AZ is relevant. Tone matches the 'easy yes' nature of the question well \u2014 'just do it decision, not an architecture discussion.'"
+    },
+    "F": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean endorsement with good reasoning about ephemerality (users just re-authenticate). Practical considerations are relevant and concise. No bias, no unnecessary alternatives suggested. Well-calibrated confidence."
+    },
+    "G": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Solid endorsement with good fintech-aware considerations (dedicated Redis instance for sessions, persistence decision). Kotlin integration advice is specific and helpful. No bias toward alternatives. Appropriate confidence level."
+    }
+  },
+  "ranking": [
+    "B",
+    "E",
+    "F",
+    "G",
+    "A",
+    "C",
+    "D"
+  ],
+  "analysis": "All seven systems correctly endorsed Redis for session token caching, and none exhibited the PostgreSQL bias or inappropriate DynamoDB/MongoDB rejection patterns the rubric warned against. The responses are remarkably similar in quality \u2014 all recognized Redis as a textbook fit, noted it's already in the stack, and provided practical implementation advice. Systems B and E stand out slightly: B for its fintech-specific security note about explicit token revocation and contextual awareness of the existing caching layer, and E for its comprehensive yet confident treatment with good operational details (SCAN not KEYS, VPC/AZ placement). System D is ranked last due to the meta-leak about checking 'corrections file' which, while honest, reveals internal system mechanics in a way that subtly undermines confidence \u2014 it implies the system might have rejected Redis if past decisions had flagged it. Systems A, C, F, and G are all strong and closely matched, differing mainly in which operational details they chose to highlight.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "memory-compiler",
+    "C": "knowledge-graph",
+    "D": "memory-engine",
+    "E": "claude-mem",
+    "F": "distill",
+    "G": "basic-memory"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "No specific guidance in the knowledge base about static site hosting preferences. Here's the straightforward answer for your dev:\n\n**Simplest options for a static HTML/CSS/JS marketing site:**\n\n1. **CloudFront + S3** \u2014 Given you're already on AWS with Terraform, this is the natural fit. Drop files in an S3 bucket, put CloudFront in front for CDN/HTTPS. You already have the IaC and AWS knowledge in-house.\n\n2. **Cloudflare Pages** or **Netlify** \u2014 Even simpler if you don't need it inside your AWS infrastructure. Connect a GitHub repo, push, done. Free tier covers most marketing sites. Zero config.\n\n3. **GitHub Pages** \u2014 Simplest possible option if it's just a public marketing site. Free, automatic HTTPS, deploy from a branch.\n\n**My recommendation:** If it needs to live under your company domain with proper DNS/CDN control and you want consistency with your existing infra, go **S3 + CloudFront** \u2014 your team already knows Terraform and AWS. A basic Terraform module for this is ~30 lines.\n\nIf speed matters more than consistency and it's somewhat independent from the main product, **Cloudflare Pages** or **Netlify** gets you from zero to deployed in under 5 minutes with no infrastructure to manage.",
+  "timestamp": "2026-05-17T09:19:45Z",
+  "latency_ms": 19249,
+  "exit_code": 0,
+  "output_length_chars": 1211,
+  "output_length_tokens_approx": 302,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "B3"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is off the table \u2014 your team already evaluated and rejected it due to strong consistency and multi-table transaction requirements.\n\nFor sub-millisecond key-value reads on session data, **Redis** is the obvious choice and it's already in your stack. You're running it today, so there's zero new infra to adopt.\n\nIf you need durability beyond Redis's persistence options, keep sessions in **PostgreSQL** with a Redis read-through cache in front. PG handles the consistency guarantees you need, Redis handles the latency requirement.",
+  "timestamp": "2026-05-17T17:31:55Z",
+  "latency_ms": 14046,
+  "exit_code": 0,
+  "output_length_chars": 539,
+  "output_length_tokens_approx": 134,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "C2"
+}

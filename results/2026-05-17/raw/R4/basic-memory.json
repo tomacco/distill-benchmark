@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Based on your architecture and past decisions, here are some strong options for an analytics service with fast reads on large datasets:\n\n**Top recommendation: ClickHouse**\n- Column-oriented, purpose-built for analytical queries on large datasets\n- Extremely fast aggregations and scans \u2014 often 100x faster than PostgreSQL for analytics workloads\n- Plays well with Kafka (you can ingest events directly via the Kafka engine)\n- Runs on AWS (self-hosted on EKS or via ClickHouse Cloud)\n\n**Also worth considering:**\n- **Apache Druid** \u2014 great for real-time analytics with Kafka ingestion; slightly more operational complexity than ClickHouse\n- **TimescaleDB** \u2014 if the data is time-series heavy, this is a PostgreSQL extension, so your team's existing PG expertise transfers directly\n\n**Why not the usual suspects:**\n- DynamoDB and MongoDB are off the table per your past decisions (consistency requirements, relational fit, team expertise)\n- Raw PostgreSQL would work for smaller volumes but will struggle with analytical query patterns at scale\n\nGiven your Kafka-based event streaming and AWS/EKS infrastructure, **ClickHouse** is probably the best fit \u2014 it integrates naturally with Kafka for ingestion, your team can deploy it on EKS, and it's the strongest performer for read-heavy analytical workloads.\n\nWant me to look into a specific option in more detail, or sketch out how it would fit into your existing architecture?",
+  "timestamp": "2026-05-17T15:28:29Z",
+  "latency_ms": 18501,
+  "exit_code": 0,
+  "output_length_chars": 1424,
+  "output_length_tokens_approx": 356,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "R4"
+}

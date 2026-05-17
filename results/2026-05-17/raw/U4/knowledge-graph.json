@@ -1,0 +1,16 @@
+{
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "```fish\nfind . -name \"*.kt\" -mtime -7\n```\n\nThis finds all `.kt` files modified within the last 7 days from the current directory recursively.",
+  "timestamp": "2026-05-17T17:15:44Z",
+  "latency_ms": 5248,
+  "exit_code": 0,
+  "output_length_chars": 141,
+  "output_length_tokens_approx": 35,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "U4"
+}

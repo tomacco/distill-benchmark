@@ -1,0 +1,67 @@
+{
+  "test_id": "D2",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Recommends PostgreSQL, no mention of DynamoDB/MongoDB, references team expertise, mentions extensions (TimescaleDB). Well-structured with scaling path."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Strong PostgreSQL recommendation, explicitly mentions pg_cron, no DynamoDB/MongoDB suggestions. Concise and opinionated. References Series C/B context showing deep project awareness."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "PostgreSQL recommendation with good technical depth. Mentions pg_cron, Citus, TimescaleDB as PG-native options. No rejected databases mentioned. Clean and practical."
+    },
+    "D": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Recommends PostgreSQL correctly but explicitly mentions DynamoDB and MongoDB, explaining why they were rejected. Admits no stored memory. User would NOT need to re-correct, but the mention shows the system didn't internalize the correction \u2014 it relied on prompt context."
+    },
+    "E": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Recommends PostgreSQL, references that DynamoDB/MongoDB were 'previously rejected' \u2014 shows awareness but brings them up unprompted which is borderline. Mentions TimescaleDB extension. Solid but slightly weaker on correction durability."
+    },
+    "F": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Strong PostgreSQL recommendation, mentions pg_cron and Flyway alignment. No mention of rejected databases. References Helios fintech context and team expertise. Well-structured scaling path."
+    },
+    "G": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "PostgreSQL recommendation with good alignment to stack. Mentions materialized views, read replicas, partitioning. No DynamoDB/MongoDB. References Helios context and existing tooling."
+    }
+  },
+  "ranking": [
+    "B",
+    "F",
+    "A",
+    "C",
+    "G",
+    "E",
+    "D"
+  ],
+  "analysis": "All systems correctly recommend PostgreSQL, which is the baseline expectation. Systems B and F stand out: B is notably concise, opinionated, and mentions pg_cron explicitly while showing deep project context (Series B/C references) without mentioning rejected alternatives. F similarly avoids rejected databases and ties recommendations tightly to existing tooling (Flyway, pg_cron). A, C, and G are all strong \u2014 they recommend PostgreSQL with good technical depth and no mention of rejected databases. E is slightly weaker because it explicitly references the DynamoDB/MongoDB rejections, which while showing awareness, means the system is surfacing rejected options rather than simply not considering them. D is weakest on the correction durability metric: it admits having no stored memory, explicitly discusses DynamoDB and MongoDB (even if to reject them), and would require the user to see those names again \u2014 exactly the kind of correction token waste this test measures.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "claude-mem",
+    "C": "knowledge-graph",
+    "D": "no-memory",
+    "E": "memory-engine",
+    "F": "basic-memory",
+    "G": "distill"
+  }
+}

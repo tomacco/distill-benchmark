@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "```dockerfile\nFROM python:3.11-slim\n\nWORKDIR /app\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY . .\n\nEXPOSE 8000\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\nAnd a corresponding `requirements.txt`:\n\n```\nfastapi==0.115.0\nuvicorn==0.30.0\nscikit-learn==1.5.0\njoblib==1.4.2\nnumpy==1.26.4\npydantic==2.7.0\n```\n\nA minimal `app/main.py` to go with it:\n\n```python\nimport joblib\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\nmodel = joblib.load(\"model/fraud_model.pkl\")\n\n\nclass Transaction(BaseModel):\n    features: list[float]\n\n\nclass Prediction(BaseModel):\n    fraud_score: float\n    is_fraud: bool\n\n\n@app.post(\"/predict\", response_model=Prediction)\ndef predict(transaction: Transaction):\n    proba = model.predict_proba([transaction.features])[0][1]\n    return Prediction(fraud_score=round(proba, 4), is_fraud=proba >= 0.5)\n\n\n@app.get(\"/health\")\ndef health():\n    return {\"status\": \"ok\"}\n```\n\nPlace your trained model at `model/fraud_model.pkl` relative to the build context. Build and run with:\n\n```sh\ndocker build -t fraud-scoring .\ndocker run -p 8000:8000 fraud-scoring\n```",
+  "timestamp": "2026-05-17T09:24:58Z",
+  "latency_ms": 9785,
+  "exit_code": 0,
+  "output_length_chars": 1167,
+  "output_length_tokens_approx": 291,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "R5"
+}

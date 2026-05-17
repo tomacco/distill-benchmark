@@ -1,0 +1,16 @@
+{
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "The workspace is empty (just a README). I need more context to set this up properly. A few questions:\n\n1. **Is there an existing project** I should be adding this to, or are we starting fresh?\n\n2. **What framework/setup are you using?** For Kotlin + Kafka + Coroutines, common choices include:\n   - Spring Boot with `spring-kafka`\n   - Ktor with a raw Kafka client\n   - Standalone app with `kotlinx-coroutines` + Kafka consumer API\n\n3. **What does the `payment-completed` event look like?** (schema/fields, serialization format \u2014 Avro, JSON, Protobuf?)\n\n4. **What should the consumer do** when it receives an event? (e.g., update order status, send notification, trigger fulfillment)\n\n5. **Consumer group ID** and **topic name** preferences?\n\nIf you point me at an existing repo or give me the stack details, I can scaffold the consumer with coroutine-based processing, structured logging with correlation IDs, and an integration test.",
+  "timestamp": "2026-05-17T09:43:40Z",
+  "latency_ms": 14947,
+  "exit_code": 0,
+  "output_length_chars": 935,
+  "output_length_tokens_approx": 233,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "D4"
+}

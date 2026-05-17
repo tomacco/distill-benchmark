@@ -1,0 +1,67 @@
+{
+  "test_id": "D3",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Perfectly integrates all context: Kotlin, gRPC internal, PostgreSQL, Flyway, coroutines. Proportional solution - no over-engineering. Concise with clear next steps. Would require 0 corrections from user."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Excellent integration of all knowledge pieces. Explicitly references team decisions (coroutines over RxJava, gRPC migration decision). Mentions Kafka for events, REST gateway for external. Proportional and concise. 0 corrections needed."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Strong integration with security awareness (hashing account numbers), proper proto3 conventions (UNSPECIFIED enum). References team member Sofia by name suggesting deep context. gRPC internal, Kotlin, Flyway all present. Slightly more opinionated but proportional. 0 corrections needed."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Correctly uses Kotlin, gRPC to account-service, REST external, coroutines, PostgreSQL. Shows the confirmation step (micro-deposits) rather than initiation, which is a slightly odd framing but still valid. Proportional. 0 corrections needed but slightly less natural integration."
+    },
+    "E": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Mentions Kotlin, gRPC to account-service, REST external, coroutines. But doesn't provide full implementation - asks 'Want me to scaffold?' which is less helpful. No Flyway migration shown. Less concrete than others. References the right stack but delivers less. 0 corrections needed but incomplete delivery."
+    },
+    "F": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Kotlin, REST external, gRPC for internal callers, coroutines, PostgreSQL with Flyway. Good two-step flow. Slightly confused about direction of gRPC - says other services call payment-service over gRPC rather than payment-service calling account-service. Still proportional and functional."
+    },
+    "G": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Correctly integrates Kotlin, gRPC to account-service, REST external, coroutines, Kafka events. Mentions encryption and attempt capping. References monolith extraction context. Slightly verbose for a 'concise' preference but still reasonable. 0 corrections needed."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "A",
+    "D",
+    "G",
+    "F",
+    "E"
+  ],
+  "analysis": "All systems demonstrate awareness of the Kotlin/gRPC/REST/PostgreSQL stack, meaning all would save the user significant correction effort versus vanilla. Systems A, B, and C stand out for the most natural integration of contextual knowledge with proportional, complete implementations. B explicitly references team architectural decisions (coroutines over RxJava, gRPC migration), C adds security-conscious details and references a team member, and A is cleanly proportional. D, F, and G are solid but slightly less polished in their integration or framing. E is the weakest, providing an outline rather than a complete implementation and ending with an offer to scaffold rather than just delivering the code. The key differentiator between top and middle tier is how naturally the knowledge pieces are woven in versus merely mentioned, and whether the response delivers a complete, ready-to-use solution.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "basic-memory",
+    "C": "claude-mem",
+    "D": "memory-engine",
+    "E": "no-memory",
+    "F": "memory-compiler",
+    "G": "distill"
+  }
+}

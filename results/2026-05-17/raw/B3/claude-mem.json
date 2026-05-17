@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "Given your stack (AWS already), the simplest options:\n\n1. **S3 + CloudFront** \u2014 you're already on AWS, so this is the path of least resistance. No new vendor, Dev can `aws s3 sync` the build folder, CloudFront handles HTTPS/caching. Done in 15 minutes.\n\n2. **Cloudflare Pages** \u2014 if he wants zero AWS config overhead. Git push to deploy, free tier is generous, automatic HTTPS. Good DX for a frontend dev.\n\nMy recommendation: **Cloudflare Pages** for Dev specifically. He's junior frontend, 6 months in \u2014 the git-push workflow and instant previews per PR will be much friendlier than wrangling S3 bucket policies and CloudFront invalidations. No IAM headaches, no infra tickets to you or Sofia.\n\nIf it ever needs to live under your main domain with tight AWS integration (WAF rules, same CDN as the app), migrate to S3+CloudFront later \u2014 it's static files, so the move is trivial.",
+  "timestamp": "2026-05-17T17:31:05Z",
+  "latency_ms": 13337,
+  "exit_code": 0,
+  "output_length_chars": 880,
+  "output_length_tokens_approx": 220,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "B3"
+}

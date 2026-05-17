@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For fast reads on large analytical datasets, here are strong options that fit your stack:\n\n**Top recommendation: ClickHouse**\n- Purpose-built for analytical queries (OLAP) on large datasets\n- Columnar storage gives excellent read performance for aggregations\n- Handles billions of rows with sub-second query times\n- You can ingest from Kafka directly (fits your existing infra)\n- Runs well on AWS/EKS\n\n**Alternative: TimescaleDB**\n- Extension on top of PostgreSQL \u2014 your team already has PG expertise\n- Great for time-series analytics (common in fintech: transaction trends, usage metrics)\n- Lower operational overhead since it's familiar tooling\n- Supports standard SQL, works with Flyway\n\n**Also worth considering: Apache Druid**\n- Real-time analytics at scale with native Kafka ingestion\n- Better if you need sub-second queries on streaming data\n- More operational complexity than the above two\n\nGiven your team's PostgreSQL expertise and existing Kafka infrastructure, I'd lean toward **ClickHouse** if you need maximum read throughput on large datasets, or **TimescaleDB** if you'd rather minimize operational overhead and stay in the PG ecosystem.\n\nWant me to dig into any of these further, or sketch out how one would integrate with your Kafka pipeline?",
+  "timestamp": "2026-05-17T17:24:19Z",
+  "latency_ms": 18696,
+  "exit_code": 0,
+  "output_length_chars": 1260,
+  "output_length_tokens_approx": 315,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "R4"
+}

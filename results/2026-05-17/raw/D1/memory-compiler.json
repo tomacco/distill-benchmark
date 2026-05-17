@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "```bash\n#!/usr/bin/env bash\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nOr as a one-liner you can run directly:\n\n```\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nWant me to save this to a file?",
+  "timestamp": "2026-05-17T15:35:06Z",
+  "latency_ms": 7019,
+  "exit_code": 0,
+  "output_length_chars": 240,
+  "output_length_tokens_approx": 60,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "D1"
+}

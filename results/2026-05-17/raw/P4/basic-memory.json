@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin backend, PostgreSQL, Redis) and preference for minimal dependencies / no over-engineering, the simplest approach is a **PostgreSQL-backed feature flag** with Redis caching. No new infra, no third-party service.\n\n### Schema (Flyway migration)\n\n```sql\n-- V__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    key         TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    rollout_pct INT NOT NULL DEFAULT 0 CHECK (rollout_pct BETWEEN 0 AND 100),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (key, enabled, rollout_pct)\nVALUES ('new_payment_flow', FALSE, 0);\n```\n\n### Kotlin service\n\n```kotlin\n@Service\nclass FeatureFlags(\n    private val jdbi: Jdbi,\n    private val redis: RedisTemplate<String, String>\n) {\n    fun isEnabled(key: String, userId: String? = null): Boolean {\n        val cached = redis.opsForValue().get(\"ff:$key\")\n        val flag = if (cached != null) {\n            deserialize(cached)\n        } else {\n            val f = jdbi.withHandle<Flag, Exception> {\n                it.createQuery(\"SELECT enabled, rollout_pct FROM feature_flags WHERE key = :key\")\n                    .bind(\"key\", key)\n                    .mapTo<Flag>()\n                    .firstOrNull()\n            } ?: return false\n            redis.opsForValue().set(\"ff:$key\", serialize(f), Duration.ofMinutes(1))\n            f\n        }\n        if (!flag.enabled) return false\n        if (flag.rolloutPct == 100) return true\n        // Deterministic bucketing by userId\n        return userId != null && (userId.hashCode().absoluteValue % 100) < flag.rolloutPct\n    }\n}\n\ndata class Flag(val enabled: Boolean, val rolloutPct: Int)\n```\n\n### Usage in payment-processing\n\n```kotlin\nif (featureFlags.isEnabled(\"new_payment_flow\", userId = merchant.id)) {\n    newPaymentFlow.process(payment)\n} else {\n    legacyPaymentFlow.process(payment)\n}\n```\n\n### Dark-launch rollout\n\n```sql\n-- Enable for 0% (flag exists but off)\nUPDATE feature_flags SET enabled = TRUE, rollout_pct = 0 WHERE key = 'new_payment_flow';\n-- Roll to 5%, then 25%, then 100%\nUPDATE feature_flags SET rollout_pct = 5 WHERE key = 'new_payment_flow';\n```\n\nRedis TTL is 1 minute, so changes propagate quickly without redeployments. The deterministic bucketing ensures a given merchant always sees the same variant.\n\nWant me to scaffold the actual migration and service files in the repo?",
+  "timestamp": "2026-05-17T15:26:56Z",
+  "latency_ms": 21612,
+  "exit_code": 0,
+  "output_length_chars": 2406,
+  "output_length_tokens_approx": 601,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "P4"
+}

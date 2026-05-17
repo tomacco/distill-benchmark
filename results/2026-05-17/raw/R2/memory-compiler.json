@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on the project's established patterns, here's how to set up database migrations for the new service:\n\n## Database Migrations with Flyway\n\nThe team has already standardized on **Flyway** (chosen over Liquibase by team vote), targeting **PostgreSQL 14**.\n\n### 1. Add the Flyway dependency\n\nIn your `build.gradle.kts`:\n\n```kotlin\ndependencies {\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.flywaydb:flyway-database-postgresql\")\n}\n```\n\n### 2. Configure Flyway\n\nIn `application.yml`:\n\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    schemas: public\n    baseline-on-migrate: true\n```\n\n### 3. Migration file structure\n\nPlace SQL files under `src/main/resources/db/migration/` using Flyway's naming convention:\n\n```\ndb/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n  V3__seed_reference_data.sql\n```\n\n### 4. Key guidelines for this codebase\n\n- **PostgreSQL only** \u2014 do not use DynamoDB or MongoDB (evaluated and rejected; the team needs strong consistency and multi-table transactions).\n- **Each microservice owns its own database/schema** \u2014 this aligns with the monolith-to-microservices extraction pattern already used by auth-service and account-service.\n- Use **transactions** in migrations where possible (Flyway wraps each migration in a transaction by default on PostgreSQL).\n- Include **rollback scripts** (`U1__undo_create_initial_schema.sql`) if your team uses Flyway Teams, or document manual rollback steps.\n\n### 5. CI/CD integration\n\nSince the pipeline is **GitHub Actions \u2192 ECR \u2192 ArgoCD**, you'll want Flyway to run automatically on app startup (the Spring Boot default) so migrations apply when the new pod deploys to EKS.\n\nWould you like help scaffolding the initial migration SQL for a specific service (e.g., payment-processing)?",
+  "timestamp": "2026-05-17T16:46:06Z",
+  "latency_ms": 17313,
+  "exit_code": 0,
+  "output_length_chars": 1827,
+  "output_length_tokens_approx": 456,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "R2"
+}

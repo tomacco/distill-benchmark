@@ -1,0 +1,67 @@
+{
+  "test_id": "R2",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Recommends Flyway with Kotlin/Gradle setup and PostgreSQL context. Doesn't explicitly mention it was chosen over Liquibase. Mentions Sofia and cross-service coordination naturally. Practical and actionable."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Explicitly mentions Flyway as matching existing services, PostgreSQL 14, EKS deployment context. Practical guidance with deployment-aware migration strategy. Feels organic and contextual without over-dumping."
+    },
+    "C": {
+      "relevance": 1,
+      "precision": 5,
+      "naturalness": 3,
+      "notes": "No stored knowledge surfaced at all. Asks clarifying questions and suggests multiple tools including Liquibase as equal alternatives. Fails the core retrieval task entirely."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Explicitly names Flyway + PostgreSQL 14 + Kotlin stack. Detailed Gradle config, schema-per-service pattern, CI integration with EKS context. Mentions 'Series C architecture story' which feels slightly forced but mostly natural."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Explicitly states team standardized on Flyway over Liquibase. References existing services (auth-service, account-service). Kotlin/PostgreSQL/GitHub Actions/ArgoCD context. Very natural framing as team knowledge."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Mentions Flyway, PostgreSQL 14, team decision, existing services. References 'vault' which breaks immersion slightly. Mentions DynamoDB/MongoDB avoidance which adds noise. Good practical guidance but slightly over-dumps stored context."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Explicitly mentions Flyway chosen over Liquibase by team vote, PostgreSQL 14. But also mentions DynamoDB/MongoDB rejection and includes deployment pipeline details that weren't asked for. Slightly over-shares stored knowledge."
+    }
+  },
+  "ranking": [
+    "E",
+    "B",
+    "D",
+    "G",
+    "F",
+    "A",
+    "C"
+  ],
+  "analysis": "System E best balances all criteria: it explicitly surfaces the Flyway-over-Liquibase decision, contextualizes for Kotlin/PostgreSQL, references existing services as patterns to follow, and does so naturally without over-dumping. System B is nearly as strong with excellent naturalness and practical deployment-aware guidance, though it doesn't explicitly mention the Liquibase comparison. System D provides comprehensive technical detail with good context but the 'Series C architecture story' reference feels slightly forced. Systems G and F both surface the right knowledge but inject slightly too much stored context (DynamoDB/MongoDB rejection, pipeline details) that wasn't directly relevant to the migration setup question. System A is solid technically but doesn't explicitly mention the team decision or PostgreSQL 14. System C completely fails the retrieval task, surfacing no stored knowledge and suggesting alternatives (including Liquibase) that contradict team decisions.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "claude-mem",
+    "E": "distill",
+    "F": "basic-memory",
+    "G": "memory-compiler"
+  }
+}

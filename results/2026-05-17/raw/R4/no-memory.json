@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Here are strong options depending on your specific needs:\n\n**Column-oriented databases (best for analytical queries on large datasets):**\n- **ClickHouse** \u2014 extremely fast for aggregations, open-source, great compression. Popular choice for analytics/OLAP workloads.\n- **Apache Druid** \u2014 real-time analytics, good for time-series + slice-and-dice queries.\n- **DuckDB** \u2014 embedded (no server), excellent for single-node analytical workloads. Great if you don't need distributed queries.\n\n**Cloud-managed options:**\n- **BigQuery** (GCP) \u2014 serverless, scales massively, pay-per-query.\n- **Redshift** (AWS) \u2014 columnar, integrates well with AWS ecosystem.\n- **Snowflake** \u2014 separates compute/storage, good multi-cloud story.\n\n**Time-series focused:**\n- **TimescaleDB** \u2014 if your analytics are primarily time-series, this adds fast analytical queries on top of PostgreSQL.\n\n**Key factors to narrow it down:**\n1. **Data volume** \u2014 GBs vs TBs vs PBs changes the answer significantly\n2. **Query latency requirements** \u2014 sub-second dashboards vs. batch reports\n3. **Real-time ingestion** \u2014 streaming vs. batch ETL\n4. **Operational complexity** \u2014 self-hosted vs. managed\n5. **Concurrency** \u2014 few analysts vs. customer-facing with thousands of concurrent queries\n\nIf you share more about your scale, latency needs, and infrastructure preferences, I can give a more specific recommendation.",
+  "timestamp": "2026-05-17T09:17:02Z",
+  "latency_ms": 12196,
+  "exit_code": 0,
+  "output_length_chars": 1377,
+  "output_length_tokens_approx": 344,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "R4"
+}

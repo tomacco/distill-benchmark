@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack (Flyway + PostgreSQL 14 + Kotlin), here's a clean setup for the payment-processing service:\n\n## Project structure\n\n```\npayment-processing/\n\u2514\u2500\u2500 src/main/resources/\n    \u2514\u2500\u2500 db/migration/\n        \u251c\u2500\u2500 V1__create_schema.sql\n        \u251c\u2500\u2500 V2__create_payments_table.sql\n        \u2514\u2500\u2500 ...\n```\n\n## Flyway config\n\n```kotlin\n// build.gradle.kts\nplugins {\n    id(\"org.flywaydb.flyway\") version \"9.22.3\"\n}\n\nflyway {\n    url = System.getenv(\"DB_URL\") ?: \"jdbc:postgresql://localhost:5432/payment_processing\"\n    user = System.getenv(\"DB_USER\") ?: \"postgres\"\n    schemas = arrayOf(\"payment\")\n    locations = arrayOf(\"classpath:db/migration\")\n    cleanDisabled = true // safety net for prod\n}\n```\n\n## Baseline migration\n\n```sql\n-- V1__create_schema.sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\n-- V2__create_payments_table.sql\nCREATE TABLE payment.payments (\n    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id    UUID NOT NULL,\n    amount        NUMERIC(19,4) NOT NULL,\n    currency      VARCHAR(3) NOT NULL DEFAULT 'USD',\n    status        VARCHAR(32) NOT NULL DEFAULT 'PENDING',\n    correlation_id VARCHAR(64) NOT NULL,\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment.payments(account_id);\nCREATE INDEX idx_payments_correlation_id ON payment.payments(correlation_id);\n```\n\n## Key conventions to match your other services\n\n1. **Separate schema per service** (`payment.*`) \u2014 clean boundary, no cross-service joins\n2. **Versioned migrations only** (`V__`), no repeatable (`R__`) unless truly idempotent reference data\n3. **One concern per migration** \u2014 easier rollback planning\n4. **`TIMESTAMPTZ` everywhere** \u2014 not `TIMESTAMP`\n5. **`correlation_id` on all root entities** \u2014 matches your structured logging setup\n6. **`cleanDisabled = true`** in all non-local envs\n\n## EKS/CI integration\n\nRun migrations as an init container before the service starts:\n\n```yaml\ninitContainers:\n  - name: flyway-migrate\n    image: flyway/flyway:9.22.3\n    args: [\"migrate\"]\n    envFrom:\n      - secretRef:\n          name: payment-processing-db-credentials\n```\n\nThis keeps migration execution out of app startup, so a bad migration doesn't crash-loop the pod.\n\n## Things to coordinate with Sofia\n\n- Agree on the Kafka topic schema for payment events before `V3` (outbox table)\n- If you need idempotency keys, add that in `V2` rather than retrofitting later\n- Consider `pg_cron` for payment timeout/expiry sweeps instead of adding a separate scheduled job\n\nWant me to scaffold the actual migration files or the outbox table for Kafka event publishing?",
+  "timestamp": "2026-05-17T17:36:46Z",
+  "latency_ms": 19091,
+  "exit_code": 0,
+  "output_length_chars": 2664,
+  "output_length_tokens_approx": 666,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "R2"
+}

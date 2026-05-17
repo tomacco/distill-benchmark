@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "For a simple static marketing site (HTML/CSS/JS only), the simplest options:\n\n**Best bet: S3 + CloudFront** \u2014 since Helios is already on AWS, this is the path of least resistance:\n\n```bash\n# Create bucket, enable static hosting\naws s3 mb s3://helios-marketing\naws s3 website s3://helios-marketing --index-document index.html\n\n# Deploy\naws s3 sync ./site/ s3://helios-marketing --delete\n\n# Put CloudFront in front for HTTPS + caching\n```\n\nNo servers, no containers, pennies/month, and it stays within your existing AWS account and billing.\n\n**Even simpler if he just wants it live fast:** Cloudflare Pages or Netlify \u2014 drag-and-drop deploy, free tier, automatic HTTPS. Zero config. But that's another vendor/account to manage.\n\n**Skip:** Don't put it in EKS \u2014 massive overkill for static files. No need for a container or a service.\n\nTell Dev to go with S3 + CloudFront since the AWS infra is already there and ops knows it.",
+  "timestamp": "2026-05-17T17:08:21Z",
+  "latency_ms": 11316,
+  "exit_code": 0,
+  "output_length_chars": 923,
+  "output_length_tokens_approx": 230,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "B3"
+}

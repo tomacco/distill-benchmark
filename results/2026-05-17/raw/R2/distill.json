@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your team's architecture, here's how to set up database migrations for the new service:\n\n## Flyway Setup (Kotlin/PostgreSQL)\n\nYour team has already standardized on **Flyway** over Liquibase, so follow the same pattern as `auth-service` and `account-service`.\n\n### 1. Add the Flyway dependency\n\nIn your `build.gradle.kts`:\n\n```kotlin\ndependencies {\n    implementation(\"org.flywaydb:flyway-core:9.x.x\")\n    implementation(\"org.flywaydb:flyway-database-postgresql:9.x.x\")\n}\n```\n\n### 2. Create the migration directory\n\n```\nsrc/main/resources/db/migration/\n```\n\n### 3. Name migrations with Flyway's convention\n\n```\nV1__create_initial_schema.sql\nV2__add_indexes.sql\nV3__add_audit_columns.sql\n```\n\nThe format is `V<version>__<description>.sql` (double underscore).\n\n### 4. Configure Flyway\n\nIn your `application.yml` (or equivalent config):\n\n```yaml\nflyway:\n  url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}\n  user: ${DB_USER}\n  password: ${DB_PASSWORD}\n  schemas: public\n  baseline-on-migrate: false\n```\n\n### 5. Run on service startup\n\nFlyway runs automatically on boot if you're using Spring Boot. Otherwise, invoke it programmatically:\n\n```kotlin\nval flyway = Flyway.configure()\n    .dataSource(dataSource)\n    .load()\nflyway.migrate()\n```\n\n### Key practices for your setup\n\n- **One schema per service** \u2014 each microservice owns its own database/schema (no shared tables across services)\n- **Never edit a migration that has been applied** \u2014 create a new `V<n+1>` file instead\n- **Repeatable migrations** (`R__name.sql`) for views or functions that can be re-run\n- **Test migrations in CI** \u2014 your GitHub Actions pipeline should apply migrations against a test PostgreSQL instance before deploying via ArgoCD\n\nWould you like me to look at how one of your existing extracted services (e.g. `auth-service` or `account-service`) structures its migrations so you can mirror that pattern exactly?",
+  "timestamp": "2026-05-17T09:23:50Z",
+  "latency_ms": 23754,
+  "exit_code": 0,
+  "output_length_chars": 1897,
+  "output_length_tokens_approx": 474,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "R2"
+}

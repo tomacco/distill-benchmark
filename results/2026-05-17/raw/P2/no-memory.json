@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "The workspace is empty \u2014 there's no existing `auth-service` project to add a health check endpoint to. Could you point me to the codebase? For example:\n\n- Is there a git repo URL I should clone?\n- Is the code in a different directory?\n- Should I scaffold a new auth-service from scratch?\n\nLet me know and I'll get the health check endpoint added.",
+  "timestamp": "2026-05-17T09:15:21Z",
+  "latency_ms": 24168,
+  "exit_code": 0,
+  "output_length_chars": 346,
+  "output_length_tokens_approx": 86,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "P2"
+}

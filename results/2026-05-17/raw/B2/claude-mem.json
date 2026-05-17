@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: probably not worth it right now, but the instinct isn't wrong.\n\n**Arguments for Go:**\n- Kafka consumer \u2192 SNS dispatcher is exactly the kind of thing Go excels at \u2014 small surface area, low overhead, fast cold starts\n- Fewer abstractions than a Kotlin/Spring (or even Ktor) setup for something this simple\n- Lower memory footprint on EKS, which adds up\n\n**Arguments against (right now):**\n- It's in prod and working. Rewrite risk for a service that's already doing its job.\n- You're mid-migration with payment-processing next \u2014 that's where the team's cycles should go\n- Introduces a second backend language into the org. Whoever's on-call now needs to context-switch. Sofia's a Kotlin expert; Go debugging falls on... who?\n- Series C due diligence in Q3 \u2014 \"clean architecture story\" is easier with a consistent stack than with \"we also have this one Go service\"\n- 80-eng org, but your backend bench is thin. Adding Go to the hiring/onboarding matrix has a cost.\n\n**What I'd actually do:**\nIf the Kotlin version genuinely feels heavy, slim it down \u2014 strip the framework, use a thin Kafka consumer with `kotlinx.coroutines` and the AWS SDK directly. You can get pretty close to Go-level simplicity without the language switch. That's a few days, not a rewrite.\n\nIf you eventually end up with multiple simple infrastructure-style services (rate limiter, event router, etc.), then Go as a second supported language starts to make sense as a deliberate platform decision \u2014 not a one-off.",
+  "timestamp": "2026-05-17T17:30:52Z",
+  "latency_ms": 20138,
+  "exit_code": 0,
+  "output_length_chars": 1494,
+  "output_length_tokens_approx": 373,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "B2"
+}

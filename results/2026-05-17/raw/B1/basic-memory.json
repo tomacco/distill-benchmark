@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a solid fit here. You already have it in the stack, and session token caching is one of its textbook use cases:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX ttl` / `GET key` \u2014 no complex data modeling needed.\n- **Redis TTL expiry** handles token cleanup automatically, no background jobs or cron sweeps required.\n- **Low latency** \u2014 session validation happens on every authenticated request, so in-memory lookups matter.\n- **auth-service is already Kotlin** \u2014 the Lettuce or Jedis clients integrate cleanly with coroutines (Lettuce's reactive API works well with `kotlinx-coroutines-reactor`).\n\nSince this is a fintech platform, a couple of things worth confirming with the team:\n\n- **Eviction policy** \u2014 use `noeviction` or a dedicated Redis instance/database for sessions so cache pressure from other uses doesn't evict active sessions unexpectedly.\n- **Persistence** \u2014 decide whether a Redis restart can invalidate all sessions (forcing re-login) or if you need RDB/AOF persistence. For short-lived tokens this is usually acceptable.\n- **Key naming convention** \u2014 something like `session:{userId}:{tokenId}` keeps it scannable and avoids collisions with existing cache keys.\n\nNo architectural concerns here \u2014 straightforward use of infrastructure you already operate.",
+  "timestamp": "2026-05-17T14:10:06Z",
+  "latency_ms": 16934,
+  "exit_code": 0,
+  "output_length_chars": 1307,
+  "output_length_tokens_approx": 326,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "B1"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no existing auth-service code in this workspace. Since you mentioned it's already in prod (Kotlin, gRPC, EKS), I'll lay out what you need \u2014 adapt to your actual project structure.\n\nFor an EKS load balancer health check, you want a simple HTTP endpoint (ALB/NLB health checks use HTTP, not gRPC). Most Kotlin services on EKS use Ktor or Spring Boot alongside the gRPC server.\n\n**If you're using Ktor** (likely given your minimal-dependency preference), add a lightweight HTTP server on a separate port:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/HealthCheck.kt\npackage com.helios.auth\n\nimport io.ktor.http.*\nimport io.ktor.server.application.*\nimport io.ktor.server.engine.*\nimport io.ktor.server.netty.*\nimport io.ktor.server.response.*\nimport io.ktor.server.routing.*\n\nfun startHealthCheckServer(port: Int = 8081) = embeddedServer(Netty, port = port) {\n    routing {\n        get(\"/healthz\") {\n            call.respondText(\"ok\", status = HttpStatusCode.OK)\n        }\n        get(\"/readyz\") {\n            // Add real checks: DB pool, Redis, Kafka consumer group\n            val dbHealthy = checkPostgres()\n            val redisHealthy = checkRedis()\n            if (dbHealthy && redisHealthy) {\n                call.respondText(\"ok\", status = HttpStatusCode.OK)\n            } else {\n                call.respondText(\"not ready\", status = HttpStatusCode.ServiceUnavailable)\n            }\n        }\n    }\n}.start(wait = false)\n```\n\n**If you already use gRPC health protocol**, the ALB still can't speak gRPC for health checks natively \u2014 you need the HTTP sidecar or this approach.\n\n**K8s manifest update:**\n\n```yaml\n# In your Deployment spec\nlivenessProbe:\n  httpGet:\n    path: /healthz\n    port: 8081\n  initialDelaySeconds: 10\n  periodSeconds: 15\nreadinessProbe:\n  httpGet:\n    path: /readyz\n    port: 8081\n  initialDelaySeconds: 5\n  periodSeconds: 10\n```\n\n**Key points:**\n- `/healthz` \u2014 liveness: process is alive, no dependency checks\n- `/readyz` \u2014 readiness: dependencies (PG, Redis) are reachable. LB routes traffic only when ready.\n- Separate port (8081) from gRPC (typically 9090) so the ALB target group can point directly at it\n- Wire `startHealthCheckServer()` into your `main()` before the gRPC server starts\n\nWant me to look at the actual auth-service repo to integrate this into your existing code? If so, point me at the directory or clone it here.",
+  "timestamp": "2026-05-17T17:35:33Z",
+  "latency_ms": 21799,
+  "exit_code": 0,
+  "output_length_chars": 2370,
+  "output_length_tokens_approx": 592,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "P2"
+}

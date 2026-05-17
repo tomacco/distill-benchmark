@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "```dockerfile\nFROM python:3.11-slim AS builder\n\nWORKDIR /app\n\nRUN pip install --no-cache-dir --upgrade pip\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir --prefix=/install -r requirements.txt\n\nFROM python:3.11-slim\n\nWORKDIR /app\n\nRUN groupadd -r mlservice && useradd -r -g mlservice mlservice\n\nCOPY --from=builder /install /usr/local\n\nCOPY app/ ./app/\nCOPY models/ ./models/\n\nUSER mlservice\n\nEXPOSE 8000\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\", \"--workers\", \"2\"]\n```\n\nExpected `requirements.txt`:\n\n```\nfastapi==0.115.0\nuvicorn[standard]==0.30.0\nscikit-learn==1.5.1\njoblib==1.4.2\nnumpy==1.26.4\npydantic==2.9.0\n```\n\nExpected layout:\n\n```\n.\n\u251c\u2500\u2500 Dockerfile\n\u251c\u2500\u2500 requirements.txt\n\u251c\u2500\u2500 models/\n\u2502   \u2514\u2500\u2500 fraud_model.joblib\n\u2514\u2500\u2500 app/\n    \u2514\u2500\u2500 main.py\n```\n\nMinimal `app/main.py` to match:\n\n```python\nimport joblib\nimport numpy as np\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\nmodel = joblib.load(\"models/fraud_model.joblib\")\n\napp = FastAPI()\n\n\nclass ScoringRequest(BaseModel):\n    features: list[float]\n\n\nclass ScoringResponse(BaseModel):\n    fraud_probability: float\n    is_fraud: bool\n\n\n@app.get(\"/health\")\ndef health():\n    return {\"status\": \"ok\"}\n\n\n@app.post(\"/score\", response_model=ScoringResponse)\ndef score(req: ScoringRequest):\n    X = np.array(req.features).reshape(1, -1)\n    prob = float(model.predict_proba(X)[0][1])\n    return ScoringResponse(fraud_probability=prob, is_fraud=prob >= 0.5)\n```\n\nKey choices:\n\n- **Multi-stage build** \u2014 keeps final image small (no build deps)\n- **Non-root user** \u2014 required for EKS pod security policies\n- **`--no-cache-dir`** \u2014 smaller image, no pip cache layer\n- **2 workers** \u2014 tune based on pod CPU limits; scikit-learn inference is CPU-bound so match to cores\n- **Model baked in** \u2014 simplest path. If models change frequently, mount via EFS/S3 fetch at startup instead\n\nFor the payment-processing service Sofia is building, you'd wire this behind your existing gRPC gateway or expose it directly depending on latency requirements.",
+  "timestamp": "2026-05-17T17:37:29Z",
+  "latency_ms": 16619,
+  "exit_code": 0,
+  "output_length_chars": 2023,
+  "output_length_tokens_approx": 505,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "R5"
+}

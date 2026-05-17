@@ -1,0 +1,16 @@
+{
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your existing architecture, you should use **structured logging with correlation IDs** \u2014 this is already an adopted standard across your services (per your team's decision).\n\nFor a Kotlin service, use **kotlin-logging** (wrapper around SLF4J) with **Logback** and **JSON output** via `logstash-logback-encoder`. This fits your EKS/AWS stack where JSON logs are easy to query.\n\nHere's what the setup looks like:\n\n**Dependencies** (build.gradle.kts):\n```kotlin\nimplementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n**logback.xml** (structured JSON output):\n```xml\n<configuration>\n    <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n        <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\">\n            <includeMdcKeyName>correlationId</includeMdcKeyName>\n            <includeMdcKeyName>userId</includeMdcKeyName>\n        </encoder>\n    </appender>\n    <root level=\"INFO\">\n        <appender-ref ref=\"STDOUT\" />\n    </root>\n</configuration>\n```\n\n**Correlation ID interceptor** (for gRPC, matching your internal API pattern):\n```kotlin\nimport io.grpc.*\nimport org.slf4j.MDC\nimport java.util.UUID\n\nclass CorrelationIdInterceptor : ServerInterceptor {\n    override fun <ReqT, RespT> interceptCall(\n        call: ServerCall<ReqT, RespT>,\n        headers: Metadata,\n        next: ServerCallHandler<ReqT, RespT>\n    ): ServerCall.Listener<ReqT> {\n        val correlationId = headers.get(CORRELATION_ID_KEY) ?: UUID.randomUUID().toString()\n        val ctx = Context.current().withValue(CORRELATION_ID_CTX, correlationId)\n        return Contexts.interceptCall(ctx, call, headers, object : ServerCallHandler<ReqT, RespT> {\n            override fun startCall(call: ServerCall<ReqT, RespT>, headers: Metadata) =\n                next.startCall(call, headers).also { MDC.put(\"correlationId\", correlationId) }\n        })\n    }\n\n    companion object {\n        val CORRELATION_ID_KEY: Metadata.Key<String> =\n            Metadata.Key.of(\"x-correlation-id\", Metadata.ASCII_STRING_MARSHALLER)\n        val CORRELATION_ID_CTX: Context.Key<String> = Context.key(\"correlationId\")\n    }\n}\n```\n\n**Usage**:\n```kotlin\nimport mu.KotlinLogging\n\nprivate val logger = KotlinLogging.logger {}\n\nfun processPayment(request: PaymentRequest) {\n    logger.info { \"Processing payment amount=${request.amount} currency=${request.currency}\" }\n}\n```\n\nThis gives you JSON logs with correlation IDs propagated across your gRPC services, queryable in CloudWatch or whatever log aggregator you're using on EKS. Check how `auth-service` or `account-service` have it set up \u2014 you should match their pattern for consistency.",
+  "timestamp": "2026-05-17T15:34:59Z",
+  "latency_ms": 25736,
+  "exit_code": 0,
+  "output_length_chars": 2754,
+  "output_length_tokens_approx": 688,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "C4"
+}

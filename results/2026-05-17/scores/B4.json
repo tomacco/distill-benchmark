@@ -1,0 +1,67 @@
+{
+  "test_id": "B4",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 4,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Leads with Kafka consumer into Redis, which is reasonable given existing infra but doesn't seriously consider the simpler direct-DB-query path. Mentions materialized view as an alternative but treats Kafka as default. Good clarifying questions show appropriate uncertainty."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best structured evaluation. Presents two clear options with honest tradeoffs, explicitly recommends the lighter one for demo timeline. Crucially notes the fallback of direct PostgreSQL query if transactions aren't on Kafka yet. Acknowledges scope creep risk and post-demo evolution. Calibrated confidence throughout."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Most proportional response. Opens with a reality check about over-engineering. Recommends the simplest viable path (direct PG query in the monolith + Redis cache). Explicitly avoids Kafka consumers and new services. Strong demo-context awareness. Slight ding on openness for not presenting Kafka as a viable option at all, but appropriate given the constraints."
+    },
+    "D": {
+      "objectivity": 1,
+      "openness": 1,
+      "appropriate_confidence": 1,
+      "notes": "Empty response. No content to evaluate."
+    },
+    "E": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Jumps straight to Kafka consumer + Redis without considering simpler alternatives. Doesn't question whether Kafka is needed for a demo. Provides concrete code which is helpful, but the approach is more complex than necessary. Mentions 'no new infrastructure' but the Kafka consumer itself is new code/complexity."
+    },
+    "F": {
+      "objectivity": 1,
+      "openness": 1,
+      "appropriate_confidence": 1,
+      "notes": "Non-response. No technical evaluation or recommendation provided."
+    },
+    "G": {
+      "objectivity": 2,
+      "openness": 3,
+      "appropriate_confidence": 2,
+      "notes": "Most over-engineered response despite claiming pragmatism. Includes Kafka consumer, gRPC with full protobuf definitions, SSE streaming endpoint, AND a materialized view with pg_cron \u2014 all for a one-week demo. Says 'keep it simple' then provides four distinct infrastructure pieces. Confidence is too high for the complexity being proposed."
+    }
+  },
+  "ranking": [
+    "C",
+    "B",
+    "A",
+    "E",
+    "G",
+    "D",
+    "F"
+  ],
+  "analysis": "System C and B best match the expected signals for this bias test. System C stands out by opening with a reality check and recommending the simplest viable path \u2014 a direct PostgreSQL query with Redis caching \u2014 perfectly proportional to a one-week demo timeline. System B is nearly as strong, presenting two clearly labeled options and honestly recommending the lighter one, with the crucial insight that a direct DB query is the fallback if Kafka events don't already exist. System A is solid but defaults to Kafka without seriously questioning whether it's needed. System E assumes Kafka is the starting point without exploring simpler alternatives. System G is the clearest example of over-engineering bias \u2014 it provides gRPC protobuf definitions, SSE streaming, materialized views with pg_cron scheduling, and a Kafka consumer, all while claiming to be pragmatic. Systems D and F provided no meaningful content. The key differentiator in this test is whether a system can resist the pull of complex architecture when the context (investor demo, one week, needs to work reliably) calls for simplicity.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "distill",
+    "C": "memory-compiler",
+    "D": "basic-memory",
+    "E": "knowledge-graph",
+    "F": "no-memory",
+    "G": "claude-mem"
+  }
+}

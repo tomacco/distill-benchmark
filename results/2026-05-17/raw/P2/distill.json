@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no auth-service source code in this workspace \u2014 just knowledge files. I can see from the architecture docs that auth-service is Kotlin, uses gRPC internally, and runs on EKS.\n\nSince the load balancer (ALB) needs the health check, you'll want a simple HTTP endpoint \u2014 ALBs don't natively probe gRPC. Here's what to add:\n\n**Option 1: If using Ktor** (lightweight, fits the \"minimal dependencies\" preference):\n\n```kotlin\n// In your Application.kt or a new HealthRoutes.kt\nfun Application.configureHealthCheck() {\n    routing {\n        get(\"/health\") {\n            call.respond(HttpStatusCode.OK, mapOf(\"status\" to \"UP\"))\n        }\n    }\n}\n```\n\n**Option 2: If using Spring Boot:**\n\n```kotlin\n// HealthController.kt\n@RestController\nclass HealthController {\n    @GetMapping(\"/health\")\n    fun health(): ResponseEntity<Map<String, String>> {\n        return ResponseEntity.ok(mapOf(\"status\" to \"UP\"))\n    }\n}\n```\n\nSpring Boot also has Actuator (`/actuator/health`) built-in if you add `spring-boot-starter-actuator`, but that pulls in more dependencies.\n\n**Option 3: gRPC Health Checking Protocol** (if using an NLB/gRPC-aware LB instead):\n\n```kotlin\n// Register the standard gRPC health service\nserver = ServerBuilder.forPort(port)\n    .addService(yourAuthService)\n    .addService(HealthStatusManager().healthService)\n    .build()\n```\n\nFor the ALB target group config, point the health check at `GET /health` with a 200 expected response.\n\nCould you point me to the auth-service source code? I can make the actual changes directly if I can see the codebase.",
+  "timestamp": "2026-05-17T09:22:20Z",
+  "latency_ms": 39876,
+  "exit_code": 0,
+  "output_length_chars": 1558,
+  "output_length_tokens_approx": 389,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "P2"
+}

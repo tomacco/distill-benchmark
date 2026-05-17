@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack (PostgreSQL 14, AWS EKS) and constraints, here are solid options:\n\n**Best fit: ClickHouse**\n- Purpose-built for analytical queries on large datasets \u2014 columnar storage, very fast aggregations\n- Self-hostable on EKS, or use ClickHouse Cloud on AWS\n- Minimal operational overhead, SQL-compatible (easy ramp for your team)\n\n**Runner-up: Amazon Redshift**\n- Already in AWS, managed service, columnar storage\n- Good if you want minimal ops burden and your team is comfortable with AWS-managed services\n- Integrates natively with your existing AWS infrastructure\n\n**Also worth considering: TimescaleDB**\n- Extension on top of PostgreSQL \u2014 your team already has deep PG expertise\n- Great if the analytics workload is time-series oriented\n- Lowest learning curve since it's just Postgres\n\n**Avoid:** DynamoDB and MongoDB \u2014 both rejected for good reasons (strong consistency needs, relational model fit, multi-table transactions).\n\nMy recommendation: **ClickHouse** if the workload is heavy analytical queries (dashboards, aggregations, reporting). **TimescaleDB** if it's time-series data and you want to stay in the Postgres ecosystem with minimal new infrastructure.\n\nWhat kind of data and query patterns are you looking at?",
+  "timestamp": "2026-05-17T17:14:11Z",
+  "latency_ms": 12222,
+  "exit_code": 0,
+  "output_length_chars": 1235,
+  "output_length_tokens_approx": 308,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "R4"
+}

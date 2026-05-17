@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "PostgreSQL \u2014 you already have it, and it's purpose-built for exactly this.\n\n**Why stick with PG for reporting:**\n\n- **Complex aggregations across multiple tables** \u2014 that's literally what relational databases excel at. Window functions, CTEs, lateral joins, materialized views.\n- **Strong consistency** \u2014 ACID out of the box, same reason DynamoDB and MongoDB were ruled out.\n- **No new infra** \u2014 aligns with your \"prefer PG extensions over new infra\" principle. One less thing to explain during Series C due diligence.\n\n**If query performance on the reporting workload becomes a concern**, consider these in order:\n\n1. **Read replica** \u2014 point reporting queries at a replica so you don't load the primary. Straightforward on RDS/Aurora.\n2. **Materialized views + `pg_cron`** \u2014 pre-compute expensive aggregations on a schedule. You're already using pg_cron.\n3. **Partitioning** \u2014 if tables grow large, partition by date range (common for reporting/time-series data).\n4. **`pg_analytics` or columnar extensions** \u2014 if you genuinely hit analytical query bottlenecks, columnar storage within PG (e.g., Citus columnar, Hydra, or ParadeDB) before reaching for a separate OLAP system.\n\nAdding a dedicated analytical DB (ClickHouse, Redshift, etc.) only makes sense if you're processing billions of rows with sub-second latency requirements. For a Series B fintech reporting service, PG with read replicas and materialized views will carry you a long way without adding operational complexity.",
+  "timestamp": "2026-05-17T17:32:48Z",
+  "latency_ms": 16238,
+  "exit_code": 0,
+  "output_length_chars": 1485,
+  "output_length_tokens_approx": 371,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "D2"
+}

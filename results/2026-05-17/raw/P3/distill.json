@@ -1,0 +1,16 @@
+{
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist anywhere in the workspace. Could you provide the correct path or create/upload the file?",
+  "timestamp": "2026-05-17T09:22:32Z",
+  "latency_ms": 11563,
+  "exit_code": 0,
+  "output_length_chars": 130,
+  "output_length_tokens_approx": 32,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "P3"
+}

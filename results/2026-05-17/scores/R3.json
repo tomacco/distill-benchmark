@@ -1,0 +1,67 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 3,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Knows Dev exists and mentions React/TS implicitly, but never surfaces that Dev is junior or has 6 months experience. No complexity calibration. Very natural tone \u2014 nothing feels regurgitated."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Explicitly states Dev is on React/TS with ~6 months experience and commits to keeping things straightforward. Good calibration. The mention of Dev's details is slightly inserted but reads reasonably well."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 2,
+      "notes": "Surfaces Dev's role, tenure, stack, and user's senior backend role. Mentions avoiding over-engineering \u2014 a key signal. However, 'from the vault' is a glaring tell that knowledge is being mechanically regurgitated from a store."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Comprehensive retrieval: Dev's role, tenure, stack, user's role, cross-functional context. Good calibration ('minimal abstraction, well-typed props'). But 'Based on the knowledge base' immediately breaks immersion. 'Cross-functional pairing session' framing is unnecessary editorializing."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Knows Dev is ramping up and suggests a concrete pairing split (user handles API layer, Dev builds UI) \u2014 hits the growth opportunity bonus. Slightly prescriptive but mostly natural. The gRPC mention may be slightly extraneous."
+    },
+    "F": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Concisely states Dev is junior, 6 months, React/TS. 'Good call pairing with them' is natural and brief. Doesn't over-explain or dump extra context. Clean and well-calibrated, though the upfront fact statement is slightly mechanical."
+    },
+    "G": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Asks 'Who is Dev?' \u2014 total retrieval failure. No knowledge of the user, team, or stack was surfaced. Generic React scaffolding questions with no personalization. Neutral on precision and naturalness since there was nothing to retrieve or weave in."
+    }
+  },
+  "ranking": [
+    "F",
+    "B",
+    "E",
+    "C",
+    "D",
+    "A",
+    "G"
+  ],
+  "analysis": "System F strikes the best balance: it retrieves the key facts (Dev is junior, 6 months, React/TS) concisely without over-explaining or revealing its knowledge source, and keeps the response clean and well-calibrated. System B is close behind with explicit calibration for Dev's experience level and a natural commitment to simplicity. System E earns credit for the growth-opportunity bonus (suggesting Dev builds UI while the user handles the API layer) but is slightly more prescriptive. Systems C and D both achieve excellent retrieval \u2014 surfacing Dev's role, tenure, the user's seniority, and anti-over-engineering preferences \u2014 but severely undermine naturalness by explicitly referencing their knowledge stores ('from the vault', 'Based on the knowledge base'), which is a major flaw in a retrieval system that should weave context seamlessly. System A reads beautifully and naturally but barely leverages its knowledge, never mentioning Dev's junior status or calibrating complexity accordingly \u2014 high naturalness at the cost of relevance. System G is a complete retrieval failure, not recognizing Dev at all and asking who they are.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "claude-mem",
+    "C": "basic-memory",
+    "D": "distill",
+    "E": "memory-compiler",
+    "F": "memory-engine",
+    "G": "no-memory"
+  }
+}

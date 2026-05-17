@@ -1,0 +1,67 @@
+{
+  "test_id": "R5",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused Dockerfile with requirements and sample app code. Zero knowledge bleed \u2014 no mention of Kotlin, gRPC, EKS, or infrastructure opinions. Exactly what was asked for."
+    },
+    "B": {
+      "relevance": 3,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Good technical decisions explained but notably missing the actual Dockerfile content \u2014 only describes what it does. No irrelevant knowledge injected, but incomplete as an answer."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Solid Dockerfile and sample app, but ends with 'Since you're on EKS with gRPC internally, you might want to add a gRPC interface later' \u2014 unprompted injection of stored infrastructure knowledge. Exactly the kind of bleed this test targets."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Worst knowledge bleed of the group. Drops the fictional company name ('Helios uses gRPC for internal APIs'), references EKS liveness probes in a Dockerfile healthcheck note, and recommends adding gRPC. Multiple signals of stored context being regurgitated unprompted."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Strong multi-stage Dockerfile with good practices. Brief EKS mention ('tune to your EKS pod CPU limits') is minor and somewhat contextual. S3 model tip is practical. Slight bleed but restrained."
+    },
+    "F": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Good Dockerfile technically, but injects a full deployment pipeline opinion: 'Fits your existing pipeline: build in GitHub Actions, push to ECR, deploy via ArgoCD to EKS.' This reads as regurgitated stored knowledge about the user's infrastructure \u2014 not asked for."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean and practical \u2014 Dockerfile summary, sample app, build/run/curl instructions. No irrelevant context injected. Focused entirely on the request."
+    }
+  },
+  "ranking": [
+    "A",
+    "G",
+    "E",
+    "B",
+    "C",
+    "F",
+    "D"
+  ],
+  "analysis": "This test measures precision \u2014 whether accumulated knowledge bleeds into unrelated requests. Systems A and G scored highest by delivering exactly what was asked (a Python Dockerfile) with zero extraneous context. System E showed mild bleed with a brief EKS reference but stayed restrained. System B was clean on precision but hurt by incomplete output (no actual Dockerfile shown). The bottom three all exhibit clear knowledge bleed: System C injects a gRPC suggestion tagged to EKS knowledge, System F dumps an entire CI/CD pipeline opinion (GitHub Actions, ECR, ArgoCD, EKS), and System D is the worst offender \u2014 it name-drops the fictional company 'Helios,' references EKS probes, and recommends gRPC, all unprompted. The gap between top and bottom is stark: the best systems treated this as the simple Python Dockerfile request it was, while the worst systems couldn't resist surfacing stored infrastructure context that had no bearing on the task.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "knowledge-graph",
+    "C": "memory-engine",
+    "D": "memory-compiler",
+    "E": "claude-mem",
+    "F": "basic-memory",
+    "G": "no-memory"
+  }
+}

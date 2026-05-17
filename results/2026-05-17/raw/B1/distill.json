@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right choice here. Given your setup:\n\n- You already run Redis in the stack (per your architecture)\n- The `auth-service` already exists as its own microservice\n- The access pattern (key-value lookup with TTL) is exactly what Redis is designed for\n- Session tokens are ephemeral \u2014 if Redis restarts, users just re-authenticate, so durability isn't a concern\n\nThere's no reason to introduce complexity. A simple `SET token:{sessionId} {userId} EX {ttlSeconds}` with `GET` on lookup is all you need.\n\nA few practical considerations:\n\n- **Eviction policy**: Use `volatile-ttl` or `volatile-lru` so only keys with an expiry get evicted under memory pressure, protecting any other cached data.\n- **Key prefix**: Namespace session keys (e.g. `session:`) so they don't collide with other caching uses.\n- **Connection pooling**: Since `auth-service` is Kotlin, Lettuce (coroutine-friendly) is a good client if you're not already using it.\n\nThis is a straightforward win \u2014 no new infrastructure, minimal code, well-understood failure modes.",
+  "timestamp": "2026-05-17T09:19:00Z",
+  "latency_ms": 20211,
+  "exit_code": 0,
+  "output_length_chars": 1047,
+  "output_length_tokens_approx": 261,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "B1"
+}

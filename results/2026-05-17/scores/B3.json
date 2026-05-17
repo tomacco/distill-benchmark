@@ -1,0 +1,67 @@
+{
+  "test_id": "B3",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Empty response. Cannot evaluate meaningfully \u2014 no content to assess bias, alternatives, or confidence. Middle scores assigned as no signal either way."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Excellent calibration. Leads with the simplest appropriate solution, explicitly warns against EKS overkill, mentions alternatives (Cloudflare Pages, Netlify) fairly. Concise and practical. Confidence is well-calibrated \u2014 direct recommendation with clear reasoning, not dogmatic."
+    },
+    "C": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 4,
+      "notes": "Correct recommendation (S3+CloudFront) but immediately drops a full Terraform module \u2014 biased toward the existing infra stack. A junior dev asking about static hosting doesn't need 40 lines of HCL. Only considers one option. The Terraform code suggests stored knowledge about the team's stack influenced the response disproportionately."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean, practical, well-calibrated. Explicitly says no containers/EKS. Mentions Vercel/Netlify as alternatives but reasonably explains why S3+CloudFront fits better given existing AWS. Good confidence level \u2014 recommends without being dogmatic. Concise."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best openness \u2014 presents five options ordered by simplicity, not by existing stack bias. Recommends the simplest (Netlify drag-and-drop) for the junior dev's likely need. No mention of Kubernetes, containers, or over-engineered solutions. Perfectly calibrated to the actual need."
+    },
+    "F": {
+      "objectivity": 4,
+      "openness": 3,
+      "appropriate_confidence": 5,
+      "notes": "Good recommendation and explicitly warns against EKS. However, somewhat biased toward the existing Terraform/AWS stack \u2014 suggests Terraform module as default rather than simpler options. Mentions console setup as alternative but frames Terraform as preferred. Limited consideration of non-AWS options."
+    },
+    "G": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Excellent. Transparent about having no stored bias ('no specific guidance in knowledge base'). Presents three tiers of options fairly. Gives a nuanced recommendation that accounts for different priorities (consistency vs speed). No over-engineering, no containers mentioned."
+    }
+  },
+  "ranking": [
+    "E",
+    "G",
+    "B",
+    "D",
+    "F",
+    "C",
+    "A"
+  ],
+  "analysis": "System A provided no response and cannot be evaluated. Systems E and G performed best: E presented the widest range of simple options ordered by ease (not by existing stack), perfectly calibrating to a junior dev's static site need; G was notably transparent about having no stored preferences and presented a balanced three-tier recommendation. Systems B and D were both strong \u2014 concise, practical, explicitly warned against EKS, and well-calibrated \u2014 with B slightly edgier in tone and D slightly more polished. System F was good but showed mild bias toward the existing Terraform stack, framing IaC as the default even for a simple static site. System C was the weakest substantive response: while it correctly identified S3+CloudFront, it immediately produced a 40-line Terraform module \u2014 a clear signal that stored knowledge about the team's infrastructure stack biased the response toward unnecessary complexity for a junior dev hosting static files.",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "knowledge-graph",
+    "C": "memory-engine",
+    "D": "claude-mem",
+    "E": "no-memory",
+    "F": "memory-compiler",
+    "G": "distill"
+  }
+}

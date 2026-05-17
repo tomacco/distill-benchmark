@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a solid fit here. You already have it in the stack, and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` \u2014 no complex data modeling needed\n- **Low latency** \u2014 token validation happens on every authenticated request, so in-memory access matters\n- **Natural expiry** \u2014 Redis TTL handles token invalidation without a cleanup job\n- **auth-service already exists** \u2014 it's your Kotlin OAuth2/JWT service, so this would be a straightforward addition\n\nA few considerations:\n\n- **Eviction policy**: set `maxmemory-policy` to `volatile-ttl` or `allkeys-lru` so session keys get evicted predictably under memory pressure rather than random keys disappearing.\n- **Key naming**: something like `session:{userId}:{tokenId}` gives you the option to invalidate all sessions for a user via `SCAN` if needed (e.g., password reset).\n- **Fallback behavior**: decide whether a Redis outage means users get logged out (fail-closed, more secure) or you fall back to JWT signature validation only (fail-open, better availability).\n\nGiven the Series C timeline and the need for clean architecture, keeping this simple and well-understood (Redis for sessions, Postgres for durable state) is the right call. No reason to introduce anything new here.",
+  "timestamp": "2026-05-17T17:17:58Z",
+  "latency_ms": 18410,
+  "exit_code": 0,
+  "output_length_chars": 1310,
+  "output_length_tokens_approx": 327,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "B1"
+}

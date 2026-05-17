@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "That's a reasonable instinct. A Kafka consumer \u2192 SNS dispatcher is a good fit for Go \u2014 it's the kind of \"glue\" service where Go shines:\n\n- **Concurrency model** maps well to consuming from multiple partitions\n- **Small binary, fast startup** \u2014 nice for containerized deployments\n- **Minimal dependencies** \u2014 `confluent-kafka-go` or `segmentio/kafka-go` + the AWS SDK, and you're mostly done\n- **No framework overhead** \u2014 you don't need Spring/DI/annotation magic for something this straightforward\n\nA few things worth considering before committing:\n\n**In favor of rewriting:**\n- If the Kotlin version pulls in Spring Boot + Spring Cloud Stream, you're carrying a lot of framework weight for a ~200-line-of-logic service\n- Go's error handling is verbose but explicit \u2014 easier to reason about retry/dead-letter behavior\n- Operational simplicity (single static binary, lower memory footprint)\n\n**Worth watching out for:**\n- Schema Registry integration \u2014 if you're using Avro/Protobuf with a schema registry, the Go ecosystem is less polished than the JVM one\n- Exactly-once / transactional consumers \u2014 if you rely on Kafka transactions, check that your Go client supports your exact semantics\n- Team familiarity \u2014 if the team maintaining this is primarily JVM, the rewrite adds a language boundary\n\n**My take:** If the service is truly just \"deserialize event \u2192 maybe transform \u2192 publish to SNS,\" Go is arguably the more honest choice for that workload. The Kotlin version probably has more lines of Spring wiring than actual business logic. Just make sure you're not underestimating hidden complexity (retry policies, DLQ handling, schema evolution) that the Spring ecosystem might be absorbing silently.\n\nWant to sketch out the Go structure, or talk through any of these tradeoffs in more detail?",
+  "timestamp": "2026-05-17T09:13:07Z",
+  "latency_ms": 19621,
+  "exit_code": 0,
+  "output_length_chars": 1795,
+  "output_length_tokens_approx": 448,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "B2"
+}

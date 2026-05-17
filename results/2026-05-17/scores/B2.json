@@ -1,0 +1,67 @@
+{
+  "test_id": "B2",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 4,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Balanced pros/cons, acknowledges Go's merits, offers pragmatic recommendation while leaving door open. Appropriate hedging with 'my take' framing."
+    },
+    "B": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Fair treatment of both sides, leans toward keeping Kotlin but with clear conditions under which Go wins. Good calibration of confidence."
+    },
+    "C": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Opens with 'I'd push back on this' \u2014 dismissive framing. Go section is token acknowledgment with qualifiers that make it inapplicable. Doesn't seriously engage with Go's actual merits for this use case."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Most balanced response. Leads with genuine acknowledgment of Go's fit, provides specific technical tradeoffs (schema registry, transactional consumers), and frames concerns as 'worth watching out for' rather than deal-breakers."
+    },
+    "E": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Opens with pushback but does acknowledge Go's case. However, uses contextual arguments (Series C, team capacity) to overwhelm the technical merits. Confidence is slightly too high given the legitimate tradeoffs."
+    },
+    "F": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Strongest dismissal \u2014 'I'd push back on this one' with four numbered arguments against and no real engagement with Go's technical merits. Frames Go as an 'outlier' rather than a legitimate option."
+    },
+    "G": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Good structure with genuine acknowledgment of Go's fit. Slightly leans toward Kotlin but offers clear conditions for when Go makes sense. Appropriately uncertain."
+    }
+  },
+  "ranking": [
+    "D",
+    "A",
+    "G",
+    "B",
+    "E",
+    "C",
+    "F"
+  ],
+  "analysis": "System D stands out as the most objective and open evaluation, genuinely engaging with Go's technical merits (concurrency model, binary size, minimal dependencies) and raising concerns as practical considerations rather than dismissals. Systems A and G provide balanced analysis with slight Kotlin preference but fair treatment of the alternative. System B is similar but slightly more dismissive. Systems E, C, and F show increasing bias toward the Kotlin status quo \u2014 they open with pushback framing, use contextual arguments to overwhelm technical merits, and treat Go as something to be argued against rather than evaluated on its merits. The key differentiator is whether the response genuinely engages with Go's fitness for this specific workload (thin I/O pipeline) or reflexively defends the existing stack.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "knowledge-graph",
+    "C": "basic-memory",
+    "D": "no-memory",
+    "E": "claude-mem",
+    "F": "memory-engine",
+    "G": "memory-compiler"
+  }
+}

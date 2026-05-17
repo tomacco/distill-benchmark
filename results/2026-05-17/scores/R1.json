@@ -1,0 +1,67 @@
+{
+  "test_id": "R1",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 1,
+      "precision": 1,
+      "naturalness": 1,
+      "notes": "Authentication failure. No response generated. Cannot evaluate knowledge retrieval."
+    },
+    "B": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Generic payment service advice with no personalized context. Does not mention Kotlin, gRPC, EKS, Kafka, PostgreSQL as team standards, Sofia, or monolith migration. Asks user to specify what they want \u2014 the opposite of proactive retrieval."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Hits all expected signals: Kotlin, gRPC, PostgreSQL, Kafka, EKS/ArgoCD, existing service extraction pattern, monolith context, Sofia leading. Mentions Series C timeline. Knowledge is woven naturally as assumptions rather than regurgitated facts. Clean and focused."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Covers Kotlin, gRPC, PostgreSQL, Kafka, EKS, Flyway, Sofia, Series C, monolith extraction. Mentions structured logging with correlation IDs as org-wide adoption. Slightly more encyclopedic tone \u2014 the 'Helios Financial's context' framing feels slightly forced. Still very strong."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Strong retrieval: Kotlin, gRPC, PostgreSQL 14, Kafka, Flyway, Sofia, Series C, DynamoDB/MongoDB rejection reasoning. Mentions 'your stack' naturally. Slightly info-dense with some details (Resilience4j, mTLS) that feel like additions beyond stored knowledge. Good overall."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Hits Kotlin, gRPC, PostgreSQL, Kafka, Flyway, Sofia, Series C, coroutines over RxJava, Testcontainers preference. References DynamoDB/Mongo rejection and PG-extensions preference. Dense but relevant. Slightly catalog-like in presentation."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Covers Kotlin, PostgreSQL, Kafka, gRPC, Sofia, Series C, coroutines over RxJava. Includes Kotlin code example with sealed classes which is a nice touch showing language-specific knowledge. Slightly verbose but well-organized. The 'Helios Financial context' framing is slightly expository."
+    }
+  },
+  "ranking": [
+    "C",
+    "E",
+    "F",
+    "G",
+    "D",
+    "B",
+    "A"
+  ],
+  "analysis": "System A failed entirely due to an authentication error. System B provided generic payment service guidance with zero personalized knowledge retrieval \u2014 it behaved as a stateless assistant. Systems C through G all demonstrated strong knowledge retrieval, surfacing Kotlin, gRPC, PostgreSQL, Kafka, EKS, the monolith migration context, Sofia's role, and Series C timeline pressure. System C stands out for the most natural integration of stored knowledge \u2014 it assumes context rather than announcing it, and every piece of retrieved information directly serves the answer. Systems D-G are closely clustered, all hitting the key signals but with slightly more encyclopedic or catalog-like presentation. Systems E and F earned slight edges for mentioning specific technical preferences (DynamoDB/MongoDB rejection reasoning, coroutines over RxJava, Testcontainers) that demonstrate deeper contextual knowledge. System G's Kotlin code example is a differentiator showing language-specific adaptation.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "no-memory",
+    "C": "basic-memory",
+    "D": "distill",
+    "E": "knowledge-graph",
+    "F": "claude-mem",
+    "G": "memory-engine"
+  }
+}

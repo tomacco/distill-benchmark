@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given your stack and the monolith decomposition already in progress, here are the key considerations:\n\n## Architecture\n\n- **gRPC internally** (consistent with auth/account services), REST only for external webhook receivers (payment providers require it)\n- **Idempotency keys everywhere** \u2014 payment ops must be safely retriable. Store idempotency keys in PG with a unique constraint\n- **State machine for payment lifecycle** \u2014 `INITIATED \u2192 AUTHORIZED \u2192 CAPTURED \u2192 SETTLED` (and failure/refund branches). Make transitions explicit and auditable\n- **Outbox pattern with Kafka** \u2014 don't dual-write to PG + Kafka. Write to an `outbox` table in the same transaction, relay to Kafka via Debezium or a poller\n\n## Data & Consistency\n\n- **PG transactions are your friend** \u2014 this is exactly why you rejected Dynamo/Mongo. Ledger entries, balance updates, and status changes in one transaction\n- **Double-entry bookkeeping** \u2014 every movement has a debit and credit row. Makes reconciliation and auditing straightforward, which matters for Series C diligence\n- **Flyway migrations** with careful rollback scripts \u2014 payment schema changes are high-risk\n- **Soft deletes + full audit trail** \u2014 regulators will ask\n\n## Reliability\n\n- **Circuit breakers on external provider calls** (Stripe, Adyen, etc.) \u2014 Resilience4j works well with coroutines\n- **Dead letter queue** for failed Kafka consumers \u2014 payment events can't be silently dropped\n- **Timeouts and reconciliation jobs** \u2014 payments can get stuck. Run a `pg_cron` job to detect and flag stale `INITIATED` or `AUTHORIZED` states\n- **Redis for distributed locks** (Redisson) \u2014 prevent double-capture on concurrent retries\n\n## Security & Compliance\n\n- **PCI DSS scope** \u2014 minimize it. Never store raw card numbers. Use provider tokenization. Keep the service out of PCI scope if possible\n- **Encrypt sensitive fields at rest** (PG `pgcrypto`) \u2014 token references, account details\n- **Structured logging with correlation IDs** but **redact PII** \u2014 log transaction IDs, never amounts tied to user identifiers in plain text\n- **mTLS between services** on EKS\n\n## Testing\n\n- **Integration tests against PG** (Testcontainers) over mocks, per your convention\n- **Property-based tests for the state machine** \u2014 generate random transition sequences, assert invariants (balance never negative, every debit has a credit)\n- **Provider sandbox environments** in CI \u2014 don't mock external payment APIs entirely, at least have a contract test suite\n\n## Org\n\n- Sofia's leading \u2014 she'll want to define the gRPC service protos early so account-service (staging) can integrate. Coordinate with Marcus on Linear for sequencing against the account-service promotion to prod.\n\nWant me to scaffold the project structure, define the proto, or sketch the state machine and DB schema?",
+  "timestamp": "2026-05-17T17:36:27Z",
+  "latency_ms": 23528,
+  "exit_code": 0,
+  "output_length_chars": 2797,
+  "output_length_tokens_approx": 699,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "R1"
+}

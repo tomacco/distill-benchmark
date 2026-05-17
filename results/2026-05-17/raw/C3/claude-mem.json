@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you mentioned earlier in this conversation, the account service is now on **MySQL** after last week's migration from PostgreSQL.\n\nWorth noting: the project context in `.claude/rules/claude-mem-context.md` still lists PostgreSQL 14 as the stack database. You may want to update that to reflect the MySQL migration so the docs stay accurate.",
+  "timestamp": "2026-05-17T17:32:08Z",
+  "latency_ms": 12703,
+  "exit_code": 0,
+  "output_length_chars": 353,
+  "output_length_tokens_approx": 88,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "C3"
+}

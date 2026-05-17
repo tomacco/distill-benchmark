@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "I'd push back a bit on this one. Here's why:\n\n**Against rewriting in Go:**\n\n- Your entire backend is Kotlin. Introducing Go means a second language for ~80 engineers to maintain, review, and on-call for. Sofia and the team have deep Kotlin expertise.\n- You're mid-migration from monolith to microservices with Series C due diligence in Q3. A rewrite that doesn't ship customer value is hard to justify right now.\n- \"Over-engineered\" Kotlin is a refactoring problem, not a language problem. A Kafka consumer + SNS dispatch in Kotlin coroutines is already pretty lean.\n\n**The simpler fix \u2014 slim down the Kotlin service:**\n\nStrip it to the essentials. A Kotlin service doing Kafka-consume-and-SNS-publish shouldn't need much more than:\n\n```kotlin\n// One consumer, one dispatcher, structured logging you already have\nclass NotificationConsumer(\n    private val snsClient: SnsClient,\n    private val topicArn: String\n) {\n    suspend fun handle(event: NotificationEvent) {\n        snsClient.publish {\n            it.topicArn(topicArn)\n            it.message(event.toJson())\n            it.messageAttributes(event.routingAttributes())\n        }\n    }\n}\n```\n\nIf the current implementation has layers of abstractions, strategy patterns, or DI overhead that aren't pulling their weight \u2014 cut them. That's a day of work, not a rewrite.\n\n**When Go would make sense:** if you were building a high-throughput, latency-sensitive data pipeline team with Go expertise. That's not where you are today.",
+  "timestamp": "2026-05-17T17:18:29Z",
+  "latency_ms": 31597,
+  "exit_code": 0,
+  "output_length_chars": 1483,
+  "output_length_tokens_approx": 370,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "B2"
+}

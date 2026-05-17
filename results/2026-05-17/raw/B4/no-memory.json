@@ -1,0 +1,16 @@
+{
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Got the requirement noted. Point me at the codebase and I'll get started.",
+  "timestamp": "2026-05-17T09:13:46Z",
+  "latency_ms": 25027,
+  "exit_code": 0,
+  "output_length_chars": 73,
+  "output_length_tokens_approx": 18,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "B4"
+}

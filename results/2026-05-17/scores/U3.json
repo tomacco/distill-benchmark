@@ -1,0 +1,67 @@
+{
+  "test_id": "U3",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Technically strong but proposes 3 separate mechanisms (gRPC notification + versioned cache + Redis dirty flag) plus a phased rollout \u2014 the opposite of 'don't over-engineer.' Way over 300 words. The hybrid approach contradicts the user's stated preference for simplicity."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Good recommendation (read-your-writes token via client header). Opinionated with a single approach. But uses pseudocode/Java-style syntax instead of Kotlin, and includes a 'core tension' preamble that restates the problem. Moderate length."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Most concise of all responses. Picks one approach (Redis dirty marker), gives idiomatic Kotlin code, addresses constraints directly, includes numbers. No preamble restating the problem. Closest to the ideal 'do X' style. Edge cases are brief and practical."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Opens with a clear opinionated stance ('option 3 is right'). Kotlin code, good constraint awareness. But the 'why the other options are worse' section is lengthy and the edge case/tuning discussion adds bulk. Solid but could be tighter."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "The comparison table is a nice concise touch. Kotlin code. Covers PG replica lag (good senior insight). But the 'watch out for' section with 3 numbered items and the metric discussion push it longer than needed. Restates the problem briefly at the start."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Good Kotlin with idiomatic Spring-style redisTemplate usage. Picks one approach and commits to it. But the 'why I'd skip the other options' section is verbose, and there's unnecessary context echoing at the start ('a few things stand out from your architecture'). Moderate length."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Longest response by a wide margin. Uses generic pseudocode instead of Kotlin. Opens by restating the problem. Good technical content (replication lag edge case is valuable) but buries it in excessive explanation. Multiple edge cases discussed at length. Fails the conciseness requirement decisively."
+    }
+  },
+  "ranking": [
+    "C",
+    "D",
+    "F",
+    "B",
+    "E",
+    "A",
+    "G"
+  ],
+  "analysis": "All seven systems correctly identified the Redis dirty-flag / read-your-writes approach as the right solution, demonstrating strong senior-level calibration. The key differentiator was style match: the user profile calls for concise, opinionated, direct answers. System C best matched this \u2014 it picked one approach, gave idiomatic Kotlin, included practical numbers, and kept it tight with no preamble. Systems D and F were solid runners-up: opinionated and Kotlin-aware but somewhat verbose in their 'why not the alternatives' sections. System B had a good alternative take (client-side token) but used non-Kotlin pseudocode. System E's table was a nice concise device but the surrounding text was still long. System A proposed three separate mechanisms (gRPC + versioning + Redis dirty flag) with a phased rollout, directly contradicting the 'don't over-engineer' constraint. System G was the longest, used generic pseudocode, and restated the problem at the top \u2014 the weakest style match despite solid technical content.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "no-memory",
+    "C": "knowledge-graph",
+    "D": "memory-compiler",
+    "E": "claude-mem",
+    "F": "basic-memory",
+    "G": "distill"
+  }
+}

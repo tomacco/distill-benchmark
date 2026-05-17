@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honestly, this makes sense on paper \u2014 Go is a natural fit for a thin Kafka-consumer-to-SNS dispatcher. But a few things to weigh:\n\n**In favor:**\n- Go's stdlib + a Kafka client (e.g. `franz-go`) + AWS SDK is genuinely lighter than the Kotlin equivalent with Spring/coroutines machinery\n- Lower memory footprint on EKS, faster cold starts\n- Simple services like this are where Go shines \u2014 less ceremony\n\n**Against / caution:**\n- It's in prod and working. Rewriting a prod service burns cycles right when payment-processing is the priority and Series C diligence is Q3\n- You'd be introducing a second backend language into the stack. That's a permanent maintenance cost for ~80 engineers \u2014 hiring, tooling, CI pipelines, on-call debugging. One service rarely stays one service\n- If the real problem is over-engineering in the Kotlin version, a simpler Kotlin rewrite (drop Spring, use `kotlin-kafka` + raw AWS SDK) might get you 80% of the benefit without the language sprawl\n\n**My take:** If the notification service is stable and not causing pain, I'd leave it alone until after payment-processing ships. If it *is* causing pain (OOM, slow deploys, hard to modify), I'd first try slimming the Kotlin version down. Go rewrite is the right call only if you're genuinely committed to Go as a second supported language at Helios \u2014 not just for one service.\n\nWorth running this by Sofia since she'd inherit the operational complexity either way.",
+  "timestamp": "2026-05-17T17:08:09Z",
+  "latency_ms": 20425,
+  "exit_code": 0,
+  "output_length_chars": 1439,
+  "output_length_tokens_approx": 359,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "B2"
+}

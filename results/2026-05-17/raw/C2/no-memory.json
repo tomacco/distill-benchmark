@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a solid fit for session stores with simple key-value access patterns. A few considerations:\n\n**Why it works well:**\n- Single-digit millisecond reads by default, sub-millisecond with DAX (DynamoDB Accelerator)\n- No connection pooling headaches like Redis cluster\n- Auto-scaling, no capacity planning for spiky traffic\n- TTL built in for session expiry\n\n**Watch out for:**\n- \"Sub-millisecond\" specifically requires DAX \u2014 base DynamoDB is single-digit ms, not sub-ms\n- DAX adds cost and operational complexity (cache invalidation, cluster management)\n- If your sessions are truly just key-value with no queries, Redis/ElastiCache gives you sub-ms without an extra caching layer and is simpler to reason about\n- DynamoDB pricing can surprise you at high throughput if you're not using on-demand carefully\n\n**The real question:** Do you actually need sub-millisecond, or is single-digit ms fine? If single-digit ms works, plain DynamoDB with no DAX is the simplest option. If you truly need sub-ms and are already in the AWS ecosystem, DAX works \u2014 but Redis is worth comparing since it's sub-ms natively and purpose-built for this exact use case.\n\nWhat's the expected session volume and are you already running other AWS infrastructure?",
+  "timestamp": "2026-05-17T09:14:11Z",
+  "latency_ms": 13597,
+  "exit_code": 0,
+  "output_length_chars": 1243,
+  "output_length_tokens_approx": 310,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "C2"
+}

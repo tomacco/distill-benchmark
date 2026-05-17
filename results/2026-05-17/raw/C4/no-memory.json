@@ -1,0 +1,16 @@
+{
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "I'd be happy to help, but I need a bit more context to give you a good recommendation. A few questions:\n\n1. **What language/framework** is the payment service built with? (e.g., Node.js, Python, Go, Java)\n2. **What's your existing infrastructure?** Do you already aggregate logs somewhere (e.g., Datadog, ELK, CloudWatch, Splunk)?\n3. **Are there other services in this system?** If so, what logging do they use? Consistency across services is usually worth it.\n4. **Any compliance requirements?** Payment services often need audit trails, PCI-DSS considerations (masking card numbers, etc.).\n\nIf you have code in this directory I can look at, I can also check what's already in place and recommend something that fits.",
+  "timestamp": "2026-05-17T09:14:43Z",
+  "latency_ms": 11074,
+  "exit_code": 0,
+  "output_length_chars": 718,
+  "output_length_tokens_approx": 179,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "C4"
+}

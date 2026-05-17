@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin microservices, PostgreSQL, no existing feature-flag service), the simplest approach is a **database-backed feature flag** \u2014 no new infrastructure, no vendor dependency.\n\n### Approach: flags table in PostgreSQL\n\n**1. Create a Flyway migration:**\n\n```sql\n-- V__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    description TEXT,\n    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (name, enabled, description)\nVALUES ('new_payment_flow', FALSE, 'Dark-launch: new payment processing flow');\n```\n\n**2. Simple Kotlin flag check:**\n\n```kotlin\nclass FeatureFlagService(private val db: Database) {\n\n    private val cache = ConcurrentHashMap<String, Boolean>()\n\n    fun isEnabled(flag: String): Boolean =\n        cache.getOrPut(flag) {\n            db.queryOne(\"SELECT enabled FROM feature_flags WHERE name = ?\", flag) ?: false\n        }\n\n    // Call on a schedule (e.g., every 30s) to refresh without restart\n    fun refreshCache() = cache.clear()\n}\n```\n\n**3. Use it in the payment code:**\n\n```kotlin\nif (featureFlags.isEnabled(\"new_payment_flow\")) {\n    newPaymentProcessor.process(request)\n} else {\n    legacyPaymentProcessor.process(request)\n}\n```\n\n### Why this over a vendor tool\n\n- Payment processing is still in the monolith \u2014 adding LaunchDarkly or similar for one flag is overkill right now.\n- You already use Flyway, so the migration is trivial.\n- A `cache.clear()` on a timer or admin endpoint gives you instant toggling without redeployment.\n- When/if you need percentage rollouts or user-level targeting later, you can swap in a vendor solution and keep the same `isEnabled()` interface.\n\n### To flip it on\n\n```sql\nUPDATE feature_flags SET enabled = TRUE, updated_at = now() WHERE name = 'new_payment_flow';\n```\n\nWant me to scaffold the actual migration and service class in the codebase?",
+  "timestamp": "2026-05-17T09:22:57Z",
+  "latency_ms": 24391,
+  "exit_code": 0,
+  "output_length_chars": 1984,
+  "output_length_tokens_approx": 496,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "P4"
+}

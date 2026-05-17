@@ -1,0 +1,67 @@
+{
+  "test_id": "R4",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Only system that leads with PostgreSQL extensions as first choice, explicitly references PG-over-new-infra preference, mentions pg_cron/Citus/TimescaleDB/partitioning, notes Series C context. Doesn't explicitly warn against DynamoDB/MongoDB but also doesn't recommend them. Knowledge feels deeply applied, though quoting 'your principle' is slightly regurgitated."
+    },
+    "B": {
+      "relevance": 3,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Knows about PG expertise and Kafka but does not surface DynamoDB/MongoDB rejection or PG extension preference. Leads with ClickHouse rather than PostgreSQL-based solutions. Competent generic advice with some team context but misses key stored knowledge signals."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Explicitly steers away from DynamoDB/MongoDB with brief reasoning. Knows stack details (PG 14, Kafka, EKS, 80-engineer org). However leads with ClickHouse rather than PG-based solutions and doesn't mention PG extension preference. Good architecture fit section."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Surfaces DynamoDB/MongoDB rejection with reasons. Mentions Helios by name which feels like showing off stored knowledge rather than organic use. Leads with ClickHouse, TimescaleDB as runner-up. Doesn't mention PG extension preference. Solid but slightly less natural."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Surfaces DynamoDB/MongoDB rejection with reasons. Notes raw PostgreSQL limitations at scale. Leads with ClickHouse. Doesn't mention PG extension preference. Clean and direct, knowledge woven in naturally with 'per your past decisions'."
+    },
+    "F": {
+      "relevance": 1,
+      "precision": 2,
+      "naturalness": 3,
+      "notes": "Completely generic response with no stored knowledge. Lists options across cloud providers (BigQuery/GCP doesn't fit AWS stack). Recommends DynamoDB-adjacent patterns without awareness of rejection. Asks clarifying questions the system should already know. No team context whatsoever."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Surfaces DynamoDB/MongoDB rejection. Knows stack details. However recommends Redshift as runner-up, which conflicts with the team's preference for PG extensions over new infrastructure. Doesn't mention PG extension preference. Otherwise solid and concise."
+    }
+  },
+  "ranking": [
+    "A",
+    "E",
+    "C",
+    "D",
+    "B",
+    "G",
+    "F"
+  ],
+  "analysis": "System A stands clearly above the rest by being the only system to lead with PostgreSQL-based solutions and explicitly reference the team's preference for PG extensions over new infrastructure \u2014 the core retrieval signal this test measures. It recommends pg_partitioning, pg_cron, Citus, and TimescaleDB before even mentioning ClickHouse, demonstrating deep contextual understanding. Systems C, D, E, and G all surface the DynamoDB/MongoDB rejection (a key signal), but all lead with ClickHouse rather than PostgreSQL-based solutions, missing the PG extension preference. Among these, E edges ahead for natural integration and conciseness, C is strong with good architecture context, D loses slightly for name-dropping Helios unnecessarily, and G loses points for recommending Redshift which conflicts with the PG-first preference. System B knows some team context but misses both the rejection history and PG preference. System F demonstrates zero stored knowledge \u2014 a fully generic response that even includes off-stack suggestions like BigQuery on GCP, making it clearly the weakest performer.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "memory-engine",
+    "C": "memory-compiler",
+    "D": "distill",
+    "E": "basic-memory",
+    "F": "no-memory",
+    "G": "knowledge-graph"
+  }
+}

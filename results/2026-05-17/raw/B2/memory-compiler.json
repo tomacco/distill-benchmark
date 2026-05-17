@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "A few thoughts:\n\n**The case for Go makes sense on paper.** A Kafka consumer \u2192 SNS dispatcher is exactly the kind of \"infrastructure glue\" where Go shines \u2014 small binary, low memory footprint, fast startup, straightforward concurrency with goroutines for parallel dispatch.\n\n**But consider the organizational context:**\n\n1. **Your stack is Kotlin.** The entire backend team (you, Sofia, others) has Kotlin expertise. Introducing Go means a second language for hiring, code review, on-call debugging, shared libraries (structured logging with correlation IDs, gRPC interceptors, etc.). For ~80 engineers mid-monolith-extraction, that's friction.\n\n2. **The notification service is already in production.** A rewrite carries risk for something that's working. \"Over-engineered\" in Kotlin might just mean stripping out unnecessary abstractions rather than switching languages.\n\n3. **What's actually over-engineered?** If it's excessive use of coroutine flows, too many layers of abstraction, or unnecessary DI ceremony \u2014 that's fixable in Kotlin without a rewrite. A slim Kotlin service consuming Kafka and calling SNS can be ~200 lines of actual logic.\n\n**When the Go rewrite would make more sense:**\n- If you're planning more infrastructure-glue services and want to standardize them in Go\n- If the Kotlin version has genuine resource/performance issues (unlikely for this workload)\n- If the team is already considering Go for other services\n\n**My suggestion:** Before rewriting, identify what specifically feels over-engineered. If it's just boilerplate/abstraction layers, a simplification pass in Kotlin is lower risk and keeps your stack homogeneous. If there's a broader strategy to adopt Go for lightweight services, that's a different (valid) conversation \u2014 but bring Sofia into it since it affects the platform direction.",
+  "timestamp": "2026-05-17T15:33:11Z",
+  "latency_ms": 28256,
+  "exit_code": 0,
+  "output_length_chars": 1826,
+  "output_length_tokens_approx": 456,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "B2"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "**No, we shouldn't use DynamoDB.** This was already evaluated and rejected by the team. The reasons documented were:\n\n- **Strong consistency requirements** \u2014 as a financial platform, Helios needs guarantees that DynamoDB's eventual consistency model makes harder (you can get strongly consistent reads, but with limitations).\n- **Multi-table transactions** \u2014 the domain is relational; DynamoDB's transaction support is limited compared to what PostgreSQL provides.\n- **Team expertise is in PostgreSQL** \u2014 the entire stack already runs on PG 14.\n\nFor sub-millisecond key-value lookups on a session store, **Redis is already in the stack** and is purpose-built for exactly this. It gives you:\n\n- Sub-millisecond reads on simple key lookups\n- Built-in TTL for session expiry\n- No new infrastructure or expertise to adopt\n\nA Redis-backed session store is the straightforward choice here given what's already in place.",
+  "timestamp": "2026-05-17T17:19:39Z",
+  "latency_ms": 16236,
+  "exit_code": 0,
+  "output_length_chars": 913,
+  "output_length_tokens_approx": 228,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "C2"
+}

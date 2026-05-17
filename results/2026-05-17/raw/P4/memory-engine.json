@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin, PostgreSQL, Redis) and preference for minimal dependencies, the simplest approach is a database-backed feature flag \u2014 no new infrastructure, no third-party service:\n\n**A single Postgres table + Redis cache:**\n\n```sql\n-- Flyway migration\nCREATE TABLE feature_flags (\n    key         TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    percentage  INT,              -- for gradual rollout (0-100)\n    allowed_ids TEXT[],           -- specific account/user IDs for dark-launch\n    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (key, enabled, allowed_ids)\nVALUES ('new_payment_flow', false, '{}');\n```\n\n```kotlin\n// FeatureFlags.kt\nclass FeatureFlags(\n    private val redis: RedisCommands<String, String>,\n    private val db: DSLContext\n) {\n    fun isEnabled(key: String, accountId: String? = null): Boolean {\n        val cached = redis.hgetall(\"ff:$key\")\n        val flag = if (cached.isNotEmpty()) fromCache(cached)\n                   else loadAndCache(key)\n\n        return when {\n            flag == null -> false\n            !flag.enabled -> false\n            flag.allowedIds.isNotEmpty() -> accountId in flag.allowedIds\n            flag.percentage != null -> accountId.hashCode().mod(100) < flag.percentage\n            else -> true\n        }\n    }\n\n    private fun loadAndCache(key: String): Flag? {\n        // load from PG, cache in Redis with 30s TTL\n    }\n}\n```\n\n**Usage in the payment service:**\n\n```kotlin\nsuspend fun processPayment(request: PaymentRequest): PaymentResponse {\n    return if (featureFlags.isEnabled(\"new_payment_flow\", request.accountId)) {\n        newPaymentFlow(request)\n    } else {\n        legacyPaymentFlow(request)\n    }\n}\n```\n\n**Dark-launch rollout:**\n\n```sql\n-- 1. Enable for Sofia's test accounts\nUPDATE feature_flags SET enabled = true, allowed_ids = '{acct_test1,acct_test2}' WHERE key = 'new_payment_flow';\n\n-- 2. Gradual rollout to 10%\nUPDATE feature_flags SET allowed_ids = '{}', percentage = 10 WHERE key = 'new_payment_flow';\n\n-- 3. Full rollout\nUPDATE feature_flags SET percentage = 100 WHERE key = 'new_payment_flow';\n```\n\nThis gives you targeted dark-launch + percentage rollout with zero new dependencies. The Redis cache keeps it fast, and the 30s TTL means flag changes propagate quickly without needing a pub/sub mechanism. When you outgrow this (dozens of flags, A/B testing, audit trails), then evaluate a dedicated service \u2014 but not before.",
+  "timestamp": "2026-05-17T17:22:54Z",
+  "latency_ms": 28809,
+  "exit_code": 0,
+  "output_length_chars": 2515,
+  "output_length_tokens_approx": 628,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "P4"
+}

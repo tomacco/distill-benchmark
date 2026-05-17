@@ -1,0 +1,16 @@
+{
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what I created under `payment-service/`:\n\n**Event model** \u2014 `event/PaymentCompleted.kt`\n- Data class with `paymentId`, `orderId`, `amount`, `currency`, `completedAt`, `correlationId`\n\n**Kafka config** \u2014 `config/KafkaConsumerConfig.kt`\n- Typed `ConsumerFactory<String, PaymentCompleted>` with Jackson deserialization\n- Manual ack mode (`AckMode.RECORD`), auto-commit disabled\n- `earliest` offset reset so new consumer groups pick up existing events\n\n**Consumer** \u2014 `consumer/PaymentCompletedConsumer.kt`\n- `@KafkaListener` on topic `payment-completed`\n- Sets `correlationId` and `paymentId` on MDC for structured logging\n- Bridges to coroutines via `runBlocking` (Spring Kafka listeners are blocking; this lets `process()` be a `suspend fun`)\n- Rethrows exceptions so Spring's retry/DLT mechanism kicks in\n- `process()` is the stub for your business logic\n\n**Integration test** \u2014 `consumer/PaymentCompletedConsumerIntegrationTest.kt`\n- Testcontainers Kafka (real broker, no mocks)\n- Publishes a `PaymentCompleted` event and uses Awaitility to wait for consumption\n- Ready for real assertions once you wire up side effects (DB writes, gRPC calls to fulfillment, etc.)\n\n**Next steps** to fill in:\n1. Implement `process()` \u2014 likely update order status in PG and/or call fulfillment via gRPC\n2. Add dead-letter topic config if you want automatic DLT routing on repeated failures\n3. Strengthen the integration test assertions once side effects exist",
+  "timestamp": "2026-05-17T15:24:30Z",
+  "latency_ms": 127911,
+  "exit_code": 0,
+  "output_length_chars": 1450,
+  "output_length_tokens_approx": 362,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "D4"
+}

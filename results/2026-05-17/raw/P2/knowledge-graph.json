@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no actual auth-service code in this workspace \u2014 just the knowledge graph describing it. Since auth-service is a Kotlin service running on EKS with gRPC internally and REST+OpenAPI externally, here's a straightforward health check endpoint:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/controller/HealthController.kt\n\npackage com.helios.auth.controller\n\nimport org.springframework.web.bind.annotation.GetMapping\nimport org.springframework.web.bind.annotation.RestController\nimport org.springframework.http.ResponseEntity\n\n@RestController\nclass HealthController(\n    private val dataSource: javax.sql.DataSource\n) {\n    @GetMapping(\"/health\")\n    fun health(): ResponseEntity<Map<String, String>> {\n        dataSource.connection.use { it.isValid(2) }\n        return ResponseEntity.ok(mapOf(\"status\" to \"UP\"))\n    }\n}\n```\n\n**Load balancer config** \u2014 point the target group health check at:\n- **Path**: `/health`\n- **Port**: your HTTP port (typically 8080)\n- **Interval**: 30s, threshold 3\n\n**Alternatively**, if you're already using Spring Boot Actuator, you can skip the custom controller and just expose the built-in endpoint:\n\n```yaml\n# application.yml\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: health\n  endpoint:\n    health:\n      show-details: never\n  server:\n    port: 8081  # separate management port if you want\n```\n\nThen point the LB at `/actuator/health`.\n\n---\n\nI don't have access to the actual auth-service repo. Want me to scaffold the full file in this workspace, or do you want to point me at the auth-service codebase?",
+  "timestamp": "2026-05-17T17:12:33Z",
+  "latency_ms": 24119,
+  "exit_code": 0,
+  "output_length_chars": 1565,
+  "output_length_tokens_approx": 391,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "P2"
+}

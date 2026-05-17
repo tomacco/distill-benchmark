@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "The vault still lists PostgreSQL 14 as the primary database. Based on your update that the account service was migrated to MySQL last week, the answer is:\n\n**The account service now uses MySQL**, following last week's migration from PostgreSQL.\n\nThe vault file (`vault/architecture.md`) hasn't been updated yet to reflect this change \u2014 it still references PostgreSQL 14. Would you like me to update it?",
+  "timestamp": "2026-05-17T15:21:20Z",
+  "latency_ms": 11828,
+  "exit_code": 0,
+  "output_length_chars": 402,
+  "output_length_tokens_approx": 100,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "C3"
+}

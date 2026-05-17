@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "**No \u2014 DynamoDB was already evaluated and explicitly rejected by your team.** The decision is documented in your vault:\n\n> *NEVER suggest DynamoDB \u2014 rejected (strong consistency, multi-table txns, PG expertise)*\n\nThe reasoning was around strong consistency requirements, multi-table transaction needs, and the team's deep PostgreSQL expertise \u2014 all important considerations for a financial platform like Helios.\n\nFor sub-millisecond reads on simple key-value session lookups, **you already have Redis in your stack**. It's purpose-built for this:\n\n- **Sub-millisecond latency** \u2014 Redis routinely delivers <1ms reads for key-value access\n- **Already deployed** \u2014 no new infrastructure to provision or operate\n- **Built-in TTL** \u2014 natural fit for session expiry\n- **Team familiarity** \u2014 it's already in your caching layer\n\nIf sessions need durability beyond what Redis provides (e.g., surviving a full cluster restart), you could back it with PostgreSQL \u2014 session writes are infrequent relative to reads, so PG handles the persistence while Redis handles the hot path.",
+  "timestamp": "2026-05-17T15:21:08Z",
+  "latency_ms": 14555,
+  "exit_code": 0,
+  "output_length_chars": 1066,
+  "output_length_tokens_approx": 266,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "C2"
+}

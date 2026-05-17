@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you told me earlier in this conversation, the account service now uses **MySQL** \u2014 you mentioned the migration from PostgreSQL was completed last week.\n\nThat said, I should flag that the project memory files (`memory/project.md`) still list **PostgreSQL 14** as the database across the stack and don't reflect this change. Would you like me to update the memory files to record the switch to MySQL for the account service?",
+  "timestamp": "2026-05-17T17:19:51Z",
+  "latency_ms": 12164,
+  "exit_code": 0,
+  "output_length_chars": 436,
+  "output_length_tokens_approx": 109,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "C3"
+}

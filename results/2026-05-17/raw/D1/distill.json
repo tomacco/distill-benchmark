@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Done. Run it with `./containers.sh`. It uses `docker ps` with a formatted table showing container names, status, and port mappings.",
+  "timestamp": "2026-05-17T09:45:38Z",
+  "latency_ms": 12898,
+  "exit_code": 0,
+  "output_length_chars": 131,
+  "output_length_tokens_approx": 32,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "D1"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Given your stack and existing decisions, here's what I'd recommend:\n\n## Logging Stack for payment-processing\n\n**SLF4J + Logback** \u2014 standard for Kotlin/JVM, zero surprises.\n\nAdd to your `build.gradle.kts`:\n\n```kotlin\ndependencies {\n    implementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n}\n```\n\n**Why this combo:**\n- `kotlin-logging` \u2014 idiomatic Kotlin wrapper over SLF4J, coroutine-friendly\n- `logstash-logback-encoder` \u2014 JSON structured logging out of the box, which you're already doing\n\n**Logback config** (`logback.xml`) for structured JSON with correlation IDs:\n\n```xml\n<configuration>\n  <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\">\n      <includeMdcKeyName>correlationId</includeMdcKeyName>\n      <includeMdcKeyName>userId</includeMdcKeyName>\n    </encoder>\n  </appender>\n  <root level=\"INFO\">\n    <appender-ref ref=\"STDOUT\" />\n  </root>\n</configuration>\n```\n\n**Correlation ID propagation** \u2014 gRPC interceptor to pull it from metadata into MDC:\n\n```kotlin\nclass CorrelationIdInterceptor : ServerInterceptor {\n    override fun <ReqT, RespT> interceptCall(\n        call: ServerCall<ReqT, RespT>,\n        headers: Metadata,\n        next: ServerCallHandler<ReqT, RespT>\n    ): ServerCall.Listener<ReqT> {\n        val correlationId = headers.get(CORRELATION_ID_KEY) ?: UUID.randomUUID().toString()\n        val ctx = Context.current().withValue(CORRELATION_ID_CTX, correlationId)\n        MDC.put(\"correlationId\", correlationId)\n        return Contexts.interceptCall(ctx, call, headers, next)\n    }\n}\n```\n\nFor coroutines, use `MDCContext()` to propagate MDC across suspension points:\n\n```kotlin\nwithContext(MDCContext()) {\n    logger.info { \"Processing payment $paymentId\" }\n}\n```\n\n**Key points:**\n- JSON to stdout, let EKS/CloudWatch handle aggregation\n- No file appenders \u2014 you're in containers\n- Match the pattern auth-service and notification-service already use\n- For payment-specific audit logging, consider a separate logger writing to Kafka for the audit trail\n\nWant me to scaffold the actual config files and interceptor?",
+  "timestamp": "2026-05-17T17:32:25Z",
+  "latency_ms": 16783,
+  "exit_code": 0,
+  "output_length_chars": 2205,
+  "output_length_tokens_approx": 551,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "C4"
+}

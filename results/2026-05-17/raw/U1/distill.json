@@ -1,0 +1,16 @@
+{
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "Good context. Here's a breakdown of how Kubernetes service mesh works, and whether Istio makes sense for your situation:\n\n## How a Service Mesh Works\n\nA service mesh adds a **sidecar proxy** (typically Envoy) to every pod. All traffic between services flows through these proxies, giving you:\n\n1. **Mutual TLS (mTLS)** \u2014 automatic encryption and identity verification between services, no app code changes\n2. **Authorization policies** \u2014 declarative rules like \"only `payment-service` can call `account-service` on port 8443\"\n3. **Observability** \u2014 request-level metrics, distributed traces, and access logs for free\n4. **Traffic management** \u2014 retries, circuit breaking, canary routing\n\nThe control plane (Istiod in Istio's case) pushes config to all sidecar proxies, which handle enforcement at the network layer.\n\n## Your Specific Situation\n\nBased on your architecture \u2014 EKS, gRPC between services, `payment-service` about to be extracted, `account-service` in staging \u2014 here's what matters:\n\n**Arguments for Istio:**\n- You're already on gRPC, and Envoy has first-class gRPC support (load balancing, retries, per-method policies)\n- mTLS between `payment-service` \u2194 `account-service` is critical for PCI-adjacent flows, and Istio gives you this without touching application code\n- You're mid-migration with more services coming \u2014 the mesh value compounds as service count grows\n- Series C due diligence: \"zero-trust networking with mTLS everywhere\" is a strong story\n\n**Arguments against (or to defer):**\n- You currently have 3 extracted services. Istio adds operational complexity (resource overhead per pod, debugging proxy issues, version upgrades). Under ~5 services, the cost/benefit is marginal.\n- Your `auth-service` already issues JWTs \u2014 you could use **JWT-based service-to-service auth** with audience claims (`aud: account-service`) for now. This is simpler and your team already understands it.\n- Alternatives with less overhead: **Linkerd** (lighter, simpler, Rust-based proxy) or **AWS App Mesh** (native EKS integration, less config)\n\n## Recommendation\n\nGiven you're at 3-4 services and growing, I'd suggest:\n\n1. **Short term** \u2014 use mTLS via a lighter option. Either:\n   - Linkerd (minimal config, auto-mTLS, ~10MB memory per sidecar vs Istio's ~50-100MB)\n   - Or extend your existing JWT auth with service-identity tokens from `auth-service` (no mesh needed)\n\n2. **Evaluate Istio when** you hit 6+ extracted services or need advanced traffic policies (canary deployments, fault injection for chaos testing)\n\nWant me to sketch out either approach \u2014 the JWT service-identity pattern or a minimal Linkerd setup for your EKS cluster?",
+  "timestamp": "2026-05-17T09:25:39Z",
+  "latency_ms": 40665,
+  "exit_code": 0,
+  "output_length_chars": 2648,
+  "output_length_tokens_approx": 662,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "U1"
+}

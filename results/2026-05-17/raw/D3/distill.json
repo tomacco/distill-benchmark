@@ -1,0 +1,16 @@
+{
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Here's the simplest approach that fits your stack:\n\n## Merchant Bank Account Verification Endpoint\n\nSince payment-service is being extracted from the monolith, add a REST endpoint (external-facing) backed by a gRPC call to `account-service` for the actual verification logic.\n\n**REST endpoint** (external, for partners/merchants):\n\n```kotlin\n@PostMapping(\"/v1/merchants/{merchantId}/bank-accounts/verify\")\nsuspend fun verifyBankAccount(\n    @PathVariable merchantId: String,\n    @Valid @RequestBody request: VerifyBankAccountRequest\n): VerifyBankAccountResponse {\n    val merchant = merchantClient.getMerchant(merchantId) // gRPC to account-service\n    val result = bankVerificationService.verify(merchant, request.toModel())\n    return result.toResponse()\n}\n```\n\n```kotlin\ndata class VerifyBankAccountRequest(\n    val routingNumber: String,\n    val accountNumber: String,\n    val accountHolderName: String\n)\n```\n\n**Verification approach \u2014 micro-deposit:**\n\nThe standard pattern for bank account verification without adding a third-party dependency:\n\n1. Initiate two small deposits (e.g., $0.01\u2013$0.99) to the provided account\n2. Merchant confirms the amounts via a second endpoint (`/confirm`)\n3. Mark the account as verified in PostgreSQL\n\n```sql\n-- Flyway migration\nCREATE TABLE merchant_bank_accounts (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    merchant_id UUID NOT NULL REFERENCES merchants(id),\n    routing_number VARCHAR(9) NOT NULL,\n    account_number_encrypted BYTEA NOT NULL,\n    status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING \u2192 VERIFIED / FAILED\n    verification_attempts INT NOT NULL DEFAULT 0,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n```\n\n**Key points:**\n\n- Encrypt `account_number` at rest (you're fintech, this is table stakes)\n- Cap verification attempts (3 max) to prevent brute-forcing the deposit amounts\n- Publish a `BankAccountVerified` event to Kafka so `notification-service` can alert the merchant\n- Use Kotlin coroutines for the async deposit initiation \u2014 consistent with your team's choice over RxJava\n\nIf you already have a banking-as-a-service provider (Plaid, Stripe, etc.) in the monolith, even simpler: wrap their verification API in the new service instead of rolling micro-deposits yourself. Want me to sketch either path in more detail?",
+  "timestamp": "2026-05-17T09:49:55Z",
+  "latency_ms": 29117,
+  "exit_code": 0,
+  "output_length_chars": 2306,
+  "output_length_tokens_approx": 576,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "D3"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your project's knowledge base, here's what to use:\n\n**Structured logging with correlation IDs** \u2014 this is already an adopted standard across all Helios services (per your team's decisions).\n\nFor a Kotlin service on your stack, use **SLF4J + Logback** with JSON output. Here's a minimal setup:\n\n**`build.gradle.kts`**\n```kotlin\ndependencies {\n    implementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\n    implementation(\"ch.qos.logback:logback-classic:1.4.14\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\") // JSON structured logs\n}\n```\n\n**`src/main/resources/logback.xml`**\n```xml\n<configuration>\n    <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n        <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\">\n            <includeMdcKeyName>correlationId</includeMdcKeyName>\n        </encoder>\n    </appender>\n    <root level=\"INFO\">\n        <appender-ref ref=\"STDOUT\" />\n    </root>\n</configuration>\n```\n\n**Usage in code:**\n```kotlin\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"Payment processed\" } // simple\nlogger.withLoggingContext(\"correlationId\" to requestId) {\n    logger.info { \"Processing payment for account=$accountId amount=$amount\" }\n}\n```\n\nKey points:\n- **JSON output** \u2014 parseable by whatever log aggregator you're shipping to on EKS (CloudWatch, Datadog, etc.)\n- **Correlation IDs via MDC** \u2014 consistent with your other extracted services, lets you trace requests across `auth-service` \u2192 `payment-service` \u2192 `account-service` via Kafka headers\n- **kotlin-logging** \u2014 thin Kotlin wrapper over SLF4J, avoids the verbose Java logger boilerplate\n\nSince this is a payment service, also consider logging at `WARN`/`ERROR` for failed transactions with enough context for audit (amount, account, failure reason) but **never log card numbers, tokens, or PII**.",
+  "timestamp": "2026-05-17T09:21:28Z",
+  "latency_ms": 24087,
+  "exit_code": 0,
+  "output_length_chars": 1860,
+  "output_length_tokens_approx": 465,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "C4"
+}

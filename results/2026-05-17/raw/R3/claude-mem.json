@@ -1,0 +1,16 @@
+{
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Sure, happy to help. Before I start, a couple of quick questions:\n\n1. **Is there an existing frontend project in this workspace?** I don't see one yet \u2014 should I scaffold something, or is there a repo I should be looking at?\n\n2. **What should the settings page cover?** For example:\n   - User profile (name, email, avatar)\n   - Notification preferences\n   - Security (password, 2FA)\n   - Team/org settings\n   - Some combination of the above\n\n3. **Any existing component library or design system** you're using (e.g., MUI, Radix, Shadcn, custom)?\n\n4. **State management** \u2014 React context, Zustand, Redux, or just local state for now?\n\nThis will help me write something Dev can pick up and extend easily rather than something you'd need to rework later.",
+  "timestamp": "2026-05-17T17:36:55Z",
+  "latency_ms": 9154,
+  "exit_code": 0,
+  "output_length_chars": 751,
+  "output_length_tokens_approx": 187,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "R3"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Key points:\n\n- **Multi-stage build** \u2014 `build-essential` stays in the builder stage, final image is slim (~200MB smaller)\n- **Non-root user** \u2014 runs as `app`, not root\n- **Healthcheck** \u2014 uses stdlib `urllib` so no extra deps (like `curl`) in the slim image\n- **Model loading** \u2014 expects `models/fraud_model.joblib` baked into the image (or mount it as a volume)\n- Fits your existing pipeline: build in GitHub Actions, push to ECR, deploy via ArgoCD to EKS\n\nThe `POST /score` endpoint takes transaction features and returns `fraud_probability` + `is_fraudulent` (threshold at 0.5 \u2014 adjust to your precision/recall needs). Swap the fields in `Transaction` to match your actual feature set.",
+  "timestamp": "2026-05-17T15:29:08Z",
+  "latency_ms": 38816,
+  "exit_code": 0,
+  "output_length_chars": 688,
+  "output_length_tokens_approx": 172,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "R5"
+}

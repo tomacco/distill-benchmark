@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "I'd actually push back on DynamoDB here. Your team evaluated it previously (for the analytics service) and rejected it for good reasons that still apply:\n\n1. **Strong consistency requirements** \u2014 You're in fintech. Financial session data likely ties into transactions or balances where eventual consistency is risky.\n\n2. **Multi-table transactions** \u2014 If sessions interact with any other data (audit logs, account state), DynamoDB's transaction model is more constrained than what you already have with PostgreSQL.\n\n3. **Operational expertise** \u2014 Your team is deep on PostgreSQL. Adding DynamoDB means a new operational surface (capacity planning, GSI management, DDB-specific failure modes) for a use case that your existing stack handles fine.\n\n**For sub-millisecond key-value reads, you already have Redis in your stack.** It's purpose-built for this exact pattern \u2014 simple key lookups with extremely low latency. A Redis-backed session store gives you:\n\n- Sub-millisecond reads (typically ~0.1\u20130.5ms)\n- TTL-based expiry (natural fit for sessions)\n- No new infrastructure to adopt or learn\n- Battle-tested session store libraries in Kotlin (Spring Session, Lettuce, etc.)\n\nIf you need durability beyond Redis's persistence guarantees, you could write sessions to PostgreSQL asynchronously and serve reads from Redis. But for a session store alone, Redis is the straightforward choice given your current stack.",
+  "timestamp": "2026-05-17T09:20:47Z",
+  "latency_ms": 21326,
+  "exit_code": 0,
+  "output_length_chars": 1412,
+  "output_length_tokens_approx": 353,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "C2"
+}

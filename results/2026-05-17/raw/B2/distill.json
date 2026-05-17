@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Makes sense on the surface \u2014 a Kafka-to-SNS bridge is exactly the kind of thing Go excels at. But a few things to weigh given your context:\n\n**Arguments for Go:**\n- Kafka consumer + SNS publish is a thin I/O pipeline \u2014 Go's goroutines and small runtime footprint are a natural fit\n- Dramatically simpler codebase for what's essentially glue code\n- Lower memory/CPU per pod on EKS, which adds up\n\n**Arguments for staying with Kotlin:**\n- Your entire backend is Kotlin. One Go service means a second build pipeline, a second set of base Docker images, separate dependency management, and team members who now need to context-switch languages\n- You already have Kotlin patterns for Kafka consumers, structured logging with correlation IDs, gRPC \u2014 the notification service presumably shares all that. A Go rewrite means re-implementing or finding Go equivalents for each\n- With ~80 engineers mid-monolith extraction and Series C diligence coming in Q3, the team's bandwidth is tight. Payment processing extraction is next in the queue\n\n**My take:** If the Kotlin version feels over-engineered, the cheaper move is probably to simplify the Kotlin \u2014 strip out unnecessary abstractions, lean on coroutines for the consumer loop, and keep it thin. You get 80% of the benefit without introducing a second language to the stack.\n\nThat said, if you're considering Go as a strategic direction for lightweight services going forward (not just this one), then the notification service is a low-risk place to prove it out since it's simple and has no downstream dependents via gRPC. Just make sure it's a deliberate team decision rather than a one-off.\n\nWhat's driving the \"over-engineered\" feeling \u2014 too many layers of abstraction, or something else?",
+  "timestamp": "2026-05-17T09:19:25Z",
+  "latency_ms": 25723,
+  "exit_code": 0,
+  "output_length_chars": 1736,
+  "output_length_tokens_approx": 434,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "B2"
+}

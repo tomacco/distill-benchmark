@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: I'd push back on this.\n\n**The case against rewriting:**\n\n- Your entire backend is Kotlin. One Go service means a second build pipeline, separate dependency management, different observability patterns, another language in on-call runbooks. For ~80 engineers on a Kotlin stack, that's real operational overhead.\n- \"Over-engineered\" is a code problem, not a language problem. If the Kotlin service has too many abstractions, strip them out. A Kafka consumer + SNS publish in Kotlin with coroutines is already pretty lean.\n- You already chose coroutines over RxJava specifically for simplicity. The tools are there.\n\n**Where Go would actually make sense:**\n\n- If you were building a new team/domain with its own deploy pipeline\n- If the service had extreme throughput requirements where Go's runtime mattered (unlikely for a notification dispatcher)\n- If this was a standalone CLI tool or infrastructure component, not a business service\n\n**What I'd do instead:**\n\nSimplify the existing Kotlin service. A Kafka consumer dispatching to SNS should be ~200 lines of actual logic. If it's significantly more than that, the problem is accidental complexity you can cut \u2014 not Kotlin itself.\n\nWant me to look at the current notification-service code and propose a simplified version?",
+  "timestamp": "2026-05-17T14:10:23Z",
+  "latency_ms": 17341,
+  "exit_code": 0,
+  "output_length_chars": 1286,
+  "output_length_tokens_approx": 321,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "B2"
+}

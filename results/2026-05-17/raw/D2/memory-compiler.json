@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Based on your requirements \u2014 complex aggregation queries across multiple tables with strong consistency \u2014 and given your existing stack, **PostgreSQL** is the clear recommendation.\n\nHere's why it's a strong fit for the reporting service:\n\n**Aligns with your stack:**\n- You're already running PostgreSQL 14 as your primary database\n- The team has deep PostgreSQL expertise\n- Flyway is already in place for migrations\n\n**Meets your requirements:**\n- Complex aggregations: window functions, CTEs, materialized views, and `GROUP BY` extensions (`ROLLUP`, `CUBE`, `GROUPING SETS`) handle multi-dimensional reporting well\n- Multi-table joins with full ACID consistency\n- Partitioning (range/list/hash) for large reporting tables that grow over time\n\n**Options to consider for scaling reads:**\n\n1. **Dedicated read replica** \u2014 route reporting queries to a replica so they don't compete with transactional workloads in account-service or payment processing.\n2. **Materialized views** \u2014 pre-compute expensive aggregations, refresh on a schedule or via `REFRESH MATERIALIZED VIEW CONCURRENTLY`.\n3. **TimescaleDB extension** \u2014 if you end up with heavy time-series aggregations, this slots in without leaving the PostgreSQL ecosystem.\n\nIf reporting volume eventually outgrows what a single Postgres instance can handle, you could add a lightweight OLAP layer (e.g., ClickHouse or Apache Druid fed from Kafka), but I'd start with PostgreSQL and only introduce that complexity when you have evidence you need it.\n\nWant me to sketch out a schema or help plan the service setup?",
+  "timestamp": "2026-05-17T15:35:24Z",
+  "latency_ms": 17966,
+  "exit_code": 0,
+  "output_length_chars": 1562,
+  "output_length_tokens_approx": 390,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "D2"
+}

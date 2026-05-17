@@ -1,0 +1,9 @@
+# Local settings (may contain personal permissions/paths)
+.claude/settings.local.json
+
+# OS
+.DS_Store
+
+# Temp files
+/tmp/
+*.tmp

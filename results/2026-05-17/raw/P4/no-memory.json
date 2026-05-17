@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "The workspace is empty, so I'll give you a general recommendation.\n\n## Simplest approach: environment variable + config check\n\n**1. Define the flag:**\n\n```env\n# .env\nENABLE_NEW_PAYMENT_FLOW=false\n```\n\n**2. Create a minimal feature flag module:**\n\n```python\n# feature_flags.py\nimport os\n\ndef new_payment_flow_enabled() -> bool:\n    return os.getenv(\"ENABLE_NEW_PAYMENT_FLOW\", \"false\").lower() == \"true\"\n```\n\n**3. Use it at the routing/entry point:**\n\n```python\nif new_payment_flow_enabled():\n    return process_payment_v2(request)\nelse:\n    return process_payment(request)\n```\n\n## Why this is enough for a dark launch\n\n- **No external dependencies** \u2014 no LaunchDarkly, Unleash, etc.\n- **Per-environment control** \u2014 flip it in staging first, then prod.\n- **Easy rollback** \u2014 set back to `false` and restart/redeploy.\n- **No code shipped to users** \u2014 the old path remains default.\n\n## When to graduate to something more complex\n\nMove to a proper feature flag service (LaunchDarkly, Flipt, etc.) if you need:\n\n- **Per-user or percentage-based rollout** (e.g., 5% of traffic)\n- **Runtime toggling without redeploy**\n- **Audit trail** of who enabled what and when\n\nWould you like me to scaffold this into your project once you have code here, or tailor it to a specific framework/language?",
+  "timestamp": "2026-05-17T09:15:56Z",
+  "latency_ms": 20547,
+  "exit_code": 0,
+  "output_length_chars": 1283,
+  "output_length_tokens_approx": 320,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "P4"
+}

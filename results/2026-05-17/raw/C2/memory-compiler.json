@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "I'd recommend against DynamoDB here. Your team has already evaluated and rejected it \u2014 the decision was to stick with **PostgreSQL** due to the need for strong consistency, multi-table transactions, and the team's existing PostgreSQL expertise.\n\nFor the session store specifically, you already have **Redis** in the stack as a caching layer. Redis is a natural fit for this:\n\n- Sub-millisecond reads on key-value lookups (typically <1ms)\n- Purpose-built for exactly this pattern\n- Already deployed and familiar to the team\n- Built-in TTL for session expiration\n- No additional operational burden\n\nAdding DynamoDB would introduce a new data store to operate and monitor when Redis already solves the problem cleanly.",
+  "timestamp": "2026-05-17T15:34:26Z",
+  "latency_ms": 12817,
+  "exit_code": 0,
+  "output_length_chars": 715,
+  "output_length_tokens_approx": 178,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "C2"
+}

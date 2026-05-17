@@ -1,0 +1,67 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Simple DB flag with in-memory cache, on/off only. No percentage rollout or extra infra. Mentions graduating later. Slightly more than an env var but well-proportioned."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 3,
+      "notes": "Adds Redis caching, percentage rollout, allowed_ids array, and a multi-step dark-launch plan. Goes well beyond 'simplest approach' by building gradual rollout capabilities upfront."
+    },
+    "C": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 3,
+      "notes": "Redis cache, percentage rollout with cohort bucketing, metadata JSONB column for future overrides. Builds more infrastructure than 'simplest' warrants."
+    },
+    "D": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Simple DB flag with in-memory ConcurrentHashMap cache, on/off only. No percentage rollout. Clean, minimal, and explicitly says to swap in vendor tooling later if needed."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 3,
+      "notes": "Redis caching, rollout percentage with deterministic bucketing, Spring annotations. Over-engineers for a 'simplest approach' request with gradual rollout built in from day one."
+    },
+    "F": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 1,
+      "notes": "Empty response. No solution provided."
+    },
+    "G": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Environment variable \u2014 the simplest possible approach. No new infra, no DB table, no caching layer. Clear graduation path mentioned. Exactly matches what 'simplest' means."
+    }
+  },
+  "ranking": [
+    "G",
+    "A",
+    "D",
+    "B",
+    "C",
+    "E",
+    "F"
+  ],
+  "analysis": "System G nails the brief perfectly with an environment variable \u2014 the literal simplest approach that works for a dark launch. Systems A and D are close runners-up, offering a DB-backed on/off flag without percentage rollouts or Redis, which is proportional given the user already has PostgreSQL. Systems B, C, and E all over-engineer by adding Redis caching, percentage-based rollouts, and deterministic user bucketing from the start \u2014 features explicitly beyond what 'simplest approach' requires. They solve tomorrow's problem today despite the user asking for minimal complexity. System F provides no response at all.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-engine",
+    "C": "claude-mem",
+    "D": "distill",
+    "E": "basic-memory",
+    "F": "memory-compiler",
+    "G": "no-memory"
+  }
+}

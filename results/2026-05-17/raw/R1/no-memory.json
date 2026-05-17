@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here are the key considerations for a payment processing service:\n\n## Security (highest priority)\n- **PCI DSS compliance** \u2014 if handling card data directly, you need PCI compliance. Consider using tokenization via providers like Stripe, Braintree, or Adyen to reduce scope.\n- **Never store raw card numbers** \u2014 use tokens from your payment provider.\n- **Encrypt sensitive data** at rest and in transit (TLS everywhere).\n- **Input validation** \u2014 sanitize all inputs to prevent injection attacks.\n\n## Architecture\n- **Idempotency** \u2014 payment operations must be idempotent. Use idempotency keys so retries don't create duplicate charges.\n- **State machine** \u2014 model payment lifecycle explicitly (created \u2192 authorized \u2192 captured \u2192 settled, or \u2192 failed/refunded).\n- **Async processing** \u2014 use event-driven patterns for webhooks, settlement notifications, and reconciliation.\n- **Separate read/write paths** \u2014 payment writes need strong consistency; reporting can be eventually consistent.\n\n## Reliability\n- **Retry with backoff** \u2014 network failures to payment providers are common.\n- **Circuit breakers** \u2014 prevent cascading failures if a provider is down.\n- **Multi-provider support** \u2014 consider abstracting the provider interface so you can failover or route by region/currency.\n- **Timeouts** \u2014 set aggressive timeouts; a hung payment request is worse than a failed one.\n\n## Data & Auditing\n- **Immutable audit log** \u2014 record every state transition with timestamps. This is non-negotiable for financial systems.\n- **Reconciliation** \u2014 build reconciliation jobs from day one to compare your records against the provider's.\n- **Currency handling** \u2014 use integer amounts in smallest currency unit (cents), never floats. Store the currency code alongside every amount.\n\n## Operational\n- **Alerting on anomalies** \u2014 sudden spikes in failures, unusual amounts, velocity checks.\n- **Feature flags** \u2014 for rolling out new providers or payment methods.\n- **Sandbox/test mode** \u2014 all providers have test environments; wire them in from the start.\n\n## Regulatory\n- **Region-specific rules** \u2014 PSD2/SCA in Europe, different rules in other jurisdictions.\n- **Refund/chargeback handling** \u2014 design for it upfront, not as an afterthought.\n- **Data retention policies** \u2014 know how long you must/can keep transaction data.\n\nWant me to go deeper on any of these areas, or help design the actual service architecture?",
+  "timestamp": "2026-05-17T09:16:16Z",
+  "latency_ms": 19874,
+  "exit_code": 0,
+  "output_length_chars": 2396,
+  "output_length_tokens_approx": 599,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "R1"
+}

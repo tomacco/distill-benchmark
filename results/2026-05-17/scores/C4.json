@@ -1,0 +1,67 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall of structured logging with correlation IDs. References auth-service and notification-service. Practical with specific libraries (SLF4J, Logback, logstash-logback-encoder, kotlin-logging as optional). Leaves room for deviation ('kotlin-logging is fine too'). Bonus: PCI masking guidance, MDC with transactionId/accountId, EKS pipeline note. Detailed gRPC interceptor."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 3,
+      "notes": "Clearly recalls structured logging with correlation IDs, references 'your decisions doc'. Mentions auth-service and notification-service. Concise and practical. Presents as adopted standard without being rigid. Doesn't explore alternatives or address potential contradictions much."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Very strong recall, references 'corrections.md as an adopted decision'. Most assertive framing ('this is already decided'). Practical setup with kotlin-logging and logstash-logback-encoder. Slightly rigid \u2014 doesn't leave much room for deviation or discuss alternatives. Clean code examples."
+    },
+    "D": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "No recall whatsoever. Asks basic questions about language, infrastructure, and existing services \u2014 information that should have been known. No corrective behavior. Clearly has no memory of team standards or prior decisions."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall of structured logging with correlation IDs as 'adopted standard'. References auth-service and account-service. Most detailed gRPC interceptor implementation with companion object. Suggests checking existing services for consistency, leaving room for adaptation. Practical and thorough."
+    },
+    "F": {
+      "recall": 4,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Good recall of structured logging standard, mentions auth-service and notification-service. Uses 'traceId' in config instead of 'correlationId' which is slightly off from the expected pattern. Actively discusses and dismisses alternatives with reasoning. Opinionated ('Skip kotlin-logging') but with rationale. Concise."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 3,
+      "notes": "Strong recall, references 'adopted standard across all Helios services'. Mentions auth-service, payment-service, account-service, and Kafka header propagation. Includes PCI/PII guidance. Presents as team standard without being overly rigid. Doesn't address potential contradictions or alternatives."
+    }
+  },
+  "ranking": [
+    "A",
+    "E",
+    "G",
+    "C",
+    "B",
+    "F",
+    "D"
+  ],
+  "analysis": "Systems A and E are the strongest overall \u2014 both demonstrate clear recall of the structured logging with correlation IDs standard, reference existing services by name, provide detailed and practical implementation guidance (including gRPC interceptors), and strike the right balance between presenting the team standard and leaving room for deviation. A edges ahead with PCI-specific masking guidance and a slightly more nuanced tone. G and C both show excellent recall, with C being the most assertive ('this is already decided') but slightly rigid. B is concise and accurate but less detailed. F shows good recall but uses 'traceId' instead of 'correlationId' in its config and dismisses kotlin-logging, which is actually part of the team pattern. System D is a clear outlier \u2014 it has zero recall of any team decisions, asks basic questions about the language and stack, and provides no corrective behavior whatsoever, scoring 1 across all criteria.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "basic-memory",
+    "C": "memory-engine",
+    "D": "no-memory",
+    "E": "memory-compiler",
+    "F": "knowledge-graph",
+    "G": "distill"
+  }
+}

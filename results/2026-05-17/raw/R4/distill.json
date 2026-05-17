@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Based on your existing stack and team context at Helios, here are the strongest options:\n\n**Top recommendation: ClickHouse**\n- Purpose-built columnar database for analytics/OLAP workloads\n- Extremely fast aggregation queries over billions of rows\n- Pairs well with Kafka (which you already use) for real-time ingestion\n- Self-hosted on EKS or managed via ClickHouse Cloud\n\n**Runner-up: TimescaleDB**\n- PostgreSQL extension, so your team's existing Postgres expertise transfers directly\n- Great for time-series analytics (transaction history, financial metrics)\n- Lower operational overhead since it's \"just Postgres\" under the hood\n- Easier sell given team familiarity\n\n**Pattern to consider:** Use ClickHouse or TimescaleDB as a read-optimized analytics store fed by Kafka events from your transactional PostgreSQL databases. This keeps your source-of-truth in Postgres (strong consistency for financial data) while giving the analytics service the read performance it needs.\n\nA few things I'd **avoid** based on your team's prior evaluations:\n- DynamoDB and MongoDB were already evaluated and rejected for good reasons (consistency requirements, relational model fit, team expertise)\n\nWant me to dig into the architecture for how this would integrate with your existing Kafka + PostgreSQL setup?",
+  "timestamp": "2026-05-17T09:24:48Z",
+  "latency_ms": 32240,
+  "exit_code": 0,
+  "output_length_chars": 1297,
+  "output_length_tokens_approx": 324,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "R4"
+}

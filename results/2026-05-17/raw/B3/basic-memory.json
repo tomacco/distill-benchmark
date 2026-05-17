@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "",
+  "timestamp": "2026-05-17T14:45:20Z",
+  "latency_ms": 2096512,
+  "exit_code": 143,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "B3"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack and \"minimal dependencies\" preference, simplest path: **a `feature_flags` table in PG + a thin Kotlin reader cached in Redis.**\n\n### Schema (Flyway migration)\n\n```sql\n-- V__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    key         TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    rollout_pct INT NOT NULL DEFAULT 0 CHECK (rollout_pct BETWEEN 0 AND 100),\n    metadata    JSONB,\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (key, enabled, rollout_pct)\nVALUES ('payment_flow_v2', FALSE, 0);\n```\n\n### Reader\n\n```kotlin\nclass FeatureFlags(\n    private val redis: RedisCommands<String, String>,\n    private val db: DSLContext,\n    private val ttl: Duration = Duration.ofSeconds(30)\n) {\n    fun isEnabled(key: String, userId: String? = null): Boolean {\n        val cached = redis.get(\"ff:$key\")\n        if (cached != null) return evaluate(cached, userId)\n\n        val flag = db.selectFrom(FEATURE_FLAGS).where(FEATURE_FLAGS.KEY.eq(key)).fetchOne()\n            ?: return false\n\n        redis.setex(\"ff:$key\", ttl.seconds, \"${flag.enabled}:${flag.rolloutPct}\")\n        return evaluate(\"${flag.enabled}:${flag.rolloutPct}\", userId)\n    }\n\n    private fun evaluate(raw: String, userId: String?): Boolean {\n        val (enabled, pct) = raw.split(\":\")\n        if (enabled != \"true\") return false\n        if (pct.toInt() == 100) return true\n        if (userId == null) return false\n        return (userId.hashCode().absoluteValue % 100) < pct.toInt()\n    }\n}\n```\n\n### Usage in payment-processing\n\n```kotlin\nif (featureFlags.isEnabled(\"payment_flow_v2\", request.userId)) {\n    paymentV2.process(request)\n} else {\n    paymentV1.process(request)\n}\n```\n\n### Dark-launch rollout\n\n```sql\n-- Enable for 0% (just code path, no traffic)\nUPDATE feature_flags SET enabled = true, rollout_pct = 0 WHERE key = 'payment_flow_v2';\n-- Canary 5%\nUPDATE feature_flags SET rollout_pct = 5 WHERE key = 'payment_flow_v2';\n-- Ramp to 50%, then 100%\nUPDATE feature_flags SET rollout_pct = 50 WHERE key = 'payment_flow_v2';\n```\n\n### Why this over LaunchDarkly/Unleash\n\n- No new infra, no vendor, no SDK\n- PG + Redis already in your stack\n- 30s TTL means flag changes propagate fast, Redis protects PG from hot-path reads\n- `rollout_pct` with deterministic user hashing gives consistent bucketing (same user always gets same experience)\n- Good enough until you actually need audience targeting or experimentation \u2014 revisit if/when that happens\n\nIf Sofia wants service-level flag overrides across gRPC boundaries, you can add a `service` column later. But for dark-launching payment v2, this is the whole thing.",
+  "timestamp": "2026-05-17T17:36:03Z",
+  "latency_ms": 21046,
+  "exit_code": 0,
+  "output_length_chars": 2654,
+  "output_length_tokens_approx": 663,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "P4"
+}

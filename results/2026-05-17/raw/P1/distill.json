@@ -1,0 +1,16 @@
+{
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "There are no files containing `AccountService` in the current workspace. The codebase appears to be empty or doesn't have that class.\n\nCould you point me to the right directory, or do you need to clone/copy the project first?",
+  "timestamp": "2026-05-17T09:21:40Z",
+  "latency_ms": 12167,
+  "exit_code": 0,
+  "output_length_chars": 225,
+  "output_length_tokens_approx": 56,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "P1"
+}

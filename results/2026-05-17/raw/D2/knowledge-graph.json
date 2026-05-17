@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Given your existing stack and requirements, **PostgreSQL** is the clear choice. You already run PG 14, your team has deep expertise, and it excels at exactly what you need:\n\n- **Complex aggregations**: window functions, CTEs, materialized views, `GROUPING SETS` / `CUBE` / `ROLLUP`\n- **Multi-table joins**: this is what relational databases are built for\n- **Strong consistency**: ACID by default, serializable isolation available\n\nFor a reporting-specific service, a few patterns to consider:\n\n- **Read replica** \u2014 point the reporting service at a PG replica to avoid load on the primary\n- **Materialized views** \u2014 precompute expensive aggregations, refresh on a schedule or via `pg_cron`\n- **Partitioning** \u2014 if tables grow large, partition by date range for faster scans\n- **`pg_stat_statements`** \u2014 monitor query performance as report complexity grows\n\nIf you eventually hit scale limits on raw PG for analytics, a columnar extension like **Citus** or **TimescaleDB** (both PG-native) can help without leaving the ecosystem. But start simple \u2014 PG 14 can handle a lot before you need that.\n\nNo reason to introduce a new database here when your stack already has the right tool.",
+  "timestamp": "2026-05-17T17:09:45Z",
+  "latency_ms": 14734,
+  "exit_code": 0,
+  "output_length_chars": 1180,
+  "output_length_tokens_approx": 295,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "D2"
+}

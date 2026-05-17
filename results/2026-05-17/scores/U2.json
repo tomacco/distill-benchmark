@@ -1,0 +1,67 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Good commit message with clean subject line (52 chars) and terse bullet body. But the trailing explanation ('This keeps the subject line focused on the why...') is unnecessary filler for a senior engineer. No Co-Authored-By."
+    },
+    "B": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Delivers the commit message and nothing else. Clean subject line (60 chars), terse bullet body, includes Co-Authored-By. No filler, no preamble, no offers to adjust. Treats the user as a senior who knows what they want."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Clean and direct delivery. Body uses prose instead of bullet points which is slightly less scannable but still concise. Subject line is 59 chars. Includes Co-Authored-By. No filler."
+    },
+    "D": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Provides the commit message but then adds an unsolicited alternative version plus 'Want me to adjust the tone, add more detail...' \u2014 classic over-offering that signals uncertainty. Verbose wrapper around a decent commit message. No Co-Authored-By."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Clean delivery with minimal surrounding text. Body adds 'All traffic now flows through gRPC' which is slightly redundant context but not egregious. Subject line is 59 chars. Includes Co-Authored-By."
+    },
+    "F": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Most concise overall. Single-sentence body packs all three changes and the motivation into one line. Minimal wrapper text, no filler, no offers. Includes Co-Authored-By. Exactly what a senior engineer wants."
+    },
+    "G": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Decent commit message undermined by a patronizing explanation of conventional commit conventions. A senior engineer who just migrated a service to gRPC does not need a tutorial on commit message structure. No Co-Authored-By."
+    }
+  },
+  "ranking": [
+    "F",
+    "B",
+    "C",
+    "E",
+    "A",
+    "D",
+    "G"
+  ],
+  "analysis": "The key differentiator across these systems is the surrounding text, not the commit messages themselves \u2014 all seven produce serviceable commit messages with appropriate subject lines under 72 characters. Systems F and B stand out by delivering the commit message with virtually no wrapper text, treating the user as a competent senior engineer who does not need explanations of what a good commit message looks like. System C is similarly clean but uses prose instead of bullets in the body. System E is nearly as good with only minor redundancy. Systems A and G both produce good commit messages but then undercut themselves: A with a mild explanation of its formatting choices, G with a full paragraph teaching conventional commits \u2014 patronizing for the target audience. System D is the weakest on style, offering an unsolicited alternative and asking if the user wants adjustments to tone or format, which is exactly the kind of verbose hand-holding the rubric penalizes. The Co-Authored-By trailer present in B, C, E, and F suggests those systems recalled a user preference for attribution, giving them a slight edge on preference recall.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "claude-mem",
+    "C": "distill",
+    "D": "no-memory",
+    "E": "basic-memory",
+    "F": "knowledge-graph",
+    "G": "memory-compiler"
+  }
+}

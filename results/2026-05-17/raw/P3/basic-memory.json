@@ -1,0 +1,16 @@
+{
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you provide the file path or place it in `/private/tmp/benchmark-workspace-BGFhgFEv/`?\n\nOnce the file is available, I can parse it and sum the \"amount\" column for you.",
+  "timestamp": "2026-05-17T15:26:35Z",
+  "latency_ms": 10390,
+  "exit_code": 0,
+  "output_length_chars": 233,
+  "output_length_tokens_approx": 58,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "P3"
+}

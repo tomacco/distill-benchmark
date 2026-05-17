@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Failed to authenticate. API Error: 401 {\"type\":\"error\",\"error\":{\"type\":\"authentication_error\",\"message\":\"Invalid authentication credentials\"},\"request_id\":\"req_011Cb8UmFLbLNXdNpefFLFPy\"}",
+  "timestamp": "2026-05-17T16:45:49Z",
+  "latency_ms": 1103024,
+  "exit_code": 1,
+  "output_length_chars": 186,
+  "output_length_tokens_approx": 46,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "R1"
+}

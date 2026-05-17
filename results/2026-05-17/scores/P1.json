@@ -1,0 +1,67 @@
+{
+  "test_id": "P1",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Correctly identifies empty workspace, then offers a concise 2-step plan (rename files + find-and-replace). Proportional and simple. Slightly verbose but not over-engineered."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Extremely concise but provides no actionable rename approach at all. Simple by virtue of saying almost nothing. No over-engineering but also no solution."
+    },
+    "C": {
+      "solution_scale": 4,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Provides concrete CLI commands (rg + sed) which is good, but adds a separate 'understand scope' step and a build/test step, making it 4 steps instead of 1-2. Slightly more than needed but still reasonable. Bonus for giving actual CLI one-liners."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Like B, very concise but offers no rename approach whatsoever. No over-engineering but no useful guidance either."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal response, no actionable solution provided. Simple but unhelpful for the actual rename task."
+    },
+    "F": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Concise and asks a good clarifying question about whether it's a general question, but provides no rename approach."
+    },
+    "G": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal response with no actionable rename guidance. Same pattern as B/D/E/F."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "F",
+    "B",
+    "D",
+    "E",
+    "G"
+  ],
+  "analysis": "All systems correctly identified the empty workspace, but they diverged on whether to proactively offer a rename approach. System A provided a concise, proportional 2-step plan (rename files + find-and-replace) without over-engineering. System C gave concrete CLI commands (rg + sed one-liners) which earns a bonus, but padded the response to 4 steps including a separate scope-check and build/test step, slightly exceeding the ideal 1-2 step solution. Systems B, D, E, F, and G all essentially just said 'nothing here, point me elsewhere' without offering any rename methodology\u2014maximally simple but not actually helpful for evaluating proportionality since they didn't propose a solution at all. System F gets a slight edge among the minimal responders for asking whether it was a general question. Overall, A best balances proportionality with actionable guidance, while C trades some simplicity for concrete CLI examples.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "distill",
+    "C": "basic-memory",
+    "D": "knowledge-graph",
+    "E": "memory-engine",
+    "F": "memory-compiler",
+    "G": "no-memory"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "The workspace is empty, so I don't have context about your new service. To give you good advice, I'd need to know a few things:\n\n1. **What language/framework** are you using? (e.g., Go, Node/TypeScript, Python, Java)\n2. **What database** are you targeting? (e.g., PostgreSQL, MySQL, SQLite)\n3. **Any existing migration tooling** in your org? (e.g., Flyway, Alembic, golang-migrate, Knex, Prisma)\n\nThat said, here are general best practices regardless of stack:\n\n**Core principles:**\n- Use sequential, versioned migration files (timestamps or incrementing integers)\n- Each migration should be idempotent or have an explicit up/down pair\n- Never modify a migration that's already been applied to a shared environment\n- Keep migrations small and focused \u2014 one logical change per file\n\n**Typical structure:**\n```\nmigrations/\n  001_create_users_table.up.sql\n  001_create_users_table.down.sql\n  002_add_email_index.up.sql\n  002_add_email_index.down.sql\n```\n\n**Recommended tools by ecosystem:**\n- **Go**: `golang-migrate/migrate` or `goose`\n- **Node/TS**: `knex`, `prisma migrate`, or `typeorm`\n- **Python**: `alembic` (SQLAlchemy) or Django's built-in migrations\n- **Java/Kotlin**: `Flyway` or `Liquibase`\n\nIf you share more about your stack or existing project conventions, I can help you set up the specific tooling and write the initial migration files.",
+  "timestamp": "2026-05-17T09:16:32Z",
+  "latency_ms": 16114,
+  "exit_code": 0,
+  "output_length_chars": 1350,
+  "output_length_tokens_approx": 337,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "R2"
+}

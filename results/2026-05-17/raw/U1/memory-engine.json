@@ -1,0 +1,16 @@
+{
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "## Service Mesh \u2014 How It Works\n\nA service mesh (Istio, Linkerd) injects a sidecar proxy (Envoy) alongside each pod. All traffic flows through these proxies, which handle:\n\n- **mTLS** \u2014 automatic certificate provisioning/rotation between services\n- **AuthZ policies** \u2014 declarative rules like \"only payment-service can call account-service on `/balance`\"\n- **Observability** \u2014 distributed tracing, metrics, retries, circuit breaking\n\nThe control plane (istiod) manages certs and pushes config to sidecars. Your app code doesn't change.\n\n## Do You Need Istio?\n\n**Probably not right now.** Here's why:\n\n**You already have the pieces:**\n- `auth-service` issues JWTs with OAuth2\n- gRPC supports TLS and interceptors natively\n- You're mid-migration with ~3-4 services live\n\n**Istio's cost for your stage:**\n- Significant operational complexity (control plane, CRDs, sidecar injection, debugging proxy issues)\n- Adds latency per hop (sidecar round-trips)\n- ~80 engineers is mid-size, but your services count is still small\n- Contradicts your preference for minimal dependencies and convention over configuration\n\n**What to do instead for payment-service <-> account-service auth:**\n\n1. **gRPC mTLS** \u2014 configure TLS between services directly. On EKS you can use cert-manager with a private CA. This gives you encrypted, authenticated channels without a mesh.\n\n2. **JWT propagation via gRPC interceptor** \u2014 you already have auth-service issuing tokens. Add a Kotlin interceptor that validates JWTs on incoming gRPC calls:\n\n```kotlin\nclass AuthInterceptor(private val jwtVerifier: JwtVerifier) : ServerInterceptor {\n    override fun <Req, Resp> interceptCall(\n        call: ServerCall<Req, Resp>,\n        headers: Metadata,\n        next: ServerCallHandler<Req, Resp>\n    ): ServerCall.Listener<Req> {\n        val token = headers.get(AUTH_HEADER_KEY)\n            ?: throw StatusRuntimeException(Status.UNAUTHENTICATED)\n        val claims = jwtVerifier.verify(token)\n        val ctx = Context.current().withValue(CLAIMS_KEY, claims)\n        return Contexts.interceptCall(ctx, call, headers, next)\n    }\n}\n```\n\n3. **Kubernetes NetworkPolicies** \u2014 restrict which pods can talk to each other at the network level. Free, built-in, no extra infra.\n\n**When Istio would make sense:** once you have 10+ services with complex traffic patterns and need canary deployments, traffic shifting, or cross-service rate limiting at scale. Revisit post-Series C when the service count grows.\n\n**TL;DR:** gRPC mTLS + JWT interceptors + NetworkPolicies covers inter-service auth for your current scale without adding a mesh dependency.",
+  "timestamp": "2026-05-17T17:25:13Z",
+  "latency_ms": 30341,
+  "exit_code": 0,
+  "output_length_chars": 2604,
+  "output_length_tokens_approx": 651,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "U1"
+}

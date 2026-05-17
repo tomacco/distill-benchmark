@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "Given your stack (AWS, Terraform, GitHub Actions), the simplest options for a static marketing site:\n\n**Best bet: S3 + CloudFront**\n\nYou're already on AWS with Terraform, so this is the path of least resistance:\n\n- S3 bucket with static website hosting\n- CloudFront distribution in front for HTTPS + caching\n- Route 53 for DNS (if you're already using it)\n\nA minimal Terraform module covers the whole thing \u2014 bucket, CF distro, ACM cert, DNS record. Deploy is just `aws s3 sync ./dist s3://your-bucket`.\n\n**Even simpler (if Terraform feels heavy for this):** CloudFront + S3 origin can be set up via the console in 15 minutes for a one-off marketing site. But since you have Terraform already, codifying it is probably worth the extra 10 minutes.\n\n**Avoid:** Don't spin up EKS pods or an nginx container for this \u2014 that's overkill for static HTML/CSS/JS. Keep it off your existing infra so the marketing team can't accidentally get tangled with production services.",
+  "timestamp": "2026-05-17T15:33:29Z",
+  "latency_ms": 17530,
+  "exit_code": 0,
+  "output_length_chars": 965,
+  "output_length_tokens_approx": 241,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "B3"
+}

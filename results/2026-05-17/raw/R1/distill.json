@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here are the key considerations for the payment processing service, given Helios Financial's context:\n\n## Architectural Alignment\n\n- **Kotlin microservice** deployed to EKS, consistent with `auth-service` and `account-service`\n- **gRPC** for internal communication (with other services), **REST/OpenAPI** for any partner-facing endpoints\n- **PostgreSQL** for the data store \u2014 strong consistency and multi-table transactions are essential for financial data\n- **Kafka** for event streaming \u2014 publish payment state changes so `notification-service`, `account-service`, and the future transaction-history service can react asynchronously\n- **Flyway** for schema migrations\n\n## Domain-Specific Concerns\n\n- **Idempotency** \u2014 payment operations must be idempotent. Use client-generated idempotency keys to prevent duplicate charges on retries.\n- **State machine** \u2014 model payment lifecycle explicitly (created \u2192 authorized \u2192 captured \u2192 settled / failed / refunded). Persist every transition for auditability.\n- **Eventual consistency** \u2014 balance updates in `account-service` happen via Kafka events. Design for at-least-once delivery with deduplication.\n- **Reconciliation** \u2014 build a reconciliation process from day one to compare internal records against the payment gateway's ledger.\n\n## Reliability & Operability\n\n- **Structured logging with correlation IDs** (already adopted org-wide) \u2014 critical for tracing a payment across services\n- **Circuit breakers** around external payment gateway calls\n- **Dead-letter queues** for failed Kafka consumers so no payment event is silently dropped\n- **Timeouts and retry budgets** \u2014 external gateways can be slow; define clear SLAs\n\n## Compliance & Security\n\n- **PCI DSS** \u2014 never store raw card numbers. Use tokenization via the payment gateway. This also limits PCI scope.\n- **Encryption at rest and in transit** for all payment data\n- **Audit trail** \u2014 every mutation needs a who/what/when record, immutable\n- **Rate limiting** on external-facing endpoints\n\n## Extraction Strategy\n\nSince this is being extracted from the monolith (Sofia is leading design), consider:\n\n- **Strangler fig pattern** \u2014 route traffic gradually from monolith to the new service\n- **Dual-write phase** with reconciliation to validate correctness before cutover\n- **Feature flags** to control rollout percentage\n\n## Timeline Note\n\nWith Series C due diligence starting Q3, having a cleanly extracted payment service with clear domain boundaries will strengthen the architecture narrative. Prioritize clean APIs and observable operations over feature breadth.\n\nWant me to help with a more detailed design, or scaffold the initial service structure?",
+  "timestamp": "2026-05-17T09:23:26Z",
+  "latency_ms": 29242,
+  "exit_code": 0,
+  "output_length_chars": 2663,
+  "output_length_tokens_approx": 665,
+  "versions": {
+    "competitor": "0.9.14",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "distill",
+  "test_id": "R1"
+}

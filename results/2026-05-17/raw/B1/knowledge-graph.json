@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, this is a good fit. You already have Redis in the stack, and session tokens are the textbook Redis use case \u2014 simple key-value lookups with TTL expiry. No reason to introduce anything new here.\n\nA few things to keep in mind:\n\n- **Use `SET key value EX seconds`** (or `SETEX`) to atomically set the token with expiry. Avoid setting the key and expiry in separate calls.\n- **Prefix your keys** (e.g., `session:{userId}`) to avoid collisions with other Redis usage and make debugging easier.\n- **Set a reasonable TTL** \u2014 match it to your auth-service's session lifetime so stale tokens get cleaned up automatically.\n- **Handle cache misses gracefully** \u2014 if Redis is down or a key is missing, fall back to validating against the auth-service/database rather than failing hard.\n\nSince auth-service is already in prod with Kotlin, you can use Lettuce or Jedis (Lettuce is the better choice if you want non-blocking I/O with coroutines). If you're already using a Redis client elsewhere in the service, just reuse that.\n\nThis is simple enough that there's nothing to over-engineer \u2014 don't add a second caching layer or an abstraction on top of it.",
+  "timestamp": "2026-05-17T17:07:49Z",
+  "latency_ms": 13834,
+  "exit_code": 0,
+  "output_length_chars": 1146,
+  "output_length_tokens_approx": 286,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "B1"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "",
+  "timestamp": "2026-05-17T16:27:25Z",
+  "latency_ms": 2925793,
+  "exit_code": 143,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "P4"
+}

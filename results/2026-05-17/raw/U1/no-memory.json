@@ -1,0 +1,16 @@
+{
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "## Kubernetes Service Mesh \u2014 How It Works\n\nA service mesh inserts a **sidecar proxy** (typically Envoy) next to every pod. All traffic in and out of the pod flows through that proxy, giving you a control plane that can enforce policies without changing application code.\n\n**Core mechanism:**\n\n1. **Sidecar injection** \u2014 The mesh control plane (e.g., Istio's `istiod`) mutates pod specs via a webhook to add the proxy container.\n2. **mTLS everywhere** \u2014 Each sidecar gets a short-lived certificate from the mesh CA. Proxies negotiate mTLS automatically, so every hop is encrypted and both sides are identity-verified.\n3. **Authorization policies** \u2014 You write `AuthorizationPolicy` resources that say things like \"only `payment-service` can call `account-service` on port 8080, method POST, path `/transfer`.\" The sidecar enforces this at L7.\n4. **No app changes** \u2014 Your services still talk plain HTTP/gRPC to `account-service.default.svc.cluster.local`. The sidecar handles TLS termination and policy enforcement transparently.\n\n## Do You Actually Need Istio?\n\nFor **inter-service auth between two specific services**, Istio works but may be overkill. Here's the decision framework:\n\n**Istio makes sense if:**\n- You have many services (10+) and need consistent mTLS + authz across all of them\n- You also want observability (distributed tracing, traffic metrics) and traffic management (canaries, retries, circuit breaking)\n- You want to enforce zero-trust networking without touching application code\n\n**Lighter alternatives if you only need auth between 2-3 services:**\n- **Network Policies** \u2014 Restrict which pods can talk to each other at L3/L4. No encryption, but limits blast radius.\n- **Application-level JWT/mTLS** \u2014 Each service validates a shared token or client cert. More code, but no mesh overhead.\n- **Linkerd** \u2014 Simpler mesh, lower resource overhead, automatic mTLS. Lacks some of Istio's L7 policy granularity but covers the auth case well.\n- **SPIFFE/SPIRE standalone** \u2014 If you only want workload identity and mTLS without the full mesh.\n\n**The cost of Istio:**\n- ~100-200MB RAM per sidecar, plus control plane resources\n- Added latency per hop (typically 1-3ms)\n- Significant operational complexity \u2014 upgrades, debugging proxy misconfigs, understanding Envoy filter chains\n\n## Recommendation\n\nIf payment-service \u2194 account-service auth is the primary problem and you have a small number of services, start with **NetworkPolicies + application-level auth tokens** (e.g., a shared JWT validated by middleware). If you're already heading toward a larger microservices architecture and need consistent security posture, then Istio (or Linkerd for simplicity) pays off.\n\nWant me to look at your actual service code to suggest a concrete auth approach?",
+  "timestamp": "2026-05-17T09:17:49Z",
+  "latency_ms": 25793,
+  "exit_code": 0,
+  "output_length_chars": 2765,
+  "output_length_tokens_approx": 691,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "U1"
+}

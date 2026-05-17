@@ -1,0 +1,67 @@
+{
+  "test_id": "U4",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Labeled as fish syntax, which shows preference recall. Command is correct and fish-compatible. Added an explanation line which a senior user doesn't need, hurting style match slightly."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, not fish \u2014 fails preference recall. However, the command itself works in fish. Concise one-liner with no explanation is good style for a senior user."
+    },
+    "C": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, ignoring fish preference. Added unnecessary explanation and 'adjust the path' advice \u2014 too verbose and hand-holdy for a senior developer."
+    },
+    "D": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, not fish. Concise one-liner which is good style, but completely ignores the user's shell preference."
+    },
+    "E": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, ignoring fish preference. Verbose explanation inappropriate for a senior user. Same issues as System C."
+    },
+    "F": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, not fish. Concise format is appropriate for senior level, but no fish awareness at all."
+    },
+    "G": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Labeled as bash, not fish. Concise one-liner is good style, but ignores the user's shell preference entirely."
+    }
+  },
+  "ranking": [
+    "A",
+    "B",
+    "D",
+    "F",
+    "G",
+    "C",
+    "E"
+  ],
+  "analysis": "System A is the only response that acknowledged the user's fish shell preference by labeling the code block as fish, earning it the top rank despite adding a slightly unnecessary explanation. Systems B, D, F, and G all labeled their responses as bash but were at least concise one-liners appropriate for a senior developer. Systems C and E were the weakest, combining bash labeling (ignoring fish preference) with verbose explanations that are patronizing for a senior user. Notably, none of the systems offered the fd alternative (e.g., fd '\\.kt$' --changed-within 1week), which would have been a strong bonus signal for fish-aware, modern tooling awareness. The actual find command is identical across all systems and happens to be fish-compatible, so the differentiator is purely whether the system recognized the user's shell preference and matched their communication style.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-engine",
+    "C": "no-memory",
+    "D": "claude-mem",
+    "E": "basic-memory",
+    "F": "distill",
+    "G": "memory-compiler"
+  }
+}

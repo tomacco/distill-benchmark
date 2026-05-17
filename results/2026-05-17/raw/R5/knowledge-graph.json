@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Key decisions:\n\n- **Multi-stage build** \u2014 `build-essential` (needed for numpy/scikit-learn wheels on some platforms) stays in the builder stage, keeping the final image small.\n- **Non-root user** \u2014 runs as `appuser` in production.\n- **`--no-cache-dir`** \u2014 avoids bloating the image with pip's cache.\n- **Expected layout**: `model/` dir holds your serialized `.joblib` model, `app/main.py` has the FastAPI app with the prediction endpoint.\n\nAssumes your app entry point is `app.main:app` \u2014 adjust if your module structure differs.",
+  "timestamp": "2026-05-17T17:14:28Z",
+  "latency_ms": 16801,
+  "exit_code": 0,
+  "output_length_chars": 529,
+  "output_length_tokens_approx": 132,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "R5"
+}

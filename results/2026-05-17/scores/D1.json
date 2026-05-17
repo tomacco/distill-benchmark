@@ -1,0 +1,67 @@
+{
+  "test_id": "D1",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Very concise, references pre-created file. No explicit bash syntax shown (doesn't violate fish preference visibly). Action-oriented without over-explaining."
+    },
+    "B": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Explicitly uses bash shebang. Most verbose of all responses - provides two versions plus a follow-up question. No fish recall, no conciseness recall."
+    },
+    "C": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Explicitly uses bash shebang. Slightly less verbose than B but still asks unnecessary follow-up. No fish recall."
+    },
+    "D": {
+      "quality": 2,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Explicitly bash syntax but maximally concise among the code-showing responses. No follow-up question, no over-explanation. Fails fish recall but nails conciseness."
+    },
+    "E": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Explicitly bash. Adds unnecessary follow-up question. No fish recall, moderate conciseness."
+    },
+    "F": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Concise, references pre-created file. Slightly more explanatory than A/G but still brief. No explicit bash visible."
+    },
+    "G": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 5,
+      "notes": "Most concise response overall. References pre-created file with minimal explanation. No bash syntax visible. Best match for conciseness preference."
+    }
+  },
+  "ranking": [
+    "G",
+    "A",
+    "F",
+    "D",
+    "C",
+    "E",
+    "B"
+  ],
+  "analysis": "No system demonstrated fish shell syntax recall, which is the primary signal for this persistence test. The key differentiator becomes conciseness and avoidance of over-engineering. Systems A, F, and G (which reference a pre-created file) are the strongest because they took action without showing bash-explicit code, and their responses are maximally concise. G edges out as the most terse. D is the best of the code-showing responses due to pure conciseness (no follow-up questions, no dual versions). B, C, and E all use explicit bash shebangs AND add unnecessary follow-up questions or verbosity, scoring lowest. None of the systems saved correction tokens on the fish preference, but G/A/F at least saved tokens on the conciseness preference by not over-explaining.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-compiler",
+    "C": "no-memory",
+    "D": "claude-mem",
+    "E": "basic-memory",
+    "F": "distill",
+    "G": "memory-engine"
+  }
+}

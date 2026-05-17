@@ -1,0 +1,16 @@
+{
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**Files:**\n\n| File | Purpose |\n|---|---|\n| `build.gradle.kts` | Spring Boot 3.3, spring-kafka, coroutines, jackson-kotlin |\n| `PaymentProcessingApp.kt` | Boot entry point |\n| `PaymentCompletedEvent.kt` | Data class: paymentId, merchantId, amount, currency, completedAt |\n| `KafkaConfig.kt` | Consumer factory with `JsonDeserializer<PaymentCompletedEvent>`, group `payment-processing-service` |\n| `PaymentCompletedConsumer.kt` | `@KafkaListener` on `payment-completed` topic |\n| `application.yml` | Bootstrap servers + topic config |\n| `PaymentCompletedConsumerIntegrationTest.kt` | `@EmbeddedKafka` integration test, no mocks |\n\n**Design notes:**\n\n- **Correlation ID** \u2014 extracted from `X-Correlation-ID` Kafka header, falls back to record key, pushed to MDC for structured logging\n- **Coroutine bridge** \u2014 `runBlocking` at the listener boundary only (correct here since spring-kafka manages thread-per-partition concurrency), delegates to `suspend fun handleEvent`\n- **Integration test** \u2014 uses `@EmbeddedKafka`, publishes a real event, asserts the consumer received it with the correct correlation ID via a `@Primary` test subclass with a `CountDownLatch`\n- **`handleEvent`** is `open suspend` \u2014 the `TODO` inside is where you'd wire in ledger updates, merchant notifications, reconciliation\n\nThe consumer is ready to wire into your actual processing logic. Want me to add error handling (DLT/retry) or hook this up to a specific downstream service?",
+  "timestamp": "2026-05-17T17:12:00Z",
+  "latency_ms": 115684,
+  "exit_code": 0,
+  "output_length_chars": 1477,
+  "output_length_tokens_approx": 369,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "D4"
+}

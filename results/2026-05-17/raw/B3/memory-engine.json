@@ -1,0 +1,16 @@
+{
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "For a static HTML/CSS/JS site with no backend, the simplest options:\n\n1. **Cloudflare Pages** \u2014 `git push` and done. Free tier is generous, global CDN, zero config.\n2. **GitHub Pages** \u2014 if it's already in a GitHub repo, just enable it in settings.\n3. **Netlify** \u2014 similar to Cloudflare Pages, drag-and-drop or git-connected.\n\nAll three are free for static sites, require no infrastructure management, and deploy on push.\n\nGiven your team's preference for minimal dependencies and convention over configuration, I'd point him to **Cloudflare Pages** \u2014 fastest CDN, no build step needed for plain HTML/CSS/JS, and the workflow is just:\n\n```\n# connect repo \u2192 auto-deploys on push to main\n# or use wrangler CLI:\nnpx wrangler pages deploy ./site-directory\n```\n\nNo containers, no servers, no config files required.",
+  "timestamp": "2026-05-17T17:18:45Z",
+  "latency_ms": 15387,
+  "exit_code": 0,
+  "output_length_chars": 810,
+  "output_length_tokens_approx": 202,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "B3"
+}

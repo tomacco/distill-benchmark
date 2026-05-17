@@ -1,0 +1,16 @@
+{
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "There are no files containing `AccountService` in the current working directory (`/private/tmp/benchmark-workspace-WvizSCIL`). The workspace appears to be empty or doesn't contain any code with that class name.\n\nCould you point me to the directory where your codebase lives? Or if you're asking generally, the fastest approach is:\n\n1. **Find all occurrences** to understand scope:\n   ```\n   rg \"AccountService\" --files-with-matches\n   ```\n\n2. **Rename with a single sed command** (or I can use the Edit tool with `replace_all`):\n   ```\n   sed -i '' 's/AccountService/BankAccountService/g' $(rg -l AccountService)\n   ```\n\n3. **Rename any files** named `AccountService.*` to `BankAccountService.*`\n\n4. **Run your build/tests** to catch anything missed (e.g., string references, config files, import paths).\n\nIf you point me at the actual codebase, I can do the rename for you right now.",
+  "timestamp": "2026-05-17T15:25:57Z",
+  "latency_ms": 87235,
+  "exit_code": 0,
+  "output_length_chars": 884,
+  "output_length_tokens_approx": 221,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "P1"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "Here's a commit message:\n\n```\nRemove legacy REST layer from account-service after gRPC migration\n\nDelete REST endpoint handlers, internal OpenAPI spec files, and\nCI pipeline steps for REST client stub generation. All internal\ntraffic now uses gRPC exclusively.\n```\n\nThis follows conventional commit style \u2014 a concise imperative subject line summarizing the scope, with a body that lists the three categories of deleted artifacts and states the motivation. Adjust the subject line prefix (e.g., `chore:`, `refactor:`) if your repo uses Conventional Commits.",
+  "timestamp": "2026-05-17T17:04:59Z",
+  "latency_ms": 13259,
+  "exit_code": 0,
+  "output_length_chars": 556,
+  "output_length_tokens_approx": 139,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "U2"
+}

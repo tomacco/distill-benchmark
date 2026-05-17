@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given your Helios Financial context \u2014 Kotlin microservices, PostgreSQL, Kafka, gRPC internally, and Sofia leading this effort \u2014 here are the key considerations:\n\n## Architecture\n\n- **Service boundaries**: Payment processing needs clear separation from account-service. Define the gRPC contracts between them early (account balance checks, holds, settlements).\n- **Saga pattern vs. 2PC**: Multi-step payment flows (authorize \u2192 capture \u2192 settle) across services. Sagas with Kafka for choreography fit your existing stack. Avoid distributed transactions.\n- **Idempotency**: Every payment endpoint needs idempotency keys. Non-negotiable for financial operations.\n\n## Data & Consistency\n\n- **PostgreSQL** is the right call \u2014 you need ACID transactions, and the team has expertise. Use `SELECT ... FOR UPDATE` or advisory locks for concurrent balance operations.\n- **Event sourcing for the ledger**: Consider an append-only ledger table in Postgres rather than introducing new infra. Double-entry bookkeeping pattern (every transaction = debit + credit entries).\n- **Flyway migrations**: Plan for zero-downtime migrations since this will be a high-write table.\n\n## Reliability & Compliance\n\n- **Outbox pattern**: Publish Kafka events transactionally with DB writes (insert payment + insert outbox row in one tx). Avoids dual-write problems.\n- **PCI DSS scope**: Never store raw card numbers. Use a tokenization provider (Stripe, Adyen) so your service stays out of PCI scope.\n- **Audit trail**: Immutable log of every state change. Structured logging with correlation IDs (already adopted) will help here.\n- **Reconciliation**: Build reconciliation against the payment provider from day one, not after launch.\n\n## Kotlin-Specific\n\n- **Coroutines** for async payment provider calls (already decided over RxJava).\n- **Sealed classes** for payment states \u2014 makes illegal state transitions unrepresentable.\n\n```kotlin\nsealed class PaymentState {\n    data class Created(val id: PaymentId) : PaymentState()\n    data class Authorized(val id: PaymentId, val authCode: String) : PaymentState()\n    data class Captured(val id: PaymentId, val amount: Money) : PaymentState()\n    data class Failed(val id: PaymentId, val reason: String) : PaymentState()\n}\n```\n\n## Series C Readiness\n\nSince due diligence is Q3, the payment service is a centerpiece investors will scrutinize. Clean domain modeling, clear service contracts, and solid test coverage (property-based tests for edge cases like partial captures, refunds, currency rounding) will matter.\n\nSofia should probably define the gRPC proto files and state machine first before any implementation. Want me to scaffold the service structure or draft the proto contracts?",
+  "timestamp": "2026-05-17T17:23:19Z",
+  "latency_ms": 25222,
+  "exit_code": 0,
+  "output_length_chars": 2703,
+  "output_length_tokens_approx": 675,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "R1"
+}

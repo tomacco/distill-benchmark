@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Based on the knowledge articles: auth-service is a **Kotlin** service using gRPC for internal APIs, running on AWS EKS. There's no actual auth-service code in this workspace, so I'll create a health check endpoint that fits the stack.\n\nFor a load balancer health check on EKS, you typically need an HTTP endpoint (ALB/NLB health checks use HTTP), even though internal APIs use gRPC. Here's what the endpoint should look like:\n\n```kotlin\n// In your auth-service, add a health check controller\n// Since the LB needs HTTP, this goes alongside your gRPC server\n\npackage com.helios.auth.health\n\nimport io.ktor.http.*\nimport io.ktor.server.application.*\nimport io.ktor.server.response.*\nimport io.ktor.server.routing.*\n\nfun Application.configureHealthCheck() {\n    routing {\n        get(\"/health\") {\n            call.respond(HttpStatusCode.OK, mapOf(\"status\" to \"ok\"))\n        }\n    }\n}\n```\n\nIf you're using **Spring Boot** instead of Ktor, it's even simpler \u2014 add the actuator dependency:\n\n```kotlin\n// build.gradle.kts\nimplementation(\"org.springframework.boot:spring-boot-starter-actuator\")\n```\n\n```yaml\n# application.yml\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: health\n  endpoint:\n    health:\n      show-details: never  # don't leak internals to the LB\n  server:\n    port: 8081  # separate port from gRPC (typically 9090)\n```\n\nThis gives you `GET /actuator/health` on port 8081. Point the ALB target group health check at that.\n\nFor the **gRPC health check** (useful for gRPC-aware probes in k8s), add the standard gRPC health service:\n\n```kotlin\n// build.gradle.kts\nimplementation(\"io.grpc:grpc-services:${grpcVersion}\")\n\n// In your gRPC server setup\nimport io.grpc.services.HealthStatusManager\n\nval healthStatusManager = HealthStatusManager()\n\nServerBuilder.forPort(9090)\n    .addService(healthStatusManager.healthService)\n    .addService(authService)\n    .build()\n    .start()\n```\n\nThen in your k8s deployment, configure both probes:\n\n```yaml\n# deployment.yaml\nspec:\n  containers:\n    - name: auth-service\n      ports:\n        - containerPort: 9090  # gRPC\n          name: grpc\n        - containerPort: 8081  # health HTTP\n          name: health\n      livenessProbe:\n        httpGet:\n          path: /actuator/health\n          port: health\n        initialDelaySeconds: 15\n        periodSeconds: 10\n      readinessProbe:\n        httpGet:\n          path: /actuator/health\n          port: health\n        initialDelaySeconds: 5\n        periodSeconds: 5\n```\n\n**Which approach are you using \u2014 Ktor or Spring Boot?** If you point me at the actual auth-service repo, I can add the endpoint directly.",
+  "timestamp": "2026-05-17T15:38:31Z",
+  "latency_ms": 27852,
+  "exit_code": 0,
+  "output_length_chars": 2617,
+  "output_length_tokens_approx": 654,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "P2"
+}

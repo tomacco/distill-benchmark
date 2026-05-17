@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Based on your architecture and project state, here are the key considerations for extracting the payment-processing service from the monolith:\n\n**Architecture alignment (follow existing patterns):**\n- Kotlin service, same as auth-service and account-service\n- gRPC for internal communication, REST+OpenAPI for any external-facing endpoints\n- PostgreSQL \u2014 not a separate datastore (per your preferences, and never DynamoDB/MongoDB)\n- Kafka for event streaming (payment events, reconciliation)\n- Deploy via the existing EKS/ArgoCD pipeline\n\n**Domain concerns specific to payments:**\n- **Idempotency** \u2014 payment operations must be idempotent. Use idempotency keys on all mutation endpoints.\n- **Saga/orchestration** \u2014 payments touch account-service (balance updates) and notification-service (confirmations). Decide between choreography (Kafka events) vs. orchestration. Given your team size and the Series C timeline, choreography with a dead-letter queue is simpler to start.\n- **Data boundary** \u2014 cleanly separate payment tables from the monolith DB. Flyway migrations for the new schema. Avoid shared-database coupling with account-service; communicate via gRPC.\n- **Audit trail** \u2014 append-only ledger table. Financial regulators will want this. Structured logging with correlation IDs (already adopted) covers the observability side.\n- **PCI scope** \u2014 if handling card data directly, this service is in PCI scope. Prefer tokenization via a provider (Stripe, Adyen) to minimize scope.\n\n**Extraction strategy:**\n- Strangler fig pattern \u2014 route payment traffic through the new service while the monolith still has the code. Cut over once validated.\n- Dual-write period with reconciliation checks before decommissioning the monolith path.\n\n**Testing:**\n- Property-based tests for payment state machines (pending \u2192 authorized \u2192 captured \u2192 settled, plus failure paths)\n- Integration tests against a real PG instance (testcontainers)\n- Contract tests for the gRPC interface between payment-processing and account-service\n\n**Timeline pressure:**\n- Series C due diligence is Q3. Clean service boundary and deployment story matters more than feature completeness. Get the extraction right, keep scope minimal.\n\nSofia is leading this \u2014 coordinate with her on the gRPC contract definitions and the Kafka topic schema early. Those are the interfaces that are hardest to change later.",
+  "timestamp": "2026-05-17T15:27:24Z",
+  "latency_ms": 27870,
+  "exit_code": 0,
+  "output_length_chars": 2372,
+  "output_length_tokens_approx": 593,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "R1"
+}

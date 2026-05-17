@@ -1,0 +1,67 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, concise, references knowledge graph source. No hedging."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, concise, references project context. Minimal and direct."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer with slight extra info about Redis. Slightly verbose but not egregious."
+    },
+    "D": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Wrong answer (PostgreSQL 18.3). Confused client tool version with project DB version. No correction applied."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct, concise one-liner. Ideal brevity matching user preference."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer with brief context about Helios Financial. Concise and confident."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, references architecture docs. Slightly more verbose but still good."
+    }
+  },
+  "ranking": [
+    "E",
+    "A",
+    "B",
+    "F",
+    "C",
+    "G",
+    "D"
+  ],
+  "analysis": "Systems A, B, C, E, F, and G all correctly recalled PostgreSQL 14 and delivered it confidently without hedging. E is ranked highest for its ideal one-line conciseness matching user preference. A and B are nearly identical in brevity. F adds useful project context. C and G are slightly more verbose but still accurate. System D failed entirely by reporting PostgreSQL 18.3 (a client tool version from the local machine rather than the project's actual database version), showing no sign of recalling the corrected fact and no awareness of the contradiction.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "claude-mem",
+    "C": "distill",
+    "D": "no-memory",
+    "E": "memory-engine",
+    "F": "basic-memory",
+    "G": "memory-compiler"
+  }
+}

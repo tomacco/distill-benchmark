@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you mentioned earlier in this conversation, the account service was migrated to **MySQL** last week, replacing the previous PostgreSQL setup.\n\nThat said, I should flag that the project's knowledge graph (`knowledge-graph/graph.jsonl`) still lists **PostgreSQL 14** as the stack database. If the migration is complete, that file should probably be updated to reflect the change for the account service so others (and I) don't reference stale information. Want me to update it?",
+  "timestamp": "2026-05-17T17:09:02Z",
+  "latency_ms": 7845,
+  "exit_code": 0,
+  "output_length_chars": 489,
+  "output_length_tokens_approx": 122,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "C3"
+}

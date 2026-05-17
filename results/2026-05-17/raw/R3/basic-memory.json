@@ -1,0 +1,16 @@
+{
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "No existing frontend code yet. Here's what I know from the vault:\n\n- **Dev** is your junior frontend engineer (React/TS, 6 months tenure)\n- Stack is **React/TypeScript**\n- You're a senior backend engineer\n\nBefore I scaffold the settings component, a few questions so we get the right starting point for pairing with Dev:\n\n1. **What settings?** Account profile, notification preferences, security/password, billing \u2014 or all of the above?\n2. **Existing UI patterns?** Is there a component library in use (e.g. MUI, Radix, shadcn/ui) or rolling your own?\n3. **State management?** Are you using React Query, Zustand, Redux, or just local state + fetch?\n4. **Routing?** React Router, Next.js, or something else?\n\nSince Dev is junior, I can structure the component to be a good learning exercise \u2014 clear separation of concerns, typed props, straightforward patterns \u2014 without over-engineering it. Just need those details to make it fit your codebase.",
+  "timestamp": "2026-05-17T15:28:10Z",
+  "latency_ms": 19394,
+  "exit_code": 0,
+  "output_length_chars": 944,
+  "output_length_tokens_approx": 236,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "R3"
+}

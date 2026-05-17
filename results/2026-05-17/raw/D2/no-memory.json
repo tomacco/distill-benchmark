@@ -1,0 +1,16 @@
+{
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "No prior memory stored for this project. The system prompt mentions that DynamoDB and MongoDB were previously evaluated and rejected, but I don't have stored details on why.\n\nGiven your requirements \u2014 **complex aggregation queries across multiple tables** with **strong consistency** \u2014 here's my take:\n\n**PostgreSQL is the strongest fit.** Here's why:\n\n- **Complex aggregations**: Window functions, CTEs, subqueries, `GROUP BY` with rollups/cubes \u2014 PostgreSQL has best-in-class SQL support for analytical queries.\n- **Multi-table joins**: First-class relational joins, unlike document or key-value stores.\n- **Strong consistency**: Full ACID transactions by default.\n- **Reporting-specific features**: Materialized views for caching expensive aggregations, partial indexes, parallel query execution.\n\n**If query volume or data size is very large**, consider:\n\n- **PostgreSQL + CitusDB extension** \u2014 shards PostgreSQL horizontally while preserving SQL semantics.\n- **ClickHouse** \u2014 columnar store purpose-built for analytical/aggregation workloads. Extremely fast for read-heavy reporting, but weaker on transactional consistency and updates.\n\n**Why not DynamoDB/MongoDB** (which I understand were already evaluated and rejected): both are poor fits for ad-hoc multi-table aggregation. DynamoDB requires pre-designed access patterns, and MongoDB's `$lookup` is limited compared to relational joins. The rejection was the right call given these requirements.\n\nWant me to dig into any of these options further, or look at how this would integrate with the existing codebase?",
+  "timestamp": "2026-05-17T09:39:44Z",
+  "latency_ms": 18978,
+  "exit_code": 0,
+  "output_length_chars": 1571,
+  "output_length_tokens_approx": 392,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "D2"
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1a2d"/>
+      <stop offset="100%" style="stop-color:#16131e"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Progress ring (benchmark gauge) -->
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#b0a0cc" stroke-width="4" opacity="0.2"/>
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#e8b168" stroke-width="4" stroke-linecap="round"
+    stroke-dasharray="105" stroke-dashoffset="22" transform="rotate(-90 32 32)"/>
+  <!-- Score number -->
+  <text x="32" y="37" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="16" fill="#ede9e2">4.2</text>
+</svg>

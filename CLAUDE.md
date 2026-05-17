@@ -15,14 +15,14 @@ You are running competitive benchmarks. You must be HONEST — this project exis
 
 ## Project context
 
-- claude-distill: https://github.com/tomacco/claude-distill
-- Research findings: https://tomacco.github.io/claude-distill/research/
+- aura-distill: https://github.com/tomacco/aura-distill
+- Research findings: https://tomacco.github.io/aura-distill/research/
 - The system uses: rules/distill.md (retrieval rules) + SPINE index + tiered knowledge files
 - Key capabilities to benchmark: retrieval, correction durability, bias resistance, proportionality, user model
 
 ## First steps
 
 1. Research what other Claude memory tools exist (MCP servers, skills, custom instructions approaches)
-2. Design the test battery (use scenarios from claude-distill's existing research as starting points)
+2. Design the test battery (use scenarios from aura-distill's existing research as starting points)
 3. Build the runner framework
 4. Execute and evaluate

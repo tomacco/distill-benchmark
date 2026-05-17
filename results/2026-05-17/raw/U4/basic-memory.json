@@ -1,0 +1,16 @@
+{
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "```bash\nfind . -name \"*.kt\" -mtime -7\n```\n\nThis finds all files ending in `.kt` that were modified within the last 7 days. Adjust the path (`.`) as needed for your target directory.",
+  "timestamp": "2026-05-17T15:30:35Z",
+  "latency_ms": 6934,
+  "exit_code": 0,
+  "output_length_chars": 181,
+  "output_length_tokens_approx": 45,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "U4"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin, PostgreSQL, minimal deps preference), the simplest approach is a DB-backed feature flag \u2014 no new dependencies needed.\n\n### 1. Flyway migration\n\n```sql\n-- V<next>__create_feature_flags.sql\nCREATE TABLE feature_flags (\n    key   TEXT PRIMARY KEY,\n    enabled BOOLEAN NOT NULL DEFAULT FALSE\n);\n\nINSERT INTO feature_flags (key, enabled) VALUES ('payment_flow_v2', false);\n```\n\n### 2. Thin flag service\n\n```kotlin\nclass FeatureFlags(private val db: Database) {\n\n    private val cache = ConcurrentHashMap<String, Boolean>()\n\n    fun isEnabled(key: String): Boolean =\n        cache.getOrPut(key) { fetchFlag(key) }\n\n    private fun fetchFlag(key: String): Boolean =\n        db.queryOne(\"SELECT enabled FROM feature_flags WHERE key = ?\", key) { it.getBoolean(\"enabled\") }\n            ?: false\n\n    fun refresh() = cache.clear()  // call on a schedule or via admin endpoint\n}\n```\n\n### 3. Usage in the payment flow\n\n```kotlin\nif (featureFlags.isEnabled(\"payment_flow_v2\")) {\n    newPaymentFlow.process(request)\n} else {\n    legacyPaymentFlow.process(request)\n}\n```\n\n### 4. Toggle it\n\n```sql\nUPDATE feature_flags SET enabled = true WHERE key = 'payment_flow_v2';\n```\n\nThen hit the `/admin/flags/refresh` endpoint (or wait for the cache TTL).\n\n**Why this over a library like LaunchDarkly or Unleash:**\n- Zero new deps\n- You already have PostgreSQL \u2014 no new infra\n- Dark-launch only needs on/off, not % rollouts or user targeting yet\n- You can always graduate to something more sophisticated later\n\nIf Sofia needs per-merchant rollout for payment-processing, add a `merchant_ids TEXT[]` column to scope the flag \u2014 still no new deps.",
+  "timestamp": "2026-05-17T17:13:04Z",
+  "latency_ms": 15403,
+  "exit_code": 0,
+  "output_length_chars": 1645,
+  "output_length_tokens_approx": 411,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "P4"
+}

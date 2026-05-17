@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you told me earlier in this conversation, you switched the account service to **MySQL** last week, having completed the migration from PostgreSQL.\n\nIf you'd like, I can check the project's knowledge articles to see if they need updating to reflect this change.",
+  "timestamp": "2026-05-17T15:34:33Z",
+  "latency_ms": 7038,
+  "exit_code": 0,
+  "output_length_chars": 274,
+  "output_length_tokens_approx": 68,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "C3"
+}

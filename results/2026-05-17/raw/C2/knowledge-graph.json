@@ -1,0 +1,16 @@
+{
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No. DynamoDB was explicitly rejected at Helios. The reasons: you need strong consistency, multi-table transactions, and the team has deep PostgreSQL expertise.\n\nFor sub-millisecond key-value reads on session data, **Redis** is the right call \u2014 it's already in your stack. You're running it today, so there's zero new infrastructure to provision or learn.\n\n```kotlin\n// Simple session store with Redis + your existing setup\n@Service\nclass SessionStore(private val redisTemplate: StringRedisTemplate) {\n\n    fun put(sessionId: String, data: String, ttl: Duration = Duration.ofHours(1)) {\n        redisTemplate.opsForValue().set(\"session:$sessionId\", data, ttl)\n    }\n\n    fun get(sessionId: String): String? {\n        return redisTemplate.opsForValue().get(\"session:$sessionId\")\n    }\n}\n```\n\nRedis gives you sub-millisecond reads, simple key-value is its bread and butter, and you avoid adding a new dependency before the Series C due diligence.",
+  "timestamp": "2026-05-17T17:08:54Z",
+  "latency_ms": 9308,
+  "exit_code": 0,
+  "output_length_chars": 943,
+  "output_length_tokens_approx": 235,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "C2"
+}

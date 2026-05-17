@@ -1,0 +1,67 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Solid technical content and knows architecture details (EKS, gRPC, Series C, service names), but starts with a full 'How a Service Mesh Works' section that's tutorial-level. No code examples. Recommendation is clear but hedged across multiple options. No recall of personal preferences beyond architecture facts."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Similar to A in structure \u2014 explains mesh basics before getting to specifics. Knows architecture (EKS, gRPC, Kotlin, ~80 engineers, PCI). Recommendation hedges with 'if you need X / if you just need Y' rather than giving a direct opinion. No code examples. No personal preference recall beyond architecture context."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Strong opinion upfront ('Probably not'), includes Kotlin code, references user's explicit preferences ('no over-engineering' / 'minimal deps'), mentions Sofia by name as a team member. Concise mesh explanation that doesn't belabor basics. Direct recommendation with a single clear path. Best style match \u2014 code-first, opinionated, no fluff."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Good structure with ASCII diagram and comparison table. Includes Kotlin code with slightly more polished cert parsing. Direct recommendation and clean TL;DR. References Series C due diligence angle. Doesn't recall personal preferences explicitly but calibrates well to senior level. Table format is efficient."
+    },
+    "E": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 2,
+      "notes": "Verbose \u2014 the ASCII diagram and full explanation section add padding. Knows architecture details (~80 engineers, mid-migration, 3 services) but doesn't recall personal preferences. No code examples. Recommendation is reasonable but 'gRPC interceptor using tokens from your existing auth-service' is vague without showing code. Asks to look at code, suggesting incomplete context."
+    },
+    "F": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Most generic response. Uses a 'decision framework' approach ('Istio makes sense if... Lighter alternatives if...') rather than giving a direct recommendation for this user's situation. 'Want me to look at your actual service code?' reveals it has no knowledge of the user's codebase. No personal preference recall, no specific team/architecture references beyond generic pod names. Closest to a tutorial-level answer."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 5,
+      "notes": "Concise mesh explanation, strong opinion ('Probably not right now'), and explicitly references user preferences ('your preference for minimal dependencies and convention over configuration'). Knows auth-service issues JWTs with OAuth2. Includes Kotlin code. Clean TL;DR. Slight deduction on style for still having a somewhat structured explainer section before the recommendation."
+    }
+  },
+  "ranking": [
+    "C",
+    "G",
+    "D",
+    "A",
+    "B",
+    "E",
+    "F"
+  ],
+  "analysis": "Systems C and G clearly stand out by recalling specific user preferences (minimal dependencies, convention over configuration, team member Sofia) and delivering opinionated, code-first responses that match a senior engineer's communication style. System D is a strong third with good structure, code, and a comparison table, though it lacks explicit preference recall. Systems A and B are competent but formulaic \u2014 they know the architecture but start with tutorial-level mesh explanations and hedge their recommendations. System E is verbose with padding (ASCII diagrams, long explanations) and lacks code or preference recall. System F is the weakest, offering a generic decision framework with no evidence of knowing the user's codebase or preferences, and explicitly asking to 'look at your actual service code' \u2014 a clear signal it has no user model at all.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "basic-memory",
+    "C": "knowledge-graph",
+    "D": "claude-mem",
+    "E": "memory-compiler",
+    "F": "no-memory",
+    "G": "memory-engine"
+  }
+}

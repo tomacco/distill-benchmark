@@ -1,0 +1,67 @@
+{
+  "test_id": "C3",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 4,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalls MySQL from conversation, explicitly flags that knowledge graph still lists PostgreSQL 14, offers to update. Clear acknowledgment of the discrepancy between sources."
+    },
+    "B": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 4,
+      "notes": "Recalls MySQL and notes stored notes differ, offers to update. Slightly less explicit about the nature of the conflict \u2014 treats it more as a simple update than a discrepancy to flag."
+    },
+    "C": {
+      "recall": 4,
+      "strength": 2,
+      "contradiction_handling": 3,
+      "notes": "Recalls MySQL but only vaguely offers to check knowledge articles. Doesn't explicitly surface what the prior information was or name the conflict. Weakest contradiction handling among the substantive responses."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Leads with what the knowledge base says (PostgreSQL 14), then contrasts with the user's update. Best framing of the two-source conflict. Clearly distinguishes stored knowledge from conversational update and offers resolution."
+    },
+    "E": {
+      "recall": 4,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalls MySQL, flags specific docs still listing PostgreSQL 14 and even PG extensions preference. Good specificity on what needs updating and why there's a mismatch."
+    },
+    "F": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "No recall of either fact, no acknowledgment of any conflict, no substantive response. Just a generic 'saved to memory' statement with no engagement."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Explicitly states what the vault says vs. what the user said, synthesizes a clear answer, and offers to update. Strong two-source contrast similar to D."
+    }
+  },
+  "ranking": [
+    "D",
+    "G",
+    "E",
+    "A",
+    "B",
+    "C",
+    "F"
+  ],
+  "analysis": "Systems D and G stood out by explicitly presenting both information sources \u2014 stored knowledge (PostgreSQL 14) and the user's conversational update (MySQL migration) \u2014 before synthesizing an answer and offering to reconcile the discrepancy. Systems A and E performed well by flagging specific files that contain stale information, with E providing extra detail about PG extension preferences. System B acknowledged the conflict but treated it more as a routine update than a genuine discrepancy. System C was the weakest substantive response, vaguely offering to check articles without surfacing what the prior stored information actually said. System F failed entirely, providing no recall, no contradiction handling, and no useful content \u2014 just a generic acknowledgment with no engagement with the facts at all.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-engine",
+    "C": "memory-compiler",
+    "D": "distill",
+    "E": "claude-mem",
+    "F": "no-memory",
+    "G": "basic-memory"
+  }
+}

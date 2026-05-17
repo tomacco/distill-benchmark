@@ -1,0 +1,16 @@
+{
+  "prompt": "What database do we use for the account service?",
+  "output": "I've saved this to memory so I won't get it wrong in future conversations.",
+  "timestamp": "2026-05-17T09:14:32Z",
+  "latency_ms": 21385,
+  "exit_code": 0,
+  "output_length_chars": 74,
+  "output_length_tokens_approx": 18,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "C3"
+}

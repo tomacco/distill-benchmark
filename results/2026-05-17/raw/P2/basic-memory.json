@@ -1,0 +1,16 @@
+{
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Based on the architecture, auth-service is Kotlin with gRPC (internal). Here's a health check endpoint for the load balancer:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/health/HealthController.kt\n\npackage com.helios.auth.health\n\nimport io.ktor.http.*\nimport io.ktor.server.application.*\nimport io.ktor.server.response.*\nimport io.ktor.server.routing.*\n\nfun Route.healthRoutes() {\n    get(\"/health\") {\n        call.respond(HttpStatusCode.OK, mapOf(\"status\" to \"healthy\"))\n    }\n}\n```\n\nSince the load balancer likely hits an HTTP endpoint (ALB on AWS EKS), this is a simple REST endpoint even though internal comms use gRPC. If you're using gRPC health checking protocol instead (e.g., for a gRPC-aware LB or Kubernetes gRPC probes), here's that version:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/health/GrpcHealthService.kt\n\npackage com.helios.auth.health\n\nimport io.grpc.health.v1.HealthCheckResponse\nimport io.grpc.health.v1.HealthGrpc\nimport io.grpc.health.v1.HealthCheckRequest\nimport io.grpc.stub.StreamObserver\n\nclass GrpcHealthService : HealthGrpc.HealthImplBase() {\n    override fun check(request: HealthCheckRequest, responseObserver: StreamObserver<HealthCheckResponse>) {\n        responseObserver.onNext(\n            HealthCheckResponse.newBuilder()\n                .setStatus(HealthCheckResponse.ServingStatus.SERVING)\n                .build()\n        )\n        responseObserver.onCompleted()\n    }\n}\n```\n\nRegister it in your gRPC server builder:\n\n```kotlin\nServerBuilder.forPort(port)\n    .addService(GrpcHealthService())\n    // ... other services\n    .build()\n```\n\nWhich approach does your load balancer use \u2014 HTTP path check (ALB `/health`) or gRPC health protocol?",
+  "timestamp": "2026-05-17T15:26:24Z",
+  "latency_ms": 27042,
+  "exit_code": 0,
+  "output_length_chars": 1686,
+  "output_length_tokens_approx": 421,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "P2"
+}

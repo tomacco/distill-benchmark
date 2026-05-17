@@ -1,0 +1,16 @@
+{
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "Since you're on fish:\n\n```fish\nfind . -name \"*.kt\" -mtime -7\n```\n\nOr with `fd` if you have it installed (faster, respects `.gitignore`):\n\n```fish\nfd -e kt --changed-within 1w\n```",
+  "timestamp": "2026-05-17T17:38:42Z",
+  "latency_ms": 7917,
+  "exit_code": 0,
+  "output_length_chars": 178,
+  "output_length_tokens_approx": 44,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "U4"
+}

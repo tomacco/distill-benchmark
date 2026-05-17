@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and preferences, a few options worth considering:\n\n**PostgreSQL + extensions (strongest fit)**\n- **TimescaleDB** \u2014 PG extension, so no new infra. Hypertables give you automatic partitioning, continuous aggregates for pre-computed rollups, and compression (90%+ on typical analytics data). You already know PG, Flyway works, your team stays productive.\n- **pg_partman + materialized views** \u2014 if the analytics queries are predictable, native partitioning + mat views can get you surprisingly far without any extension.\n\n**If PG hits a wall at scale**\n- **ClickHouse** \u2014 columnar, purpose-built for analytics. Dramatically faster than PG for large aggregate queries (10-100x on big scans). Tradeoff: new infra to operate, though there are managed options (ClickHouse Cloud). Worth it if you're talking billions of rows or sub-second dashboards on massive datasets.\n- **Apache Druid** \u2014 similar niche, but heavier operationally. Probably overkill unless you need real-time ingestion from Kafka at very high throughput.\n\n**My recommendation:** Start with TimescaleDB. It's a PG extension (aligns with your \"prefer PG extensions over new infra\" principle), zero learning curve for the team, works with your existing Flyway migrations, and handles analytics workloads well into the hundreds of millions of rows. If you outgrow it, ClickHouse is the natural next step \u2014 and by then you'll have concrete query patterns to validate the move.\n\nFor the Series C story, \"we extended our existing proven stack\" reads better than \"we added another database to operate.\"",
+  "timestamp": "2026-05-17T17:37:12Z",
+  "latency_ms": 16763,
+  "exit_code": 0,
+  "output_length_chars": 1572,
+  "output_length_tokens_approx": 393,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "R4"
+}

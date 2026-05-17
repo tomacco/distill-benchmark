@@ -1,0 +1,16 @@
+{
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your existing stack and the critical constraints on record, here are the best options for the analytics service:\n\n**Top recommendation: ClickHouse**\n- Purpose-built for analytical (OLAP) workloads with extremely fast reads on large datasets\n- Columnar storage means aggregation queries over millions/billions of rows are very efficient\n- Works well alongside your existing PostgreSQL 14 \u2014 keep PostgreSQL as the transactional store, feed data into ClickHouse via Kafka (which you already have)\n- Strong SQL support, so the team's relational/SQL expertise transfers directly\n\n**Runner-up: Apache Druid**\n- Also columnar and designed for real-time analytics on large datasets\n- Excellent Kafka integration for streaming ingestion\n- Better suited if you need sub-second queries on real-time data with high concurrency\n\n**Also worth considering: TimescaleDB**\n- Extension on top of PostgreSQL \u2014 minimal operational overhead since the team already knows Postgres\n- Good for time-series analytics specifically\n- Less raw analytical performance than ClickHouse, but the operational simplicity is a real advantage for an 80-engineer org\n\n**Architecture fit:**\nAll three integrate naturally with your Kafka-based event pipeline and AWS EKS infrastructure. The pattern would be: services write to PostgreSQL (transactional) \u2192 events flow through Kafka \u2192 analytics DB ingests for read-heavy queries.\n\nPer your team's prior evaluations, I'm steering clear of DynamoDB and MongoDB \u2014 the relational model and strong consistency requirements ruled those out.\n\nWant me to dig into any of these options further, or sketch out the ingestion pipeline?",
+  "timestamp": "2026-05-17T16:46:47Z",
+  "latency_ms": 16332,
+  "exit_code": 0,
+  "output_length_chars": 1638,
+  "output_length_tokens_approx": 409,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-compiler",
+  "test_id": "R4"
+}

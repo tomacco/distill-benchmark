@@ -1,0 +1,16 @@
+{
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's the complete setup:\n\n**Dockerfile** \u2014 uses `python:3.11-slim`, installs deps, runs uvicorn on port 8000.\n\n**app/main.py** \u2014 loads a scikit-learn model from `model/fraud_model.joblib` and exposes:\n- `POST /predict` \u2014 accepts a list of features, returns `fraud_probability` and `is_fraud`\n- `GET /health` \u2014 liveness check\n\n**To use it:**\n\n1. Place your trained model at `model/fraud_model.joblib` (serialized with `joblib.dump(clf, \"model/fraud_model.joblib\")`)\n2. Build and run:\n   ```bash\n   docker build -t fraud-scorer .\n   docker run -p 8000:8000 fraud-scorer\n   ```\n3. Score a transaction:\n   ```bash\n   curl -X POST http://localhost:8000/predict \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\"features\": [0.1, 200.0, 1.5, ...]}'\n   ```\n\nThe model needs to be a scikit-learn classifier with `predict_proba` support (e.g., `LogisticRegression`, `RandomForestClassifier`, `GradientBoostingClassifier`).",
+  "timestamp": "2026-05-17T09:17:23Z",
+  "latency_ms": 21149,
+  "exit_code": 0,
+  "output_length_chars": 920,
+  "output_length_tokens_approx": 230,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "no-memory",
+  "test_id": "R5"
+}

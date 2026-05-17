@@ -4,7 +4,7 @@ Competitive benchmarking of Claude memory/knowledge enhancement tools.
 
 ## Goal
 
-Evaluate claude-distill against other memory add-ons, skills, and approaches using a standardized test suite. Results must be unbiased — evaluated by a sub-agent that has no knowledge of which system produced which output.
+Evaluate aura-distill against other memory add-ons, skills, and approaches using a standardized test suite. Results must be unbiased — evaluated by a sub-agent that has no knowledge of which system produced which output.
 
 ## Methodology
 
@@ -45,7 +45,7 @@ Evaluate claude-distill against other memory add-ons, skills, and approaches usi
 ```
 distill-benchmark/
 ├── competitors/          # Setup instructions for each tool
-│   ├── distill/          # claude-distill (our system)
+│   ├── distill/          # aura-distill (our system)
 │   ├── vanilla/          # No enhancements (baseline)
 │   ├── memory-md/        # Standard CLAUDE.md + memory/ approach
 │   └── [others]/         # Other tools as we discover them
@@ -83,7 +83,7 @@ distill-benchmark/
 
 ## Competitors to evaluate
 
-- [ ] claude-distill (our system)
+- [ ] aura-distill (our system)
 - [ ] Vanilla Claude (no memory enhancements)
 - [ ] Standard CLAUDE.md + memory/ files (built-in system)
 - [ ] [Research needed: other memory MCP servers, skills, approaches]

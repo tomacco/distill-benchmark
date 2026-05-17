@@ -1,0 +1,16 @@
+{
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal, REST external, PostgreSQL), here's the simplest approach:\n\n**A single gRPC endpoint on `payment-service` that does micro-deposit verification:**\n\n```kotlin\n// payment_verification.proto\nservice MerchantBankVerification {\n  rpc VerifyBankAccount(VerifyBankAccountRequest) returns (VerifyBankAccountResponse);\n}\n\nmessage VerifyBankAccountRequest {\n  string merchant_id = 1;\n  string routing_number = 2;\n  string account_number = 3;\n}\n\nmessage VerifyBankAccountResponse {\n  string verification_id = 1;\n  VerificationStatus status = 2;\n}\n\nenum VerificationStatus {\n  PENDING = 0;\n  VERIFIED = 1;\n  FAILED = 2;\n}\n```\n\n```kotlin\n// BankVerificationService.kt\nclass BankVerificationService(\n    private val bankingClient: BankingPartnerClient, // your ACH provider\n    private val db: VerificationRepository\n) : MerchantBankVerificationGrpcKt.MerchantBankVerificationCoroutineImplBase() {\n\n    override suspend fun verifyBankAccount(request: VerifyBankAccountRequest): VerifyBankAccountResponse {\n        // Initiate micro-deposits via ACH provider\n        val verification = bankingClient.initiateMicroDeposits(\n            routing = request.routingNumber,\n            account = request.accountNumber\n        )\n\n        db.save(\n            BankVerification(\n                merchantId = request.merchantId,\n                verificationId = verification.id,\n                status = VerificationStatus.PENDING\n            )\n        )\n\n        return VerifyBankAccountResponse.newBuilder()\n            .setVerificationId(verification.id)\n            .setStatus(VerificationStatus.PENDING)\n            .build()\n    }\n}\n```\n\n**Why this works for your setup:**\n\n- gRPC for internal calls (per your migration decision)\n- Coroutines (per your decision over RxJava)\n- State in PostgreSQL (no new infra needed)\n- Expose a REST endpoint in your API gateway for external merchant-facing access\n- Publish a `bank_account.verification_initiated` event to Kafka so notification-service can inform the merchant\n\n**For the confirmation step** (merchant confirms micro-deposit amounts), add a second RPC `ConfirmMicroDeposits(verification_id, amount_1, amount_2)` that transitions status to `VERIFIED` or `FAILED`.\n\nOne Flyway migration for the `bank_verifications` table and you're done.",
+  "timestamp": "2026-05-17T15:22:21Z",
+  "latency_ms": 20224,
+  "exit_code": 0,
+  "output_length_chars": 2307,
+  "output_length_tokens_approx": 576,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "basic-memory",
+  "test_id": "D3"
+}

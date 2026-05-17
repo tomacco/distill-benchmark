@@ -1,0 +1,16 @@
+{
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n### Project structure\n\n```\npayment-processing/\n\u251c\u2500\u2500 build.gradle.kts                          # Spring Boot 3.3 + Kafka + coroutines\n\u251c\u2500\u2500 settings.gradle.kts\n\u2514\u2500\u2500 src/\n    \u251c\u2500\u2500 main/\n    \u2502   \u251c\u2500\u2500 kotlin/com/helios/payments/\n    \u2502   \u2502   \u251c\u2500\u2500 PaymentProcessingApplication.kt\n    \u2502   \u2502   \u251c\u2500\u2500 config/KafkaConfig.kt         # Manual ack, DLT, retry (3x @ 1s)\n    \u2502   \u2502   \u251c\u2500\u2500 consumer/PaymentCompletedConsumer.kt\n    \u2502   \u2502   \u2514\u2500\u2500 model/PaymentCompleted.kt\n    \u2502   \u2514\u2500\u2500 resources/application.yml\n    \u2514\u2500\u2500 test/\n        \u251c\u2500\u2500 kotlin/.../PaymentCompletedConsumerIntegrationTest.kt\n        \u2514\u2500\u2500 resources/application-test.yml\n```\n\n### Key decisions\n\n- **Manual ack** (`AckMode.MANUAL`) \u2014 no message loss on crash\n- **`runBlocking(MDCContext())`** in the listener bridges to coroutines while propagating the correlation ID through MDC\n- **DLT (dead letter topic)** at `payment.completed.DLT` after 3 retries, 1s apart\n- **JSON deserialization** via Spring's `JsonDeserializer` with trusted packages scoped to `com.helios.payments.model`\n- **Integration test** uses `@EmbeddedKafka` on a random port \u2014 no Docker needed to run tests\n\n### Next steps\n\nThe `processPayment()` suspend function in `PaymentCompletedConsumer.kt:41` is stubbed \u2014 wire in your business logic there (ledger update, notification trigger via SNS, etc.). Once you have a downstream write, add a concrete assertion in the integration test's `untilAsserted` block.",
+  "timestamp": "2026-05-17T17:34:53Z",
+  "latency_ms": 104277,
+  "exit_code": 0,
+  "output_length_chars": 1434,
+  "output_length_tokens_approx": 358,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "claude-mem",
+  "test_id": "D4"
+}

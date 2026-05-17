@@ -1,0 +1,16 @@
+{
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your project context:\n\n**Use SLF4J + Logback with structured JSON output.** This aligns with what's already been adopted across Helios (\"structured logging with correlation IDs\" per your team decisions).\n\nFor the payment service specifically:\n\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n}\n```\n\n```kotlin\n// Usage\nimport mu.KotlinLogging\n\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"Payment initiated\" }\nlogger.withLoggingContext(\"correlationId\" to correlationId, \"amount\" to amount.toString()) {\n    logger.info { \"Processing payment\" }\n}\n```\n\n```xml\n<!-- logback.xml \u2014 JSON to stdout, EKS picks it up -->\n<configuration>\n  <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\">\n      <includeMdcKeyName>correlationId</includeMdcKeyName>\n    </encoder>\n  </appender>\n  <root level=\"INFO\">\n    <appender-ref ref=\"STDOUT\" />\n  </root>\n</configuration>\n```\n\nKey points:\n- `kotlin-logging` wraps SLF4J with idiomatic Kotlin (lazy eval, no `isDebugEnabled` checks)\n- Logstash encoder gives you structured JSON \u2014 works with your EKS/CloudWatch stack\n- Correlation IDs via MDC propagate through coroutines (use `MDCContext()` in your coroutine context)\n- No new infra needed \u2014 logs go to stdout, collected by existing cluster logging\n\nFor a payment service, also consider adding MDC fields for `paymentId`, `merchantId`, and `idempotencyKey` to every log line for traceability during audits.",
+  "timestamp": "2026-05-17T17:20:11Z",
+  "latency_ms": 19643,
+  "exit_code": 0,
+  "output_length_chars": 1633,
+  "output_length_tokens_approx": 408,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "memory-engine",
+  "test_id": "C4"
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given your stack and the Series C timeline, here are the key considerations for the payment-processing service:\n\n## Architecture\n\n- **Kotlin + gRPC** internally, consistent with auth-service and the rest of your stack\n- **PostgreSQL 14** \u2014 you need strong consistency and multi-table transactions for payments (this is exactly why DynamoDB/MongoDB were rejected)\n- **Kafka** for async event publishing (payment initiated, completed, failed) so notification-service and account-service can react\n- **Flyway** for schema migrations from day one\n\n## Data & Consistency\n\n- **Idempotency keys** on every payment operation \u2014 network retries will happen\n- **Transactional outbox pattern** for Kafka events \u2014 don't publish events outside the DB transaction\n- **Pessimistic locking or serializable isolation** for balance-affecting operations\n- **Audit trail table** \u2014 append-only ledger of every state change, critical for Series C due diligence\n\n## Reliability\n\n- **Circuit breakers** around external payment provider calls (Resilience4j fits Kotlin well)\n- **Dead letter queues** for failed Kafka consumers\n- **Reconciliation job** to catch discrepancies between your ledger and external providers\n- **Timeouts and retry budgets** on all gRPC calls from other services\n\n## Security & Compliance\n\n- **PCI DSS scope** \u2014 minimize it. Never store raw card numbers; tokenize via your payment provider\n- **Encryption at rest** for any sensitive payment metadata in Postgres\n- **mTLS** between services on EKS (you likely have this already)\n- **Rate limiting** on payment initiation endpoints\n\n## Operational\n\n- **Staged rollout** \u2014 Sofia has it going to staging first, which is right. Run shadow traffic against account-service before cutting over\n- **Metrics from the start** \u2014 payment latency p50/p95/p99, success/failure rates, provider error breakdowns\n- **Feature flags** per payment type or customer segment for gradual enablement\n\n## Schema Starting Point\n\nThink in terms of: `payments` (core record), `payment_events` (state machine transitions/audit log), `idempotency_keys`, and `reconciliation_records`. Keep the ledger append-only and derive current state from events.\n\nThe biggest risk is getting the consistency model wrong \u2014 coordinate with Sofia on the state machine design early. Everything else is standard for your stack.",
+  "timestamp": "2026-05-17T17:13:24Z",
+  "latency_ms": 19391,
+  "exit_code": 0,
+  "output_length_chars": 2328,
+  "output_length_tokens_approx": 582,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109",
+    "benchmark": "0.1.0"
+  },
+  "competitor_id": "knowledge-graph",
+  "test_id": "R1"
+}
