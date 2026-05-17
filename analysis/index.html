@@ -34,14 +34,28 @@
         html { overflow-x: hidden; }
         img, svg, canvas, table, pre { max-width: 100%; }
 
-        /* Low performance: strip expensive GPU effects */
+        /* Low performance: strip expensive GPU effects, force everything visible */
         .perf-low body::before { display: none !important; }
+        .perf-low .card,
+        .perf-low .header,
+        .perf-low .intro,
+        .perf-low [id^="systems"],
+        .perf-low [id^="test"],
+        .perf-low .system-profile-card,
+        .perf-low .response-card { opacity: 1 !important; transform: none !important; }
         .perf-low .card { backdrop-filter: none !important; box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important; }
         .perf-low .pill { backdrop-filter: none !important; }
         .perf-low .card:hover { transform: none !important; }
         .perf-low .detail-table-card thead th { backdrop-filter: none !important; }
 
-        /* Mid performance: lighter blur, no hover transforms */
+        /* Mid performance: force visible, lighter blur, no hover transforms */
+        .perf-mid .card,
+        .perf-mid .header,
+        .perf-mid .intro,
+        .perf-mid [id^="systems"],
+        .perf-mid [id^="test"],
+        .perf-mid .system-profile-card,
+        .perf-mid .response-card { opacity: 1 !important; transform: none !important; }
         .perf-mid body::before { opacity: 0.015 !important; }
         .perf-mid .card { backdrop-filter: blur(4px) !important; }
         .perf-mid .card:hover { transform: none !important; }
