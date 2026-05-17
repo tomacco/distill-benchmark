@@ -49,6 +49,8 @@
         .perf-low .pill { backdrop-filter: none !important; }
         .perf-low .card:hover { transform: none !important; }
         .perf-low .detail-table-card thead th { backdrop-filter: none !important; }
+        .perf-low .xp-bar-fill { transition: none !important; }
+        .perf-low .ring-fill { transition: none !important; }
 
         /* Mid performance: force visible, lighter blur, no hover transforms */
         .perf-mid .card,
@@ -63,6 +65,8 @@
         .perf-mid body::before { opacity: 0.015 !important; }
         .perf-mid .card { backdrop-filter: blur(4px) !important; }
         .perf-mid .card:hover { transform: none !important; }
+        .perf-mid .xp-bar-fill { transition: none !important; }
+        .perf-mid .ring-fill { transition: none !important; }
 
         body {
             font-family: 'Nunito', sans-serif;
@@ -1730,17 +1734,13 @@ tags: [decisions, corrections, critical]
     }
 
     function initAnimations() {
-        // Low tier: skip ALL animations, just show everything
-        if (PERF_TIER === 'low') {
-            finalizeDataVisuals();
-            return;
-        }
-
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Mid tier: simple fade-ins, finalize data visuals immediately
-        if (PERF_TIER === 'mid') {
-            finalizeDataVisuals();
+        // Low/mid tier: skip animations, set final values after paint
+        if (PERF_TIER === 'low' || PERF_TIER === 'mid') {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    finalizeDataVisuals();
+                });
+            });
             return;
         }
 
