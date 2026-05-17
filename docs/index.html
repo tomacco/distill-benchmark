@@ -1209,7 +1209,7 @@ tags: [decisions, corrections, critical]
     </div>
 
     <!-- Info Panel Overlay -->
-    <div class="info-panel-overlay" id="infoPanelOverlay" onclick="closeInfoPanel()"></div>
+    <div class="info-panel-overlay" id="infoPanelOverlay" onclick="closeInfoPanel(true)"></div>
 
     <!-- Info Panel -->
     <aside class="info-panel" id="infoPanel">
@@ -1726,6 +1726,7 @@ tags: [decisions, corrections, critical]
                     <li><strong>User agent:</strong> <span style="font-size:0.7rem;word-break:break-all;color:var(--muted);">${navigator.userAgent}</span></li>
                 `;
                 panel.querySelector('.scoring h5').textContent = 'Device Details';
+                debugPanelOpen = true;
                 panel.classList.add('open');
                 overlay.classList.add('open');
             }
@@ -2009,11 +2010,15 @@ tags: [decisions, corrections, critical]
         gsap.fromTo(panel, { x: 30 }, { x: 0, duration: 0.3, ease: 'power2.out' });
     }
 
-    function closeInfoPanel() {
+    let debugPanelOpen = false;
+
+    function closeInfoPanel(fromOverlay) {
+        if (fromOverlay && debugPanelOpen) return;
         const panel = document.getElementById('infoPanel');
         const overlay = document.getElementById('infoPanelOverlay');
         panel.classList.remove('open');
         overlay.classList.remove('open');
+        debugPanelOpen = false;
     }
 
     // Delegate click events for category labels, pills, and test labels
