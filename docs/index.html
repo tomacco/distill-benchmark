@@ -896,15 +896,30 @@
         /* --- Responsive --- */
         @media (max-width: 768px) {
             .grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 2rem; }
-            .card { padding: 1.5rem; }
-            .container { padding: 2rem 1rem; }
-            .hero-scores { gap: 1.5rem; }
-            .ring-container { width: 90px; height: 90px; }
-            .ring-value { font-size: 1.2rem; }
-            .xp-label { min-width: 70px; font-size: 0.7rem; }
+            .header h1 { font-size: 1.8rem; }
+            .card { padding: 1rem; backdrop-filter: none; }
+            .pill { backdrop-filter: none; }
+            .container { padding: 1.5rem 0.8rem; }
+            .hero-scores { gap: 1rem; }
+            .ring-container { width: 80px; height: 80px; }
+            .ring-value { font-size: 1rem; }
+            .ring-label { font-size: 0.7rem; }
+            .winner-badge { font-size: 0.6rem; padding: 0.2rem 0.5rem; }
+            .intro p { font-size: 0.9rem; }
+            .card h3 { font-size: 1rem; }
+
+            /* XP bars: fixed-width labels so bars align */
+            .xp-row { gap: 0.4rem; }
+            .xp-label { width: 100px; min-width: 100px; max-width: 100px; font-size: 0.65rem; text-align: right; }
+            .xp-bar-container { height: 16px; }
+            .xp-score { font-size: 0.65rem; min-width: 28px; }
+
             .systems-grid { grid-template-columns: 1fr; }
             .test-responses-grid { grid-template-columns: 1fr; }
+            .system-snippet { max-height: 120px; }
+            .system-snippet code { font-size: 0.65rem; }
+            .category-pills { gap: 0.3rem; }
+            .pill { font-size: 0.75rem; padding: 0.3rem 0.7rem; }
 
             /* Swap table for cards on mobile */
             .detail-desktop { display: none !important; }
