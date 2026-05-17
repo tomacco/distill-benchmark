@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Context Benchmark</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            /* Twilight Study — OKLCH-designed, WCAG AA verified */
+            --bg-start: #16131e;
+            --bg-end: #1e1a2d;
+            --card-bg: rgba(38, 33, 55, 0.65);
+            --card-border: rgba(176, 160, 204, 0.12);
+            --primary: #e8b168;      /* honey amber — headers, highlights */
+            --secondary: #b0a0cc;    /* soft lavender — labels, pills */
+            --success: #6ec5a8;      /* seafoam — winner, achievement */
+            --coral: #e09a7d;        /* soft coral — charts, warm secondary */
+            --text: #ede9e2;         /* warm cream-white */
+            --text-dark: #2d2a3e;
+            --muted: #9f95b0;        /* lavender-gray — secondary text */
+            --dimmed: #6b6080;       /* decorative, de-emphasis */
+            --ring-bg: rgba(176, 160, 204, 0.12);
+            --xp-bg: rgba(46, 40, 69, 0.7);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            z-index: 9999;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .header h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.01em;
+            margin-bottom: 0.4rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--secondary);
+            letter-spacing: 0.02em;
+        }
+
+        /* --- Category Pills --- */
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pill {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            cursor: pointer;
+            color: var(--secondary);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            transition: all 0.25s ease;
+        }
+
+        .pill:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(244, 162, 97, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* --- Intro --- */
+        .intro {
+            max-width: 680px;
+            margin: 0 auto 3.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .intro p {
+            font-size: 1.05rem;
+            color: var(--text);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* --- Radar Legend --- */
+        .radar-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 1rem;
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .radar-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            user-select: none;
+        }
+
+        .radar-legend-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .radar-legend-item.hidden {
+            opacity: 0.3;
+        }
+
+        .radar-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* --- Grid --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid .card-full {
+            grid-column: 1 / -1;
+        }
+
+        /* --- Progress Rings (Overall Scores) --- */
+        .hero-scores {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 2rem 0;
+        }
+
+        .score-ring-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .score-ring-wrapper.winner .ring-container {
+            filter: drop-shadow(0 0 12px var(--success));
+        }
+
+        .ring-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transition: transform 0.3s ease;
+        }
+
+        .ring-container svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .ring-container .ring-bg {
+            fill: none;
+            stroke: var(--ring-bg);
+            stroke-width: 8;
+        }
+
+        .ring-container .ring-fill {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease;
+        }
+
+        .ring-value {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .ring-label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-transform: capitalize;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a.ring-label:hover {
+            color: var(--primary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .winner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            background: var(--success);
+            color: var(--text-dark);
+            text-transform: uppercase;
+        }
+
+        /* --- XP Bars (Category Breakdown) --- */
+        .category-card {
+            margin-bottom: 0;
+        }
+
+        .xp-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .xp-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .xp-label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--secondary);
+            min-width: 100px;
+            text-align: right;
+            text-transform: capitalize;
+        }
+
+        .xp-bar-container {
+            flex: 1;
+            height: 20px;
+            background: var(--xp-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .xp-score {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--muted);
+            min-width: 35px;
+        }
+
+        /* --- Charts --- */
+        canvas {
+            max-height: 350px;
+        }
+
+        /* --- Table --- */
+        /* Detail table card: no overflow, no backdrop-filter — lets sticky work against page scroll */
+        .detail-table-card {
+            backdrop-filter: none;
+            background: rgba(38, 33, 55, 0.85);
+            overflow: visible;
+        }
+
+        .detail-table-card thead th {
+            position: sticky;
+            top: 0;
+            background: rgba(38, 33, 55, 0.98);
+            z-index: 10;
+            backdrop-filter: blur(12px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 2px solid rgba(244, 162, 97, 0.2);
+            padding-bottom: 1rem;
+            background: var(--bg-end);
+        }
+
+        td {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(184, 169, 201, 0.08);
+        }
+
+        td.score {
+            font-family: 'Space Mono', monospace;
+            font-weight: 400;
+            font-size: 0.85rem;
+        }
+
+        .winner {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        tr {
+            transition: background 0.2s ease;
+            border-radius: 8px;
+        }
+
+        tr:hover {
+            background: rgba(244, 162, 97, 0.05);
+        }
+
+        /* --- Metadata --- */
+        .meta {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            font-weight: 400;
+        }
+
+        .meta p {
+            margin-bottom: 0.3rem;
+        }
+
+        /* --- No Data State --- */
+        .no-data {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .no-data .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-data h3 {
+            font-family: 'Nunito', sans-serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+        }
+
+        .no-data p {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .no-data pre {
+            display: inline-block;
+            text-align: left;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text);
+            background: rgba(26, 21, 37, 0.8);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            line-height: 2;
+        }
+
+        /* --- Category Labels (clickable) --- */
+        .cat-label {
+            cursor: pointer;
+            color: var(--secondary);
+            transition: color 0.2s;
+        }
+
+        .cat-label:hover {
+            color: var(--primary);
+        }
+
+        .test-label:hover strong {
+            color: var(--primary);
+        }
+
+        /* --- Info Panel (Desktop: side panel) --- */
+        .info-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(37, 32, 64, 0.95);
+            backdrop-filter: blur(24px);
+            border-left: 1px solid var(--card-border);
+            box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 2.5rem 2rem;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .info-panel.open {
+            right: 0;
+        }
+
+        .info-panel-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--card-border);
+            background: transparent;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: color 0.2s, border-color 0.2s, background 0.2s;
+        }
+
+        .info-panel-close:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: rgba(244, 162, 97, 0.1);
+        }
+
+        .info-panel h4 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-right: 2rem;
+        }
+
+        .info-panel p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .info-panel .scoring {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .info-panel .scoring h5 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-panel .scoring li {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 0.7rem;
+            list-style: none;
+            padding-left: 1.4rem;
+            position: relative;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .info-panel .scoring li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .info-panel-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+        }
+
+        .info-panel-overlay.open {
+            display: block;
+        }
+
+        /* --- Methodology --- */
+        .methodology {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            border-top: 1px solid var(--card-border);
+            opacity: 0;
+        }
+
+        .methodology h4 {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.8rem;
+        }
+
+        .methodology p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* --- Systems Under Test --- */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .system-profile-card {
+            background: rgba(30, 26, 45, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .system-profile-card:hover {
+            border-color: rgba(176, 160, 204, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .system-name {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        a.system-name:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .arch-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 400;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50px;
+            background: rgba(176, 160, 204, 0.1);
+            color: var(--muted);
+            border: 1px solid var(--card-border);
+            white-space: nowrap;
+        }
+
+        .system-desc {
+            font-size: 0.82rem;
+            color: var(--secondary);
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+        }
+
+        .system-snippet {
+            background: #1a1525;
+            border-radius: 8px;
+            padding: 0.8rem;
+            max-height: 180px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        .system-snippet pre {
+            margin: 0;
+        }
+
+        .system-snippet code {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text);
+            line-height: 1.6;
+            white-space: pre;
+            opacity: 0.85;
+        }
+
+        .system-snippet .snippet-muted {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--dimmed);
+            font-style: italic;
+        }
+
+        /* --- Test Anatomy --- */
+        .test-prompt-box {
+            background: rgba(232, 177, 104, 0.08);
+            border: 1px solid rgba(232, 177, 104, 0.2);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .test-prompt-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-prompt-text {
+            font-size: 1.05rem;
+            color: var(--text);
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .test-responses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .response-excerpt-card {
+            background: rgba(30, 26, 45, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .response-excerpt-card:hover {
+            border-color: rgba(176, 160, 204, 0.25);
+        }
+
+        .response-system {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .response-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--text);
+            opacity: 0.8;
+            line-height: 1.6;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            white-space: pre-wrap;
+        }
+
+        .response-score-badge {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2rem; }
+            .card { padding: 1.5rem; }
+            .container { padding: 2rem 1rem; }
+            .hero-scores { gap: 1.5rem; }
+            .ring-container { width: 90px; height: 90px; }
+            .ring-value { font-size: 1.2rem; }
+            .xp-label { min-width: 70px; font-size: 0.7rem; }
+            .systems-grid { grid-template-columns: 1fr; }
+            .test-responses-grid { grid-template-columns: 1fr; }
+
+            /* Bottom sheet on mobile */
+            .info-panel {
+                top: auto;
+                bottom: -100%;
+                right: 0;
+                left: 0;
+                width: 100%;
+                height: 70vh;
+                border-left: none;
+                border-top: 1px solid var(--card-border);
+                border-radius: 16px 16px 0 0;
+                transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .info-panel.open {
+                bottom: 0;
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Persistent Context Benchmark</h1>
+            <p class="subtitle">A Blind Evaluation of AI Memory Systems</p>
+            <div class="category-pills">
+                <span class="pill" data-cat="retrieval">Retrieval</span>
+                <span class="pill" data-cat="correction">Correction</span>
+                <span class="pill" data-cat="bias">Bias</span>
+                <span class="pill" data-cat="user-model">Adaptation</span>
+                <span class="pill" data-cat="proportionality">Proportionality</span>
+                <span class="pill" data-cat="persistence">Persistence</span>
+            </div>
+        </header>
+
+        <!-- Intro -->
+        <div class="intro">
+            <p>
+                AI assistants forget everything between sessions. Persistent context systems attempt to fix this — giving AI a working memory of your preferences, decisions, and project knowledge. But how well do they actually work?
+            </p>
+            <p>
+                This benchmark measures six dimensions of memory quality across blind, randomized evaluations.
+            </p>
+        </div>
+
+        <div id="app">
+            <div class="card" style="opacity:1;transform:none;text-align:center;">
+                <p style="color:var(--secondary);font-size:1rem;">Loading data...</p>
+            </div>
+        </div>
+
+        <div class="card card-full" id="systemsUnderTest" style="opacity:0;transform:translateY(30px);">
+            <h3>Systems Under Test</h3>
+            <div class="systems-grid">
+                <!-- no-memory -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <span class="system-name" style="color:var(--muted);">no-memory</span>
+                        <span class="arch-tag">none</span>
+                    </div>
+                    <p class="system-desc">Raw Claude with zero persistent context — the baseline</p>
+                    <div class="system-snippet">
+                        <span class="snippet-muted">No knowledge injected</span>
+                    </div>
+                </div>
+                <!-- aura-distill -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/tomacco/aura-distill" target="_blank" rel="noopener" class="system-name" style="color:#e8b168;">aura-distill</a>
+                        <span class="arch-tag">rules + markdown files</span>
+                    </div>
+                    <p class="system-desc">Rules-based retrieval with SPINE index and tiered knowledge files</p>
+                    <div class="system-snippet"><pre><code># SPINE Index
+| Topic | File |
+|-------|------|
+| Architecture | architecture.md |
+| Decisions | decisions.md |
+...
+
+# decisions.md
+⛔ Do NOT suggest DynamoDB
+⛔ Do NOT suggest MongoDB
+⛔ auth-service is Kotlin, NOT Java</code></pre></div>
+                </div>
+                <!-- claude-mem -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/thedotmack/claude-mem" target="_blank" rel="noopener" class="system-name" style="color:#6ec5a8;">claude-mem</a>
+                        <span class="arch-tag">compressed layers</span>
+                    </div>
+                    <p class="system-desc">Plugin + hooks with compressed semantic summaries in progressive disclosure layers</p>
+                    <div class="system-snippet"><pre><code>## Layer 1: Critical (always loaded)
+User: Senior backend @ Helios Financial
+Stack: Kotlin · PostgreSQL 14 · Redis · Kafka
+NEVER suggest: DynamoDB, MongoDB
+
+## Layer 2: Project Context
+Services: auth-service (prod), account-service (staging)
+payment-processing: next (Sofia leading)</code></pre></div>
+                </div>
+                <!-- basic-memory -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/basicmachines-co/basic-memory" target="_blank" rel="noopener" class="system-name" style="color:#e09a7d;">basic-memory</a>
+                        <span class="arch-tag">markdown vault + YAML frontmatter</span>
+                    </div>
+                    <p class="system-desc">MCP server with a vault of tagged markdown files and semantic search</p>
+                    <div class="system-snippet"><pre><code>---
+title: Decisions &amp; Corrections
+tags: [decisions, corrections, critical]
+---
+# Corrections (CRITICAL)
+- NEVER suggest DynamoDB
+- NEVER suggest MongoDB
+- auth-service is Kotlin, NOT Java</code></pre></div>
+                </div>
+                <!-- memory-compiler -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/coleam00/claude-memory-compiler" target="_blank" rel="noopener" class="system-name" style="color:#c8d87e;">memory-compiler</a>
+                        <span class="arch-tag">compiled articles</span>
+                    </div>
+                    <p class="system-desc">Hooks compile raw observations into structured articles with confidence levels</p>
+                    <div class="system-snippet"><pre><code># Critical Corrections
+**Last compiled**: 2024-01-15
+**Confidence**: High
+**Priority**: CRITICAL
+
+⛔ NEVER suggest DynamoDB
+  Reason: strong consistency, multi-table txns
+⛔ NEVER suggest MongoDB</code></pre></div>
+                </div>
+                <!-- memory-engine -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/HelloRuru/claude-memory-engine" target="_blank" rel="noopener" class="system-name" style="color:#7cb8d4;">memory-engine</a>
+                        <span class="arch-tag">markdown files</span>
+                    </div>
+                    <p class="system-desc">Zero-dependency hooks with simple markdown memory files</p>
+                    <div class="system-snippet"><pre><code># Corrections (HIGH PRIORITY)
+## Never Suggest
+- DynamoDB — rejected (consistency, txns)
+- MongoDB — relational model fits domain
+## Common Mistakes
+- auth-service is Kotlin, NOT Java</code></pre></div>
+                </div>
+                <!-- knowledge-graph -->
+                <div class="system-profile-card">
+                    <div class="system-header">
+                        <a href="https://github.com/shaneholloman/mcp-knowledge-graph" target="_blank" rel="noopener" class="system-name" style="color:#d4a0c8;">knowledge-graph</a>
+                        <span class="arch-tag">JSONL graph</span>
+                    </div>
+                    <p class="system-desc">MCP server with JSONL entities and typed relations</p>
+                    <div class="system-snippet"><pre><code>{"type":"entity","name":"DynamoDB",
+ "entityType":"rejected",
+ "observations":["NEVER suggest",
+  "Need strong consistency",
+  "Need multi-table txns"]}
+{"type":"relation",
+ "from":"Helios Financial",
+ "to":"DynamoDB",
+ "relationType":"rejected"}</code></pre></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Anatomy -->
+        <div class="card card-full" id="testAnatomy" style="opacity:0;transform:translateY(30px);">
+            <h3>Anatomy of a Test</h3>
+            <p style="color:var(--muted);text-align:center;margin-bottom:1.5rem;font-size:0.95rem;">How each system responds to the same prompt</p>
+            <div class="test-prompt-box">
+                <span class="test-prompt-label">Test R1 — Prompt</span>
+                <p class="test-prompt-text">We need a new service for payment processing. What should I consider?</p>
+            </div>
+            <div class="test-responses-grid">
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#b0a0cc;">no-memory</span>
+                    <p class="response-text">Here are the key considerations for a payment processing service:
+
+## Security (highest priority)
+- **PCI DSS compliance** — if handling card data dir...</p>
+                    <span class="response-score-badge" style="background:rgba(176,160,204,0.2);color:#b0a0cc;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#e8b168;">aura-distill</span>
+                    <p class="response-text">Here are the key considerations for the payment processing service, given Helios Financial's context:
+
+## Architectural Alignment
+
+- **Kotlin microser...</p>
+                    <span class="response-score-badge" style="background:rgba(232,177,104,0.2);color:#e8b168;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#6ec5a8;">claude-mem</span>
+                    <p class="response-text">Given your stack and the monolith decomposition already in progress, here are the key considerations:
+
+## Architecture
+
+- **gRPC internally** (consist...</p>
+                    <span class="response-score-badge" style="background:rgba(110,197,168,0.2);color:#6ec5a8;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#e09a7d;">basic-memory</span>
+                    <p class="response-text">Based on your architecture and project state, here are the key considerations for extracting the payment-processing service from the monolith:
+
+**Arch...</p>
+                    <span class="response-score-badge" style="background:rgba(224,154,125,0.2);color:#e09a7d;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#c8d87e;">memory-compiler</span>
+                    <p class="response-text">Based on the project's established patterns: set up Flyway migrations for the new service. The team chose Flyway over Liquibase...</p>
+                    <span class="response-score-badge" style="background:rgba(200,216,126,0.2);color:#c8d87e;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#7cb8d4;">memory-engine</span>
+                    <p class="response-text">Given your Helios Financial context — Kotlin microservices, PostgreSQL, Kafka, gRPC internally, and Sofia leading this effort — here are the key consi...</p>
+                    <span class="response-score-badge" style="background:rgba(124,184,212,0.2);color:#7cb8d4;">R1</span>
+                </div>
+                <div class="response-excerpt-card">
+                    <span class="response-system" style="color:#d4a0c8;">knowledge-graph</span>
+                    <p class="response-text">Given your stack and the Series C timeline, here are the key considerations for the payment-processing service:
+
+## Architecture
+
+- **Kotlin + gRPC** ...</p>
+                    <span class="response-score-badge" style="background:rgba(212,160,200,0.2);color:#d4a0c8;">R1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="methodology" id="methodology">
+            <h4>Methodology</h4>
+            <p>
+                Each competitor is tested under isolated conditions with identical prompts.
+                Scoring uses blind evaluation: the evaluator does not know which system produced each output.
+                All scores are on a 1-5 scale across multiple criteria per category.
+                Latency and token counts are measured per response.
+            </p>
+        </div>
+    </div>
+
+    <!-- Info Panel Overlay -->
+    <div class="info-panel-overlay" id="infoPanelOverlay" onclick="closeInfoPanel()"></div>
+
+    <!-- Info Panel -->
+    <aside class="info-panel" id="infoPanel">
+        <button class="info-panel-close" onclick="closeInfoPanel()" aria-label="Close">&times;</button>
+        <h4 class="info-panel-title"></h4>
+        <p class="info-panel-desc"></p>
+        <div class="scoring">
+            <h5>How it's scored</h5>
+            <ul class="info-panel-scoring"></ul>
+        </div>
+    </aside>
+
+    <script>
+    // --- Constants ---
+    const CATEGORIES = ['retrieval', 'correction', 'bias', 'user-model', 'proportionality', 'persistence'];
+    const CATEGORY_LABELS = {
+        retrieval: 'Retrieval',
+        correction: 'Correction',
+        bias: 'Bias',
+        'user-model': 'User Model',
+        proportionality: 'Proportionality',
+        persistence: 'Persistence'
+    };
+    const CATEGORY_PREFIX = { R: 'retrieval', C: 'correction', B: 'bias', U: 'user-model', P: 'proportionality', D: 'persistence' };
+
+    const TEST_INFO = {
+        R1: { summary: 'New payment service — does it recall architecture without being asked?', prompt: 'We need a new service for payment processing. What should I consider?', signals: 'Should mention Kotlin, gRPC, EKS, Kafka, PostgreSQL without being asked. Should reference existing service extraction pattern. Bonus: mentions Sofia is leading payment extraction.' },
+        R2: { summary: 'Database migrations — does it recall Flyway preference?', prompt: 'How should I set up the database migrations for the new service?', signals: 'Should recommend Flyway (team\'s chosen tool over Liquibase). Should provide practical setup guidance for Kotlin/Gradle.' },
+        R3: { summary: 'React component help — does it know who the frontend dev is?', prompt: 'Can you help me write a React component for the settings page? I want to pair with Dev on this.', signals: 'Should acknowledge Dev as the junior frontend engineer. Should use React/TypeScript. Should calibrate complexity for a junior.' },
+        R4: { summary: 'Database for analytics — does it recall the DynamoDB rejection?', prompt: 'What\'s a good database for our new analytics service? We need fast reads on large datasets.', signals: 'Should NOT recommend DynamoDB or MongoDB. Should explain WHY they were rejected. Should recommend PostgreSQL-based solutions.' },
+        R5: { summary: 'Python Dockerfile — does it avoid injecting irrelevant Kotlin context?', prompt: 'Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.', signals: 'Should write a Python Dockerfile. Should NOT inject Kotlin context. Should NOT suggest rewriting in Kotlin. Tests PRECISION — accumulated knowledge should not bleed.' },
+        C1: { summary: 'PostgreSQL version — does it recall the correct version (14)?', prompt: 'What version of Postgres are we on?', signals: 'Should answer PostgreSQL 14. Should be concise. Should NOT hedge or say "I\'m not sure."' },
+        C2: { summary: 'DynamoDB suggestion — does it actively warn against it?', prompt: 'Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.', signals: 'Should actively warn against DynamoDB. Should cite team\'s prior evaluation. Should propose Redis as alternative.' },
+        C3: { summary: 'Contradiction — user says "we switched to MySQL" vs stored PostgreSQL', prompt: 'What database do we use for the account service?', signals: 'Should handle contradiction gracefully — ask for clarification or flag the discrepancy. Should NOT confidently state incorrect info.' },
+        C4: { summary: 'Logging setup — does it recall structured logging with correlation IDs?', prompt: 'Set up logging for the new payment service. What should I use?', signals: 'Should recall structured logging with correlation IDs. Should present as team pattern, not absolute rule. Should suggest specific libraries.' },
+        B1: { summary: 'Redis for key-value cache — does SQL knowledge bias against valid NoSQL?', prompt: 'Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.', signals: 'Should endorse Redis (already in stack, perfect fit). Should NOT bias toward PostgreSQL. This is an easy yes.' },
+        B2: { summary: 'Rewrite in Go — does Kotlin knowledge dismiss a valid alternative?', prompt: 'I\'m thinking of rewriting the notification service in Go. It\'s a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?', signals: 'Should engage seriously with Go proposal. Should weigh tradeoffs honestly. Should NOT reflexively dismiss because of Kotlin knowledge.' },
+        B3: { summary: 'Deploy a static site — does EKS knowledge leak into a simple answer?', prompt: 'Dev asked me: what\'s the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?', signals: 'Should suggest S3+CloudFront, Vercel, Netlify, or GitHub Pages. Should NOT suggest EKS, Terraform, or containers for static files.' },
+        B4: { summary: 'Real-time analytics — does it propose proportional or heavy solutions?', prompt: 'We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.', signals: 'Should propose proportional solution (it\'s for a demo, one week deadline). Should NOT default to full Kafka streaming pipeline.' },
+        U1: { summary: 'Explain K8s service mesh — calibrated to senior engineer level?', prompt: 'Explain how Kubernetes service mesh works. I\'m evaluating whether we need Istio for the inter-service auth between payment-service and account-service.', signals: 'Should explain at senior level. Should skip basics. Should focus on the decision: Istio needed or not? Penalty: starting with "A service mesh is..."' },
+        U2: { summary: 'Write a commit message — matches concise communication style?', prompt: 'Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files, and updated CI pipeline.', signals: 'Should produce a concise commit message. Should NOT write multi-paragraph explanation. Under 72 chars for subject line.' },
+        U3: { summary: 'Complex caching problem — gives proportionally concise answer?', prompt: '[400+ word detailed prompt about Caffeine cache invalidation race condition with Kafka events]', signals: 'Should give concise, focused answer despite long input. Should pick ONE approach and recommend it. Answer should be under 300 words. Penalty: restating the problem back.' },
+        U4: { summary: 'Shell command for finding files — uses fish syntax?', prompt: 'What shell command do I need to find all Kotlin files modified in the last week?', signals: 'Should use fish shell syntax. Should NOT preface with "In bash..." Bonus: suggests fd as modern alternative. Penalty: bash-specific syntax.' },
+        P1: { summary: 'Rename a class across files — simple tool or refactoring framework?', prompt: 'I need to rename the AccountService class to BankAccountService across the codebase. What\'s the fastest way?', signals: 'Should suggest IDE rename or simple find-replace. Should NOT suggest phased rollout or adapter pattern for a class rename.' },
+        P2: { summary: 'Health check endpoint — simple endpoint or observability stack?', prompt: 'Add a health check endpoint to auth-service. The load balancer needs it.', signals: 'Should provide simple /health endpoint in Kotlin. Should NOT propose full observability stack. Under 50 lines of code.' },
+        P3: { summary: 'Parse CSV and sum column — one-liner or framework?', prompt: 'Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is "amount".', signals: 'Should give one-liner or very short script. Should NOT suggest pandas or build a CSV framework. Under 5 lines.' },
+        P4: { summary: 'Feature flag — env var or full feature flag platform?', prompt: 'We need a feature flag for the new payment flow so we can dark-launch it. What\'s the simplest approach?', signals: 'Should suggest env var, config file, or DB flag. Should NOT recommend LaunchDarkly or build a feature flag microservice.' },
+        D1: { summary: 'Fresh session script request — recalls preferences without prompting?', prompt: 'Write me a quick script to list all running containers and their ports.', signals: 'Should use fish shell syntax. Should be concise. Tests zero-shot preference recall.' },
+        D2: { summary: 'Database recommendation — recalls corrections without re-prompting?', prompt: 'I\'m evaluating database options for the new reporting service. We need complex aggregation with strong consistency.', signals: 'Should recommend PostgreSQL. Should NOT suggest DynamoDB or MongoDB. Tests correction durability without prompting.' },
+        D3: { summary: 'Payment endpoint — integrates multiple stored facts naturally?', prompt: 'The payment service needs an endpoint to verify a merchant\'s bank account. What\'s the simplest approach given our setup?', signals: 'Should mention gRPC, Kotlin, account-service. Tests multi-fact integration. Key metric: how many corrections would vanilla need?' },
+        D4: { summary: 'Kafka consumer — uses Kotlin, coroutines, structured logging unprompted?', prompt: 'Help me set up a new Kafka consumer for the payment-completed events.', signals: 'Should give Kotlin code with coroutines, structured logging, correlation IDs. Tests total interaction cost.' }
+    };
+
+    const COMPETITOR_COLORS = {
+        'distill': '#e8b168',         /* honey amber */
+        'no-memory': '#b0a0cc',       /* soft lavender */
+        'claude-mem': '#6ec5a8',      /* seafoam */
+        'basic-memory': '#e09a7d',    /* soft coral */
+        'memory-compiler': '#c8d87e', /* sage lime */
+        'memory-engine': '#7cb8d4',   /* sky blue */
+        'knowledge-graph': '#d4a0c8'  /* orchid pink */
+    };
+
+    const COMPETITOR_URLS = {
+        'distill': 'https://github.com/tomacco/aura-distill',
+        'no-memory': null,
+        'claude-mem': 'https://github.com/thedotmack/claude-mem',
+        'basic-memory': 'https://github.com/basicmachines-co/basic-memory',
+        'memory-compiler': 'https://github.com/coleam00/claude-memory-compiler',
+        'memory-engine': 'https://github.com/HelloRuru/claude-memory-engine',
+        'knowledge-graph': 'https://github.com/shaneholloman/mcp-knowledge-graph'
+    };
+
+    const COMPETITOR_DISPLAY = {
+        'distill': 'aura-distill'
+    };
+
+    function displayName(id) {
+        return COMPETITOR_DISPLAY[id] || id;
+    }
+
+    function getCompetitorColor(name) {
+        return COMPETITOR_COLORS[name] || '#b0a0cc';
+    }
+
+    // --- Data Loading ---
+    async function loadData() {
+        try {
+            const resp = await fetch('data.json');
+            if (!resp.ok) throw new Error('No data');
+            return await resp.json();
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function computeAggregates(data) {
+        const competitors = Object.keys(data.scores);
+        const categoryScores = {};
+        const overallScores = {};
+
+        for (const comp of competitors) {
+            categoryScores[comp] = {};
+            let totalScore = 0;
+            let totalCount = 0;
+
+            for (const cat of CATEGORIES) {
+                const catTests = data.scores[comp].filter(s => s.category === cat);
+                if (catTests.length === 0) {
+                    categoryScores[comp][cat] = 0;
+                    continue;
+                }
+                const avg = catTests.reduce((sum, t) => sum + t.avg_score, 0) / catTests.length;
+                categoryScores[comp][cat] = avg;
+                totalScore += avg * catTests.length;
+                totalCount += catTests.length;
+            }
+            overallScores[comp] = totalCount > 0 ? totalScore / totalCount : 0;
+        }
+        return { competitors, categoryScores, overallScores };
+    }
+
+    // --- Progress Ring SVG ---
+    function createProgressRing(score, maxScore, color, size = 120) {
+        const radius = (size / 2) - 10;
+        const circumference = 2 * Math.PI * radius;
+        const pct = score / maxScore;
+        const offset = circumference * (1 - pct);
+
+        return `
+            <div class="ring-container" style="width:${size}px;height:${size}px;">
+                <svg viewBox="0 0 ${size} ${size}">
+                    <circle class="ring-bg" cx="${size/2}" cy="${size/2}" r="${radius}"/>
+                    <circle class="ring-fill" cx="${size/2}" cy="${size/2}" r="${radius}"
+                        stroke="${color}"
+                        stroke-dasharray="${circumference}"
+                        stroke-dashoffset="${circumference}"
+                        data-target-offset="${offset}"/>
+                </svg>
+                <div class="ring-value">${score.toFixed(1)}</div>
+            </div>
+        `;
+    }
+
+    // --- XP Bar HTML ---
+    function createXPBar(label, score, maxScore, color) {
+        const pct = (score / maxScore) * 100;
+        return `
+            <div class="xp-row">
+                <span class="xp-label">${label}</span>
+                <div class="xp-bar-container">
+                    <div class="xp-bar-fill" data-width="${pct}" style="background: ${color};"></div>
+                </div>
+                <span class="xp-score">${score.toFixed(1)}</span>
+            </div>
+        `;
+    }
+
+    // --- Chart Rendering ---
+    function chartOptions(extra = {}) {
+        return {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ede9e2',
+                        font: { family: "'Nunito', sans-serif", size: 12, weight: 600 }
+                    }
+                }
+            },
+            ...extra
+        };
+    }
+
+    function renderRadarChart(ctx, agg) {
+        const activeCats = CATEGORIES.filter(cat =>
+            agg.competitors.some(comp => agg.categoryScores[comp][cat] > 0)
+        );
+        const chart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: activeCats.map(c => CATEGORY_LABELS[c] || c),
+                datasets: agg.competitors.map(comp => ({
+                    label: displayName(comp),
+                    data: activeCats.map(cat => agg.categoryScores[comp][cat] || 0),
+                    borderColor: getCompetitorColor(comp),
+                    backgroundColor: getCompetitorColor(comp) + '20',
+                    borderWidth: 2.5,
+                    pointRadius: 5,
+                    pointBackgroundColor: getCompetitorColor(comp),
+                    pointBorderColor: getCompetitorColor(comp),
+                    pointStyle: 'circle'
+                }))
+            },
+            options: chartOptions({
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    r: {
+                        min: 0, max: 5,
+                        ticks: { stepSize: 1, color: '#b0a0cc', backdropColor: 'transparent', font: { family: "'Space Mono', monospace", size: 10 } },
+                        grid: { color: '#ffffff10' },
+                        angleLines: { color: '#ffffff10' },
+                        pointLabels: { color: '#ede9e2', font: { family: "'Nunito', sans-serif", size: 12, weight: 600 } }
+                    }
+                }
+            })
+        });
+
+        // Build interactive legend
+        const legendEl = document.getElementById('radarLegend');
+        if (legendEl) {
+            legendEl.innerHTML = agg.competitors.map((comp, i) => `
+                <div class="radar-legend-item" data-index="${i}">
+                    <span class="radar-legend-dot" style="background:${getCompetitorColor(comp)}"></span>
+                    <span>${displayName(comp)}</span>
+                </div>
+            `).join('');
+
+            legendEl.querySelectorAll('.radar-legend-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const idx = parseInt(item.dataset.index);
+                    const meta = chart.getDatasetMeta(idx);
+                    meta.hidden = !meta.hidden;
+                    item.classList.toggle('hidden', meta.hidden);
+                    chart.update();
+                });
+            });
+        }
+    }
+
+    function renderLatencyChart(ctx, data) {
+        const competitors = Object.keys(data.latency);
+        const sorted = [...competitors].sort((a, b) => data.latency[a].avg - data.latency[b].avg);
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sorted.map(displayName),
+                datasets: [{
+                    label: 'Avg Latency (ms)',
+                    data: sorted.map(c => data.latency[c].avg),
+                    backgroundColor: sorted.map(c => getCompetitorColor(c)),
+                    borderColor: 'transparent',
+                    borderWidth: 0,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: chartOptions({
+                indexAxis: 'y',
+                scales: {
+                    x: { grid: { color: '#ffffff10' }, ticks: { color: '#b0a0cc', font: { family: "'Space Mono', monospace", size: 10 } } },
+                    y: { grid: { display: false }, ticks: { color: '#ede9e2', font: { family: "'Nunito', sans-serif", size: 12, weight: 600 } } }
+                },
+                plugins: { legend: { display: false } }
+            })
+        });
+    }
+
+    function renderTokenChart(ctx, data) {
+        const competitors = Object.keys(data.latency);
+        const sorted = [...competitors].sort((a, b) => data.latency[a].avg_tokens - data.latency[b].avg_tokens);
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sorted.map(displayName),
+                datasets: [{
+                    label: 'Avg Output Tokens',
+                    data: sorted.map(c => data.latency[c].avg_tokens),
+                    backgroundColor: sorted.map(c => getCompetitorColor(c)),
+                    borderColor: 'transparent',
+                    borderWidth: 0,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: chartOptions({
+                indexAxis: 'y',
+                scales: {
+                    x: { grid: { color: '#ffffff10' }, ticks: { color: '#b0a0cc', font: { family: "'Space Mono', monospace", size: 10 } } },
+                    y: { grid: { display: false }, ticks: { color: '#ede9e2', font: { family: "'Nunito', sans-serif", size: 12, weight: 600 } } }
+                },
+                plugins: { legend: { display: false } }
+            })
+        });
+    }
+
+    function renderDetailTable(data) {
+        const competitors = Object.keys(data.scores);
+        const tests = [...new Set(competitors.flatMap(c => data.scores[c].map(s => s.test_id)))].sort();
+
+        let html = '<table><thead><tr><th>Test</th><th>Category</th>';
+        for (const comp of competitors) html += `<th>${displayName(comp)}</th>`;
+        html += '</tr></thead><tbody>';
+
+        for (const test of tests) {
+            let cat = '';
+            for (const comp of competitors) {
+                const entry = data.scores[comp].find(s => s.test_id === test);
+                if (entry) { cat = entry.category; break; }
+            }
+            const info = TEST_INFO[test] || {};
+            const desc = info.summary || '';
+            html += `<tr><td class="test-label" data-test="${test}" style="cursor:pointer;"><strong>${test}</strong>${desc ? `<br><span style="font-size:0.75rem;font-weight:400;color:var(--muted);line-height:1.3;">${desc}</span>` : ''}</td><td class="cat-label" data-cat="${cat}" style="color:var(--secondary);cursor:pointer;">${cat}</td>`;
+            let maxScore = 0;
+            const scores = {};
+            for (const comp of competitors) {
+                const entry = data.scores[comp].find(s => s.test_id === test);
+                scores[comp] = entry ? entry.avg_score : 0;
+                maxScore = Math.max(maxScore, scores[comp]);
+            }
+            for (const comp of competitors) {
+                const s = scores[comp];
+                const cls = s === maxScore && s > 0 ? 'winner' : '';
+                html += `<td class="score ${cls}">${s.toFixed(1)}</td>`;
+            }
+            html += '</tr>';
+        }
+        html += '</tbody></table>';
+        return html;
+    }
+
+    // --- Main Render ---
+    async function render() {
+        const data = await loadData();
+        const app = document.getElementById('app');
+
+        if (!data) {
+            app.innerHTML = `
+                <div class="card no-data" style="opacity:1;transform:none;">
+                    <div class="emoji">\u2615</div>
+                    <h3>No benchmark data yet</h3>
+                    <p>Run the benchmark suite to generate evaluation data, then come back with your coffee.</p>
+                    <pre>./runner/run-benchmark.sh
+./runner/blind-eval.sh
+./runner/aggregate.sh  # generates analysis/data.json</pre>
+                </div>`;
+            initAnimations();
+            return;
+        }
+
+        const agg = computeAggregates(data);
+
+        // Find winner
+        const sorted = [...agg.competitors].sort((a, b) => agg.overallScores[b] - agg.overallScores[a]);
+        const winner = sorted[0];
+
+        // Hero Scores (Progress Rings)
+        let heroHTML = '<div class="card card-full" style="opacity:0;transform:translateY(30px);"><h3>Overall Scores</h3><div class="hero-scores">';
+        for (const comp of sorted) {
+            const isWinner = comp === winner;
+            heroHTML += `
+                <div class="score-ring-wrapper ${isWinner ? 'winner' : ''}">
+                    ${isWinner ? '<span class="winner-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 4l3 12h14l3-12-6 4-4-6-4 6-6-4z"/></svg> TOP</span>' : ''}
+                    ${createProgressRing(agg.overallScores[comp], 5, isWinner ? 'var(--success)' : getCompetitorColor(comp), 110)}
+                    ${COMPETITOR_URLS[comp] ? `<a class="ring-label" href="${COMPETITOR_URLS[comp]}" target="_blank" rel="noopener">${displayName(comp)}</a>` : `<span class="ring-label">${displayName(comp)}</span>`}
+                </div>
+            `;
+        }
+        heroHTML += '</div></div>';
+
+        // Category Breakdown (XP Bars)
+        let catHTML = '';
+        const activeCats = CATEGORIES.filter(cat =>
+            agg.competitors.some(comp => agg.categoryScores[comp][cat] > 0)
+        );
+
+        for (const cat of activeCats) {
+            let cardContent = `<div class="card category-card"><h3>${CATEGORY_LABELS[cat] || cat} <span class="cat-label" data-cat="${cat}" style="font-size:0.7rem;font-weight:400;color:var(--muted);cursor:pointer;vertical-align:middle;">what's this?</span></h3>`;
+            for (const comp of sorted) {
+                const score = agg.categoryScores[comp][cat] || 0;
+                cardContent += createXPBar(displayName(comp), score, 5, getCompetitorColor(comp));
+            }
+            cardContent += '</div>';
+            catHTML += cardContent;
+        }
+
+        app.innerHTML = `
+            ${heroHTML}
+
+            <div class="grid">
+                ${catHTML}
+            </div>
+
+            <div class="grid" style="margin-top:2rem;">
+                <div class="card">
+                    <h3>Category Radar <span style="font-size:0.7rem;font-weight:400;color:var(--muted);display:block;margin-top:0.3rem;">score 1–5 · higher is better</span></h3>
+                    <canvas id="radarChart"></canvas>
+                    <div id="radarLegend" class="radar-legend"></div>
+                </div>
+                <div class="card">
+                    <h3>Response Latency <span style="font-size:0.7rem;font-weight:400;color:var(--muted);display:block;margin-top:0.3rem;">milliseconds · lower is better</span></h3>
+                    <canvas id="latencyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:2rem;">
+                <h3>Output Length <span style="font-size:0.7rem;font-weight:400;color:var(--muted);display:block;margin-top:0.3rem;">avg tokens per response · context-dependent</span></h3>
+                <canvas id="tokenChart"></canvas>
+            </div>
+
+            <div class="card card-full detail-table-card" style="margin-top:2rem;">
+                <h3>Detailed Scores</h3>
+                <div id="detailTable"></div>
+            </div>
+
+            <div class="meta">
+                <p>Generated: ${data.metadata?.timestamp || 'unknown'}</p>
+                <p>Total runs: ${data.metadata?.total_runs || '?'} &middot; Competitors: ${data.metadata?.competitors?.join(', ') || Object.keys(data.scores).join(', ')}</p>
+            </div>
+        `;
+
+        // Render charts
+        renderRadarChart(document.getElementById('radarChart'), agg);
+        if (data.latency) {
+            renderLatencyChart(document.getElementById('latencyChart'), data);
+            renderTokenChart(document.getElementById('tokenChart'), data);
+        }
+        document.getElementById('detailTable').innerHTML = renderDetailTable(data);
+
+        initAnimations();
+    }
+
+    // --- GSAP Animations ---
+    function initAnimations() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Header entrance
+        gsap.to('.header', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out'
+        });
+
+        // Intro entrance
+        gsap.to('.intro', {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 0.3,
+            ease: 'power2.out'
+        });
+
+        // Systems Under Test & Test Anatomy sections
+        ['#systemsUnderTest', '#testAnatomy'].forEach(sel => {
+            const el = document.querySelector(sel);
+            if (el) {
+                gsap.to(el, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 88%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            }
+        });
+
+        // System profile cards stagger
+        const sysCards = document.querySelectorAll('.system-profile-card');
+        sysCards.forEach((card, i) => {
+            gsap.fromTo(card,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, delay: i * 0.06, ease: 'power2.out',
+                  scrollTrigger: { trigger: card.closest('.card'), start: 'top 85%', toggleActions: 'play none none none' }
+                }
+            );
+        });
+
+        // Response excerpt cards stagger
+        const respCards = document.querySelectorAll('.response-excerpt-card');
+        respCards.forEach((card, i) => {
+            gsap.fromTo(card,
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, delay: i * 0.05, ease: 'power2.out',
+                  scrollTrigger: { trigger: card.closest('.card'), start: 'top 85%', toggleActions: 'play none none none' }
+                }
+            );
+        });
+
+        // Cards float up with stagger
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, i) => {
+            gsap.to(card, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 88%',
+                    toggleActions: 'play none none none'
+                },
+                delay: i * 0.08
+            });
+        });
+
+        // Animate progress rings
+        setTimeout(() => {
+            const rings = document.querySelectorAll('.ring-fill');
+            rings.forEach(ring => {
+                const target = ring.getAttribute('data-target-offset');
+                gsap.to(ring, {
+                    attr: { 'stroke-dashoffset': target },
+                    duration: 1.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: ring.closest('.card'),
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+        }, 100);
+
+        // Animate XP bars
+        setTimeout(() => {
+            const bars = document.querySelectorAll('.xp-bar-fill');
+            bars.forEach(bar => {
+                const w = bar.getAttribute('data-width');
+                gsap.to(bar, {
+                    width: w + '%',
+                    duration: 1.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: bar.closest('.card'),
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+        }, 100);
+
+        // Gentle floating effect on winner badges
+        const winnerBadges = document.querySelectorAll('.winner-badge');
+        winnerBadges.forEach(badge => {
+            gsap.to(badge, {
+                y: -3,
+                duration: 2,
+                ease: 'sine.inOut',
+                yoyo: true,
+                repeat: -1
+            });
+        });
+
+        // (winner distinguished by glow, not animation — keeps layout stable)
+
+        // Methodology fade in
+        gsap.to('#methodology', {
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: '#methodology',
+                start: 'top 90%',
+                toggleActions: 'play none none none'
+            }
+        });
+    }
+
+    // --- Category Info Panel ---
+    const CATEGORY_INFO = {
+        retrieval: {
+            title: 'Context Retrieval',
+            description: 'Can the system surface relevant knowledge without being asked? Scored on: relevance, precision, naturalness.',
+            scoring: [
+                'Relevance \u2014 Did it bring up useful context unprompted?',
+                'Precision \u2014 Did it avoid dumping unrelated stored facts?',
+                'Naturalness \u2014 Did knowledge feel organic, not regurgitated?'
+            ]
+        },
+        correction: {
+            title: 'Correction Durability',
+            description: 'When you say "don\'t suggest X," does it remember? Scored on: recall, strength, contradiction handling.',
+            scoring: [
+                'Recall \u2014 Did it remember the correction existed?',
+                'Strength \u2014 Did it actively steer away, or just passively note it?',
+                'Contradiction handling \u2014 When new info conflicts, did it flag the discrepancy?'
+            ]
+        },
+        bias: {
+            title: 'Bias Resistance',
+            description: 'Does stored knowledge create tunnel vision? Scored on: objectivity, openness, calibrated confidence.',
+            scoring: [
+                'Objectivity \u2014 Did stored preferences inappropriately skew the answer?',
+                'Openness \u2014 Were valid alternatives fairly considered?',
+                'Calibrated confidence \u2014 Did it express uncertainty where warranted?'
+            ]
+        },
+        'user-model': {
+            title: 'User Adaptation',
+            description: 'Does it calibrate communication to your level? Scored on: calibration, style match, preference recall.',
+            scoring: [
+                'Calibration \u2014 Right expertise level? No condescension or confusion?',
+                'Style match \u2014 Concise vs verbose, formal vs casual?',
+                'Preference recall \u2014 Remembered specific tools, shell, conventions?'
+            ]
+        },
+        proportionality: {
+            title: 'Proportional Response',
+            description: 'Does solution complexity match problem size? Scored on: solution scale, simplicity, restraint.',
+            scoring: [
+                'Solution scale \u2014 Did complexity match the actual problem?',
+                'Simplicity \u2014 Did it default to the lightest approach?',
+                'Restraint \u2014 Did it resist recommending heavyweight tools for lightweight tasks?'
+            ]
+        },
+        persistence: {
+            title: 'Persistence Efficiency',
+            description: 'Does persistent context save more tokens than it costs? Scored on: zero-shot recall, correction avoidance, total interaction cost.',
+            scoring: [
+                'Zero-shot recall \u2014 Did it know your context without being told?',
+                'Correction avoidance \u2014 How many "actually, we use X" moments were prevented?',
+                'Total interaction cost \u2014 Context tokens spent vs. correction tokens saved'
+            ]
+        }
+    };
+
+    function openInfoPanel(category) {
+        const info = CATEGORY_INFO[category];
+        if (!info) return;
+
+        const panel = document.getElementById('infoPanel');
+        const overlay = document.getElementById('infoPanelOverlay');
+
+        panel.querySelector('.info-panel-title').textContent = info.title;
+        panel.querySelector('.info-panel-desc').textContent = info.description;
+
+        const scoringList = panel.querySelector('.info-panel-scoring');
+        scoringList.innerHTML = info.scoring.map(s => `<li>${s}</li>`).join('');
+
+        panel.classList.add('open');
+        overlay.classList.add('open');
+
+        gsap.fromTo(panel, { x: 30 }, { x: 0, duration: 0.3, ease: 'power2.out' });
+    }
+
+    function openTestPanel(testId) {
+        const info = TEST_INFO[testId];
+        if (!info) return;
+
+        const panel = document.getElementById('infoPanel');
+        const overlay = document.getElementById('infoPanelOverlay');
+
+        const catKey = CATEGORY_PREFIX[testId[0]] || 'unknown';
+        const catLabel = CATEGORY_LABELS[catKey] || catKey;
+
+        panel.querySelector('.info-panel-title').textContent = `${testId}: ${info.summary.split(' — ')[0]}`;
+        panel.querySelector('.info-panel-desc').innerHTML = `
+            <span style="display:inline-block;font-size:0.75rem;font-weight:700;color:var(--primary);background:rgba(244,162,97,0.12);padding:0.15rem 0.6rem;border-radius:50px;margin-bottom:0.8rem;">${catLabel}</span>
+            <br><strong style="color:var(--secondary);font-size:0.85rem;">Prompt sent to each system:</strong>
+            <br><span style="display:block;margin:0.6rem 0 1rem;padding:0.8rem 1rem;background:rgba(255,255,255,0.04);border-radius:8px;font-size:0.95rem;line-height:1.6;">${info.prompt}</span>
+        `;
+
+        const scoringList = panel.querySelector('.info-panel-scoring');
+        const signals = info.signals.split('. ').filter(s => s.trim());
+        scoringList.innerHTML = signals.map(s => `<li>${s.trim().replace(/^Should /, '').replace(/^should /, '')}</li>`).join('');
+
+        panel.querySelector('.scoring h5').textContent = 'What a good answer does';
+
+        panel.classList.add('open');
+        overlay.classList.add('open');
+        gsap.fromTo(panel, { x: 30 }, { x: 0, duration: 0.3, ease: 'power2.out' });
+    }
+
+    function closeInfoPanel() {
+        const panel = document.getElementById('infoPanel');
+        const overlay = document.getElementById('infoPanelOverlay');
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+    }
+
+    // Delegate click events for category labels, pills, and test labels
+    document.addEventListener('click', (e) => {
+        const testLabel = e.target.closest('.test-label');
+        if (testLabel) {
+            const testId = testLabel.dataset.test;
+            if (testId) openTestPanel(testId);
+            return;
+        }
+
+        const label = e.target.closest('.cat-label, .pill');
+        if (label) {
+            const cat = label.dataset.cat;
+            if (cat) openInfoPanel(cat);
+        }
+    });
+
+    // --- Init ---
+    render();
+    </script>
+</body>
+</html>
