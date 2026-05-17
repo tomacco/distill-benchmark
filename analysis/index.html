@@ -1715,25 +1715,32 @@ tags: [decisions, corrections, critical]
         document.documentElement.classList.add('perf-mid');
     }
 
+    // Set rings and XP bars to their final values (no animation)
+    function finalizeDataVisuals() {
+        // Progress rings: set stroke-dashoffset to target
+        document.querySelectorAll('.ring-fill').forEach(ring => {
+            const target = ring.getAttribute('data-target-offset');
+            if (target) ring.setAttribute('stroke-dashoffset', target);
+        });
+        // XP bars: set width to target
+        document.querySelectorAll('.xp-bar-fill').forEach(bar => {
+            const w = bar.getAttribute('data-width');
+            if (w) bar.style.width = w + '%';
+        });
+    }
+
     function initAnimations() {
         // Low tier: skip ALL animations, just show everything
         if (PERF_TIER === 'low') {
-            document.querySelectorAll('.card, .header, .intro, [id^="systems"], [id^="test"], .system-profile-card, .response-card').forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
+            finalizeDataVisuals();
             return;
         }
 
         gsap.registerPlugin(ScrollTrigger);
 
-        // Mid tier: simple fade-ins only, no ScrollTrigger observers
+        // Mid tier: simple fade-ins, finalize data visuals immediately
         if (PERF_TIER === 'mid') {
-            document.querySelectorAll('.card, .header, .intro, [id^="systems"], [id^="test"], .system-profile-card, .response-card').forEach(el => {
-                el.style.transition = 'opacity 0.5s ease';
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
+            finalizeDataVisuals();
             return;
         }
 
