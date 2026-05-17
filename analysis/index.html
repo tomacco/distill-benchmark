@@ -379,6 +379,93 @@
             backdrop-filter: blur(12px);
         }
 
+        /* Mobile test cards (replaces table on small screens) */
+        .detail-desktop { display: block; }
+        .detail-mobile { display: none; }
+
+        .test-card {
+            background: rgba(30, 26, 45, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .test-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.6rem;
+            cursor: pointer;
+        }
+
+        .test-card-id {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        .test-card-cat {
+            font-size: 0.7rem;
+            color: var(--secondary);
+            background: rgba(176, 160, 204, 0.1);
+            padding: 0.15rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        .test-card-desc {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .test-card-scores {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .test-card-score-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .test-card-score-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--secondary);
+            min-width: 90px;
+        }
+
+        .test-card-score-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--xp-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .test-card-score-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .test-card-score-val {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text);
+            min-width: 24px;
+            text-align: right;
+        }
+
+        .test-card-score-val.winner {
+            color: var(--success);
+            font-weight: 700;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -818,6 +905,10 @@
             .xp-label { min-width: 70px; font-size: 0.7rem; }
             .systems-grid { grid-template-columns: 1fr; }
             .test-responses-grid { grid-template-columns: 1fr; }
+
+            /* Swap table for cards on mobile */
+            .detail-desktop { display: none !important; }
+            .detail-mobile { display: block !important; }
 
             /* Bottom sheet on mobile */
             .info-panel {
@@ -1359,9 +1450,13 @@ tags: [decisions, corrections, critical]
         const competitors = Object.keys(data.scores);
         const tests = [...new Set(competitors.flatMap(c => data.scores[c].map(s => s.test_id)))].sort();
 
-        let html = '<table><thead><tr><th>Test</th><th>Category</th>';
-        for (const comp of competitors) html += `<th>${displayName(comp)}</th>`;
-        html += '</tr></thead><tbody>';
+        // Desktop: table
+        let tableHTML = '<div class="detail-desktop"><table><thead><tr><th>Test</th><th>Category</th>';
+        for (const comp of competitors) tableHTML += `<th>${displayName(comp)}</th>`;
+        tableHTML += '</tr></thead><tbody>';
+
+        // Mobile: cards
+        let cardsHTML = '<div class="detail-mobile">';
 
         for (const test of tests) {
             let cat = '';
@@ -1371,7 +1466,6 @@ tags: [decisions, corrections, critical]
             }
             const info = TEST_INFO[test] || {};
             const desc = info.summary || '';
-            html += `<tr><td class="test-label" data-test="${test}" style="cursor:pointer;"><strong>${test}</strong>${desc ? `<br><span style="font-size:0.75rem;font-weight:400;color:var(--muted);line-height:1.3;">${desc}</span>` : ''}</td><td class="cat-label" data-cat="${cat}" style="color:var(--secondary);cursor:pointer;">${cat}</td>`;
             let maxScore = 0;
             const scores = {};
             for (const comp of competitors) {
@@ -1379,15 +1473,38 @@ tags: [decisions, corrections, critical]
                 scores[comp] = entry ? entry.avg_score : 0;
                 maxScore = Math.max(maxScore, scores[comp]);
             }
+
+            // Desktop row
+            tableHTML += `<tr><td class="test-label" data-test="${test}" style="cursor:pointer;"><strong>${test}</strong>${desc ? `<br><span style="font-size:0.75rem;font-weight:400;color:var(--muted);line-height:1.3;">${desc}</span>` : ''}</td><td class="cat-label" data-cat="${cat}" style="color:var(--secondary);cursor:pointer;">${cat}</td>`;
             for (const comp of competitors) {
                 const s = scores[comp];
                 const cls = s === maxScore && s > 0 ? 'winner' : '';
-                html += `<td class="score ${cls}">${s.toFixed(1)}</td>`;
+                tableHTML += `<td class="score ${cls}">${s.toFixed(1)}</td>`;
             }
-            html += '</tr>';
+            tableHTML += '</tr>';
+
+            // Mobile card
+            cardsHTML += `<div class="test-card"><div class="test-card-header test-label" data-test="${test}"><span class="test-card-id">${test}</span><span class="test-card-cat cat-label" data-cat="${cat}">${cat}</span></div>`;
+            if (desc) cardsHTML += `<div class="test-card-desc">${desc}</div>`;
+            cardsHTML += '<div class="test-card-scores">';
+            // Sort by score descending for mobile
+            const sorted = [...competitors].sort((a, b) => scores[b] - scores[a]);
+            for (const comp of sorted) {
+                const s = scores[comp];
+                const pct = (s / 5) * 100;
+                const isWinner = s === maxScore && s > 0;
+                cardsHTML += `<div class="test-card-score-row">
+                    <span class="test-card-score-name">${displayName(comp)}</span>
+                    <div class="test-card-score-bar"><div class="test-card-score-fill" style="width:${pct}%;background:${getCompetitorColor(comp)};"></div></div>
+                    <span class="test-card-score-val ${isWinner ? 'winner' : ''}">${s.toFixed(1)}</span>
+                </div>`;
+            }
+            cardsHTML += '</div></div>';
         }
-        html += '</tbody></table>';
-        return html;
+
+        tableHTML += '</tbody></table></div>';
+        cardsHTML += '</div>';
+        return tableHTML + cardsHTML;
     }
 
     // --- Main Render ---
