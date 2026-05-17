@@ -1587,7 +1587,17 @@ tags: [decisions, corrections, critical]
         const winner = sorted[0];
 
         // Hero Scores (Progress Rings)
-        let heroHTML = '<div class="card card-full" style="opacity:0;transform:translateY(30px);"><h3>Overall Scores</h3><div class="hero-scores">';
+        const versions = data.metadata?.versions || {};
+        const benchDate = data.metadata?.timestamp ? new Date(data.metadata.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+        const compVersions = versions.competitors || {};
+        const versionLine = sorted.map(c => `${displayName(c)} ${compVersions[c] || ''}`).join(' · ');
+
+        let heroHTML = `<div class="card card-full" style="opacity:0;transform:translateY(30px);">
+            <h3>Overall Scores</h3>
+            <p style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:-1rem;margin-bottom:1.5rem;font-family:'Space Mono',monospace;">
+                ${benchDate}${versions.claude ? ' · Claude Code ' + versions.claude : ''}${versions.benchmark ? ' · Benchmark v' + versions.benchmark : ''}
+            </p>
+            <div class="hero-scores">`;
         for (const comp of sorted) {
             const isWinner = comp === winner;
             heroHTML += `
@@ -1595,6 +1605,7 @@ tags: [decisions, corrections, critical]
                     ${isWinner ? '<span class="winner-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 4l3 12h14l3-12-6 4-4-6-4 6-6-4z"/></svg> TOP</span>' : ''}
                     ${createProgressRing(agg.overallScores[comp], 5, isWinner ? 'var(--success)' : getCompetitorColor(comp), 110)}
                     ${COMPETITOR_URLS[comp] ? `<a class="ring-label" href="${COMPETITOR_URLS[comp]}" target="_blank" rel="noopener">${displayName(comp)}</a>` : `<span class="ring-label">${displayName(comp)}</span>`}
+                    ${compVersions[comp] && compVersions[comp] !== 'none' ? `<span style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--dimmed);">${compVersions[comp]}</span>` : ''}
                 </div>
             `;
         }
