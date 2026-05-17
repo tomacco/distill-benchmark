@@ -31,6 +31,20 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
+        img, svg, canvas, table, pre { max-width: 100%; }
+
+        /* Low performance: strip expensive GPU effects */
+        .perf-low body::before { display: none !important; }
+        .perf-low .card { backdrop-filter: none !important; box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important; }
+        .perf-low .pill { backdrop-filter: none !important; }
+        .perf-low .card:hover { transform: none !important; }
+        .perf-low .detail-table-card thead th { backdrop-filter: none !important; }
+
+        /* Mid performance: lighter blur, no hover transforms */
+        .perf-mid body::before { opacity: 0.015 !important; }
+        .perf-mid .card { backdrop-filter: blur(4px) !important; }
+        .perf-mid .card:hover { transform: none !important; }
 
         body {
             font-family: 'Nunito', sans-serif;
@@ -1624,9 +1638,86 @@ tags: [decisions, corrections, critical]
     }
 
     // --- GSAP Animations ---
+    // --- Performance Detection ---
+    function detectPerformanceTier() {
+        // Tier 0: reduced motion preference — respect it unconditionally
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'low';
+
+        // Quick GPU/CPU benchmark: time a blocking operation
+        const start = performance.now();
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 256;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            for (let i = 0; i < 50; i++) {
+                ctx.fillStyle = `rgba(${i},${i*2},${i*3},0.5)`;
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.filter = 'blur(2px)';
+                ctx.drawImage(canvas, 0, 0);
+                ctx.filter = 'none';
+            }
+        }
+        const elapsed = performance.now() - start;
+
+        // Heuristics
+        const cores = navigator.hardwareConcurrency || 2;
+        const memory = navigator.deviceMemory || 2; // GB, Chrome only
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+        // Score: lower = weaker device
+        let score = 0;
+        if (elapsed < 15) score += 3;      // fast GPU
+        else if (elapsed < 40) score += 2;  // decent
+        else if (elapsed < 80) score += 1;  // slow
+        // else: very slow, score stays 0
+
+        if (cores >= 8) score += 2;
+        else if (cores >= 4) score += 1;
+
+        if (memory >= 8) score += 1;
+
+        if (isMobile) score -= 1;
+
+        // Tiers: high (5+), mid (3-4), low (0-2)
+        if (score >= 5) return 'high';
+        if (score >= 3) return 'mid';
+        return 'low';
+    }
+
+    const PERF_TIER = detectPerformanceTier();
+    console.log(`Performance tier: ${PERF_TIER}`);
+
+    // Apply low-perf mode immediately via CSS class
+    if (PERF_TIER === 'low') {
+        document.documentElement.classList.add('perf-low');
+    } else if (PERF_TIER === 'mid') {
+        document.documentElement.classList.add('perf-mid');
+    }
+
     function initAnimations() {
+        // Low tier: skip ALL animations, just show everything
+        if (PERF_TIER === 'low') {
+            document.querySelectorAll('.card, .header, .intro, [id^="systems"], [id^="test"], .system-profile-card, .response-card').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+            return;
+        }
+
         gsap.registerPlugin(ScrollTrigger);
 
+        // Mid tier: simple fade-ins only, no ScrollTrigger observers
+        if (PERF_TIER === 'mid') {
+            document.querySelectorAll('.card, .header, .intro, [id^="systems"], [id^="test"], .system-profile-card, .response-card').forEach(el => {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+            return;
+        }
+
+        // High tier: full GSAP animations
         // Header entrance
         gsap.to('.header', {
             opacity: 1,
