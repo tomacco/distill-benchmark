@@ -1664,9 +1664,14 @@ tags: [decisions, corrections, critical]
 
     // --- GSAP Animations ---
     // --- Performance Detection ---
+    const PERF_DETAILS = {};
+
     function detectPerformanceTier() {
         // Tier 0: reduced motion preference — respect it unconditionally
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'low';
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            Object.assign(PERF_DETAILS, { reason: 'prefers-reduced-motion', gpuMs: '-', cores: '-', memoryGb: '-', score: 0 });
+            return 'low';
+        }
 
         // Quick GPU/CPU benchmark: time a blocking operation
         const start = performance.now();
@@ -1683,25 +1688,23 @@ tags: [decisions, corrections, critical]
                 ctx.filter = 'none';
             }
         }
-        const elapsed = performance.now() - start;
+        const elapsed = Math.round((performance.now() - start) * 10) / 10;
 
-        // Heuristics
         const cores = navigator.hardwareConcurrency || 2;
-        const memory = navigator.deviceMemory || 2; // GB, Chrome only
+        const memory = navigator.deviceMemory || '?';
 
-        // Score based on actual measured performance, not device type
         let score = 0;
-        if (elapsed < 15) score += 3;      // fast GPU
-        else if (elapsed < 40) score += 2;  // decent
-        else if (elapsed < 80) score += 1;  // slow
-        // else: very slow, score stays 0
+        if (elapsed < 15) score += 3;
+        else if (elapsed < 40) score += 2;
+        else if (elapsed < 80) score += 1;
 
         if (cores >= 8) score += 2;
         else if (cores >= 4) score += 1;
 
         if (memory >= 8) score += 1;
 
-        // Tiers: high (5+), mid (3-4), low (0-2)
+        Object.assign(PERF_DETAILS, { reason: 'benchmark', gpuMs: elapsed, cores, memoryGb: memory, score });
+
         if (score >= 5) return 'high';
         if (score >= 3) return 'mid';
         return 'low';
@@ -1710,7 +1713,40 @@ tags: [decisions, corrections, critical]
     // Query param override: ?perf=low | ?perf=mid | ?perf=high
     const perfOverride = new URLSearchParams(window.location.search).get('perf');
     const PERF_TIER = ['low','mid','high'].includes(perfOverride) ? perfOverride : detectPerformanceTier();
-    console.log(`Performance tier: ${PERF_TIER}${perfOverride ? ' (forced via ?perf=)' : ''}`);
+    console.log(`Performance tier: ${PERF_TIER}${perfOverride ? ' (forced via ?perf=)' : ''}`, PERF_DETAILS);
+
+    // Debug: tap title 5 times to show perf info
+    let titleTaps = 0;
+    let titleTapTimer = null;
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.header h1')) {
+            titleTaps++;
+            clearTimeout(titleTapTimer);
+            titleTapTimer = setTimeout(() => { titleTaps = 0; }, 2000);
+            if (titleTaps >= 5) {
+                titleTaps = 0;
+                const d = PERF_DETAILS;
+                const panel = document.getElementById('infoPanel');
+                const overlay = document.getElementById('infoPanelOverlay');
+                panel.querySelector('.info-panel-title').textContent = 'Render Performance';
+                panel.querySelector('.info-panel-desc').innerHTML = `
+                    <span style="display:inline-block;font-size:0.8rem;font-weight:700;padding:0.2rem 0.8rem;border-radius:50px;margin-bottom:1rem;background:${PERF_TIER==='high'?'rgba(110,197,168,0.15);color:var(--success)':PERF_TIER==='mid'?'rgba(232,177,104,0.15);color:var(--primary)':'rgba(224,154,125,0.15);color:var(--coral)'};">${PERF_TIER.toUpperCase()}</span>
+                    ${perfOverride ? '<br><span style="font-size:0.8rem;color:var(--muted);">Forced via ?perf=' + perfOverride + '</span>' : ''}
+                `;
+                const scoring = panel.querySelector('.info-panel-scoring');
+                scoring.innerHTML = `
+                    <li><strong>GPU benchmark:</strong> ${d.gpuMs}ms <span style="color:var(--muted)">(50× canvas blur)</span></li>
+                    <li><strong>CPU cores:</strong> ${d.cores}</li>
+                    <li><strong>Device memory:</strong> ${d.memoryGb === '?' ? 'not exposed' : d.memoryGb + ' GB'}</li>
+                    <li><strong>Score:</strong> ${d.score}/6 <span style="color:var(--muted)">(≥5 high, ≥3 mid, &lt;3 low)</span></li>
+                    <li><strong>User agent:</strong> <span style="font-size:0.7rem;word-break:break-all;color:var(--muted);">${navigator.userAgent}</span></li>
+                `;
+                panel.querySelector('.scoring h5').textContent = 'Device Details';
+                panel.classList.add('open');
+                overlay.classList.add('open');
+            }
+        }
+    });
 
     // Apply low-perf mode immediately via CSS class
     if (PERF_TIER === 'low') {
