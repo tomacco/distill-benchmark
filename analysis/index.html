@@ -1663,9 +1663,8 @@ tags: [decisions, corrections, critical]
         // Heuristics
         const cores = navigator.hardwareConcurrency || 2;
         const memory = navigator.deviceMemory || 2; // GB, Chrome only
-        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-        // Score: lower = weaker device
+        // Score based on actual measured performance, not device type
         let score = 0;
         if (elapsed < 15) score += 3;      // fast GPU
         else if (elapsed < 40) score += 2;  // decent
@@ -1677,16 +1676,16 @@ tags: [decisions, corrections, critical]
 
         if (memory >= 8) score += 1;
 
-        if (isMobile) score -= 1;
-
         // Tiers: high (5+), mid (3-4), low (0-2)
         if (score >= 5) return 'high';
         if (score >= 3) return 'mid';
         return 'low';
     }
 
-    const PERF_TIER = detectPerformanceTier();
-    console.log(`Performance tier: ${PERF_TIER}`);
+    // Query param override: ?perf=low | ?perf=mid | ?perf=high
+    const perfOverride = new URLSearchParams(window.location.search).get('perf');
+    const PERF_TIER = ['low','mid','high'].includes(perfOverride) ? perfOverride : detectPerformanceTier();
+    console.log(`Performance tier: ${PERF_TIER}${perfOverride ? ' (forced via ?perf=)' : ''}`);
 
     // Apply low-perf mode immediately via CSS class
     if (PERF_TIER === 'low') {
