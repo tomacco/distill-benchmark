@@ -36,13 +36,21 @@
             font-family: 'Nunito', sans-serif;
             font-weight: 400;
             font-size: 16px;
-            background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
-            background-attachment: fixed;
+            background: var(--bg-start);
             color: var(--text);
             line-height: 1.7;
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* Gradient as fixed pseudo-element (background-attachment:fixed breaks on mobile Safari) */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            z-index: -1;
         }
 
         /* Noise texture overlay */
