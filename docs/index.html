@@ -1203,7 +1203,7 @@ tags: [decisions, corrections, critical]
                 Latency and token counts are measured per response.
             </p>
             <p style="margin-top:1.5rem;font-size:0.75rem;opacity:0.5;font-family:'Space Mono',monospace;">
-                v0.1.0 · <script>document.write(PERF_TIER)</script>
+                v0.1.0 · <span id="footerTier"></span>
             </p>
         </div>
     </div>
@@ -1754,6 +1754,8 @@ tags: [decisions, corrections, critical]
     } else if (PERF_TIER === 'mid') {
         document.documentElement.classList.add('perf-mid');
     }
+    const ft = document.getElementById('footerTier');
+    if (ft) ft.textContent = PERF_TIER;
 
     // Set rings and XP bars to their final values (no animation)
     function finalizeDataVisuals() {
