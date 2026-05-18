@@ -2,14 +2,14 @@
   "test_id": "B3",
   "competitor_id": "claude-mem",
   "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
-  "output": "For a simple static site (HTML/CSS/JS only), the simplest options:\n\n**Best bet: S3 + CloudFront** — you're already on AWS.\n\n```bash\n# 1. Create bucket\naws s3 mb s3://helios-marketing-site\n\n# 2. Enable static hosting\naws s3 website s3://helios-marketing-site \\\n  --index-document index.html \\\n  --error-document 404.html\n\n# 3. Deploy\naws s3 sync ./dist s3://helios-marketing-site --delete\n\n# 4. Put CloudFront in front for HTTPS + caching\n```\n\nNo new infra to learn, stays in your AWS org, IAM controls who can deploy.\n\n**Even simpler if he just wants it up fast:** Cloudflare Pages or Netlify — just connect a Git repo, pushes auto-deploy. Zero config. Good for a marketing site that doesn't touch internal services.\n\nTell Dev to go with Cloudflare Pages or Netlify if he wants it done in 10 minutes. If it needs to live under your AWS account (compliance, domain management, etc.), S3 + CloudFront.",
+  "output": "For a simple static site (HTML/CSS/JS only), the simplest options:\n\n**Best bet: S3 + CloudFront** \u2014 you're already on AWS.\n\n```bash\n# 1. Create bucket\naws s3 mb s3://helios-marketing-site\n\n# 2. Enable static hosting\naws s3 website s3://helios-marketing-site \\\n  --index-document index.html \\\n  --error-document 404.html\n\n# 3. Deploy\naws s3 sync ./dist s3://helios-marketing-site --delete\n\n# 4. Put CloudFront in front for HTTPS + caching\n```\n\nNo new infra to learn, stays in your AWS org, IAM controls who can deploy.\n\n**Even simpler if he just wants it up fast:** Cloudflare Pages or Netlify \u2014 just connect a Git repo, pushes auto-deploy. Zero config. Good for a marketing site that doesn't touch internal services.\n\nTell Dev to go with Cloudflare Pages or Netlify if he wants it done in 10 minutes. If it needs to live under your AWS account (compliance, domain management, etc.), S3 + CloudFront.",
   "timestamp": "2026-05-18T08:39:21Z",
   "latency_ms": 11151,
   "exit_code": 0,
   "output_length_chars": 899,
   "output_length_tokens_approx": 224,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

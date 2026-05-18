@@ -2,14 +2,14 @@
   "test_id": "R3",
   "competitor_id": "knowledge-graph",
   "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
-  "output": "Sure, I can help with that. Before I start, I have a few questions so I can give you and Dev something useful to work with:\n\n1. **What settings** should the page cover? (e.g., user profile, notification preferences, billing, API keys?)\n2. **Is there an existing React project** I should be working in, or are we starting fresh?\n3. **Any component library** you're already using? (MUI, Radix, shadcn/ui, etc.)\n4. **Routing setup** — React Router, Next.js, something else?\n\nEven a rough list of the fields/sections you want on the page would help me scaffold something concrete for you and Dev to iterate on.",
+  "output": "Sure, I can help with that. Before I start, I have a few questions so I can give you and Dev something useful to work with:\n\n1. **What settings** should the page cover? (e.g., user profile, notification preferences, billing, API keys?)\n2. **Is there an existing React project** I should be working in, or are we starting fresh?\n3. **Any component library** you're already using? (MUI, Radix, shadcn/ui, etc.)\n4. **Routing setup** \u2014 React Router, Next.js, something else?\n\nEven a rough list of the fields/sections you want on the page would help me scaffold something concrete for you and Dev to iterate on.",
   "timestamp": "2026-05-18T09:26:28Z",
   "latency_ms": 9287,
   "exit_code": 0,
   "output_length_chars": 606,
   "output_length_tokens_approx": 151,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

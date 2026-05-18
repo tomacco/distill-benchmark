@@ -2,14 +2,14 @@
   "test_id": "D2",
   "competitor_id": "knowledge-graph",
   "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
-  "output": "Given your stack and requirements, **PostgreSQL** is the clear choice:\n\n- **Complex aggregations** — PG's window functions, CTEs, lateral joins, and materialized views are purpose-built for reporting workloads\n- **Strong consistency** — ACID transactions across multiple tables, which you already rely on\n- **Team expertise** — your team already runs PG 14 in production, so no operational learning curve\n- **Minimal new deps** — aligns with your stack; no new infrastructure to provision or maintain on EKS\n\n**For reporting-specific tuning**, consider:\n\n- A **read replica** dedicated to reporting queries so you don't impact transactional workloads on account-service or auth-service\n- **Materialized views** with `REFRESH CONCURRENTLY` for pre-computed aggregations\n- `pg_partman` for time-based partitioning if report data grows large\n- PG 14's improvements to parallelism for large sequential scans and aggregations\n\nIf reporting volume eventually outgrows what a single PG replica can handle, **TimescaleDB** (PG extension, not a separate system) or **Apache Druid** would be the next step — but I'd exhaust PG tuning first before adding complexity.\n\nNo need to introduce a new database engine for this.",
+  "output": "Given your stack and requirements, **PostgreSQL** is the clear choice:\n\n- **Complex aggregations** \u2014 PG's window functions, CTEs, lateral joins, and materialized views are purpose-built for reporting workloads\n- **Strong consistency** \u2014 ACID transactions across multiple tables, which you already rely on\n- **Team expertise** \u2014 your team already runs PG 14 in production, so no operational learning curve\n- **Minimal new deps** \u2014 aligns with your stack; no new infrastructure to provision or maintain on EKS\n\n**For reporting-specific tuning**, consider:\n\n- A **read replica** dedicated to reporting queries so you don't impact transactional workloads on account-service or auth-service\n- **Materialized views** with `REFRESH CONCURRENTLY` for pre-computed aggregations\n- `pg_partman` for time-based partitioning if report data grows large\n- PG 14's improvements to parallelism for large sequential scans and aggregations\n\nIf reporting volume eventually outgrows what a single PG replica can handle, **TimescaleDB** (PG extension, not a separate system) or **Apache Druid** would be the next step \u2014 but I'd exhaust PG tuning first before adding complexity.\n\nNo need to introduce a new database engine for this.",
   "timestamp": "2026-05-18T13:13:15Z",
   "latency_ms": 17722,
   "exit_code": 0,
   "output_length_chars": 1209,
   "output_length_tokens_approx": 302,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

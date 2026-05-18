@@ -2,14 +2,14 @@
   "test_id": "R3",
   "competitor_id": "memory-engine",
   "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
-  "output": "Dev is your junior frontend engineer (React/TS, 6 months tenure). Since you're a senior backend engineer looking to pair with Dev on a frontend component, it sounds like a good collaboration opportunity.\n\nBefore I scaffold anything, a few quick questions:\n\n1. **What does the settings page need to cover?** Account settings, notification preferences, team/org settings, or something else?\n2. **Is there an existing frontend codebase I should look at?** I don't see one in this workspace — should I check a specific path or repo?\n3. **Any existing UI library/design system in use** (e.g., Radix, shadcn, MUI), or starting fresh?\n\nThis will help me put together something concrete that you and Dev can iterate on together.",
+  "output": "Dev is your junior frontend engineer (React/TS, 6 months tenure). Since you're a senior backend engineer looking to pair with Dev on a frontend component, it sounds like a good collaboration opportunity.\n\nBefore I scaffold anything, a few quick questions:\n\n1. **What does the settings page need to cover?** Account settings, notification preferences, team/org settings, or something else?\n2. **Is there an existing frontend codebase I should look at?** I don't see one in this workspace \u2014 should I check a specific path or repo?\n3. **Any existing UI library/design system in use** (e.g., Radix, shadcn, MUI), or starting fresh?\n\nThis will help me put together something concrete that you and Dev can iterate on together.",
   "timestamp": "2026-05-18T13:07:04Z",
   "latency_ms": 17603,
   "exit_code": 0,
   "output_length_chars": 720,
   "output_length_tokens_approx": 180,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

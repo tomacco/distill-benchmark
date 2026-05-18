@@ -2,14 +2,14 @@
   "test_id": "R4",
   "competitor_id": "memory-engine",
   "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
-  "output": "Given your stack and preferences, I'd recommend **ClickHouse** or **TimescaleDB** — but TimescaleDB is the stronger fit here. Here's why:\n\n**TimescaleDB** (PostgreSQL extension)\n- Runs as a PostgreSQL extension, so it aligns with your \"PostgreSQL extensions over new infra\" preference\n- Your team already has PG expertise (a key reason DynamoDB/Mongo were rejected)\n- Hypertables give you fast reads on large time-series/event data — exactly what analytics workloads need\n- Continuous aggregates for pre-computed rollups (dashboards, reporting)\n- Compression yields 90%+ storage savings on older data\n- Standard SQL — no new query language, works with your existing Flyway migrations\n- Fits cleanly into your existing AWS/EKS infra\n\n**When ClickHouse would be better**: if you're looking at billions of rows with sub-second ad-hoc OLAP queries across many columns. But that adds a new piece of infrastructure and operational burden your team doesn't need yet at Series B scale.\n\n**Practical starting point** — a separate PostgreSQL instance with TimescaleDB enabled for the analytics service, fed from Kafka (which you already have). This keeps the analytics workload isolated from your transactional databases while reusing team knowledge.",
+  "output": "Given your stack and preferences, I'd recommend **ClickHouse** or **TimescaleDB** \u2014 but TimescaleDB is the stronger fit here. Here's why:\n\n**TimescaleDB** (PostgreSQL extension)\n- Runs as a PostgreSQL extension, so it aligns with your \"PostgreSQL extensions over new infra\" preference\n- Your team already has PG expertise (a key reason DynamoDB/Mongo were rejected)\n- Hypertables give you fast reads on large time-series/event data \u2014 exactly what analytics workloads need\n- Continuous aggregates for pre-computed rollups (dashboards, reporting)\n- Compression yields 90%+ storage savings on older data\n- Standard SQL \u2014 no new query language, works with your existing Flyway migrations\n- Fits cleanly into your existing AWS/EKS infra\n\n**When ClickHouse would be better**: if you're looking at billions of rows with sub-second ad-hoc OLAP queries across many columns. But that adds a new piece of infrastructure and operational burden your team doesn't need yet at Series B scale.\n\n**Practical starting point** \u2014 a separate PostgreSQL instance with TimescaleDB enabled for the analytics service, fed from Kafka (which you already have). This keeps the analytics workload isolated from your transactional databases while reusing team knowledge.",
   "timestamp": "2026-05-18T13:07:26Z",
   "latency_ms": 21786,
   "exit_code": 0,
   "output_length_chars": 1240,
   "output_length_tokens_approx": 310,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

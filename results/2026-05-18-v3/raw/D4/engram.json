@@ -2,14 +2,14 @@
   "test_id": "D4",
   "competitor_id": "engram",
   "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
-  "output": "Here's what was created:\n\n| File | Purpose |\n|---|---|\n| `events/PaymentCompleted.kt` | Event data class — `BigDecimal` for money, correlation ID |\n| `consumer/PaymentCompletedConsumer.kt` | Kafka consumer — coroutine-based poll loop, manual commit, structured logging via MDC + logstash markers |\n| `consumer/EventDeserializer.kt` | Jackson deserialization (forward-compatible with `FAIL_ON_UNKNOWN_PROPERTIES` off) |\n| `consumer/PaymentCompletedConsumerIT.kt` | Integration test using Testcontainers Kafka — publishes an event, asserts handler receives it |\n\nKey design choices:\n\n- **Manual commit** (`ENABLE_AUTO_COMMIT=false`, `commitSync`) — no silent data loss on crash\n- **SupervisorJob** — one failed event doesn't kill the consumer\n- **MDC correlation** — `correlationId` and `paymentId` propagated to all log lines within the handler scope, cleared in `finally`\n- **Handler as lambda** — inject whatever side-effect you need (update account balance, trigger notifications, etc.)\n\nOne thing to flag: the current impl commits after the poll batch, but processes records concurrently via `launch`. If you need at-least-once guarantees per record, you'd want to await all launched coroutines before committing. Want me to add that?",
+  "output": "Here's what was created:\n\n| File | Purpose |\n|---|---|\n| `events/PaymentCompleted.kt` | Event data class \u2014 `BigDecimal` for money, correlation ID |\n| `consumer/PaymentCompletedConsumer.kt` | Kafka consumer \u2014 coroutine-based poll loop, manual commit, structured logging via MDC + logstash markers |\n| `consumer/EventDeserializer.kt` | Jackson deserialization (forward-compatible with `FAIL_ON_UNKNOWN_PROPERTIES` off) |\n| `consumer/PaymentCompletedConsumerIT.kt` | Integration test using Testcontainers Kafka \u2014 publishes an event, asserts handler receives it |\n\nKey design choices:\n\n- **Manual commit** (`ENABLE_AUTO_COMMIT=false`, `commitSync`) \u2014 no silent data loss on crash\n- **SupervisorJob** \u2014 one failed event doesn't kill the consumer\n- **MDC correlation** \u2014 `correlationId` and `paymentId` propagated to all log lines within the handler scope, cleared in `finally`\n- **Handler as lambda** \u2014 inject whatever side-effect you need (update account balance, trigger notifications, etc.)\n\nOne thing to flag: the current impl commits after the poll batch, but processes records concurrently via `launch`. If you need at-least-once guarantees per record, you'd want to await all launched coroutines before committing. Want me to add that?",
   "timestamp": "2026-05-18T13:25:03Z",
   "latency_ms": 76273,
   "exit_code": 0,
   "output_length_chars": 1237,
   "output_length_tokens_approx": 309,
   "versions": {
-    "competitor": "0.83.0",
+    "competitor": "1.15.13",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

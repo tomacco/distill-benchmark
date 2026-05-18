@@ -2,14 +2,14 @@
   "test_id": "P2",
   "competitor_id": "memory-compiler",
   "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
-  "output": "Here's what I created:\n\n**`auth-service/src/main/kotlin/com/helios/auth/health/HealthCheckRoute.kt`** — a Ktor routing extension that registers `GET /health` returning:\n\n```json\n{\"status\": \"healthy\", \"service\": \"auth-service\"}\n```\n\nTo wire it into your existing Ktor application, add this to your routing block:\n\n```kotlin\nrouting {\n    healthCheck()\n    // ... existing routes\n}\n```\n\nFor the ALB target group, configure the health check path as `/health` with expected status `200`.\n\nA few notes:\n- This is a simple liveness check. If you need a readiness check that verifies downstream dependencies (PostgreSQL, Redis), let me know and I'll add a `/ready` endpoint that probes those connections.\n- If your gRPC server runs on a separate port from HTTP, make sure the load balancer targets the HTTP port.",
+  "output": "Here's what I created:\n\n**`auth-service/src/main/kotlin/com/helios/auth/health/HealthCheckRoute.kt`** \u2014 a Ktor routing extension that registers `GET /health` returning:\n\n```json\n{\"status\": \"healthy\", \"service\": \"auth-service\"}\n```\n\nTo wire it into your existing Ktor application, add this to your routing block:\n\n```kotlin\nrouting {\n    healthCheck()\n    // ... existing routes\n}\n```\n\nFor the ALB target group, configure the health check path as `/health` with expected status `200`.\n\nA few notes:\n- This is a simple liveness check. If you need a readiness check that verifies downstream dependencies (PostgreSQL, Redis), let me know and I'll add a `/ready` endpoint that probes those connections.\n- If your gRPC server runs on a separate port from HTTP, make sure the load balancer targets the HTTP port.",
   "timestamp": "2026-05-18T12:53:54Z",
   "latency_ms": 69408,
   "exit_code": 0,
   "output_length_chars": 805,
   "output_length_tokens_approx": 201,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.04.06",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

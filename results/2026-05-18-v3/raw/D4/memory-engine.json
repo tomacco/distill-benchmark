@@ -2,14 +2,14 @@
   "test_id": "D4",
   "competitor_id": "memory-engine",
   "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
-  "output": "Here's what I set up in `payment-service/`:\n\n**Files created:**\n\n| File | Purpose |\n|---|---|\n| `build.gradle.kts` | Spring Boot 3.2 + spring-kafka + coroutines + testcontainers |\n| `model/PaymentCompleted.kt` | Event data class with `correlationId` |\n| `config/KafkaConfig.kt` | Consumer factory — manual ack (RECORD mode), JSON deser, no auto-commit |\n| `consumer/PaymentCompletedConsumer.kt` | `@KafkaListener` that sets MDC correlation/payment IDs, delegates to a `suspend fun` |\n| `application.yml` | Topic + consumer group config, env-overridable bootstrap servers |\n| `consumer/PaymentCompletedConsumerTest.kt` | Integration test with `@EmbeddedKafka` — produces a real event and verifies consumption |\n\n**Key decisions matching your stack:**\n- **Coroutines** — `process()` is a `suspend fun`, bridged via `runBlocking` at the listener boundary\n- **Structured logging** — `correlationId` and `paymentId` in MDC, carried through all log lines\n- **Manual ack** — `AckMode.RECORD` with auto-commit disabled for at-least-once delivery\n- **Integration test** — embedded Kafka broker, real producer/consumer, no mocks\n\nThe `process()` function is stubbed — that's where you'll wire in account balance updates, notification triggers, etc. Once you have the downstream logic, swap the `Thread.sleep` in the test for a proper assertion on side effects (e.g., DB row exists).",
+  "output": "Here's what I set up in `payment-service/`:\n\n**Files created:**\n\n| File | Purpose |\n|---|---|\n| `build.gradle.kts` | Spring Boot 3.2 + spring-kafka + coroutines + testcontainers |\n| `model/PaymentCompleted.kt` | Event data class with `correlationId` |\n| `config/KafkaConfig.kt` | Consumer factory \u2014 manual ack (RECORD mode), JSON deser, no auto-commit |\n| `consumer/PaymentCompletedConsumer.kt` | `@KafkaListener` that sets MDC correlation/payment IDs, delegates to a `suspend fun` |\n| `application.yml` | Topic + consumer group config, env-overridable bootstrap servers |\n| `consumer/PaymentCompletedConsumerTest.kt` | Integration test with `@EmbeddedKafka` \u2014 produces a real event and verifies consumption |\n\n**Key decisions matching your stack:**\n- **Coroutines** \u2014 `process()` is a `suspend fun`, bridged via `runBlocking` at the listener boundary\n- **Structured logging** \u2014 `correlationId` and `paymentId` in MDC, carried through all log lines\n- **Manual ack** \u2014 `AckMode.RECORD` with auto-commit disabled for at-least-once delivery\n- **Integration test** \u2014 embedded Kafka broker, real producer/consumer, no mocks\n\nThe `process()` function is stubbed \u2014 that's where you'll wire in account balance updates, notification triggers, etc. Once you have the downstream logic, swap the `Thread.sleep` in the test for a proper assertion on side effects (e.g., DB row exists).",
   "timestamp": "2026-05-18T13:04:35Z",
   "latency_ms": 62279,
   "exit_code": 0,
   "output_length_chars": 1372,
   "output_length_tokens_approx": 343,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

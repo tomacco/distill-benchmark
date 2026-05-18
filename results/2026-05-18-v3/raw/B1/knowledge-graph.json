@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "knowledge-graph",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes, Redis is a good fit here. You already run it in the stack, the access pattern is exactly what Redis excels at (key-value + TTL), and it avoids adding new infrastructure.\n\nA few things to keep in mind:\n\n- **Use `SET key value EX ttl`** — atomic set-with-expiry, no race between SET and EXPIRE\n- **Key format**: something like `session:{userId}:{tokenId}` keeps it scannable and avoids collisions\n- **TTL**: match your token validity period; don't rely on application-level expiry checks alone\n- **Eviction policy**: make sure your Redis instance uses `noeviction` or `volatile-ttl` for session data — you don't want valid sessions silently evicted under memory pressure\n- **Since you're on EKS**: confirm your Redis (ElastiCache?) has Multi-AZ failover enabled if sessions are auth-critical\n\nGiven auth-service is already in prod with Kotlin, this should be straightforward with Jedis or Lettuce (Lettuce if you want non-blocking IO with coroutines).\n\nNo reason to reach for anything else here.",
+  "output": "Yes, Redis is a good fit here. You already run it in the stack, the access pattern is exactly what Redis excels at (key-value + TTL), and it avoids adding new infrastructure.\n\nA few things to keep in mind:\n\n- **Use `SET key value EX ttl`** \u2014 atomic set-with-expiry, no race between SET and EXPIRE\n- **Key format**: something like `session:{userId}:{tokenId}` keeps it scannable and avoids collisions\n- **TTL**: match your token validity period; don't rely on application-level expiry checks alone\n- **Eviction policy**: make sure your Redis instance uses `noeviction` or `volatile-ttl` for session data \u2014 you don't want valid sessions silently evicted under memory pressure\n- **Since you're on EKS**: confirm your Redis (ElastiCache?) has Multi-AZ failover enabled if sessions are auth-critical\n\nGiven auth-service is already in prod with Kotlin, this should be straightforward with Jedis or Lettuce (Lettuce if you want non-blocking IO with coroutines).\n\nNo reason to reach for anything else here.",
   "timestamp": "2026-05-18T13:11:15Z",
   "latency_ms": 13188,
   "exit_code": 0,
   "output_length_chars": 998,
   "output_length_tokens_approx": 249,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

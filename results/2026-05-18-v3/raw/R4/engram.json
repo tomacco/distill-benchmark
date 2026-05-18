@@ -2,14 +2,14 @@
   "test_id": "R4",
   "competitor_id": "engram",
   "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
-  "output": "PostgreSQL with appropriate extensions. The team already decided against DynamoDB and MongoDB — PostgreSQL is the standard, and extensions like `pg_cron` for scheduled jobs or `pg_partman` for table partitioning handle analytics workloads well.\n\nFor fast reads on large datasets specifically:\n\n- **Partitioning** (native or pg_partman) — prune irrelevant data at query time\n- **Materialized views** — pre-aggregate common queries\n- **TimescaleDB extension** — if the analytics data is time-series heavy, this gives you columnar compression and continuous aggregates on top of Postgres\n- **pg_analytics / DuckDB fdw** — newer options for columnar/OLAP queries within Postgres\n\nThis keeps your operational stack uniform (one DB to manage, existing team expertise, Flyway migrations work as-is) and avoids adding new infrastructure.",
+  "output": "PostgreSQL with appropriate extensions. The team already decided against DynamoDB and MongoDB \u2014 PostgreSQL is the standard, and extensions like `pg_cron` for scheduled jobs or `pg_partman` for table partitioning handle analytics workloads well.\n\nFor fast reads on large datasets specifically:\n\n- **Partitioning** (native or pg_partman) \u2014 prune irrelevant data at query time\n- **Materialized views** \u2014 pre-aggregate common queries\n- **TimescaleDB extension** \u2014 if the analytics data is time-series heavy, this gives you columnar compression and continuous aggregates on top of Postgres\n- **pg_analytics / DuckDB fdw** \u2014 newer options for columnar/OLAP queries within Postgres\n\nThis keeps your operational stack uniform (one DB to manage, existing team expertise, Flyway migrations work as-is) and avoids adding new infrastructure.",
   "timestamp": "2026-05-18T13:27:17Z",
   "latency_ms": 10482,
   "exit_code": 0,
   "output_length_chars": 829,
   "output_length_tokens_approx": 207,
   "versions": {
-    "competitor": "0.83.0",
+    "competitor": "1.15.13",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

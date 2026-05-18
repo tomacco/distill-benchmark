@@ -2,14 +2,14 @@
   "test_id": "R3",
   "competitor_id": "basic-memory",
   "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
-  "output": "No existing frontend code in this workspace. To get started, I need to know:\n\n1. **What settings** should this page expose? (e.g., profile info, notification preferences, security/2FA, billing)\n2. **Component library** — are you using one (e.g., Radix, shadcn/ui, MUI) or rolling your own?\n3. **State management / data fetching** — any conventions already established? (React Query, Zustand, plain fetch, etc.)\n4. **Should I scaffold the project** or just write the component files for you to drop into an existing app?\n\nSince you're pairing with Dev on this, I'll keep the code straightforward and well-structured so it's easy for them to follow and extend.",
+  "output": "No existing frontend code in this workspace. To get started, I need to know:\n\n1. **What settings** should this page expose? (e.g., profile info, notification preferences, security/2FA, billing)\n2. **Component library** \u2014 are you using one (e.g., Radix, shadcn/ui, MUI) or rolling your own?\n3. **State management / data fetching** \u2014 any conventions already established? (React Query, Zustand, plain fetch, etc.)\n4. **Should I scaffold the project** or just write the component files for you to drop into an existing app?\n\nSince you're pairing with Dev on this, I'll keep the code straightforward and well-structured so it's easy for them to follow and extend.",
   "timestamp": "2026-05-18T12:43:51Z",
   "latency_ms": 19539,
   "exit_code": 0,
   "output_length_chars": 658,
   "output_length_tokens_approx": 164,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

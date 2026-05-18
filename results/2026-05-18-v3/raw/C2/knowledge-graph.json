@@ -2,14 +2,14 @@
   "test_id": "C2",
   "competitor_id": "knowledge-graph",
   "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
-  "output": "No. DynamoDB was explicitly rejected at Helios Financial — the decision was made due to strong consistency requirements, multi-table transaction needs, and existing PostgreSQL expertise on the team.\n\nFor sub-millisecond key-value reads on session data, **Redis** is the right choice here — it's already in your stack. A simple approach:\n\n```kotlin\n// session store using your existing Redis infrastructure\n@Service\nclass SessionStore(private val redisTemplate: StringRedisTemplate) {\n\n    fun get(sessionId: String): Session? =\n        redisTemplate.opsForValue().get(\"session:$sessionId\")\n            ?.let { Json.decodeFromString(it) }\n\n    fun set(session: Session, ttl: Duration = 30.minutes) {\n        redisTemplate.opsForValue().set(\n            \"session:${session.id}\",\n            Json.encodeToString(session),\n            ttl.toJavaDuration()\n        )\n    }\n}\n```\n\nRedis gives you sub-millisecond reads, you already run it in production, and the team knows it. No new infrastructure needed.",
+  "output": "No. DynamoDB was explicitly rejected at Helios Financial \u2014 the decision was made due to strong consistency requirements, multi-table transaction needs, and existing PostgreSQL expertise on the team.\n\nFor sub-millisecond key-value reads on session data, **Redis** is the right choice here \u2014 it's already in your stack. A simple approach:\n\n```kotlin\n// session store using your existing Redis infrastructure\n@Service\nclass SessionStore(private val redisTemplate: StringRedisTemplate) {\n\n    fun get(sessionId: String): Session? =\n        redisTemplate.opsForValue().get(\"session:$sessionId\")\n            ?.let { Json.decodeFromString(it) }\n\n    fun set(session: Session, ttl: Duration = 30.minutes) {\n        redisTemplate.opsForValue().set(\n            \"session:${session.id}\",\n            Json.encodeToString(session),\n            ttl.toJavaDuration()\n        )\n    }\n}\n```\n\nRedis gives you sub-millisecond reads, you already run it in production, and the team knows it. No new infrastructure needed.",
   "timestamp": "2026-05-18T13:12:24Z",
   "latency_ms": 10886,
   "exit_code": 0,
   "output_length_chars": 1000,
   "output_length_tokens_approx": 250,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

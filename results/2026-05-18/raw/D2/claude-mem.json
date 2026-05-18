@@ -2,14 +2,14 @@
   "test_id": "D2",
   "competitor_id": "claude-mem",
   "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
-  "output": "PostgreSQL. You already have it, the team knows it, and it directly meets your requirements:\n\n- **Strong consistency** — native ACID, multi-table transactions\n- **Complex aggregations** — window functions, CTEs, materialized views, `GROUPING SETS` / `ROLLUP` / `CUBE`\n- **Reporting-specific options** — materialized views with `REFRESH CONCURRENTLY` for pre-computed reports, or `pg_cron` to schedule refreshes (aligns with your \"prefer PG extensions over new infra\" principle)\n\nIf query volume becomes a concern, a **read replica** dedicated to reporting keeps load off the primary without adding new technology. You're on AWS EKS already, so an RDS read replica is trivial.\n\nFor truly heavy analytical workloads down the line, you could add **columnar storage** via the `citus` extension (columnar tables) or `pg_analytics` — still Postgres, no new infra to justify during Series C due diligence.\n\nNo reason to introduce a new database here. Adding infrastructure complexity for reporting would be a harder sell in Q3 diligence than \"we use Postgres consistently and well.\"",
+  "output": "PostgreSQL. You already have it, the team knows it, and it directly meets your requirements:\n\n- **Strong consistency** \u2014 native ACID, multi-table transactions\n- **Complex aggregations** \u2014 window functions, CTEs, materialized views, `GROUPING SETS` / `ROLLUP` / `CUBE`\n- **Reporting-specific options** \u2014 materialized views with `REFRESH CONCURRENTLY` for pre-computed reports, or `pg_cron` to schedule refreshes (aligns with your \"prefer PG extensions over new infra\" principle)\n\nIf query volume becomes a concern, a **read replica** dedicated to reporting keeps load off the primary without adding new technology. You're on AWS EKS already, so an RDS read replica is trivial.\n\nFor truly heavy analytical workloads down the line, you could add **columnar storage** via the `citus` extension (columnar tables) or `pg_analytics` \u2014 still Postgres, no new infra to justify during Series C due diligence.\n\nNo reason to introduce a new database here. Adding infrastructure complexity for reporting would be a harder sell in Q3 diligence than \"we use Postgres consistently and well.\"",
   "timestamp": "2026-05-18T08:40:48Z",
   "latency_ms": 12804,
   "exit_code": 0,
   "output_length_chars": 1075,
   "output_length_tokens_approx": 268,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

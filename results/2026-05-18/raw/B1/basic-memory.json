@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "basic-memory",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes, Redis is a great fit here. You already have it in the stack for caching, and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` — no extra abstraction needed.\n- **Low latency** for token validation on every authenticated request.\n- **TTL expiry** handles session cleanup automatically, no background job required.\n- **auth-service is already in Kotlin** — Lettuce or Jedis clients integrate cleanly with coroutines (Lettuce's reactive API works well with `kotlinx-coroutines-reactor`).\n\nNo concerns from past decisions — this doesn't conflict with anything in the decision log. Redis is already deployed and managed, so there's no new infrastructure to operate.\n\nOne consideration for a fintech platform: make sure you have a fallback or clear error path if Redis is temporarily unavailable (e.g., during a failover), so users get a clean re-auth prompt rather than a 500.",
+  "output": "Yes, Redis is a great fit here. You already have it in the stack for caching, and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` \u2014 no extra abstraction needed.\n- **Low latency** for token validation on every authenticated request.\n- **TTL expiry** handles session cleanup automatically, no background job required.\n- **auth-service is already in Kotlin** \u2014 Lettuce or Jedis clients integrate cleanly with coroutines (Lettuce's reactive API works well with `kotlinx-coroutines-reactor`).\n\nNo concerns from past decisions \u2014 this doesn't conflict with anything in the decision log. Redis is already deployed and managed, so there's no new infrastructure to operate.\n\nOne consideration for a fintech platform: make sure you have a fallback or clear error path if Redis is temporarily unavailable (e.g., during a failover), so users get a clean re-auth prompt rather than a 500.",
   "timestamp": "2026-05-18T08:49:12Z",
   "latency_ms": 17018,
   "exit_code": 0,
   "output_length_chars": 949,
   "output_length_tokens_approx": 237,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

@@ -2,14 +2,14 @@
   "test_id": "D2",
   "competitor_id": "claude-mem",
   "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
-  "output": "PostgreSQL. You already run PG 14, it's excellent at complex aggregations and multi-table joins, and it gives you the strong consistency you need. Adding another database for reporting would be extra infra to justify during Series C due diligence.\n\nA few approaches depending on query load:\n\n**If reporting queries can hit prod traffic:**\n- Materialized views + `pg_cron` to refresh on schedule\n- Partial indexes tuned to your common aggregation patterns\n\n**If you need to isolate reporting load:**\n- PG read replica dedicated to reporting — zero new technology, just a replica config\n- `pg_partitioning` on time-series reporting data for faster range scans\n\n**If aggregations get really heavy:**\n- Look at `pg_analytics` or the `citus` extension for columnar storage / parallel aggregation — still PostgreSQL, just extended\n- TimescaleDB (PG extension) if there's a strong time-series dimension to the data\n\nAll of these keep you on one database technology, which simplifies operations, Flyway migrations, and the architecture story. No new connection pooling, no new backup strategy, no new expertise needed on the team.\n\nStart with materialized views + `pg_cron` — it's the least effort and you can measure whether you actually need more before adding complexity.",
+  "output": "PostgreSQL. You already run PG 14, it's excellent at complex aggregations and multi-table joins, and it gives you the strong consistency you need. Adding another database for reporting would be extra infra to justify during Series C due diligence.\n\nA few approaches depending on query load:\n\n**If reporting queries can hit prod traffic:**\n- Materialized views + `pg_cron` to refresh on schedule\n- Partial indexes tuned to your common aggregation patterns\n\n**If you need to isolate reporting load:**\n- PG read replica dedicated to reporting \u2014 zero new technology, just a replica config\n- `pg_partitioning` on time-series reporting data for faster range scans\n\n**If aggregations get really heavy:**\n- Look at `pg_analytics` or the `citus` extension for columnar storage / parallel aggregation \u2014 still PostgreSQL, just extended\n- TimescaleDB (PG extension) if there's a strong time-series dimension to the data\n\nAll of these keep you on one database technology, which simplifies operations, Flyway migrations, and the architecture story. No new connection pooling, no new backup strategy, no new expertise needed on the team.\n\nStart with materialized views + `pg_cron` \u2014 it's the least effort and you can measure whether you actually need more before adding complexity.",
   "timestamp": "2026-05-18T12:28:03Z",
   "latency_ms": 15586,
   "exit_code": 0,
   "output_length_chars": 1266,
   "output_length_tokens_approx": 316,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

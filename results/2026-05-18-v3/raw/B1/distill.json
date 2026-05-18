@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "distill",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes. Redis is already in your stack for caching, `auth-service` already exists, and the access pattern (key-value + TTL) is exactly what Redis excels at.\n\nNo reason to introduce anything new here. A few implementation notes:\n\n- **Key format**: `session:{userId}:{tokenId}` or similar — keep it grep-friendly\n- **TTL**: set on write via `SETEX`/`SET ... EX` — don't rely on manual cleanup\n- **Serialization**: plain string (the token itself) if you just need lookup; avoid JSON overhead unless you're storing metadata alongside it\n- **Eviction policy**: confirm your Redis instance uses `volatile-ttl` or `volatile-lru` — you want expired keys to go first, not random eviction of other cached data\n\nSince `auth-service` already handles JWT issuance, session token caching fits naturally there.",
+  "output": "Yes. Redis is already in your stack for caching, `auth-service` already exists, and the access pattern (key-value + TTL) is exactly what Redis excels at.\n\nNo reason to introduce anything new here. A few implementation notes:\n\n- **Key format**: `session:{userId}:{tokenId}` or similar \u2014 keep it grep-friendly\n- **TTL**: set on write via `SETEX`/`SET ... EX` \u2014 don't rely on manual cleanup\n- **Serialization**: plain string (the token itself) if you just need lookup; avoid JSON overhead unless you're storing metadata alongside it\n- **Eviction policy**: confirm your Redis instance uses `volatile-ttl` or `volatile-lru` \u2014 you want expired keys to go first, not random eviction of other cached data\n\nSince `auth-service` already handles JWT issuance, session token caching fits naturally there.",
   "timestamp": "2026-05-18T11:18:01Z",
   "latency_ms": 22869,
   "exit_code": 0,
   "output_length_chars": 792,
   "output_length_tokens_approx": 198,
   "versions": {
-    "competitor": "0.10.0-user-model-v3",
+    "competitor": "1.1.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

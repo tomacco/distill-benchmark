@@ -2,14 +2,14 @@
   "test_id": "R5",
   "competitor_id": "knowledge-graph",
   "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
-  "output": "Expected project layout:\n\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── model/\n│   └── fraud_model.pkl      # your serialized scikit-learn model\n└── app/\n    └── main.py               # FastAPI app that loads the model\n```\n\nKey decisions in the Dockerfile:\n\n- **Multi-stage build** — `build-essential` (needed for numpy/scikit-learn wheel compilation) stays in the builder stage, keeping the final image small\n- **Non-root user** — runs as `appuser` in production\n- **`--no-cache-dir`** — avoids bloating the image with pip's cache\n- **`requirements.txt` copied first** — leverages Docker layer caching so deps aren't reinstalled on every code change",
+  "output": "Expected project layout:\n\n```\n.\n\u251c\u2500\u2500 Dockerfile\n\u251c\u2500\u2500 requirements.txt\n\u251c\u2500\u2500 model/\n\u2502   \u2514\u2500\u2500 fraud_model.pkl      # your serialized scikit-learn model\n\u2514\u2500\u2500 app/\n    \u2514\u2500\u2500 main.py               # FastAPI app that loads the model\n```\n\nKey decisions in the Dockerfile:\n\n- **Multi-stage build** \u2014 `build-essential` (needed for numpy/scikit-learn wheel compilation) stays in the builder stage, keeping the final image small\n- **Non-root user** \u2014 runs as `appuser` in production\n- **`--no-cache-dir`** \u2014 avoids bloating the image with pip's cache\n- **`requirements.txt` copied first** \u2014 leverages Docker layer caching so deps aren't reinstalled on every code change",
   "timestamp": "2026-05-18T13:18:04Z",
   "latency_ms": 18111,
   "exit_code": 0,
   "output_length_chars": 650,
   "output_length_tokens_approx": 162,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

@@ -2,14 +2,14 @@
   "test_id": "D1",
   "competitor_id": "basic-memory",
   "prompt": "Write me a quick script to list all running containers and their ports.",
-  "output": "Created `containers.sh` — run it with `./containers.sh`. It shows container names, status, and port mappings in a clean table format.",
+  "output": "Created `containers.sh` \u2014 run it with `./containers.sh`. It shows container names, status, and port mappings in a clean table format.",
   "timestamp": "2026-05-18T12:38:38Z",
   "latency_ms": 10727,
   "exit_code": 0,
   "output_length_chars": 133,
   "output_length_tokens_approx": 33,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

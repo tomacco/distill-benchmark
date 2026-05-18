@@ -4,26 +4,26 @@
     "total_runs": 25,
     "competitors": [
       "claude-mem",
-      "knowledge-graph",
-      "memory-compiler",
-      "no-memory",
       "basic-memory",
-      "distill",
+      "no-memory",
+      "memory-compiler",
+      "engram",
       "memory-engine",
-      "engram"
+      "knowledge-graph",
+      "distill"
     ],
     "versions": {
       "benchmark": "0.1.0",
       "claude": "2.1.109 (Claude Code)",
       "competitors": {
-        "memory-compiler": "0.1.0",
+        "memory-compiler": "2026.04.06",
         "no-memory": "none",
-        "memory-engine": "0.1.0",
-        "claude-mem": "v13",
-        "knowledge-graph": "0.1.0",
-        "distill": "0.10.0-user-model-v3",
-        "basic-memory": "0.1.0",
-        "engram": "0.83.0"
+        "memory-engine": "2026.05.11",
+        "claude-mem": "v13.2.0",
+        "knowledge-graph": "1.3.2",
+        "distill": "1.1.0",
+        "basic-memory": "0.21.1",
+        "engram": "1.15.13"
       }
     }
   },
@@ -2052,7 +2052,7 @@
       "max": 69408,
       "avg_tokens": 371,
       "total_runs": 25,
-      "version": "0.1.0"
+      "version": "2026.04.06"
     },
     "no-memory": {
       "avg": 16325,
@@ -2068,7 +2068,7 @@
       "max": 62279,
       "avg_tokens": 354,
       "total_runs": 25,
-      "version": "0.1.0"
+      "version": "2026.05.11"
     },
     "claude-mem": {
       "avg": 20049,
@@ -2076,7 +2076,7 @@
       "max": 91989,
       "avg_tokens": 408,
       "total_runs": 25,
-      "version": "v13"
+      "version": "v13.2.0"
     },
     "knowledge-graph": {
       "avg": 19559,
@@ -2084,7 +2084,7 @@
       "max": 120073,
       "avg_tokens": 326,
       "total_runs": 25,
-      "version": "0.1.0"
+      "version": "1.3.2"
     },
     "distill": {
       "avg": 23535,
@@ -2092,7 +2092,7 @@
       "max": 70104,
       "avg_tokens": 292,
       "total_runs": 25,
-      "version": "0.10.0-user-model-v3"
+      "version": "1.1.0"
     },
     "basic-memory": {
       "avg": 23557,
@@ -2100,7 +2100,7 @@
       "max": 119231,
       "avg_tokens": 348,
       "total_runs": 25,
-      "version": "0.1.0"
+      "version": "0.21.1"
     },
     "engram": {
       "avg": 17218,
@@ -2108,7 +2108,7 @@
       "max": 76273,
       "avg_tokens": 342,
       "total_runs": 25,
-      "version": "0.83.0"
+      "version": "1.15.13"
     }
   }
 }

@@ -2,14 +2,14 @@
   "test_id": "B4",
   "competitor_id": "basic-memory",
   "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
-  "output": "Here's my take on this:\n\n**Good fit for your stack.** You already have Kafka for event streaming and Redis for caching — both are ideal for this. No new infrastructure needed.\n\n**Suggested approach:**\n\n1. **Kafka consumer** — aggregate transaction events into per-merchant counts in a tumbling 30s window (Kafka Streams or a simple coroutine-based consumer in Kotlin)\n2. **Redis sorted set or hash** — store current counts keyed by merchant ID, updated by the consumer. This is your materialized view.\n3. **REST endpoint** — `/api/v1/dashboard/merchant-counts` reads from Redis. Simple GET, no WebSockets needed for 30s refresh — the frontend can poll.\n4. **React frontend** — `useQuery` with 30s `refetchInterval`. Table or bar chart (Recharts is already lightweight).\n\n**What I'd avoid:**\n- WebSockets / SSE — overkill for 30s updates on a demo dashboard\n- New databases — per your decisions, stick with PG + Redis\n- Over-investing in this before the demo — keep it read-only, no filters/drill-downs unless Marcus explicitly asks\n\n**Open questions for Marcus:**\n- Which time window? Counts today? Last hour? Rolling 24h?\n- Which merchants — all, or a filtered set?\n- Does this need to survive past the demo, or is it throwaway?\n\nWant me to scaffold the Kotlin consumer + endpoint and the React component?",
+  "output": "Here's my take on this:\n\n**Good fit for your stack.** You already have Kafka for event streaming and Redis for caching \u2014 both are ideal for this. No new infrastructure needed.\n\n**Suggested approach:**\n\n1. **Kafka consumer** \u2014 aggregate transaction events into per-merchant counts in a tumbling 30s window (Kafka Streams or a simple coroutine-based consumer in Kotlin)\n2. **Redis sorted set or hash** \u2014 store current counts keyed by merchant ID, updated by the consumer. This is your materialized view.\n3. **REST endpoint** \u2014 `/api/v1/dashboard/merchant-counts` reads from Redis. Simple GET, no WebSockets needed for 30s refresh \u2014 the frontend can poll.\n4. **React frontend** \u2014 `useQuery` with 30s `refetchInterval`. Table or bar chart (Recharts is already lightweight).\n\n**What I'd avoid:**\n- WebSockets / SSE \u2014 overkill for 30s updates on a demo dashboard\n- New databases \u2014 per your decisions, stick with PG + Redis\n- Over-investing in this before the demo \u2014 keep it read-only, no filters/drill-downs unless Marcus explicitly asks\n\n**Open questions for Marcus:**\n- Which time window? Counts today? Last hour? Rolling 24h?\n- Which merchants \u2014 all, or a filtered set?\n- Does this need to survive past the demo, or is it throwaway?\n\nWant me to scaffold the Kotlin consumer + endpoint and the React component?",
   "timestamp": "2026-05-18T12:37:24Z",
   "latency_ms": 22190,
   "exit_code": 0,
   "output_length_chars": 1306,
   "output_length_tokens_approx": 326,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

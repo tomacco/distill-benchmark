@@ -2,14 +2,14 @@
   "test_id": "P2",
   "competitor_id": "memory-engine",
   "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
-  "output": "The endpoint:\n\n- **`GET /health`** — returns JSON with overall status, timestamp, and individual checks for Postgres and Redis\n- Uses **Kotlin coroutines** (not RxJava, per team decision)\n- Checks both **PostgreSQL** (via R2DBC) and **Redis** — the two dependencies auth-service relies on for JWT/session management\n- Returns `\"UP\"` only when both dependencies are healthy; load balancer can key on the `status` field or HTTP 200\n\nResponse looks like:\n```json\n{\n  \"status\": \"UP\",\n  \"timestamp\": \"2026-05-18T12:00:00Z\",\n  \"checks\": {\n    \"postgres\": true,\n    \"redis\": true\n  }\n}\n```\n\n**Note:** If you're already using Spring Boot Actuator, you could alternatively just expose `/actuator/health` by adding `management.endpoints.web.exposure.include=health` to `application.yml` and registering custom `ReactiveHealthIndicator` beans. The controller above gives you a standalone `/health` path that's simpler to wire into the load balancer without Actuator overhead. Let me know which approach you prefer.",
+  "output": "The endpoint:\n\n- **`GET /health`** \u2014 returns JSON with overall status, timestamp, and individual checks for Postgres and Redis\n- Uses **Kotlin coroutines** (not RxJava, per team decision)\n- Checks both **PostgreSQL** (via R2DBC) and **Redis** \u2014 the two dependencies auth-service relies on for JWT/session management\n- Returns `\"UP\"` only when both dependencies are healthy; load balancer can key on the `status` field or HTTP 200\n\nResponse looks like:\n```json\n{\n  \"status\": \"UP\",\n  \"timestamp\": \"2026-05-18T12:00:00Z\",\n  \"checks\": {\n    \"postgres\": true,\n    \"redis\": true\n  }\n}\n```\n\n**Note:** If you're already using Spring Boot Actuator, you could alternatively just expose `/actuator/health` by adding `management.endpoints.web.exposure.include=health` to `application.yml` and registering custom `ReactiveHealthIndicator` beans. The controller above gives you a standalone `/health` path that's simpler to wire into the load balancer without Actuator overhead. Let me know which approach you prefer.",
   "timestamp": "2026-05-18T09:15:14Z",
   "latency_ms": 34257,
   "exit_code": 0,
   "output_length_chars": 1003,
   "output_length_tokens_approx": 250,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

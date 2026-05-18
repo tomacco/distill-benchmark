@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "basic-memory",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes, Redis is a solid fit here. You already have it in the stack for caching, and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` — no need for complex data modeling\n- **Low latency** — token validation happens on every authenticated request, so in-memory access matters\n- **Built-in expiry** — Redis TTL handles token invalidation cleanly without a background cleanup job\n- **Atomic operations** — easy to implement token revocation (`DEL`) and refresh rotation\n\nSince `auth-service` is already Kotlin, you can use Lettuce or Redisson as the client — both have good coroutine support, which aligns with your existing coroutine-over-RxJava decision.\n\nOne thing to consider: make sure you have a plan for Redis restarts/evictions. Since these are session tokens (not just cache), an eviction means users get logged out. If that's acceptable, standard volatile-ttl eviction policy works. If not, you could use a dedicated Redis instance (or logical database) with `noeviction` policy for sessions, separate from your general cache.",
+  "output": "Yes, Redis is a solid fit here. You already have it in the stack for caching, and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` \u2014 no need for complex data modeling\n- **Low latency** \u2014 token validation happens on every authenticated request, so in-memory access matters\n- **Built-in expiry** \u2014 Redis TTL handles token invalidation cleanly without a background cleanup job\n- **Atomic operations** \u2014 easy to implement token revocation (`DEL`) and refresh rotation\n\nSince `auth-service` is already Kotlin, you can use Lettuce or Redisson as the client \u2014 both have good coroutine support, which aligns with your existing coroutine-over-RxJava decision.\n\nOne thing to consider: make sure you have a plan for Redis restarts/evictions. Since these are session tokens (not just cache), an eviction means users get logged out. If that's acceptable, standard volatile-ttl eviction policy works. If not, you could use a dedicated Redis instance (or logical database) with `noeviction` policy for sessions, separate from your general cache.",
   "timestamp": "2026-05-18T12:36:22Z",
   "latency_ms": 16373,
   "exit_code": 0,
   "output_length_chars": 1104,
   "output_length_tokens_approx": 276,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

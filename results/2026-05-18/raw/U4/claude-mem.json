@@ -9,7 +9,7 @@
   "output_length_chars": 41,
   "output_length_tokens_approx": 10,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

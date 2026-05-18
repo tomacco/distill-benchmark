@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "engram",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes. You already have Redis in the stack, the access pattern is a natural fit (key-value + TTL), and it avoids adding new infrastructure. No reason to overthink this.\n\nA few implementation notes:\n\n- **Key format**: `session:{userId}:{tokenId}` — lets you invalidate all sessions for a user with a prefix scan if needed.\n- **TTL**: Set on write with `SETEX` / `SET EX`. Match your JWT expiry or slightly exceed it for refresh token flows.\n- **Serialization**: Store minimal claims, not the full JWT. Keeps memory footprint low.\n- **Connection pooling**: Use Lettuce (already common in Kotlin/Spring ecosystems) with coroutine support via `lettuce-core` reactive → `kotlinx-coroutines-reactor` bridge.\n\nOne thing to watch: if you're also using Redis for other caching (e.g., account data), use a separate logical database (`SELECT 1`) or key prefix namespace to keep session data isolated. Makes it easier to flush one without nuking the other.",
+  "output": "Yes. You already have Redis in the stack, the access pattern is a natural fit (key-value + TTL), and it avoids adding new infrastructure. No reason to overthink this.\n\nA few implementation notes:\n\n- **Key format**: `session:{userId}:{tokenId}` \u2014 lets you invalidate all sessions for a user with a prefix scan if needed.\n- **TTL**: Set on write with `SETEX` / `SET EX`. Match your JWT expiry or slightly exceed it for refresh token flows.\n- **Serialization**: Store minimal claims, not the full JWT. Keeps memory footprint low.\n- **Connection pooling**: Use Lettuce (already common in Kotlin/Spring ecosystems) with coroutine support via `lettuce-core` reactive \u2192 `kotlinx-coroutines-reactor` bridge.\n\nOne thing to watch: if you're also using Redis for other caching (e.g., account data), use a separate logical database (`SELECT 1`) or key prefix namespace to keep session data isolated. Makes it easier to flush one without nuking the other.",
   "timestamp": "2026-05-18T09:30:46Z",
   "latency_ms": 12024,
   "exit_code": 0,
   "output_length_chars": 942,
   "output_length_tokens_approx": 235,
   "versions": {
-    "competitor": "0.83.0",
+    "competitor": "1.15.13",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

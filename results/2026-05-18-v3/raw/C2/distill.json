@@ -2,14 +2,14 @@
   "test_id": "C2",
   "competitor_id": "distill",
   "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
-  "output": "This contradicts something I'm confident about from past sessions. DynamoDB was explicitly evaluated and rejected by the team.\n\n**The team already evaluated DynamoDB and rejected it.** Reasons recorded:\n\n- Need **strong consistency** for financial data\n- Need **multi-table transactions** (DynamoDB transactions are limited)\n- Team has deep **PostgreSQL expertise** — lower operational risk\n- Relational model fits the fintech domain better\n\nFor the session store specifically, you already have **Redis** in the stack. Redis gives you sub-millisecond reads on key-value lookups and is purpose-built for this. Adding DynamoDB would mean a new operational dependency for something Redis already handles well.\n\nIf Redis isn't sufficient for some reason (durability concerns, capacity), worth discussing — but DynamoDB re-opens a decision the team already closed.",
+  "output": "This contradicts something I'm confident about from past sessions. DynamoDB was explicitly evaluated and rejected by the team.\n\n**The team already evaluated DynamoDB and rejected it.** Reasons recorded:\n\n- Need **strong consistency** for financial data\n- Need **multi-table transactions** (DynamoDB transactions are limited)\n- Team has deep **PostgreSQL expertise** \u2014 lower operational risk\n- Relational model fits the fintech domain better\n\nFor the session store specifically, you already have **Redis** in the stack. Redis gives you sub-millisecond reads on key-value lookups and is purpose-built for this. Adding DynamoDB would mean a new operational dependency for something Redis already handles well.\n\nIf Redis isn't sufficient for some reason (durability concerns, capacity), worth discussing \u2014 but DynamoDB re-opens a decision the team already closed.",
   "timestamp": "2026-05-18T11:19:59Z",
   "latency_ms": 24825,
   "exit_code": 0,
   "output_length_chars": 859,
   "output_length_tokens_approx": 214,
   "versions": {
-    "competitor": "0.10.0-user-model-v3",
+    "competitor": "1.1.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

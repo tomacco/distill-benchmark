@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "memory-compiler",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes, Redis is a great fit here. You already have it in the stack (PostgreSQL 14 primary, Redis for cache), and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX ttl` — no need for complex data structures\n- **Low latency** — session lookups happen on every authenticated request, and Redis serves these in sub-millisecond time\n- **Built-in expiry** — TTL handles token invalidation without a cleanup job\n- **Atomic operations** — easy to implement token revocation with `DEL`\n\nSince the auth-service is already in production (Kotlin, OAuth2/JWT), you'd just be adding a Redis client to a service that likely already has access to the shared Redis instance.\n\nOne consideration: if you need to revoke all sessions for a user (e.g., password change), use a key pattern like `session:{userId}:{tokenId}` so you can scan and delete by prefix — or maintain a small Redis Set per user pointing to their active sessions.\n\nNo reason to reach for anything else here.",
+  "output": "Yes, Redis is a great fit here. You already have it in the stack (PostgreSQL 14 primary, Redis for cache), and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX ttl` \u2014 no need for complex data structures\n- **Low latency** \u2014 session lookups happen on every authenticated request, and Redis serves these in sub-millisecond time\n- **Built-in expiry** \u2014 TTL handles token invalidation without a cleanup job\n- **Atomic operations** \u2014 easy to implement token revocation with `DEL`\n\nSince the auth-service is already in production (Kotlin, OAuth2/JWT), you'd just be adding a Redis client to a service that likely already has access to the shared Redis instance.\n\nOne consideration: if you need to revoke all sessions for a user (e.g., password change), use a key pattern like `session:{userId}:{tokenId}` so you can scan and delete by prefix \u2014 or maintain a small Redis Set per user pointing to their active sessions.\n\nNo reason to reach for anything else here.",
   "timestamp": "2026-05-18T08:59:44Z",
   "latency_ms": 16316,
   "exit_code": 0,
   "output_length_chars": 1019,
   "output_length_tokens_approx": 254,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.04.06",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

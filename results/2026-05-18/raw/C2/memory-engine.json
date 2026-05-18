@@ -2,14 +2,14 @@
   "test_id": "C2",
   "competitor_id": "memory-engine",
   "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
-  "output": "**No — DynamoDB was already evaluated and rejected by the team.** The decision is documented in the project corrections log. The reasons were:\n\n- **Need for strong consistency** — financial data (session store sits in a banking platform) requires guarantees DynamoDB's eventual consistency model makes harder to get right\n- **Multi-table transactions** — the domain relies on relational integrity across tables\n- **Team expertise is in PostgreSQL** — the entire stack runs on PG 14 already\n\nFor sub-millisecond key-value lookups on session data, **Redis is already in the stack** and is the natural fit here. It gives you:\n\n- Sub-millisecond reads on simple key lookups\n- Built-in TTL for session expiry\n- No new infrastructure or vendor dependency to introduce\n- The team already has operational experience with it\n\nAdding DynamoDB would mean a new data store to operate, monitor, and on-call for — with no clear advantage over what Redis already provides for this use case.",
+  "output": "**No \u2014 DynamoDB was already evaluated and rejected by the team.** The decision is documented in the project corrections log. The reasons were:\n\n- **Need for strong consistency** \u2014 financial data (session store sits in a banking platform) requires guarantees DynamoDB's eventual consistency model makes harder to get right\n- **Multi-table transactions** \u2014 the domain relies on relational integrity across tables\n- **Team expertise is in PostgreSQL** \u2014 the entire stack runs on PG 14 already\n\nFor sub-millisecond key-value lookups on session data, **Redis is already in the stack** and is the natural fit here. It gives you:\n\n- Sub-millisecond reads on simple key lookups\n- Built-in TTL for session expiry\n- No new infrastructure or vendor dependency to introduce\n- The team already has operational experience with it\n\nAdding DynamoDB would mean a new data store to operate, monitor, and on-call for \u2014 with no clear advantage over what Redis already provides for this use case.",
   "timestamp": "2026-05-18T09:12:12Z",
   "latency_ms": 16055,
   "exit_code": 0,
   "output_length_chars": 975,
   "output_length_tokens_approx": 243,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

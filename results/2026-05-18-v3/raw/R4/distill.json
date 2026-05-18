@@ -2,14 +2,14 @@
   "test_id": "R4",
   "competitor_id": "distill",
   "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
-  "output": "Based on your past decisions, here's what I'd consider:\n\n**Given your constraints:**\n- Financial data → strong consistency required\n- Team has deep PostgreSQL expertise\n- Already rejected DynamoDB and MongoDB (relational model fits your domain)\n- Kafka already in the stack for event streaming\n\n**Options worth evaluating:**\n\n- **PostgreSQL with TimescaleDB extension** — stays in your existing expertise, adds time-series optimizations (hypertables, continuous aggregates, compression). Easiest operational path since you're already on PG 14.\n- **ClickHouse** — columnar store, excellent for analytical reads on large datasets. Significantly faster than PG for aggregate queries over billions of rows. But: new operational burden, and consistency model is eventual (inserts are async-merged).\n- **PostgreSQL with materialized views + partitioning** — if dataset isn't massive yet, native PG features (table partitioning, parallel query, materialized views refreshed via Kafka consumers) may be enough to start.\n\n**My suggestion:** Start with **TimescaleDB on your existing PG stack**. It gives you the fast analytical reads without introducing a new database to operate. If you outgrow it, ClickHouse is the natural next step — and you can feed it from Kafka, which you already have.\n\nWant me to sketch out a schema or dig into any of these?",
+  "output": "Based on your past decisions, here's what I'd consider:\n\n**Given your constraints:**\n- Financial data \u2192 strong consistency required\n- Team has deep PostgreSQL expertise\n- Already rejected DynamoDB and MongoDB (relational model fits your domain)\n- Kafka already in the stack for event streaming\n\n**Options worth evaluating:**\n\n- **PostgreSQL with TimescaleDB extension** \u2014 stays in your existing expertise, adds time-series optimizations (hypertables, continuous aggregates, compression). Easiest operational path since you're already on PG 14.\n- **ClickHouse** \u2014 columnar store, excellent for analytical reads on large datasets. Significantly faster than PG for aggregate queries over billions of rows. But: new operational burden, and consistency model is eventual (inserts are async-merged).\n- **PostgreSQL with materialized views + partitioning** \u2014 if dataset isn't massive yet, native PG features (table partitioning, parallel query, materialized views refreshed via Kafka consumers) may be enough to start.\n\n**My suggestion:** Start with **TimescaleDB on your existing PG stack**. It gives you the fast analytical reads without introducing a new database to operate. If you outgrow it, ClickHouse is the natural next step \u2014 and you can feed it from Kafka, which you already have.\n\nWant me to sketch out a schema or dig into any of these?",
   "timestamp": "2026-05-18T11:26:07Z",
   "latency_ms": 29088,
   "exit_code": 0,
   "output_length_chars": 1342,
   "output_length_tokens_approx": 335,
   "versions": {
-    "competitor": "0.10.0-user-model-v3",
+    "competitor": "1.1.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

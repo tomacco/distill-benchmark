@@ -1,15 +1,15 @@
 {
   "test_id": "B2",
   "competitor_id": "claude-mem",
-  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
-  "output": "Honest take: probably not worth it right now.\n\n**The case for Go is real** — a Kafka consumer that fans out to SNS is exactly the kind of thing Go excels at. Smaller binary, lower memory footprint, faster cold starts on EKS. The stdlib + `confluent-kafka-go` + AWS SDK is all you'd need.\n\n**But the case against is stronger given your situation:**\n\n- **It works and it's in prod.** Rewriting a working service to save some memory isn't a great use of time.\n- **Series C due diligence is Q3.** Introducing a second backend language right before that muddies the \"clean architecture story.\" Investors/technical reviewers will ask why you have two backend languages for simple services.\n- **Team expertise is Kotlin.** Sofia's your Kotlin expert, Dev is frontend. Who owns the Go service? If it's just you, that's a bus factor of 1.\n- **You're mid-migration.** payment-processing is next, account-service is still in staging. Focus there.\n\n**What I'd actually do instead:** if the Kotlin version feels over-engineered, simplify it in Kotlin. Strip out unnecessary abstractions. A Kotlin coroutine consuming from Kafka and calling SNS can be ~200 lines. That's a half-day refactor vs. a multi-day rewrite + new CI pipeline + new deployment config + team learning curve.\n\nIf you still want Go in the stack, payment-processing would be a better candidate to evaluate it — greenfield, so no rewrite tax.",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service \u2014 just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: probably not worth it right now.\n\n**The case for Go is real** \u2014 a Kafka consumer that fans out to SNS is exactly the kind of thing Go excels at. Smaller binary, lower memory footprint, faster cold starts on EKS. The stdlib + `confluent-kafka-go` + AWS SDK is all you'd need.\n\n**But the case against is stronger given your situation:**\n\n- **It works and it's in prod.** Rewriting a working service to save some memory isn't a great use of time.\n- **Series C due diligence is Q3.** Introducing a second backend language right before that muddies the \"clean architecture story.\" Investors/technical reviewers will ask why you have two backend languages for simple services.\n- **Team expertise is Kotlin.** Sofia's your Kotlin expert, Dev is frontend. Who owns the Go service? If it's just you, that's a bus factor of 1.\n- **You're mid-migration.** payment-processing is next, account-service is still in staging. Focus there.\n\n**What I'd actually do instead:** if the Kotlin version feels over-engineered, simplify it in Kotlin. Strip out unnecessary abstractions. A Kotlin coroutine consuming from Kafka and calling SNS can be ~200 lines. That's a half-day refactor vs. a multi-day rewrite + new CI pipeline + new deployment config + team learning curve.\n\nIf you still want Go in the stack, payment-processing would be a better candidate to evaluate it \u2014 greenfield, so no rewrite tax.",
   "timestamp": "2026-05-18T08:39:09Z",
   "latency_ms": 17821,
   "exit_code": 0,
   "output_length_chars": 1396,
   "output_length_tokens_approx": 349,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

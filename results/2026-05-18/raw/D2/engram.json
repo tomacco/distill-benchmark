@@ -2,14 +2,14 @@
   "test_id": "D2",
   "competitor_id": "engram",
   "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
-  "output": "PostgreSQL. You already have it in the stack, the team has deep expertise, and it meets every requirement you listed — complex aggregations, multi-table joins, strong consistency.\n\nFor the reporting workload specifically, consider:\n\n- **Materialized views** for pre-computed aggregation queries\n- **pg_cron** to schedule refreshes off-peak\n- **Table partitioning** (by date range) if the dataset grows large\n- **Read replicas** to isolate reporting load from transactional traffic\n\nThis keeps operational complexity low and avoids introducing new infrastructure before the Series C due diligence.",
+  "output": "PostgreSQL. You already have it in the stack, the team has deep expertise, and it meets every requirement you listed \u2014 complex aggregations, multi-table joins, strong consistency.\n\nFor the reporting workload specifically, consider:\n\n- **Materialized views** for pre-computed aggregation queries\n- **pg_cron** to schedule refreshes off-peak\n- **Table partitioning** (by date range) if the dataset grows large\n- **Read replicas** to isolate reporting load from transactional traffic\n\nThis keeps operational complexity low and avoids introducing new infrastructure before the Series C due diligence.",
   "timestamp": "2026-05-18T09:32:42Z",
   "latency_ms": 7828,
   "exit_code": 0,
   "output_length_chars": 596,
   "output_length_tokens_approx": 149,
   "versions": {
-    "competitor": "0.83.0",
+    "competitor": "1.15.13",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

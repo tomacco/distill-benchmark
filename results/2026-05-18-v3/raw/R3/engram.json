@@ -2,14 +2,14 @@
   "test_id": "R3",
   "competitor_id": "engram",
   "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
-  "output": "Sure. A few quick questions before we start:\n\n1. **What does the settings page cover?** Account profile, notification preferences, security settings, billing — or something else?\n2. **Is there an existing component structure/design system** in the frontend repo? (e.g., shared components, a UI library like MUI or Radix)\n3. **Where does settings data come from?** An existing API endpoint, or does that need to be built too?\n4. **Any wireframes or specs from Marcus in Linear?**\n\nSince Dev is ramping up, knowing the scope will help me calibrate the example — keep it straightforward with clear patterns he can follow.",
+  "output": "Sure. A few quick questions before we start:\n\n1. **What does the settings page cover?** Account profile, notification preferences, security settings, billing \u2014 or something else?\n2. **Is there an existing component structure/design system** in the frontend repo? (e.g., shared components, a UI library like MUI or Radix)\n3. **Where does settings data come from?** An existing API endpoint, or does that need to be built too?\n4. **Any wireframes or specs from Marcus in Linear?**\n\nSince Dev is ramping up, knowing the scope will help me calibrate the example \u2014 keep it straightforward with clear patterns he can follow.",
   "timestamp": "2026-05-18T13:27:06Z",
   "latency_ms": 9365,
   "exit_code": 0,
   "output_length_chars": 618,
   "output_length_tokens_approx": 154,
   "versions": {
-    "competitor": "0.83.0",
+    "competitor": "1.15.13",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

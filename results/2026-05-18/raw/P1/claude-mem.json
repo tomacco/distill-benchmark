@@ -2,14 +2,14 @@
   "test_id": "P1",
   "competitor_id": "claude-mem",
   "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
-  "output": "No files in the current working directory contain `AccountService`. The workspace (`/private/tmp/benchmark-workspace-iq4FXf7S`) appears to be empty or doesn't have the codebase checked out.\n\nCould you point me to the repo/directory where the code lives? Or if you need to clone it first, share the repo URL and I'll take it from there.\n\nIn the meantime, here's the general approach once we have the files:\n\n1. **Find all occurrences** — class definitions, imports, references, filenames\n2. **Rename files** — any file named `AccountService.kt` → `BankAccountService.kt`\n3. **Find-and-replace in content** — `AccountService` → `BankAccountService` across all files\n4. **Verify** — build/compile to catch anything missed\n\nFor a Kotlin project, IntelliJ's **Shift+F6** refactor is the fastest single-step option since it handles imports, usages, and filenames. From the CLI, I can do it with Grep + Edit across all files once I can see the code.",
+  "output": "No files in the current working directory contain `AccountService`. The workspace (`/private/tmp/benchmark-workspace-iq4FXf7S`) appears to be empty or doesn't have the codebase checked out.\n\nCould you point me to the repo/directory where the code lives? Or if you need to clone it first, share the repo URL and I'll take it from there.\n\nIn the meantime, here's the general approach once we have the files:\n\n1. **Find all occurrences** \u2014 class definitions, imports, references, filenames\n2. **Rename files** \u2014 any file named `AccountService.kt` \u2192 `BankAccountService.kt`\n3. **Find-and-replace in content** \u2014 `AccountService` \u2192 `BankAccountService` across all files\n4. **Verify** \u2014 build/compile to catch anything missed\n\nFor a Kotlin project, IntelliJ's **Shift+F6** refactor is the fastest single-step option since it handles imports, usages, and filenames. From the CLI, I can do it with Grep + Edit across all files once I can see the code.",
   "timestamp": "2026-05-18T08:42:45Z",
   "latency_ms": 14917,
   "exit_code": 0,
   "output_length_chars": 942,
   "output_length_tokens_approx": 235,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

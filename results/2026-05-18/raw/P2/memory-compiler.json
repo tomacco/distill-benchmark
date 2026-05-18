@@ -2,14 +2,14 @@
   "test_id": "P2",
   "competitor_id": "memory-compiler",
   "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
-  "output": "There's no auth-service source code in this workspace — only the knowledge articles. I can't add the endpoint without the actual codebase.\n\nThat said, based on the compiled knowledge, here's what the health check should look like for your setup:\n\n**Key constraints from project context:**\n- auth-service is **Kotlin** (not Java)\n- Internal APIs use **gRPC**, but load balancer health checks are typically HTTP\n- Running on **AWS EKS**\n\n**Recommended approach:** Add a simple HTTP health check endpoint alongside your gRPC server. If you're using Ktor or Spring Boot:\n\n**Ktor example:**\n```kotlin\nrouting {\n    get(\"/health\") {\n        call.respond(HttpStatusCode.OK, mapOf(\"status\" to \"ok\"))\n    }\n}\n```\n\n**Spring Boot (with Actuator):**\nAlready provides `/actuator/health` — just make sure the dependency is included and the port is exposed.\n\n**For gRPC health checking**, you can also implement the [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md) via `grpc.health.v1.Health`, but AWS ALB/NLB health checks expect HTTP, so you'll likely want the HTTP endpoint regardless.\n\nCould you point me to the auth-service repo or directory so I can add the endpoint directly?",
+  "output": "There's no auth-service source code in this workspace \u2014 only the knowledge articles. I can't add the endpoint without the actual codebase.\n\nThat said, based on the compiled knowledge, here's what the health check should look like for your setup:\n\n**Key constraints from project context:**\n- auth-service is **Kotlin** (not Java)\n- Internal APIs use **gRPC**, but load balancer health checks are typically HTTP\n- Running on **AWS EKS**\n\n**Recommended approach:** Add a simple HTTP health check endpoint alongside your gRPC server. If you're using Ktor or Spring Boot:\n\n**Ktor example:**\n```kotlin\nrouting {\n    get(\"/health\") {\n        call.respond(HttpStatusCode.OK, mapOf(\"status\" to \"ok\"))\n    }\n}\n```\n\n**Spring Boot (with Actuator):**\nAlready provides `/actuator/health` \u2014 just make sure the dependency is included and the port is exposed.\n\n**For gRPC health checking**, you can also implement the [gRPC Health Checking Protocol](https://github.com/grpc/grpc/blob/master/doc/health-checking.md) via `grpc.health.v1.Health`, but AWS ALB/NLB health checks expect HTTP, so you'll likely want the HTTP endpoint regardless.\n\nCould you point me to the auth-service repo or directory so I can add the endpoint directly?",
   "timestamp": "2026-05-18T09:04:14Z",
   "latency_ms": 28512,
   "exit_code": 0,
   "output_length_chars": 1215,
   "output_length_tokens_approx": 303,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.04.06",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

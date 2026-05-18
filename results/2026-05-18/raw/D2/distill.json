@@ -2,14 +2,14 @@
   "test_id": "D2",
   "competitor_id": "distill",
   "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
-  "output": "Given your stack and the prior evaluation, **PostgreSQL** is the clear answer:\n\n- **You already run Postgres 14** — no new operational overhead\n- **Complex aggregations across multiple tables** — this is literally what relational databases excel at (window functions, CTEs, materialized views)\n- **Strong consistency for financial data** — already a hard requirement from the analytics service evaluation\n- **Team expertise** — deep Postgres knowledge across the team\n\nFor the reporting service specifically, consider:\n\n- **Materialized views** for expensive aggregation queries that don't need real-time freshness\n- **Read replicas** if reporting load could impact transactional workloads — route reporting queries to a replica\n- **Partitioning** (e.g., by date range) if you're aggregating over large time-series data\n- **`pg_stat_statements`** to identify and optimize slow aggregation queries early\n\nIf you eventually hit scale where Postgres aggregations are too slow on large datasets, the next step would be something like **ClickHouse** or **TimescaleDB** (Postgres extension) as a dedicated analytical store fed from Kafka — but start with Postgres and measure first. No reason to add complexity before you have evidence you need it.",
+  "output": "Given your stack and the prior evaluation, **PostgreSQL** is the clear answer:\n\n- **You already run Postgres 14** \u2014 no new operational overhead\n- **Complex aggregations across multiple tables** \u2014 this is literally what relational databases excel at (window functions, CTEs, materialized views)\n- **Strong consistency for financial data** \u2014 already a hard requirement from the analytics service evaluation\n- **Team expertise** \u2014 deep Postgres knowledge across the team\n\nFor the reporting service specifically, consider:\n\n- **Materialized views** for expensive aggregation queries that don't need real-time freshness\n- **Read replicas** if reporting load could impact transactional workloads \u2014 route reporting queries to a replica\n- **Partitioning** (e.g., by date range) if you're aggregating over large time-series data\n- **`pg_stat_statements`** to identify and optimize slow aggregation queries early\n\nIf you eventually hit scale where Postgres aggregations are too slow on large datasets, the next step would be something like **ClickHouse** or **TimescaleDB** (Postgres extension) as a dedicated analytical store fed from Kafka \u2014 but start with Postgres and measure first. No reason to add complexity before you have evidence you need it.",
   "timestamp": "2026-05-18T08:31:34Z",
   "latency_ms": 31724,
   "exit_code": 0,
   "output_length_chars": 1242,
   "output_length_tokens_approx": 310,
   "versions": {
-    "competitor": "0.10.0-user-model-v2",
+    "competitor": "1.1.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

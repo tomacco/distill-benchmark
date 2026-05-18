@@ -2,14 +2,14 @@
   "test_id": "R3",
   "competitor_id": "memory-compiler",
   "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
-  "output": "Dev is your junior frontend engineer (React/TS, 6 months in). A few things before we start:\n\n1. **What settings does this page need to cover?** (e.g., user profile, notification preferences, security/2FA, billing?)\n2. **Is there an existing frontend codebase I should look at?** I don't see one in this workspace — should I scaffold from scratch, or is there a repo to pull from?\n3. **Any existing design system or component library** the team uses (e.g., Radix, Chakra, custom)?\n\nSince Dev is still learning the domain, it'd be worth keeping the component structure straightforward — clear prop types, simple state management, no unnecessary abstractions. I can structure the code so it's easy for Dev to extend section-by-section.\n\nLet me know the scope and I'll put together the component.",
+  "output": "Dev is your junior frontend engineer (React/TS, 6 months in). A few things before we start:\n\n1. **What settings does this page need to cover?** (e.g., user profile, notification preferences, security/2FA, billing?)\n2. **Is there an existing frontend codebase I should look at?** I don't see one in this workspace \u2014 should I scaffold from scratch, or is there a repo to pull from?\n3. **Any existing design system or component library** the team uses (e.g., Radix, Chakra, custom)?\n\nSince Dev is still learning the domain, it'd be worth keeping the component structure straightforward \u2014 clear prop types, simple state management, no unnecessary abstractions. I can structure the code so it's easy for Dev to extend section-by-section.\n\nLet me know the scope and I'll put together the component.",
   "timestamp": "2026-05-18T09:06:08Z",
   "latency_ms": 18153,
   "exit_code": 0,
   "output_length_chars": 792,
   "output_length_tokens_approx": 198,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.04.06",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

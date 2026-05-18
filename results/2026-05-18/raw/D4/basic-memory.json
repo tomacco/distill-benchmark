@@ -2,14 +2,14 @@
   "test_id": "D4",
   "competitor_id": "basic-memory",
   "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
-  "output": "Based on the vault context — Kotlin, Kafka, coroutines, structured logging with correlation IDs, payment-processing extraction in progress.\n\nA couple of questions before I scaffold:\n\n1. **Which service** does this consumer live in? A new service, or adding to an existing one (e.g., `account-service`, `notification-service`)?\n2. **What should happen** when a `payment-completed` event is received? (e.g., update account balance, send notification, trigger reconciliation)\n3. **Framework** — Spring Boot with spring-kafka, or something else?\n\nThese will determine the consumer's action, error handling strategy, and where to wire it in.",
+  "output": "Based on the vault context \u2014 Kotlin, Kafka, coroutines, structured logging with correlation IDs, payment-processing extraction in progress.\n\nA couple of questions before I scaffold:\n\n1. **Which service** does this consumer live in? A new service, or adding to an existing one (e.g., `account-service`, `notification-service`)?\n2. **What should happen** when a `payment-completed` event is received? (e.g., update account balance, send notification, trigger reconciliation)\n3. **Framework** \u2014 Spring Boot with spring-kafka, or something else?\n\nThese will determine the consumer's action, error handling strategy, and where to wire it in.",
   "timestamp": "2026-05-18T08:52:49Z",
   "latency_ms": 27321,
   "exit_code": 0,
   "output_length_chars": 636,
   "output_length_tokens_approx": 159,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "0.21.1",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

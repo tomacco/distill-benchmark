@@ -2,14 +2,14 @@
   "test_id": "C3",
   "competitor_id": "claude-mem",
   "prompt": "What database do we use for the account service?",
-  "output": "Based on what you told me earlier in this conversation, the account service was switched to **MySQL** last week, with the migration from PostgreSQL now complete.\n\nThat said, I want to flag that the project context in `.claude/rules/claude-mem-context.md` still lists **PostgreSQL 14** as part of the stack. You may want to update that file so it reflects the MySQL migration for the account service — otherwise it could cause confusion in future sessions.",
+  "output": "Based on what you told me earlier in this conversation, the account service was switched to **MySQL** last week, with the migration from PostgreSQL now complete.\n\nThat said, I want to flag that the project context in `.claude/rules/claude-mem-context.md` still lists **PostgreSQL 14** as part of the stack. You may want to update that file so it reflects the MySQL migration for the account service \u2014 otherwise it could cause confusion in future sessions.",
   "timestamp": "2026-05-18T12:27:22Z",
   "latency_ms": 9661,
   "exit_code": 0,
   "output_length_chars": 455,
   "output_length_tokens_approx": 113,
   "versions": {
-    "competitor": "v13",
+    "competitor": "v13.2.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

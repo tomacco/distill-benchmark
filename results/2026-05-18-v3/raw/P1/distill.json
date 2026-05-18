@@ -2,14 +2,14 @@
   "test_id": "P1",
   "competitor_id": "distill",
   "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
-  "output": "No files in the current workspace contain `AccountService`. The working directory (`/private/tmp/benchmark-workspace-yHkeomj8`) appears to be empty or doesn't have your project code.\n\nAre you working in a different directory? Point me to the repo path and I'll do the rename — just a `Grep` to find all hits, then `Edit` with `replace_all` on each file.",
+  "output": "No files in the current workspace contain `AccountService`. The working directory (`/private/tmp/benchmark-workspace-yHkeomj8`) appears to be empty or doesn't have your project code.\n\nAre you working in a different directory? Point me to the repo path and I'll do the rename \u2014 just a `Grep` to find all hits, then `Edit` with `replace_all` on each file.",
   "timestamp": "2026-05-18T11:23:09Z",
   "latency_ms": 11242,
   "exit_code": 0,
   "output_length_chars": 353,
   "output_length_tokens_approx": 88,
   "versions": {
-    "competitor": "0.10.0-user-model-v3",
+    "competitor": "1.1.0",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

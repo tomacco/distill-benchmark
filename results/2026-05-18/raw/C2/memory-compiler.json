@@ -2,14 +2,14 @@
   "test_id": "C2",
   "competitor_id": "memory-compiler",
   "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
-  "output": "I'd actually push back on DynamoDB here. The team evaluated and rejected it already — the decision was to stick with **PostgreSQL** as the primary database, with **Redis** for caching.\n\nThe reasons it was ruled out:\n\n1. **Strong consistency requirements** — as a financial platform, Helios needs guarantees that DynamoDB's eventual consistency model makes harder (you can get strongly consistent reads, but it cuts throughput in half and costs more).\n2. **Multi-table transactions** — DynamoDB transactions are limited and expensive compared to what Postgres gives you natively.\n3. **Team expertise** — the team knows PostgreSQL well. Adding DynamoDB means another operational surface to learn and maintain.\n\nFor sub-millisecond key-value lookups on sessions, **Redis is already in the stack** and is purpose-built for exactly this. It gives you:\n\n- Sub-millisecond reads on simple key-value lookups\n- Built-in TTL for session expiry\n- No new infrastructure to adopt\n- The team already operates it\n\nI'd go with Redis for the session store. It's the straightforward choice given what's already in place.",
+  "output": "I'd actually push back on DynamoDB here. The team evaluated and rejected it already \u2014 the decision was to stick with **PostgreSQL** as the primary database, with **Redis** for caching.\n\nThe reasons it was ruled out:\n\n1. **Strong consistency requirements** \u2014 as a financial platform, Helios needs guarantees that DynamoDB's eventual consistency model makes harder (you can get strongly consistent reads, but it cuts throughput in half and costs more).\n2. **Multi-table transactions** \u2014 DynamoDB transactions are limited and expensive compared to what Postgres gives you natively.\n3. **Team expertise** \u2014 the team knows PostgreSQL well. Adding DynamoDB means another operational surface to learn and maintain.\n\nFor sub-millisecond key-value lookups on sessions, **Redis is already in the stack** and is purpose-built for exactly this. It gives you:\n\n- Sub-millisecond reads on simple key-value lookups\n- Built-in TTL for session expiry\n- No new infrastructure to adopt\n- The team already operates it\n\nI'd go with Redis for the session store. It's the straightforward choice given what's already in place.",
   "timestamp": "2026-05-18T09:01:26Z",
   "latency_ms": 17062,
   "exit_code": 0,
   "output_length_chars": 1102,
   "output_length_tokens_approx": 275,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.04.06",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

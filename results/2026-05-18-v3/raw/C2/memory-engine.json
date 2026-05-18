@@ -2,14 +2,14 @@
   "test_id": "C2",
   "competitor_id": "memory-engine",
   "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
-  "output": "No — DynamoDB was already evaluated and rejected by the team. The decision is documented in the project corrections log. The reasons were:\n\n- **Need for strong consistency** — financial data (session store sits in a banking platform) requires guarantees DynamoDB's eventual-consistency model makes harder to get right.\n- **Multi-table transactions** — the domain is relational; DynamoDB's transaction model is limited compared to what you already have.\n- **Team expertise is in PostgreSQL** — you're already running PG 14 across services.\n\nFor sub-millisecond key-value lookups on sessions, **Redis** is the better fit here — and it's already in your stack. You'd get:\n\n- True sub-millisecond reads (single-digit microseconds typical)\n- No new infrastructure or expertise to adopt\n- Simple key-value semantics with TTL support built in (ideal for session expiry)\n- Strong consistency on single-node reads\n\nA basic approach: store sessions in Redis with a TTL matching your session lifetime, and fall back to PostgreSQL if you need durable session history for audit purposes (relevant for the Series C due diligence).",
+  "output": "No \u2014 DynamoDB was already evaluated and rejected by the team. The decision is documented in the project corrections log. The reasons were:\n\n- **Need for strong consistency** \u2014 financial data (session store sits in a banking platform) requires guarantees DynamoDB's eventual-consistency model makes harder to get right.\n- **Multi-table transactions** \u2014 the domain is relational; DynamoDB's transaction model is limited compared to what you already have.\n- **Team expertise is in PostgreSQL** \u2014 you're already running PG 14 across services.\n\nFor sub-millisecond key-value lookups on sessions, **Redis** is the better fit here \u2014 and it's already in your stack. You'd get:\n\n- True sub-millisecond reads (single-digit microseconds typical)\n- No new infrastructure or expertise to adopt\n- Simple key-value semantics with TTL support built in (ideal for session expiry)\n- Strong consistency on single-node reads\n\nA basic approach: store sessions in Redis with a TTL matching your session lifetime, and fall back to PostgreSQL if you need durable session history for audit purposes (relevant for the Series C due diligence).",
   "timestamp": "2026-05-18T13:01:55Z",
   "latency_ms": 18140,
   "exit_code": 0,
   "output_length_chars": 1116,
   "output_length_tokens_approx": 279,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "2026.05.11",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }

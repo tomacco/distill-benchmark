@@ -2,14 +2,14 @@
   "test_id": "B1",
   "competitor_id": "knowledge-graph",
   "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
-  "output": "Yes, Redis is a good fit here. You already have it in the stack, and session tokens are a textbook Redis use case — simple key-value lookups with TTL expiry, high read frequency, and no need for complex queries or relational integrity.\n\nA basic approach in Kotlin:\n\n```kotlin\n// Store with TTL\nredisTemplate.opsForValue().set(\n    \"session:$tokenId\", userId, Duration.ofMinutes(30)\n)\n\n// Lookup\nval userId = redisTemplate.opsForValue().get(\"session:$tokenId\")\n```\n\nA few things to keep in mind:\n\n- **Use a key prefix** like `session:` to namespace tokens and simplify eviction/monitoring.\n- **Set TTL at write time** rather than relying on manual cleanup.\n- **Consider `maxmemory-policy`** — `volatile-ttl` or `volatile-lru` is reasonable if you're sharing the Redis instance with other workloads.\n- **Token rotation** — on refresh, delete the old key and issue a new one rather than extending TTL, to limit the window if a token leaks.\n\nNo reason to reach for anything else given your existing infrastructure.",
+  "output": "Yes, Redis is a good fit here. You already have it in the stack, and session tokens are a textbook Redis use case \u2014 simple key-value lookups with TTL expiry, high read frequency, and no need for complex queries or relational integrity.\n\nA basic approach in Kotlin:\n\n```kotlin\n// Store with TTL\nredisTemplate.opsForValue().set(\n    \"session:$tokenId\", userId, Duration.ofMinutes(30)\n)\n\n// Lookup\nval userId = redisTemplate.opsForValue().get(\"session:$tokenId\")\n```\n\nA few things to keep in mind:\n\n- **Use a key prefix** like `session:` to namespace tokens and simplify eviction/monitoring.\n- **Set TTL at write time** rather than relying on manual cleanup.\n- **Consider `maxmemory-policy`** \u2014 `volatile-ttl` or `volatile-lru` is reasonable if you're sharing the Redis instance with other workloads.\n- **Token rotation** \u2014 on refresh, delete the old key and issue a new one rather than extending TTL, to limit the window if a token leaks.\n\nNo reason to reach for anything else given your existing infrastructure.",
   "timestamp": "2026-05-18T09:21:03Z",
   "latency_ms": 12563,
   "exit_code": 0,
   "output_length_chars": 1010,
   "output_length_tokens_approx": 252,
   "versions": {
-    "competitor": "0.1.0",
+    "competitor": "1.3.2",
     "claude": "2.1.109 (Claude Code)",
     "benchmark": "0.1.0"
   }
