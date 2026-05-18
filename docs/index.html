@@ -1392,8 +1392,8 @@ tags: [decisions, corrections, critical]
         Chart.helpers.each(Chart.instances, (instance) => instance.destroy());
         // Remove cloned sticky header
         document.querySelectorAll('.fixed-thead').forEach(el => el.remove());
-        // Re-render
-        render();
+        // Re-render then re-init sticky header
+        render().then(() => setTimeout(initStickyTableHeader, 200));
     }
 
     function computeAggregates(data) {
