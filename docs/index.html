@@ -130,6 +130,38 @@
             letter-spacing: 0.02em;
         }
 
+        /* --- Run Picker --- */
+        .run-picker {
+            margin: 1rem auto 0;
+            text-align: center;
+        }
+
+        .run-picker select {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b0a0cc' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            padding-right: 2rem;
+        }
+
+        .run-picker select:hover {
+            border-color: var(--primary);
+        }
+
+        .run-picker select option {
+            background: #262137;
+            color: var(--text);
+        }
+
         /* --- Category Pills --- */
         .category-pills {
             display: flex;
@@ -1025,6 +1057,13 @@
         <header class="header">
             <h1>Persistent Context Benchmark</h1>
             <p class="subtitle">A Blind Evaluation of AI Memory Systems</p>
+            <div class="run-picker">
+                <select id="runPicker" onchange="switchRun(this.value)">
+                    <option value="data-2026-05-18-v3.json" selected>May 18 v3 — Identity context removed (8 competitors)</option>
+                    <option value="data-2026-05-18.json">May 18 v2 — User Model v2 + Engram (8 competitors)</option>
+                    <option value="data-2026-05-17.json">May 17 — Baseline (7 competitors)</option>
+                </select>
+            </div>
             <div class="category-pills">
                 <span class="pill" data-cat="retrieval">Retrieval</span>
                 <span class="pill" data-cat="correction">Correction</span>
@@ -1335,14 +1374,26 @@ tags: [decisions, corrections, critical]
     }
 
     // --- Data Loading ---
-    async function loadData() {
+    let currentDataFile = 'data.json';
+
+    async function loadData(file) {
         try {
-            const resp = await fetch('data.json');
+            const resp = await fetch(file || currentDataFile);
             if (!resp.ok) throw new Error('No data');
             return await resp.json();
         } catch (e) {
             return null;
         }
+    }
+
+    function switchRun(file) {
+        currentDataFile = file;
+        // Destroy existing charts
+        Chart.helpers.each(Chart.instances, (instance) => instance.destroy());
+        // Remove cloned sticky header
+        document.querySelectorAll('.fixed-thead').forEach(el => el.remove());
+        // Re-render
+        render();
     }
 
     function computeAggregates(data) {
@@ -1602,7 +1653,7 @@ tags: [decisions, corrections, critical]
 
     // --- Main Render ---
     async function render() {
-        const data = await loadData();
+        const data = await loadData(currentDataFile);
         const app = document.getElementById('app');
 
         if (!data) {

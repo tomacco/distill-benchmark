@@ -4,12 +4,12 @@
     "total_runs": 25,
     "competitors": [
       "memory-compiler",
-      "knowledge-graph",
       "basic-memory",
-      "memory-engine",
-      "engram",
-      "claude-mem",
       "distill",
+      "engram",
+      "knowledge-graph",
+      "memory-engine",
+      "claude-mem",
       "no-memory"
     ],
     "versions": {
