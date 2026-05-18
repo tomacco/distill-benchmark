@@ -17,16 +17,13 @@ set -euo pipefail
 PROJ_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUNNER_DIR="$PROJ_ROOT/runner"
 
-# Source canonical isolation library from aura-distill
-# Try both paths (repo may be named aura-distill or claude-distill locally)
-CANONICAL_ISOLATE="$HOME/git/tomaccos/aura-distill/tests/lib/isolate.sh"
-[ ! -f "$CANONICAL_ISOLATE" ] && CANONICAL_ISOLATE="$HOME/git/tomaccos/claude-distill/tests/lib/isolate.sh"
-if [ -f "$CANONICAL_ISOLATE" ]; then
-    source "$CANONICAL_ISOLATE"
-else
-    echo "ERROR: Canonical isolation library not found at $CANONICAL_ISOLATE" >&2
-    echo "Falling back to local isolation library." >&2
-    source "$RUNNER_DIR/lib/isolate.sh"
+# Isolation: uses ~/.claude-tester/ (clean profile, dedicated to benchmarks)
+# NEVER touches ~/.claude/ or ~/.claude-personal/
+export BENCH_CONFIG_DIR="${BENCH_CONFIG_DIR:-$HOME/.claude-tester}"
+if [ ! -f "$BENCH_CONFIG_DIR/.claude.json" ]; then
+    echo -e "${RED}ERROR: Benchmark profile not found at $BENCH_CONFIG_DIR${NC}" >&2
+    echo "Set up with: CLAUDE_CONFIG_DIR=$BENCH_CONFIG_DIR claude auth login" >&2
+    exit 1
 fi
 
 # Source benchmark-specific libraries
@@ -212,10 +209,7 @@ FAIL_COUNT=0
 echo "Starting benchmark..."
 echo ""
 
-# Begin isolation (strips all personal context, sets up neutral workspace)
-isolate_begin
-# The canonical library sets its own EXIT trap, but we add our own messaging
-trap 'isolate_end; echo -e "\n${YELLOW}Interrupted — configs restored.${NC}"' INT TERM
+echo "Using benchmark profile: $BENCH_CONFIG_DIR"
 
 for comp in "${COMPETITORS[@]}"; do
     echo -e "${BLUE}=== Competitor: $comp ===${NC}"
@@ -260,14 +254,12 @@ for comp in "${COMPETITORS[@]}"; do
         rm -rf "$workspace"
         [ -n "$context_file" ] && rm -f "$context_file"
 
-        # Clear any rules that may have leaked into REAL_CONFIG during inject
-        rm -f "$REAL_CONFIG/rules/distill.md" 2>/dev/null || true
+        # No cleanup needed — workspace is destroyed, tester profile stays clean
     done
     echo ""
 done
 
-# Restore all configs
-isolate_end
+# No restore needed — benchmark profile is always clean
 
 echo "========================================="
 echo "         BENCHMARK COMPLETE"

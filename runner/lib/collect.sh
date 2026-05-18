@@ -45,7 +45,7 @@ collect_run() {
     # Run with isolation env vars and timeout
     (
         cd "$workspace" && \
-        CLAUDE_CONFIG_DIR="$HOME/.claude-personal" \
+        CLAUDE_CONFIG_DIR="${BENCH_CONFIG_DIR:-$HOME/.claude-tester}" \
         CLAUDE_CODE_USE_BEDROCK=0 \
         ANTHROPIC_DEFAULT_OPUS_MODEL= \
         ANTHROPIC_DEFAULT_SONNET_MODEL= \
