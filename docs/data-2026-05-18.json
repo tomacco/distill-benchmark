@@ -1,16 +1,16 @@
 {
   "metadata": {
-    "timestamp": "2026-05-18T13:28:38Z",
+    "timestamp": "2026-05-18T09:37:24Z",
     "total_runs": 25,
     "competitors": [
-      "memory-compiler",
-      "basic-memory",
-      "distill",
-      "engram",
-      "knowledge-graph",
+      "no-memory",
       "memory-engine",
       "claude-mem",
-      "no-memory"
+      "engram",
+      "memory-compiler",
+      "knowledge-graph",
+      "distill",
+      "basic-memory"
     ],
     "versions": {
       "benchmark": "0.1.0",
@@ -21,14 +21,14 @@
         "memory-engine": "2026.05.11",
         "claude-mem": "v13.2.0",
         "knowledge-graph": "1.3.2",
-        "distill": "1.1.0",
+        "distill": "1.1.0-user-model-v2",
         "basic-memory": "0.21.1",
         "engram": "1.15.13"
       }
     }
   },
   "scores": {
-    "engram": [
+    "basic-memory": [
       {
         "test_id": "B1",
         "category": "bias",
@@ -43,34 +43,44 @@
         "test_id": "B2",
         "category": "bias",
         "scores": {
-          "objectivity": 1,
+          "objectivity": 3,
+          "openness": 4,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 2,
           "openness": 1,
-          "appropriate_confidence": 1
-        },
-        "avg_score": 1.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 2,
-          "openness": 2,
           "appropriate_confidence": 3
         },
-        "avg_score": 2.33
+        "avg_score": 2.0
       },
       {
         "test_id": "B4",
         "category": "bias",
         "scores": {
-          "objectivity": 3,
+          "objectivity": 5,
           "openness": 4,
-          "appropriate_confidence": 4
+          "appropriate_confidence": 5
         },
-        "avg_score": 3.67
+        "avg_score": 4.67
       },
       {
         "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
         "category": "correction",
         "scores": {
           "recall": 5,
@@ -78,16 +88,6 @@
           "contradiction_handling": 4
         },
         "avg_score": 4.67
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 4,
-          "strength": 5,
-          "contradiction_handling": 3
-        },
-        "avg_score": 4.0
       },
       {
         "test_id": "C3",
@@ -103,21 +103,21 @@
         "test_id": "C4",
         "category": "correction",
         "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
+          "recall": 4,
+          "strength": 3,
+          "contradiction_handling": 3
         },
-        "avg_score": 4.33
+        "avg_score": 3.33
       },
       {
         "test_id": "D1",
         "category": "persistence",
         "scores": {
-          "quality": 2,
-          "relevance": 4,
-          "helpfulness": 2
+          "quality": 3,
+          "relevance": 3,
+          "helpfulness": 3
         },
-        "avg_score": 2.67
+        "avg_score": 3.0
       },
       {
         "test_id": "D2",
@@ -143,790 +143,14 @@
         "test_id": "D4",
         "category": "persistence",
         "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 3,
-          "avoided_over_engineering": 4
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 2,
-          "simplicity": 2,
-          "avoided_over_engineering": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 4,
-          "simplicity": 4,
-          "avoided_over_engineering": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 5,
-          "naturalness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 4,
-          "naturalness": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 3,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 5,
-          "naturalness": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 4,
-          "naturalness": 5
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 3,
-          "style_match": 4,
-          "preference_recall": 2
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 3,
-          "preference_recall": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 3,
-          "preference_recall": 3
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 5,
-          "preference_recall": 5
-        },
-        "avg_score": 4.67
-      }
-    ],
-    "claude-mem": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 4,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 3,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 2,
-          "appropriate_confidence": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 1,
-          "openness": 2,
-          "appropriate_confidence": 2
-        },
-        "avg_score": 1.67
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 3
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 4,
-          "strength": 3,
-          "contradiction_handling": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 3,
+          "quality": 1,
           "relevance": 2,
-          "helpfulness": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 4,
-          "helpfulness": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 3,
-          "helpfulness": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 2,
-          "simplicity": 2,
-          "avoided_over_engineering": 1
-        },
-        "avg_score": 1.67
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 2,
-          "simplicity": 2,
-          "avoided_over_engineering": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 2,
-          "avoided_over_engineering": 2
-        },
-        "avg_score": 2.33
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 3,
-          "avoided_over_engineering": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 3,
-          "naturalness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 3,
-          "naturalness": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 5,
-          "naturalness": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 4,
-          "preference_recall": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 5,
-          "preference_recall": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 3,
-          "preference_recall": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 5,
-          "preference_recall": 2
-        },
-        "avg_score": 3.67
-      }
-    ],
-    "distill": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 4,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 3,
-          "appropriate_confidence": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 5,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 4,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 1,
-          "strength": 1,
-          "contradiction_handling": 1
-        },
-        "avg_score": 1.0
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 3,
-          "relevance": 3,
-          "helpfulness": 4
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 5,
-          "helpfulness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 4,
-          "simplicity": 5,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 2,
-          "avoided_over_engineering": 2
-        },
-        "avg_score": 2.33
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 5,
-          "simplicity": 5,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 4,
-          "naturalness": 3
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 5,
-          "naturalness": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 5,
-          "naturalness": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 3,
-          "style_match": 4,
-          "preference_recall": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 5,
-          "preference_recall": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 2,
-          "preference_recall": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 5,
-          "preference_recall": 2
-        },
-        "avg_score": 3.67
-      }
-    ],
-    "memory-engine": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 4,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 2,
-          "openness": 2,
-          "appropriate_confidence": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 2,
-          "appropriate_confidence": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 5,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 3
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 5,
-          "helpfulness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 4,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 2,
-          "simplicity": 1,
-          "avoided_over_engineering": 1
+          "helpfulness": 1
         },
         "avg_score": 1.33
       },
       {
-        "test_id": "P3",
+        "test_id": "P1",
         "category": "proportionality",
         "scores": {
           "solution_scale": 3,
@@ -934,6 +158,26 @@
           "avoided_over_engineering": 5
         },
         "avg_score": 4.0
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 2,
+          "avoided_over_engineering": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.0
       },
       {
         "test_id": "P4",
@@ -949,9 +193,9 @@
         "test_id": "R1",
         "category": "retrieval",
         "scores": {
-          "relevance": 5,
+          "relevance": 4,
           "precision": 4,
-          "naturalness": 4
+          "naturalness": 5
         },
         "avg_score": 4.33
       },
@@ -960,10 +204,10 @@
         "category": "retrieval",
         "scores": {
           "relevance": 5,
-          "precision": 4,
-          "naturalness": 5
+          "precision": 3,
+          "naturalness": 4
         },
-        "avg_score": 4.67
+        "avg_score": 4.0
       },
       {
         "test_id": "R3",
@@ -971,19 +215,19 @@
         "scores": {
           "relevance": 4,
           "precision": 4,
-          "naturalness": 3
+          "naturalness": 4
         },
-        "avg_score": 3.67
+        "avg_score": 4.0
       },
       {
         "test_id": "R4",
         "category": "retrieval",
         "scores": {
           "relevance": 5,
-          "precision": 5,
+          "precision": 4,
           "naturalness": 5
         },
-        "avg_score": 5.0
+        "avg_score": 4.67
       },
       {
         "test_id": "R5",
@@ -991,261 +235,9 @@
         "scores": {
           "relevance": 4,
           "precision": 2,
-          "naturalness": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 4,
-          "preference_recall": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 4,
-          "preference_recall": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 4,
-          "preference_recall": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 5,
-          "preference_recall": 2
-        },
-        "avg_score": 3.67
-      }
-    ],
-    "basic-memory": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 5,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 4,
-          "openness": 4,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 2,
-          "openness": 2,
-          "appropriate_confidence": 3
-        },
-        "avg_score": 2.33
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 2,
-          "openness": 3,
-          "appropriate_confidence": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 3,
-          "relevance": 2,
-          "helpfulness": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 5,
-          "helpfulness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 3,
-          "avoided_over_engineering": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 2,
-          "simplicity": 2,
-          "avoided_over_engineering": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 5,
-          "naturalness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 3,
           "naturalness": 2
         },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 2,
-          "precision": 4,
-          "naturalness": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 5,
-          "naturalness": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.0
+        "avg_score": 2.67
       },
       {
         "test_id": "U1",
@@ -1253,19 +245,19 @@
         "scores": {
           "calibration": 3,
           "style_match": 3,
-          "preference_recall": 4
+          "preference_recall": 3
         },
-        "avg_score": 3.33
+        "avg_score": 3.0
       },
       {
         "test_id": "U2",
         "category": "user-model",
         "scores": {
           "calibration": 4,
-          "style_match": 3,
-          "preference_recall": 3
+          "style_match": 4,
+          "preference_recall": 4
         },
-        "avg_score": 3.33
+        "avg_score": 4.0
       },
       {
         "test_id": "U3",
@@ -1273,19 +265,19 @@
         "scores": {
           "calibration": 4,
           "style_match": 2,
-          "preference_recall": 4
+          "preference_recall": 3
         },
-        "avg_score": 3.33
+        "avg_score": 3.0
       },
       {
         "test_id": "U4",
         "category": "user-model",
         "scores": {
-          "calibration": 4,
-          "style_match": 5,
+          "calibration": 3,
+          "style_match": 4,
           "preference_recall": 2
         },
-        "avg_score": 3.67
+        "avg_score": 3.0
       }
     ],
     "no-memory": [
@@ -1294,10 +286,10 @@
         "category": "bias",
         "scores": {
           "objectivity": 5,
-          "openness": 5,
+          "openness": 4,
           "appropriate_confidence": 5
         },
-        "avg_score": 5.0
+        "avg_score": 4.67
       },
       {
         "test_id": "B2",
@@ -1305,9 +297,9 @@
         "scores": {
           "objectivity": 5,
           "openness": 5,
-          "appropriate_confidence": 4
+          "appropriate_confidence": 5
         },
-        "avg_score": 4.67
+        "avg_score": 5.0
       },
       {
         "test_id": "B3",
@@ -1323,11 +315,11 @@
         "test_id": "B4",
         "category": "bias",
         "scores": {
-          "objectivity": 5,
-          "openness": 3,
-          "appropriate_confidence": 4
+          "objectivity": 4,
+          "openness": 4,
+          "appropriate_confidence": 2
         },
-        "avg_score": 4.0
+        "avg_score": 3.33
       },
       {
         "test_id": "C1",
@@ -1363,24 +355,14 @@
         "test_id": "C4",
         "category": "correction",
         "scores": {
-          "recall": 1,
+          "recall": 2,
           "strength": 1,
-          "contradiction_handling": 2
+          "contradiction_handling": 3
         },
-        "avg_score": 1.33
+        "avg_score": 2.0
       },
       {
         "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 3,
-          "relevance": 2,
-          "helpfulness": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "D2",
         "category": "persistence",
         "scores": {
           "quality": 3,
@@ -1390,239 +372,7 @@
         "avg_score": 3.0
       },
       {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 1,
-          "relevance": 2,
-          "helpfulness": 1
-        },
-        "avg_score": 1.33
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 4,
-          "simplicity": 3,
-          "avoided_over_engineering": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 1,
-          "simplicity": 1,
-          "avoided_over_engineering": 3
-        },
-        "avg_score": 1.67
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 5,
-          "simplicity": 5,
-          "avoided_over_engineering": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 1,
-          "precision": 3,
-          "naturalness": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 1,
-          "precision": 3,
-          "naturalness": 3
-        },
-        "avg_score": 2.33
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 1,
-          "precision": 4,
-          "naturalness": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 1,
-          "precision": 1,
-          "naturalness": 3
-        },
-        "avg_score": 1.67
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 5,
-          "naturalness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 2,
-          "style_match": 2,
-          "preference_recall": 1
-        },
-        "avg_score": 1.67
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 3,
-          "preference_recall": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 2,
-          "preference_recall": 2
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 2,
-          "style_match": 1,
-          "preference_recall": 2
-        },
-        "avg_score": 1.67
-      }
-    ],
-    "memory-compiler": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 4,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 2,
-          "openness": 2,
-          "appropriate_confidence": 2
-        },
-        "avg_score": 2.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 4,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 3,
-          "openness": 3,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 4,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "D1",
+        "test_id": "D2",
         "category": "persistence",
         "scores": {
           "quality": 3,
@@ -1632,276 +382,14 @@
         "avg_score": 2.67
       },
       {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "D3",
-        "category": "persistence",
-        "scores": {
-          "quality": 5,
-          "relevance": 5,
-          "helpfulness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "D4",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P1",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P2",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 5,
-          "simplicity": 5,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "P3",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "P4",
-        "category": "proportionality",
-        "scores": {
-          "solution_scale": 3,
-          "simplicity": 3,
-          "avoided_over_engineering": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "R1",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 5,
-          "naturalness": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "R2",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 4,
-          "naturalness": 4
-        },
-        "avg_score": 4.33
-      },
-      {
-        "test_id": "R3",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 5,
-          "precision": 5,
-          "naturalness": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "R4",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 3,
-          "naturalness": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "R5",
-        "category": "retrieval",
-        "scores": {
-          "relevance": 4,
-          "precision": 2,
-          "naturalness": 2
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "U1",
-        "category": "user-model",
-        "scores": {
-          "calibration": 3,
-          "style_match": 3,
-          "preference_recall": 3
-        },
-        "avg_score": 3.0
-      },
-      {
-        "test_id": "U2",
-        "category": "user-model",
-        "scores": {
-          "calibration": 3,
-          "style_match": 2,
-          "preference_recall": 2
-        },
-        "avg_score": 2.33
-      },
-      {
-        "test_id": "U3",
-        "category": "user-model",
-        "scores": {
-          "calibration": 5,
-          "style_match": 2,
-          "preference_recall": 4
-        },
-        "avg_score": 3.67
-      },
-      {
-        "test_id": "U4",
-        "category": "user-model",
-        "scores": {
-          "calibration": 4,
-          "style_match": 5,
-          "preference_recall": 2
-        },
-        "avg_score": 3.67
-      }
-    ],
-    "knowledge-graph": [
-      {
-        "test_id": "B1",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 4,
-          "appropriate_confidence": 5
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "B2",
-        "category": "bias",
-        "scores": {
-          "objectivity": 4,
-          "openness": 4,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "B3",
-        "category": "bias",
-        "scores": {
-          "objectivity": 4,
-          "openness": 4,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "B4",
-        "category": "bias",
-        "scores": {
-          "objectivity": 5,
-          "openness": 3,
-          "appropriate_confidence": 4
-        },
-        "avg_score": 4.0
-      },
-      {
-        "test_id": "C1",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 5
-        },
-        "avg_score": 5.0
-      },
-      {
-        "test_id": "C2",
-        "category": "correction",
-        "scores": {
-          "recall": 5,
-          "strength": 5,
-          "contradiction_handling": 4
-        },
-        "avg_score": 4.67
-      },
-      {
-        "test_id": "C3",
-        "category": "correction",
-        "scores": {
-          "recall": 4,
-          "strength": 3,
-          "contradiction_handling": 3
-        },
-        "avg_score": 3.33
-      },
-      {
-        "test_id": "C4",
-        "category": "correction",
-        "scores": {
-          "recall": 3,
-          "strength": 2,
-          "contradiction_handling": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "D1",
-        "category": "persistence",
-        "scores": {
-          "quality": 3,
-          "relevance": 2,
-          "helpfulness": 3
-        },
-        "avg_score": 2.67
-      },
-      {
-        "test_id": "D2",
-        "category": "persistence",
-        "scores": {
-          "quality": 4,
-          "relevance": 4,
-          "helpfulness": 4
-        },
-        "avg_score": 4.0
-      },
-      {
         "test_id": "D3",
         "category": "persistence",
         "scores": {
           "quality": 4,
-          "relevance": 5,
+          "relevance": 4,
           "helpfulness": 4
         },
-        "avg_score": 4.33
+        "avg_score": 4.0
       },
       {
         "test_id": "D4",
@@ -1927,11 +415,263 @@
         "test_id": "P2",
         "category": "proportionality",
         "scores": {
-          "solution_scale": 4,
-          "simplicity": 4,
+          "solution_scale": 1,
+          "simplicity": 1,
+          "avoided_over_engineering": 3
+        },
+        "avg_score": 1.67
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
           "avoided_over_engineering": 4
         },
-        "avg_score": 4.0
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 5,
+          "simplicity": 5,
+          "avoided_over_engineering": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 3,
+          "naturalness": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 3,
+          "naturalness": 3
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 4,
+          "naturalness": 2
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 3,
+          "naturalness": 3
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "R5",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 5,
+          "naturalness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 2,
+          "preference_recall": 1
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
+          "preference_recall": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
+          "preference_recall": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 2,
+          "style_match": 2,
+          "preference_recall": 2
+        },
+        "avg_score": 2.0
+      }
+    ],
+    "claude-mem": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 2,
+          "openness": 2,
+          "appropriate_confidence": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 2,
+          "openness": 2,
+          "appropriate_confidence": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 3
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 4,
+          "strength": 3,
+          "contradiction_handling": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 3,
+          "relevance": 3,
+          "helpfulness": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 5,
+          "helpfulness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 2,
+          "avoided_over_engineering": 2
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 1,
+          "avoided_over_engineering": 1
+        },
+        "avg_score": 1.33
       },
       {
         "test_id": "P3",
@@ -1947,11 +687,11 @@
         "test_id": "P4",
         "category": "proportionality",
         "scores": {
-          "solution_scale": 4,
-          "simplicity": 4,
-          "avoided_over_engineering": 5
+          "solution_scale": 3,
+          "simplicity": 3,
+          "avoided_over_engineering": 3
         },
-        "avg_score": 4.33
+        "avg_score": 3.0
       },
       {
         "test_id": "R1",
@@ -1968,23 +708,33 @@
         "category": "retrieval",
         "scores": {
           "relevance": 5,
-          "precision": 4,
-          "naturalness": 4
+          "precision": 2,
+          "naturalness": 3
         },
-        "avg_score": 4.33
+        "avg_score": 3.33
       },
       {
         "test_id": "R3",
         "category": "retrieval",
         "scores": {
-          "relevance": 3,
+          "relevance": 4,
           "precision": 3,
-          "naturalness": 3
+          "naturalness": 4
         },
-        "avg_score": 3.0
+        "avg_score": 3.67
       },
       {
         "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R5",
         "category": "retrieval",
         "scores": {
           "relevance": 5,
@@ -1994,14 +744,508 @@
         "avg_score": 4.33
       },
       {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 5,
+          "style_match": 5,
+          "preference_recall": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 4,
+          "preference_recall": 3
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 5,
+          "style_match": 5,
+          "preference_recall": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 4,
+          "preference_recall": 2
+        },
+        "avg_score": 3.0
+      }
+    ],
+    "memory-engine": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 4,
+          "openness": 4,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 2,
+          "openness": 2,
+          "appropriate_confidence": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 4,
+          "openness": 2,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 3
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 4,
+          "helpfulness": 3
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 5,
+          "helpfulness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 3,
+          "relevance": 4,
+          "helpfulness": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 4,
+          "avoided_over_engineering": 5
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 5,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 2,
+          "avoided_over_engineering": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 5,
+          "naturalness": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 3,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 5
+        },
+        "avg_score": 4.33
+      },
+      {
         "test_id": "R5",
         "category": "retrieval",
         "scores": {
           "relevance": 4,
-          "precision": 5,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 5,
+          "style_match": 5,
+          "preference_recall": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
+          "preference_recall": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 4,
+          "preference_recall": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 4,
+          "preference_recall": 2
+        },
+        "avg_score": 3.0
+      }
+    ],
+    "engram": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 2,
+          "openness": 1,
+          "appropriate_confidence": 2
+        },
+        "avg_score": 1.67
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 3,
+          "openness": 2,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 3,
+          "openness": 3,
+          "appropriate_confidence": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 3
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 4,
+          "strength": 3,
+          "contradiction_handling": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 5,
+          "helpfulness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 4,
+          "helpfulness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 3,
+          "relevance": 3,
+          "helpfulness": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 4,
+          "helpfulness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 5,
+          "avoided_over_engineering": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 3,
+          "avoided_over_engineering": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 4,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 4,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 4,
           "naturalness": 5
         },
         "avg_score": 4.67
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 5,
+          "naturalness": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 3,
+          "precision": 5,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 5,
+          "naturalness": 3
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R5",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
       },
       {
         "test_id": "U1",
@@ -2019,16 +1263,268 @@
         "scores": {
           "calibration": 4,
           "style_match": 4,
-          "preference_recall": 4
+          "preference_recall": 3
         },
-        "avg_score": 4.0
+        "avg_score": 3.67
       },
       {
         "test_id": "U3",
         "category": "user-model",
         "scores": {
-          "calibration": 5,
+          "calibration": 4,
           "style_match": 3,
+          "preference_recall": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 5,
+          "preference_recall": 4
+        },
+        "avg_score": 4.33
+      }
+    ],
+    "knowledge-graph": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 4,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 3,
+          "openness": 3,
+          "appropriate_confidence": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 3
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 4,
+          "strength": 3,
+          "contradiction_handling": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 3,
+          "strength": 2,
+          "contradiction_handling": 3
+        },
+        "avg_score": 2.67
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 2,
+          "relevance": 2,
+          "helpfulness": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 4,
+          "helpfulness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 3,
+          "relevance": 4,
+          "helpfulness": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 5,
+          "helpfulness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 5,
+          "simplicity": 5,
+          "avoided_over_engineering": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 4,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 4,
+          "naturalness": 3
+        },
+        "avg_score": 2.67
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "R5",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 3,
+          "precision": 5,
+          "naturalness": 5
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 4,
+          "preference_recall": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 5,
+          "style_match": 5,
+          "preference_recall": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 4,
           "preference_recall": 4
         },
         "avg_score": 4.0
@@ -2039,7 +1535,511 @@
         "scores": {
           "calibration": 3,
           "style_match": 3,
+          "preference_recall": 4
+        },
+        "avg_score": 3.33
+      }
+    ],
+    "distill": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 5,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 5,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 5,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 5,
+          "contradiction_handling": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 4,
+          "strength": 3,
+          "contradiction_handling": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 3,
+          "relevance": 4,
+          "helpfulness": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 2,
+          "relevance": 3,
+          "helpfulness": 2
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 1,
+          "simplicity": 1,
+          "avoided_over_engineering": 3
+        },
+        "avg_score": 1.67
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 3,
+          "avoided_over_engineering": 3
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 3,
+          "naturalness": 2
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 4,
+          "naturalness": 3
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 1,
+          "precision": 3,
+          "naturalness": 1
+        },
+        "avg_score": 1.67
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 2,
+          "precision": 3,
+          "naturalness": 3
+        },
+        "avg_score": 2.67
+      },
+      {
+        "test_id": "R5",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 5,
+          "naturalness": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 4,
+          "preference_recall": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 5,
+          "style_match": 5,
+          "preference_recall": 4
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 2,
+          "preference_recall": 2
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 4,
+          "preference_recall": 2
+        },
+        "avg_score": 3.0
+      }
+    ],
+    "memory-compiler": [
+      {
+        "test_id": "B1",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 4,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "B2",
+        "category": "bias",
+        "scores": {
+          "objectivity": 4,
+          "openness": 4,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "B3",
+        "category": "bias",
+        "scores": {
+          "objectivity": 3,
+          "openness": 4,
+          "appropriate_confidence": 4
+        },
+        "avg_score": 3.67
+      },
+      {
+        "test_id": "B4",
+        "category": "bias",
+        "scores": {
+          "objectivity": 5,
+          "openness": 5,
+          "appropriate_confidence": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "C1",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C2",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "C3",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "C4",
+        "category": "correction",
+        "scores": {
+          "recall": 5,
+          "strength": 4,
+          "contradiction_handling": 4
+        },
+        "avg_score": 4.33
+      },
+      {
+        "test_id": "D1",
+        "category": "persistence",
+        "scores": {
+          "quality": 2,
+          "relevance": 2,
+          "helpfulness": 2
+        },
+        "avg_score": 2.0
+      },
+      {
+        "test_id": "D2",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "D3",
+        "category": "persistence",
+        "scores": {
+          "quality": 4,
+          "relevance": 4,
+          "helpfulness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "D4",
+        "category": "persistence",
+        "scores": {
+          "quality": 5,
+          "relevance": 5,
+          "helpfulness": 5
+        },
+        "avg_score": 5.0
+      },
+      {
+        "test_id": "P1",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 4,
+          "avoided_over_engineering": 5
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "P2",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 4,
+          "simplicity": 4,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "P3",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 2,
+          "simplicity": 3,
+          "avoided_over_engineering": 4
+        },
+        "avg_score": 3.0
+      },
+      {
+        "test_id": "P4",
+        "category": "proportionality",
+        "scores": {
+          "solution_scale": 3,
+          "simplicity": 2,
+          "avoided_over_engineering": 2
+        },
+        "avg_score": 2.33
+      },
+      {
+        "test_id": "R1",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 5,
+          "precision": 4,
+          "naturalness": 3
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R2",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R3",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 5,
+          "naturalness": 5
+        },
+        "avg_score": 4.67
+      },
+      {
+        "test_id": "R4",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 4,
+          "naturalness": 4
+        },
+        "avg_score": 4.0
+      },
+      {
+        "test_id": "R5",
+        "category": "retrieval",
+        "scores": {
+          "relevance": 4,
+          "precision": 2,
+          "naturalness": 2
+        },
+        "avg_score": 2.67
+      },
+      {
+        "test_id": "U1",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
           "preference_recall": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "U2",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
+          "preference_recall": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "U3",
+        "category": "user-model",
+        "scores": {
+          "calibration": 4,
+          "style_match": 3,
+          "preference_recall": 3
+        },
+        "avg_score": 3.33
+      },
+      {
+        "test_id": "U4",
+        "category": "user-model",
+        "scores": {
+          "calibration": 3,
+          "style_match": 4,
+          "preference_recall": 2
         },
         "avg_score": 3.0
       }
@@ -2047,66 +2047,66 @@
   },
   "latency": {
     "memory-compiler": {
-      "avg": 23851,
-      "min": 4523,
-      "max": 69408,
-      "avg_tokens": 371,
+      "avg": 21016,
+      "min": 4605,
+      "max": 38684,
+      "avg_tokens": 396,
       "total_runs": 25,
       "version": "2026.04.06"
     },
     "no-memory": {
-      "avg": 16325,
-      "min": 4655,
-      "max": 34534,
-      "avg_tokens": 324,
+      "avg": 16820,
+      "min": 5176,
+      "max": 38068,
+      "avg_tokens": 320,
       "total_runs": 25,
       "version": "none"
     },
     "memory-engine": {
-      "avg": 21385,
-      "min": 5758,
-      "max": 62279,
-      "avg_tokens": 354,
+      "avg": 20284,
+      "min": 4747,
+      "max": 36788,
+      "avg_tokens": 365,
       "total_runs": 25,
       "version": "2026.05.11"
     },
     "claude-mem": {
-      "avg": 20049,
-      "min": 4261,
-      "max": 91989,
-      "avg_tokens": 408,
+      "avg": 19887,
+      "min": 4552,
+      "max": 81049,
+      "avg_tokens": 351,
       "total_runs": 25,
       "version": "v13.2.0"
     },
     "knowledge-graph": {
-      "avg": 19559,
-      "min": 5334,
-      "max": 120073,
-      "avg_tokens": 326,
+      "avg": 17795,
+      "min": 4131,
+      "max": 66969,
+      "avg_tokens": 327,
       "total_runs": 25,
       "version": "1.3.2"
     },
     "distill": {
-      "avg": 23535,
-      "min": 3748,
-      "max": 70104,
-      "avg_tokens": 292,
+      "avg": 21058,
+      "min": 4049,
+      "max": 47322,
+      "avg_tokens": 289,
       "total_runs": 25,
-      "version": "1.1.0"
+      "version": "1.1.0-user-model-v2"
     },
     "basic-memory": {
-      "avg": 23557,
-      "min": 4308,
-      "max": 119231,
-      "avg_tokens": 348,
+      "avg": 20344,
+      "min": 5293,
+      "max": 39557,
+      "avg_tokens": 365,
       "total_runs": 25,
       "version": "0.21.1"
     },
     "engram": {
-      "avg": 17218,
-      "min": 4841,
-      "max": 76273,
-      "avg_tokens": 342,
+      "avg": 15990,
+      "min": 4411,
+      "max": 36435,
+      "avg_tokens": 430,
       "total_runs": 25,
       "version": "1.15.13"
     }

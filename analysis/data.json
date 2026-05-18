@@ -3,18 +3,18 @@
     "timestamp": "2026-05-18T13:28:38Z",
     "total_runs": 25,
     "competitors": [
-      "claude-mem",
       "basic-memory",
-      "no-memory",
       "memory-compiler",
-      "engram",
       "memory-engine",
+      "no-memory",
+      "claude-mem",
       "knowledge-graph",
+      "engram",
       "distill"
     ],
     "versions": {
       "benchmark": "0.1.0",
-      "claude": "2.1.109 (Claude Code)",
+      "claude": "2.1.109",
       "competitors": {
         "memory-compiler": "2026.04.06",
         "no-memory": "none",

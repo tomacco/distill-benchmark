@@ -3,14 +3,14 @@
     "timestamp": "2026-05-18T13:28:38Z",
     "total_runs": 25,
     "competitors": [
-      "memory-compiler",
-      "knowledge-graph",
       "basic-memory",
+      "memory-compiler",
       "memory-engine",
-      "engram",
+      "no-memory",
       "claude-mem",
-      "distill",
-      "no-memory"
+      "knowledge-graph",
+      "engram",
+      "distill"
     ],
     "versions": {
       "benchmark": "0.1.0",

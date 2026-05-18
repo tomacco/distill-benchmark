@@ -11,7 +11,7 @@
 set -euo pipefail
 
 PROJ_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-RESULTS_DIR=""
+RESULTS_DIR="${RESULTS_DIR:-}"
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -25,6 +25,7 @@ if [ -z "$RESULTS_DIR" ]; then
     RESULTS_DIR=$(ls -dt "$PROJ_ROOT/results"/2* 2>/dev/null | head -1)
     [ -z "$RESULTS_DIR" ] && { echo "ERROR: No results found." >&2; exit 1; }
 fi
+export RESULTS_DIR
 
 SCORES_DIR="$RESULTS_DIR/scores"
 RAW_DIR="$RESULTS_DIR/raw"
