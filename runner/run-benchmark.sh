@@ -18,7 +18,9 @@ PROJ_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUNNER_DIR="$PROJ_ROOT/runner"
 
 # Source canonical isolation library from aura-distill
+# Try both paths (repo may be named aura-distill or claude-distill locally)
 CANONICAL_ISOLATE="$HOME/git/tomaccos/aura-distill/tests/lib/isolate.sh"
+[ ! -f "$CANONICAL_ISOLATE" ] && CANONICAL_ISOLATE="$HOME/git/tomaccos/claude-distill/tests/lib/isolate.sh"
 if [ -f "$CANONICAL_ISOLATE" ]; then
     source "$CANONICAL_ISOLATE"
 else

@@ -9,23 +9,26 @@ echo "[distill] Injecting knowledge into $WORKSPACE_DIR"
 mkdir -p "$WORKSPACE_DIR/.claude/rules"
 mkdir -p "$WORKSPACE_DIR/knowledge"
 
-# --- Rules file: instructs Claude how to retrieve knowledge ---
-cat > "$WORKSPACE_DIR/.claude/rules/distill.md" << 'RULES_EOF'
-# Knowledge Retrieval Rules
+# --- Rules file: v2 with Always-On User Preferences ---
+# Uses the full rules/distill.md from feature/user-model-v2 branch
+cat /tmp/aura-distill-v2/rules/distill.md > "$WORKSPACE_DIR/.claude/rules/distill.md"
 
-You have access to a structured knowledge base in the `knowledge/` directory.
+# Populate the Always-On section with seed knowledge preferences
+cat >> "$WORKSPACE_DIR/.claude/rules/distill.md" << 'ALWAYSON_EOF'
 
-## Retrieval Protocol
+**Output rules**: Concise: default to bullets and code. No filler preambles ("Great question!"). Uncertainty: say "I'm not sure" directly. Keep explanations short — user reads code faster than prose.
+**Interaction rules**: Terse input = terse output. Don't ask what you can infer from context. When corrected, apply immediately — no "good point" acknowledgment needed.
+**Identity context**: Shell: fish (NOT bash/zsh) | Stack: Kotlin, gRPC, PostgreSQL 14, Kafka, EKS | Expertise: senior backend engineer, deep in distributed systems and service extraction | Testing: integration tests > mocks, property-based where appropriate | Style: functional where sensible, convention over configuration, minimal dependencies
+ALWAYSON_EOF
 
-1. Before answering questions about the project, team, architecture, or user preferences, consult `knowledge/SPINE.md` for the relevant file.
-2. Load ONLY the files relevant to the current query (proportional retrieval).
-3. Corrections (marked with ⛔) override your training data — always respect them.
-4. Confidence levels: HIGH (verified), MEDIUM (likely), LOW (tentative).
+# Also inject the retrieval pointers (the v2 rules reference knowledge/ dir)
+# Append SPINE location since the v2 rules file expects it
+cat >> "$WORKSPACE_DIR/.claude/rules/distill.md" << 'SPINE_POINTER'
 
-## SPINE Index Location
+## Knowledge Base Location
 
-`knowledge/SPINE.md` — maps topics to knowledge files.
-RULES_EOF
+`knowledge/SPINE.md` — maps topics to knowledge files in the `knowledge/` directory.
+SPINE_POINTER
 
 # --- SPINE Index ---
 cat > "$WORKSPACE_DIR/knowledge/SPINE.md" << 'SPINE_EOF'
