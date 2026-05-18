@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "claude-mem",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack and preference for PG extensions over new infra, simplest path is a DB-backed flag with Redis cache. No new dependencies.\n\n## Approach\n\n**1. Flyway migration**\n\n```sql\n-- V<next>__create_feature_flags.sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    percentage  INT NOT NULL DEFAULT 0 CHECK (percentage BETWEEN 0 AND 100),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (name, enabled, percentage)\nVALUES ('payment_flow_v2', false, 0);\n```\n\n**2. Flag service (~30 lines)**\n\n```kotlin\n@Singleton\nclass FeatureFlags(\n    private val redis: RedisCommands<String, String>,\n    private val db: DSLContext\n) {\n    fun isEnabled(flag: String, userId: String? = null): Boolean {\n        val cached = redis.hgetall(\"ff:$flag\")\n        val (enabled, pct) = if (cached.isNotEmpty()) {\n            cached[\"enabled\"]!!.toBoolean() to cached[\"percentage\"]!!.toInt()\n        } else {\n            val row = db.selectFrom(FEATURE_FLAGS).where(FEATURE_FLAGS.NAME.eq(flag)).fetchOne()\n                ?: return false\n            redis.hset(\"ff:$flag\", mapOf(\"enabled\" to \"${row.enabled}\", \"percentage\" to \"${row.percentage}\"))\n            redis.expire(\"ff:$flag\", 30) // 30s TTL\n            row.enabled to row.percentage\n        }\n        if (!enabled) return false\n        if (pct == 100) return true\n        return userId != null && (userId.hashCode().ushr(1) % 100) < pct\n    }\n}\n```\n\n**3. Usage in payment flow**\n\n```kotlin\nsuspend fun processPayment(request: PaymentRequest): PaymentResponse {\n    if (featureFlags.isEnabled(\"payment_flow_v2\", request.userId)) {\n        return paymentV2.process(request)\n    }\n    return paymentV1.process(request)\n}\n```\n\n**4. Rollout**\n\n```sql\n-- Enable for 10% of users\nUPDATE feature_flags SET enabled = true, percentage = 10 WHERE name = 'payment_flow_v2';\n-- Ramp to 50%\nUPDATE feature_flags SET percentage = 50 WHERE name = 'payment_flow_v2';\n-- Full rollout\nUPDATE feature_flags SET percentage = 100 WHERE name = 'payment_flow_v2';\n```\n\n## Why this over LaunchDarkly/Unleash\n\n- Zero new infra, zero new dependencies\n- 30s Redis TTL means flag changes propagate fast, DB stays authoritative\n- Percentage rollout uses stable user hashing (same user always gets same result)\n- When you rip it out post-launch, it's one table drop and one class delete\n\nIf you need per-org overrides or audit logging later, add an `overrides JSONB` column and a trigger that logs to an audit table. But for dark-launching payment v2, this is enough.",
+  "timestamp": "2026-05-18T12:31:16Z",
+  "latency_ms": 20362,
+  "exit_code": 0,
+  "output_length_chars": 2576,
+  "output_length_tokens_approx": 644,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

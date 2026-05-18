@@ -114,7 +114,7 @@ def main():
         shuffled = list(result_files)
         random.shuffle(shuffled)
 
-        labels = ["A", "B", "C", "D", "E", "F", "G"]
+        labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
         label_mapping = {}
 
         # Build evaluation prompt

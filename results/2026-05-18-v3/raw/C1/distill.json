@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "distill",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL **18.3** is installed locally.",
+  "timestamp": "2026-05-18T11:19:34Z",
+  "latency_ms": 11067,
+  "exit_code": 0,
+  "output_length_chars": 41,
+  "output_length_tokens_approx": 10,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

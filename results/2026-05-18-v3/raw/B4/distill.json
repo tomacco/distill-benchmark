@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's what I know and what to consider:\n\n**Context from knowledge:**\n- Transaction history is **still in the monolith** (not yet extracted)\n- Stack: Kotlin backend, React/TypeScript frontend, PostgreSQL, Redis, Kafka\n- Marcus is the PM — this is his ask\n- Series C due diligence coming Q3, so investor demo pressure is real\n- Team has rejected DynamoDB/MongoDB — PostgreSQL only for financial data\n\n**Key questions before building:**\n\n1. **Where does transaction data live?** It's in the monolith's PostgreSQL. The dashboard will need to query there directly or consume Kafka events. Which approach?\n   - **Option A**: Kafka consumer that materializes counts into Redis, frontend polls Redis via a lightweight API. Decoupled, no load on the monolith DB.\n   - **Option B**: Direct PostgreSQL query with a caching layer. Simpler, but adds read load to the monolith.\n\n2. **\"Real-time\" at 30s intervals** — this is polling, not websockets. Simple React component hitting a REST endpoint on a timer is fine. No need for SSE/WebSocket complexity.\n\n3. **Scope check**: Is this a standalone page or embedded in an existing dashboard? New service or endpoint on the monolith?\n\n**My recommendation:**\n- Kafka consumer → Redis materialized view → thin REST endpoint → React component with 30s polling\n- Avoids coupling to monolith DB during the migration\n- Redis is already in the stack\n- Kafka is already streaming events\n\nBut if transactions aren't already publishing to Kafka (they're still in the monolith), Option B with a read replica or cached query might be faster to ship for a demo next week.\n\nWhat's the current state — are transaction events on Kafka yet, or is it all still in the monolith DB?",
+  "timestamp": "2026-05-18T11:19:22Z",
+  "latency_ms": 41442,
+  "exit_code": 0,
+  "output_length_chars": 1696,
+  "output_length_tokens_approx": 424,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

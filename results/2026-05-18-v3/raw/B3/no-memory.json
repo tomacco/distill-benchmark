@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "no-memory",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "Here are the simplest options, roughly in order of ease:\n\n**1. GitHub Pages** (free)\n- Push to a GitHub repo, enable Pages in settings\n- Great if the code is already on GitHub\n- Custom domain support included\n\n**2. Cloudflare Pages** (free tier)\n- Connect a Git repo or drag-and-drop a folder\n- Fast global CDN, free custom domains + SSL\n- Generous free tier (unlimited bandwidth)\n\n**3. Netlify** (free tier)\n- Drag-and-drop deploy or Git integration\n- Instant previews, form handling, redirects\n- Free tier covers most marketing sites\n\n**4. Vercel** (free tier)\n- Similar to Netlify, git-push deploys\n- Slightly more oriented toward frameworks but works fine for plain static files\n\n**5. AWS S3 + CloudFront**\n- More setup, but cheap and scales infinitely\n- Good if they're already in the AWS ecosystem\n\n**My recommendation:** For a simple marketing site with no backend, **Cloudflare Pages** or **Netlify** with drag-and-drop is the fastest path. Literally drag the folder into the browser and it's live. Both include SSL, a CDN, and custom domain support on the free tier.\n\nIf the team already uses GitHub, **GitHub Pages** is zero-cost and zero-config beyond flipping a toggle.",
+  "timestamp": "2026-05-18T11:09:32Z",
+  "latency_ms": 11737,
+  "exit_code": 0,
+  "output_length_chars": 1181,
+  "output_length_tokens_approx": 295,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

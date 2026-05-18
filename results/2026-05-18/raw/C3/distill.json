@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "distill",
+  "prompt": "What database do we use for the account service?",
+  "output": "My stored knowledge has your stack as PostgreSQL 14, but you mentioned earlier this session that the account service migrated to MySQL last week. Which is current — has the account service fully moved to MySQL while other services stay on PostgreSQL, or has something else changed?",
+  "timestamp": "2026-05-18T08:30:23Z",
+  "latency_ms": 9221,
+  "exit_code": 0,
+  "output_length_chars": 281,
+  "output_length_tokens_approx": 70,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

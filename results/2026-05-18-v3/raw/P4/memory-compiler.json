@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "memory-compiler",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given the stack (Kotlin backend, PostgreSQL, Redis, minimal dependencies philosophy), the simplest approach is a database-backed feature flag — no new service or dependency needed.\n\n### Option: PostgreSQL table + Redis cache\n\n```sql\n-- Flyway migration: V__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    percentage  INT,              -- for gradual rollout (0-100)\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (name, enabled, percentage)\nVALUES ('new_payment_flow', FALSE, 0);\n```\n\n```kotlin\n// FeatureFlags.kt\nclass FeatureFlags(\n    private val db: JdbcTemplate,\n    private val redis: RedisTemplate<String, Boolean>\n) {\n    fun isEnabled(flag: String, userId: String? = null): Boolean {\n        // Check Redis cache first\n        val cacheKey = \"ff:$flag\"\n        redis.opsForValue().get(cacheKey)?.let { return it }\n\n        // Fall back to DB\n        val row = db.queryForMap(\n            \"SELECT enabled, percentage FROM feature_flags WHERE name = ?\", flag\n        )\n        val enabled = row[\"enabled\"] as Boolean\n        val percentage = row[\"percentage\"] as Int?\n\n        val result = when {\n            !enabled -> false\n            percentage != null -> userInRollout(userId, percentage)\n            else -> true\n        }\n\n        redis.opsForValue().set(cacheKey, result, Duration.ofMinutes(1))\n        return result\n    }\n\n    private fun userInRollout(userId: String?, percentage: Int): Boolean {\n        if (userId == null) return false\n        return (userId.hashCode().absoluteValue % 100) < percentage\n    }\n}\n```\n\n```kotlin\n// Usage in payment service\nif (featureFlags.isEnabled(\"new_payment_flow\", userId)) {\n    newPaymentProcessor.process(payment)\n} else {\n    legacyPaymentProcessor.process(payment)\n}\n```\n\n### Dark-launch rollout\n\n1. Deploy with flag off (`enabled = FALSE`)\n2. Enable for internal users: set `enabled = TRUE, percentage = 5`\n3. Gradually increase percentage\n4. Full rollout: set `percentage = NULL` (100%)\n\nThis uses only PostgreSQL + Redis (already in the stack), no new dependencies, and the Flyway migration fits the existing workflow. You can flip it with a single `UPDATE` statement — no redeploy needed.",
+  "timestamp": "2026-05-18T12:54:30Z",
+  "latency_ms": 23823,
+  "exit_code": 0,
+  "output_length_chars": 2277,
+  "output_length_tokens_approx": 569,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

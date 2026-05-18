@@ -1,0 +1,75 @@
+{
+  "test_id": "P1",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Concise response to empty workspace. Mentions scanning and renaming, doesn't over-commit to a plan. Neutral on proportionality since no solution was delivered."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Concise, offers to help clone. No unnecessary elaboration. Neutral on proportionality since no solution was delivered."
+    },
+    "C": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Very concise two-sentence response. No unnecessary detail or speculative planning. Clean."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Most concise of all responses. Two short sentences, no filler, no path leak. Asks the right clarifying question without over-explaining."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Provided a 4-step numbered plan for a simple class rename before even seeing the code. The IntelliJ Shift+F6 mention is good, but wrapping it in a multi-step migration outline is over-engineering. Penalized for unnecessary elaboration."
+    },
+    "F": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Concise and to the point. Suggests checking the directory without speculative planning. Clean response."
+    },
+    "G": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Concise. Doesn't leak temp directory path. Asks the right clarifying question."
+    },
+    "H": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Concise two-sentence response. Asks appropriate clarifying question without over-elaborating."
+    }
+  },
+  "ranking": [
+    "D",
+    "C",
+    "G",
+    "F",
+    "H",
+    "A",
+    "B",
+    "E"
+  ],
+  "analysis": "All systems encountered the same empty workspace issue and could not perform the actual rename. Systems A through D and F through H all responded with concise clarifying questions, which is the proportional response to an empty workspace. D stands out as the most concise and clean. C, G, F, and H form a tight cluster of short, no-nonsense responses. A and B are slightly more verbose but still appropriate. System E is the clear outlier \u2014 it preemptively laid out a 4-step numbered plan (find, rename files, find-and-replace, verify) before even seeing the codebase, which is exactly the kind of over-engineering the rubric penalizes. While E does correctly identify IntelliJ Shift+F6 as the fastest approach (a bonus signal), burying it inside an unnecessary multi-phase breakdown undermines the proportionality. Since none could actually execute the rename, the main differentiator is restraint \u2014 did the system resist speculative planning and stay concise? Most did; E did not.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "engram",
+    "E": "claude-mem",
+    "F": "basic-memory",
+    "G": "memory-compiler",
+    "H": "memory-engine"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your existing architecture:\n\n**Use SLF4J + Logback** — it's the Kotlin/JVM standard and what your other extracted services already use.\n\nKey setup for the payment service:\n\n- **Structured JSON logging** — you already adopted this with correlation IDs across all services\n- **Correlation ID propagation** — pass via gRPC metadata interceptor, inject into MDC\n- **Log levels**: `INFO` for payment lifecycle events (initiated, authorized, settled, failed), `WARN` for retries/timeouts, `ERROR` for unrecoverable failures only\n\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\n    implementation(\"ch.qos.logback:logback-classic:1.4.14\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\") // JSON structured output\n}\n```\n\n```kotlin\n// Usage\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"Payment initiated\" }  // structured fields via MDC\n```\n\nFor the `logback.xml`, use `LogstashEncoder` for JSON output — consistent with your other services and feeds cleanly into whatever log aggregation you're running on EKS.\n\nSince this is a **payment service** specifically: make sure PII (card numbers, account details) is masked in logs. Add a custom Logback `MaskingLayout` or filter before going to prod.",
+  "timestamp": "2026-05-18T08:30:54Z",
+  "latency_ms": 30281,
+  "exit_code": 0,
+  "output_length_chars": 1301,
+  "output_length_tokens_approx": 325,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

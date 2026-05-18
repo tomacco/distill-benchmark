@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "memory-engine",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you provide the file or let me know where it's located?",
+  "timestamp": "2026-05-18T09:15:26Z",
+  "latency_ms": 11503,
+  "exit_code": 0,
+  "output_length_chars": 121,
+  "output_length_tokens_approx": 30,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

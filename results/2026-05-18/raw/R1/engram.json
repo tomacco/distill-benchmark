@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "engram",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key considerations for extracting payment processing from the monolith:\n\n## Data Integrity\n\n- **Idempotency everywhere.** Payment endpoints need idempotency keys — double-charges are existential risk for a banking platform.\n- **Saga pattern or two-phase approach** for coordinating with `account-service` (balance updates) and the monolith (transaction history, which is still there).\n- **PostgreSQL advisory locks or `SELECT FOR UPDATE`** for balance mutation — you already have strong consistency guarantees, lean on them.\n\n## Service Boundaries\n\n- gRPC internally (aligns with the migration), REST externally if third-party PSPs need webhooks.\n- Kafka for async events: `payment.initiated`, `payment.completed`, `payment.failed`. `notification-service` and the monolith's transaction history can consume these.\n- Be deliberate about what stays in the monolith for now — transaction history and reporting can consume events without needing to be extracted simultaneously.\n\n## Extraction Strategy\n\n- **Strangler fig.** Route payments through the new service while keeping the monolith path as fallback. Feature flag per-merchant or per-payment-type, not big bang.\n- Flyway migrations for the new schema. Consider whether payment data needs its own PostgreSQL instance or a separate schema in the existing cluster (separate instance is cleaner for the Series C architecture story).\n- Dual-write during migration, reconciliation job to catch drift.\n\n## Operational Concerns\n\n- Structured logging with correlation IDs (team standard) — critical here since a single payment touches auth → payment → account → notification.\n- Circuit breakers on PSP calls (external dependency you don't control).\n- Dead letter queue for failed Kafka events — a dropped payment event is unacceptable.\n- Kotlin coroutines for PSP I/O — fits naturally since PSP calls are high-latency.\n\n## Compliance / Audit\n\n- Immutable audit log for every state transition. Append-only table, never update/delete.\n- PCI DSS scope — never store raw card numbers. Tokenize at the PSP boundary. This affects your schema design significantly.\n\n## What to Align with Sofia On\n\n- Saga orchestration: orchestrator service vs. choreography via Kafka. Orchestrator is easier to reason about for payments but adds a coordination point.\n- Whether `account-service` (currently in staging) needs to be production-stable first, or if you build against its API contract now.\n- Schema ownership — who owns the `transactions` table during the migration period.\n\nThe Q3 due diligence pressure argues for clean boundaries even if it means a slightly longer extraction. Investors will scrutinize payment infrastructure specifically.\n\nWant me to sketch out the gRPC service definition or the Kafka event schemas?",
+  "timestamp": "2026-05-18T09:35:11Z",
+  "latency_ms": 25563,
+  "exit_code": 0,
+  "output_length_chars": 2754,
+  "output_length_tokens_approx": 688,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

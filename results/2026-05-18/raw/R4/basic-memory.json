@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "basic-memory",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and preferences, here are the best options — starting with what aligns most with your \"prefer PG extensions over new infra\" philosophy:\n\n**1. TimescaleDB (top recommendation)**\n- PostgreSQL extension — no new infra to operate, your team already has PG expertise\n- Hypertables give fast reads on time-series/event data typical in analytics\n- Continuous aggregates for pre-computed rollups\n- Compression gets 90%+ storage reduction on older data\n- Full SQL, works with Flyway, integrates with your existing PG 14 setup\n\n**2. ClickHouse (if PG can't handle the scale)**\n- Column-oriented, purpose-built for analytical queries on billions of rows\n- Reads are extremely fast — often 100x faster than row-store PG on aggregations\n- Kafka integration is native, fits your event streaming pipeline\n- Tradeoff: new infra to operate, different query dialect, separate expertise needed\n\n**3. Apache Druid**\n- Real-time ingestion from Kafka + sub-second OLAP queries\n- Good fit if you need real-time dashboards\n- Tradeoff: operationally complex on EKS, significant overhead for an 80-person team\n\n**My recommendation: start with TimescaleDB.** It respects your preference for PG extensions, avoids adding operational burden, and your team can use existing PostgreSQL knowledge. If you hit scale limits (typically 10B+ rows or sub-second queries over very wide datasets), then evaluate ClickHouse as a dedicated analytics store.\n\nWorth noting: DynamoDB and MongoDB are off the table per your prior team decisions, which aligns here anyway — neither is a good fit for analytical workloads.",
+  "timestamp": "2026-05-18T08:55:41Z",
+  "latency_ms": 24163,
+  "exit_code": 0,
+  "output_length_chars": 1592,
+  "output_length_tokens_approx": 398,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "memory-compiler",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n### Files\n\n| File | Purpose |\n|------|---------|\n| `model/PaymentCompletedEvent.kt` | Event data class with `correlationId` for tracing |\n| `config/KafkaConfig.kt` | Consumer factory with JSON deserialization, `RECORD` ack mode |\n| `consumer/PaymentCompletedConsumer.kt` | `@KafkaListener` on `payment-completed` topic, sets MDC correlation context |\n| `Application.kt` | Spring Boot entry point |\n| `application.yml` | Kafka bootstrap config (env-overridable) |\n| `PaymentCompletedConsumerIntegrationTest.kt` | Testcontainers-based integration test — real Kafka, no mocks |\n\n### Key decisions\n\n- **`AckMode.RECORD`** — acks per message, safe for payment events where you don't want to lose one in a batch\n- **MDC correlation** — `correlationId` and `paymentId` are set on every message, so structured logs (via logstash-logback-encoder) will include them automatically\n- **`setUseTypeHeaders(false)`** — avoids coupling to the producer's class path; deserializes purely by shape\n- **Integration test uses Testcontainers** (real Kafka container), not `@EmbeddedKafka` — closer to production behavior\n- **Exceptions re-thrown** to let Spring Kafka's default error handler manage retries/DLQ\n\n### Next steps\n\nThe `handle()` method has a TODO where your business logic goes (ledger update, triggering notification-service via gRPC, etc.). You'll also want to:\n\n1. Add a dead-letter topic config if retries exhaust\n2. Wire up the actual downstream calls (account-service, notification-service)\n3. Add a logback config with the logstash encoder for JSON-structured logs\n\nWant me to add any of those?",
+  "timestamp": "2026-05-18T12:52:34Z",
+  "latency_ms": 63339,
+  "exit_code": 0,
+  "output_length_chars": 1620,
+  "output_length_tokens_approx": 405,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

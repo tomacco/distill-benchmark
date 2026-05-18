@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "basic-memory",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here's what to consider for extracting payment-processing from the monolith, given your stack and constraints:\n\n## Data model & transactions\n- Payment state machines are tricky — define states clearly (PENDING, AUTHORIZED, CAPTURED, FAILED, REFUNDED, etc.) with explicit transitions\n- Keep payment data in **PostgreSQL** — you need strong consistency and multi-table transactions (e.g., debit account + create ledger entry atomically)\n- Consider a double-entry ledger pattern from the start — Series C diligence will scrutinize this\n- Flyway migrations, same as other services\n\n## Service boundaries\n- **gRPC** internally (account-service calls, auth-service calls), **REST+OpenAPI** for any merchant-facing API\n- Publish payment events to **Kafka** — notification-service can subscribe for receipts/alerts, and it gives you an audit trail\n- Idempotency keys on every mutation endpoint — payments must be safe to retry\n\n## Reliability & compliance\n- **Idempotency** is non-negotiable — duplicate charges are the worst bug in payments\n- Implement correlation IDs (you already have structured logging for this)\n- Store raw PSP (payment service provider) responses — you'll need them for disputes\n- PCI DSS scope: tokenize card data via the PSP, never store PANs — keeps your scope minimal\n- Reconciliation job: compare your ledger against PSP settlement reports daily\n\n## Extraction strategy\n- Strangle fig pattern: route new payment flows to the new service, keep legacy paths in the monolith until cutover\n- Shared-nothing with account-service — communicate via gRPC, don't share the DB\n- Feature flag the cutover so Sofia can roll back without a deploy\n\n## Testing\n- Property-based tests for state machine transitions (exhaustive edge cases)\n- Integration tests against a PSP sandbox — not mocks\n- Chaos/failure injection for PSP timeouts, partial failures, network errors\n\n## Things to skip\n- Don't over-abstract the PSP integration early — pick one provider, wrap it later only if you actually need a second\n- Don't build a custom retry/queue system — Kafka + coroutines handle this\n\nWant me to scaffold the service structure, or dive deeper into any of these areas?",
+  "timestamp": "2026-05-18T08:54:35Z",
+  "latency_ms": 31318,
+  "exit_code": 0,
+  "output_length_chars": 2169,
+  "output_length_tokens_approx": 542,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "knowledge-graph",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's a straightforward approach using your existing stack — no new dependencies needed.\n\n## Architecture\n\n```\nKafka (txn events) → consumer → Redis (sorted sets / hashes) → SSE endpoint → dashboard\n```\n\n### 1. Redis aggregation (simplest path)\n\nA Kafka consumer in the payment-processing service (or a small dedicated consumer) listens to transaction events and increments counters in Redis:\n\n```kotlin\n// Per-merchant rolling window counters\nredis.hincrBy(\"merchant_txn_counts:${windowKey}\", merchantId, 1)\nredis.expire(\"merchant_txn_counts:${windowKey}\", 3600) // TTL 1hr\n```\n\nUse a time-bucketed key (e.g., `2026-05-18T14:30`) so you get natural 30s/1min windows. This avoids hitting PostgreSQL for real-time reads.\n\n### 2. SSE endpoint for the dashboard\n\nExpose a simple SSE (Server-Sent Events) endpoint over HTTP (not gRPC — this is external-facing for the demo):\n\n```kotlin\n@GetMapping(\"/api/dashboard/merchant-counts\", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])\nfun streamMerchantCounts(): Flow<ServerSentEvent<MerchantCountsSnapshot>> = flow {\n    while (true) {\n        val counts = redis.hgetAll(\"merchant_txn_counts:${currentWindowKey()}\")\n        emit(ServerSentEvent.builder(MerchantCountsSnapshot(counts)).build())\n        delay(30.seconds)\n    }\n}\n```\n\n### 3. Frontend\n\nDev can wire up a simple React component with `EventSource` — it's a few lines:\n\n```typescript\nconst source = new EventSource(\"/api/dashboard/merchant-counts\");\nsource.onmessage = (e) => setCounts(JSON.parse(e.data));\n```\n\n## What NOT to do\n\n- **No new database** — Redis handles this fine, PostgreSQL is overkill for ephemeral counters\n- **No WebSocket server** — SSE is simpler, unidirectional is all you need here\n- **No DynamoDB/Mongo** — Redis + PG covers this\n\n## Rollout\n\n1. Add the Kafka consumer + Redis writes (Sofia can review — she's leading payment-processing)\n2. Add the SSE endpoint in a thin dashboard service or tack it onto an existing one\n3. Dev builds the React dashboard page\n\nThis is demo-scoped. If it needs to survive past the investor demo into production, you'd want to formalize the time-windowing (maybe a proper Kafka Streams aggregate) and add persistence to PostgreSQL for historical queries. But for next week, Redis counters + SSE gets it done.\n\nWant me to scaffold any of these components?",
+  "timestamp": "2026-05-18T09:21:58Z",
+  "latency_ms": 21206,
+  "exit_code": 0,
+  "output_length_chars": 2316,
+  "output_length_tokens_approx": 579,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

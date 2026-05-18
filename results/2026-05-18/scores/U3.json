@@ -1,0 +1,75 @@
+{
+  "test_id": "U3",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Opinionated and senior-level. Good edge case coverage and code examples. But verbose \u2014 well over 300 words. Doesn't restate the problem, which is good. Addresses constraints but doesn't reference specific scenario details."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Concise relative to peers. Opinionated, clean structure, no preamble. References Marcus and specific scenario constraints. Good proportionality \u2014 covers what's needed without over-explaining. Still over 300 words but tighter than most."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Very verbose. Opens with 'The core issue' section that restates the problem \u2014 direct rubric penalty. Detailed and correct but over-explains. '50 lines of Kotlin' claim and offer to look at code are nice touches. Too long for someone who prefers conciseness."
+    },
+    "D": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Longest response. Introduces two approaches (two-phase Kafka + synchronous hint) which over-engineers despite the user saying 'don't over-engineer.' Asks a question at the end that should be unnecessary. The ConcurrentHashMap approach ignores that they already have Redis."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Opens with 'Diagnosis' section that restates the problem \u2014 rubric penalty. Otherwise solid and opinionated. Good code examples. Moderate length. Addresses constraints correctly. Offer to help at end is fine."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Starts with 'why the simple options don't work' before the recommendation \u2014 preamble penalty. Good sequencing advice (Redis SETEX after commit). Pseudocode instead of Kotlin is a minor miss. Correct analysis but verbose."
+    },
+    "G": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Most concise response. Table for comparisons is efficient. Opinionated and direct \u2014 no preamble, no restatement. References Sofia and scenario-specific details. The cache-put guard with '!dirty' is a thoughtful detail others missed. Closest to under-300-word ideal."
+    },
+    "H": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Good framing as a narrow problem. References Marcus, Series C \u2014 shows scenario awareness. Reasonably concise. The logging suggestion for correlation IDs is practical. Slightly verbose in the 'why this over your other options' section but still controlled."
+    }
+  },
+  "ranking": [
+    "G",
+    "B",
+    "H",
+    "A",
+    "E",
+    "F",
+    "C",
+    "D"
+  ],
+  "analysis": "System G is the clear winner \u2014 it's the most concise, most opinionated, and most direct. It uses a table for option comparison (efficient), includes a subtle cache-put guard others missed, and references scenario-specific details like Sofia. Systems B and H form a strong second tier: both are reasonably concise, opinionated, and show scenario awareness. System A is technically solid but too verbose. Systems E and F are competent but E restates the problem and F opens with preamble before the recommendation. System C is the most verbose and opens with a problem restatement section. System D is the weakest \u2014 it's the longest response, introduces unnecessary complexity with a two-phase Kafka approach and a synchronous hint endpoint despite the user explicitly saying not to over-engineer, and its ConcurrentHashMap approach ignores existing Redis infrastructure before eventually acknowledging the multi-instance problem.",
+  "label_mapping": {
+    "A": "engram",
+    "B": "knowledge-graph",
+    "C": "basic-memory",
+    "D": "distill",
+    "E": "memory-compiler",
+    "F": "no-memory",
+    "G": "claude-mem",
+    "H": "memory-engine"
+  }
+}

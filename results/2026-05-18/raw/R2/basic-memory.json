@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "basic-memory",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your project context, here's how to set up Flyway migrations for the new service:\n\n## Project structure\n\n```\npayment-processing/\n└── src/main/resources/db/migration/\n    ├── V1__create_payments_table.sql\n    ├── V2__create_transactions_table.sql\n    └── ...\n```\n\n## Flyway config (`application.yml`)\n\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    schemas: payment\n    baseline-on-migrate: false\n    validate-on-migrate: true\n```\n\n## Migration naming convention\n\nFollow what auth-service and account-service already use:\n\n```\nV{version}__{description}.sql    # versioned (schema changes)\nR__{description}.sql              # repeatable (views, functions)\n```\n\n## First migration example\n\n```sql\n-- V1__create_payment_schema.sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\nCREATE TABLE payment.payments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id UUID NOT NULL,\n    amount NUMERIC(19, 4) NOT NULL,\n    currency VARCHAR(3) NOT NULL,\n    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment.payments(account_id);\nCREATE INDEX idx_payments_status ON payment.payments(status);\n```\n\n## Key points for your setup\n\n- **Separate schema per service** (`payment`) — keeps boundaries clean for the microservices migration and the Series C architecture story.\n- **Use `NUMERIC(19,4)`** for money, not `FLOAT` or `DECIMAL` without scale.\n- **`TIMESTAMPTZ`** over `TIMESTAMP` — you're on PG 14, always store timezone-aware.\n- **No separate migration tool** — Flyway runs on app startup via Spring Boot integration, same as auth-service and account-service.\n- **Kafka outbox pattern** — if payment events need to go to Kafka, consider an `outbox` table in the same schema with transactional writes rather than adding a new dependency.\n\nCoordinate with Sofia on the initial schema since she's leading the payment-processing extraction.",
+  "timestamp": "2026-05-18T08:54:58Z",
+  "latency_ms": 22691,
+  "exit_code": 0,
+  "output_length_chars": 2030,
+  "output_length_tokens_approx": 507,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

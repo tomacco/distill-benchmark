@@ -402,17 +402,47 @@
         /* --- Table --- */
         /* Detail table card: no overflow, no backdrop-filter — lets sticky work against page scroll */
         .detail-table-card {
-            backdrop-filter: none;
-            background: rgba(38, 33, 55, 0.85);
-            overflow: visible;
+            background: #262137;
+            border: 1px solid rgba(176, 160, 204, 0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow-x: auto;
         }
 
-        .detail-table-card thead th {
-            position: sticky;
+        .detail-table-card h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .detail-table-card table {
+            min-width: 700px;
+        }
+
+        /* JS-cloned fixed header */
+        .fixed-thead {
+            position: fixed;
             top: 0;
-            background: rgba(38, 33, 55, 0.98);
-            z-index: 10;
-            backdrop-filter: blur(12px);
+            z-index: 100;
+            background: #262137;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            display: none;
+            pointer-events: none;
+        }
+
+        .fixed-thead table {
+            margin: 0;
+        }
+
+        .fixed-thead th {
+            background: #262137;
         }
 
         /* Mobile test cards (replaces table on small screens) */
@@ -509,8 +539,13 @@
         }
 
         th, td {
-            padding: 0.85rem 1rem;
+            padding: 0.65rem 0.5rem;
             text-align: left;
+        }
+
+        td.score, th:nth-child(n+3) {
+            text-align: center;
+            padding: 0.65rem 0.3rem;
         }
 
         th {
@@ -1230,7 +1265,7 @@ tags: [decisions, corrections, critical]
         correction: 'Correction',
         bias: 'Bias',
         'user-model': 'User Model',
-        proportionality: 'Proportionality',
+        proportionality: 'Proportio\u00ADnality',
         persistence: 'Persistence'
     };
     const CATEGORY_PREFIX = { R: 'retrieval', C: 'correction', B: 'bias', U: 'user-model', P: 'proportionality', D: 'persistence' };
@@ -1270,7 +1305,8 @@ tags: [decisions, corrections, critical]
         'basic-memory': '#e09a7d',    /* soft coral */
         'memory-compiler': '#c8d87e', /* sage lime */
         'memory-engine': '#7cb8d4',   /* sky blue */
-        'knowledge-graph': '#d4a0c8'  /* orchid pink */
+        'knowledge-graph': '#d4a0c8', /* orchid pink */
+        'engram': '#e0c878'           /* warm gold */
     };
 
     const COMPETITOR_URLS = {
@@ -1280,7 +1316,8 @@ tags: [decisions, corrections, critical]
         'basic-memory': 'https://github.com/basicmachines-co/basic-memory',
         'memory-compiler': 'https://github.com/coleam00/claude-memory-compiler',
         'memory-engine': 'https://github.com/HelloRuru/claude-memory-engine',
-        'knowledge-graph': 'https://github.com/shaneholloman/mcp-knowledge-graph'
+        'knowledge-graph': 'https://github.com/shaneholloman/mcp-knowledge-graph',
+        'engram': 'https://github.com/Gentleman-Programming/engram'
     };
 
     const COMPETITOR_DISPLAY = {
@@ -1651,7 +1688,7 @@ tags: [decisions, corrections, critical]
                 <canvas id="tokenChart"></canvas>
             </div>
 
-            <div class="card card-full detail-table-card" style="margin-top:2rem;">
+            <div class="detail-table-card" style="margin-top:2rem;">
                 <h3>Detailed Scores</h3>
                 <div id="detailTable"></div>
             </div>
@@ -2048,8 +2085,60 @@ tags: [decisions, corrections, critical]
         }
     });
 
+    // --- Sticky table header via JS (CSS sticky breaks due to stacking contexts) ---
+    function initStickyTableHeader() {
+        const card = document.querySelector('.detail-table-card');
+        if (!card) return;
+        const table = card.querySelector('table');
+        const thead = table?.querySelector('thead');
+        if (!table || !thead) return;
+
+        // Create fixed clone
+        const fixedDiv = document.createElement('div');
+        fixedDiv.className = 'fixed-thead';
+        const cloneTable = document.createElement('table');
+        cloneTable.appendChild(thead.cloneNode(true));
+        fixedDiv.appendChild(cloneTable);
+        document.body.appendChild(fixedDiv);
+
+        function sync() {
+            const cardRect = card.getBoundingClientRect();
+            const theadRect = thead.getBoundingClientRect();
+
+            // Show when original thead scrolls above viewport AND card is still visible
+            const show = theadRect.top < 0 && cardRect.bottom > 60;
+
+            fixedDiv.style.display = show ? 'block' : 'none';
+            if (show) {
+                // Clip to card bounds (accounts for padding)
+                const cardPad = parseFloat(getComputedStyle(card).paddingLeft) || 0;
+                const visibleLeft = cardRect.left + cardPad;
+                const visibleWidth = cardRect.width - cardPad * 2;
+
+                fixedDiv.style.left = visibleLeft + 'px';
+                fixedDiv.style.width = visibleWidth + 'px';
+
+                // Offset the inner table by card's scroll position
+                const scrollLeft = card.scrollLeft;
+                cloneTable.style.marginLeft = -scrollLeft + 'px';
+
+                // Sync column widths
+                const origThs = thead.querySelectorAll('th');
+                const cloneThs = fixedDiv.querySelectorAll('th');
+                origThs.forEach((th, i) => {
+                    if (cloneThs[i]) cloneThs[i].style.width = th.getBoundingClientRect().width + 'px';
+                });
+            }
+        }
+
+        // Also sync on horizontal scroll of the card
+        card.addEventListener('scroll', sync);
+        window.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync, { passive: true });
+    }
+
     // --- Init ---
-    render();
+    render().then(() => setTimeout(initStickyTableHeader, 200));
     </script>
 </body>
 </html>

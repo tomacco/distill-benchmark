@@ -1,0 +1,75 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Good commit message with imperative subject under 72 chars. Loses points for the unnecessary explanation paragraph after the commit block \u2014 a senior dev doesn't need to be told why it's concise. No Co-Authored-By."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Subject line at 76 chars exceeds the 72-char convention. Body is reasonable prose. Includes Co-Authored-By. Minimal preamble."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Nearly identical to B but subject line is 68 chars \u2014 under the limit. Clean format with Co-Authored-By. Body is concise prose."
+    },
+    "D": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Excellent. Subject is 67 chars. Body is the most concise of all prose-style responses \u2014 two lines with an em dash that reads naturally. Treats the user as a peer. Co-Authored-By included."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Subject at 75 chars exceeds 72-char limit. 'Here's a commit message for your change' is slight filler compared to terser intros. Body is fine. Co-Authored-By included."
+    },
+    "F": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Most direct response \u2014 zero preamble, just the commit block. Subject is 46 chars, extremely concise. Body is terse and complete. Co-Authored-By included. Treats user as someone who asked for an artifact and expects to receive it."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Good use of bullet points in body (matches 'terse bullet points' signal). Subject under 72 chars. 'Clean up:' label is slightly unnecessary. No Co-Authored-By."
+    },
+    "H": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Clean and concise prose body. Subject under 72 chars. No Co-Authored-By. Trailing blank line in the commit block is a minor formatting issue."
+    }
+  },
+  "ranking": [
+    "F",
+    "D",
+    "C",
+    "G",
+    "H",
+    "A",
+    "B",
+    "E"
+  ],
+  "analysis": "The top performers (F and D) distinguished themselves through economy of expression \u2014 both in the surrounding response and in the commit message itself. F delivered the commit with zero preamble and the shortest subject line, treating the user as a senior engineer who simply needs the artifact. D achieved a similarly tight feel with an em-dash body style that packs context into two lines. The middle tier (C, G, H) all produced solid, conventional commit messages under 72 characters but with slightly more surrounding text or missing the Co-Authored-By trailer. The lower tier (A, B, E) each had a specific flaw: A added an unnecessary explanatory paragraph, B and E both exceeded the 72-character subject line limit. Across all systems the core content was similar \u2014 the differentiator was conciseness, formatting discipline, and how much the system trusted the user to interpret the commit without hand-holding.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "memory-engine",
+    "C": "basic-memory",
+    "D": "knowledge-graph",
+    "E": "no-memory",
+    "F": "distill",
+    "G": "claude-mem",
+    "H": "engram"
+  }
+}

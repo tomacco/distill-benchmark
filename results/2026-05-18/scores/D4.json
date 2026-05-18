@@ -1,0 +1,75 @@
+{
+  "test_id": "D4",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Hits every expected signal: Kotlin, coroutines (runBlocking bridge), MDC-based correlation ID logging, EmbeddedKafka integration test, complete config and application.yml. Zero clarification questions needed. Production-ready code with sensible defaults (manual ack, retry, string deserializer). Slightly verbose but every line is justified."
+    },
+    "B": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Hits all signals and adds logback-spring.xml for structured JSON logging (nice touch). No questions asked. However, presents file descriptions in a table rather than full code \u2014 user would need to inspect the created files. Testcontainers over EmbeddedKafka is a valid choice. TODO body is honest but slightly less immediately useful than A."
+    },
+    "C": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Provides skeleton code in Kotlin with coroutines and correlation ID, but asks multiple questions (which service? what should it do?) before committing fully. This adds interaction cost \u2014 exactly what the rubric penalizes. The suspend fun handle approach assumes spring-kafka 3.x coroutine support which is technically correct but less battle-tested. Code is incomplete with TODOs."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Hits all signals. MDCContext() for coroutine propagation is the most technically sophisticated approach of all systems. Handler interface is a clean abstraction. No questions asked. Same weakness as B: summary table format without full inline code. Manual ack mode is MANUAL rather than RECORD \u2014 slightly different semantics but valid."
+    },
+    "E": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Complete, runnable code with Testcontainers integration test. No questions asked. However, uses raw kafka-clients API with manual poll loop instead of Spring Kafka \u2014 diverges from what most Kotlin/Spring teams would use. UUID types for IDs is an opinionated choice. SupervisorJob and CompletableDeferred show strong coroutine knowledge. Correlation ID from headers rather than event body is a different design choice."
+    },
+    "F": {
+      "quality": 1,
+      "relevance": 2,
+      "helpfulness": 1,
+      "notes": "Asks 3 clarification questions and provides zero code. Mentions knowing the stack from vault context but still asks which framework. Maximum interaction cost \u2014 user would need at least one full round-trip before getting anything usable. Complete failure on the 'should NOT need user to specify' criterion."
+    },
+    "G": {
+      "quality": 1,
+      "relevance": 1,
+      "helpfulness": 1,
+      "notes": "Asks 3 questions and provides nothing else. Doesn't even demonstrate awareness of the user's stack preferences (Kotlin, coroutines, etc.). Worst response \u2014 pure gate-keeping with zero value delivered. Maximum interaction cost."
+    },
+    "H": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Asks 4 questions despite explicitly stating it knows the stack from the knowledge base. Acknowledges Kotlin, coroutines, structured logging, integration tests \u2014 then asks about all of them anyway. Offers to 'make reasonable defaults and go' but doesn't actually do it. Slightly better than F/G because it shows awareness, but still delivers no code."
+    }
+  },
+  "ranking": [
+    "A",
+    "D",
+    "B",
+    "E",
+    "C",
+    "H",
+    "F",
+    "G"
+  ],
+  "analysis": "This test sharply separates systems that act on stored knowledge from those that ask clarifying questions. Systems A, B, D, and E all delivered Kotlin code with coroutines, structured logging, correlation IDs, and integration tests without asking \u2014 exactly what the rubric demands. System A stands out as the most complete: full inline code across multiple files, production-ready config, and a working integration test, all with zero interaction cost. D edges out B due to the technically superior MDCContext() coroutine bridging, though both use summary tables rather than full inline code. E is strong but uses raw Kafka client instead of Spring Kafka, which is an unusual choice for a Spring-convention team. C occupies the middle ground \u2014 it provides code but hedges with questions, adding interaction cost. F, G, and H are the clearest failures: they ask questions that a memory-augmented system should already know the answers to. G is worst, showing no awareness of the user's preferences at all. The Total Interaction Cost metric clearly favors A \u2014 approximately 2000 tokens of context for zero corrections, versus the 3-5 round-trips that F/G/H would require before producing anything comparable.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "knowledge-graph",
+    "C": "memory-engine",
+    "D": "claude-mem",
+    "E": "engram",
+    "F": "basic-memory",
+    "G": "no-memory",
+    "H": "distill"
+  }
+}

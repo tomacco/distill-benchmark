@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "no-memory",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "The workspace is essentially empty — there's no existing project or service to reference. To give you useful guidance, I'd need to know more:\n\n1. **What language/framework** are you using? (e.g., Python/Django, Python/SQLAlchemy+Alembic, Node/Knex, Node/Prisma, Go/goose, Java/Flyway, Ruby/Rails, etc.)\n2. **What database** are you targeting? (PostgreSQL, MySQL, SQLite, etc.)\n3. **Is this a new project from scratch**, or are you adding a migration system to an existing service?\n4. **Do you have any team conventions** or an existing monorepo with migration patterns to follow?\n\nEach framework has its own idiomatic approach. For example:\n\n- **Alembic** (Python/SQLAlchemy) — `alembic init`, revision files with `upgrade()`/`downgrade()`\n- **Prisma** (Node/TS) — schema-first with `prisma migrate dev`\n- **Flyway** (Java/JVM) — versioned SQL files (`V1__create_users.sql`)\n- **Rails** — `rails generate migration`\n- **Knex** (Node) — `knex migrate:make`\n\nLet me know the specifics and I can help you set it up.",
+  "timestamp": "2026-05-18T08:23:38Z",
+  "latency_ms": 15246,
+  "exit_code": 0,
+  "output_length_chars": 1012,
+  "output_length_tokens_approx": 253,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

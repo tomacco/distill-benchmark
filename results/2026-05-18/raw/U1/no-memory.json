@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "no-memory",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "## Kubernetes Service Mesh & Istio for Inter-Service Auth\n\n### How a Service Mesh Works\n\nA service mesh inserts a **sidecar proxy** (typically Envoy) alongside each pod. All network traffic in and out of the pod flows through this proxy transparently. This gives you:\n\n- **mTLS** — automatic mutual TLS between services, so every hop is encrypted and both sides prove identity via certificates\n- **AuthN/AuthZ policies** — declarative rules like \"only `payment-service` can call `account-service` on port 8443\"\n- **Observability** — distributed tracing, metrics, and access logs without app code changes\n- **Traffic management** — retries, circuit breaking, canary routing\n\nThe control plane (e.g., `istiod`) manages certificate issuance/rotation and pushes config to the sidecar proxies.\n\n### Do You Actually Need Istio?\n\nIt depends on what problem you're solving. For **inter-service auth between two services**, Istio works but may be overkill. Here's the decision framework:\n\n**Istio is worth it if:**\n- You have many services (10+) and need a uniform auth/encryption layer\n- You want zero-code mTLS across the mesh\n- You need fine-grained L7 authorization policies (per-path, per-method)\n- You also want observability, traffic shifting, or fault injection\n\n**Istio is probably overkill if:**\n- You only have 2-3 services communicating\n- You can handle auth at the app layer (e.g., JWT validation middleware, shared mTLS certs via cert-manager)\n- You want to avoid the operational cost (sidecar memory/CPU overhead, control plane maintenance, debugging proxy issues)\n\n### Lighter Alternatives for Just Auth\n\n| Approach | Complexity | What you get |\n|---|---|---|\n| **NetworkPolicy** | Low | L3/L4 isolation (pod A can only talk to pod B) — no encryption |\n| **cert-manager + app-level mTLS** | Medium | Encrypted + authenticated, no sidecar overhead |\n| **SPIFFE/SPIRE** | Medium | Workload identity + mTLS without full mesh |\n| **Istio ambient mode** | Medium | Mesh without sidecars (ztunnel per node), newer/less mature |\n| **Linkerd** | Medium | Lighter mesh, simpler ops than Istio, automatic mTLS |\n| **Full Istio** | High | Everything — mTLS, L7 authz, observability, traffic mgmt |\n\n### Recommendation\n\nIf the core need is \"payment-service and account-service mutually authenticate and encrypt traffic,\" start with:\n\n1. **Kubernetes NetworkPolicy** to restrict which pods can communicate at L3/L4\n2. **App-level JWT or mTLS** (via cert-manager) for authentication\n\nIf you're heading toward a larger microservices architecture and expect to need mesh features broadly, then adopting Istio (or Linkerd) now avoids retrofitting later. Ambient mode is worth evaluating since it removes the per-pod sidecar cost.",
+  "timestamp": "2026-05-18T08:25:07Z",
+  "latency_ms": 22881,
+  "exit_code": 0,
+  "output_length_chars": 2719,
+  "output_length_tokens_approx": 679,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

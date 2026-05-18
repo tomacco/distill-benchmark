@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "distill",
+  "prompt": "What database do we use for the account service?",
+  "output": "This contradicts what I have stored. My knowledge says the account service uses **PostgreSQL 14** (high confidence), but you mentioned last week that you switched it to **MySQL**. Which is current — did the account service actually migrate to MySQL, or is it still on PostgreSQL?",
+  "timestamp": "2026-05-18T11:20:20Z",
+  "latency_ms": 20501,
+  "exit_code": 0,
+  "output_length_chars": 279,
+  "output_length_tokens_approx": 69,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

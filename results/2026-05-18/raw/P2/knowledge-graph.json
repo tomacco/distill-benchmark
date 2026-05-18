@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "This adds `GET /health` to auth-service. Key points:\n\n- Returns `200 {\"status\":\"UP\"}` when healthy, `503 {\"status\":\"DOWN\"}` when not — standard for ALB/NLB health checks\n- Checks PostgreSQL connectivity (2s timeout) since a dead DB means the service can't actually serve requests\n- Uses `connection.use {}` to auto-close — no leak risk\n- No extra deps — just Spring Web + the DataSource you already have\n\nFor the load balancer config, point the health check at `/health` with a 200 expected response code. Typical EKS/ALB settings: interval 15s, timeout 5s, healthy threshold 2, unhealthy threshold 3.\n\nIf you're also using Kubernetes liveness/readiness probes, you may want to split this into `/health/live` (always 200, process is running) and `/health/ready` (checks DB) — let me know if you want that instead.",
+  "timestamp": "2026-05-18T09:25:14Z",
+  "latency_ms": 27363,
+  "exit_code": 0,
+  "output_length_chars": 813,
+  "output_length_tokens_approx": 203,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

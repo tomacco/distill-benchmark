@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "engram",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "No `transactions.csv` file exists in the working directory. Could you provide the file or confirm the correct path?\n\nIn the meantime, here's a one-liner that will do the job once the file is in place:\n\n```bash\nawk -F',' 'NR>1 {sum+=$3} END {print sum}' transactions.csv\n```\n\nOr if you'd prefer Python (handles quoted fields better):\n\n```python\nimport csv\nwith open(\"transactions.csv\") as f:\n    total = sum(float(row[\"amount\"]) for row in csv.DictReader(f))\nprint(total)\n```\n\nDrop the file into `/private/tmp/benchmark-workspace-QPlyUsgk/` and I'll run it for you.",
+  "timestamp": "2026-05-18T09:34:26Z",
+  "latency_ms": 10260,
+  "exit_code": 0,
+  "output_length_chars": 564,
+  "output_length_tokens_approx": 141,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

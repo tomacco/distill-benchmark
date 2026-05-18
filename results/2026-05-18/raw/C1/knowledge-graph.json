@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "knowledge-graph",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL 14, as noted in your project's knowledge graph.",
+  "timestamp": "2026-05-18T09:22:03Z",
+  "latency_ms": 4131,
+  "exit_code": 0,
+  "output_length_chars": 58,
+  "output_length_tokens_approx": 14,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

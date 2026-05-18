@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Got it — Dev is the junior frontend engineer on your team (React/TypeScript, 6 months in). A few things to clarify before we start:\n\n- **What does the settings page configure?** Account settings? App preferences? Notification settings? Or is there a spec from Marcus in Linear?\n- **Is there an existing frontend project/repo** we should be working in, or are we starting fresh here?\n- **Any existing component patterns** (component library, state management, styling approach) already established in the frontend?\n\nSince Dev is junior and you're a senior backend engineer, I'm guessing the goal is to scaffold something solid that Dev can build on. Let me know the scope and I'll put together something concrete.",
+  "timestamp": "2026-05-18T11:25:37Z",
+  "latency_ms": 24996,
+  "exit_code": 0,
+  "output_length_chars": 712,
+  "output_length_tokens_approx": 178,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Pragmatic choice for that scope. A Kafka consumer + SNS dispatcher is basically Go's sweet spot — small binary, low memory, goroutines map well to concurrent event processing. Kotlin/coroutines can do it, but you end up pulling in Spring or Ktor + a DI framework for something that doesn't need it.\n\nA few things to weigh:\n\n**In favor:**\n- Go's Kafka libraries (franz-go, confluent-kafka-go) are solid\n- Drastically lower resource footprint on EKS — matters at scale\n- Faster cold starts, simpler container image\n- Less ceremony for a service with no domain complexity\n\n**Watch out for:**\n- You're introducing a second backend language into the org. That has a maintenance cost — not everyone on an 80-person team will know Go. Make sure this doesn't become a pattern where every \"simple\" service gets rewritten.\n- notification-service is in prod. The rewrite risk isn't the code, it's the migration (consumer group offsets, exactly-once semantics, dead letter handling, retry logic). Make sure you're porting behavior, not just the happy path.\n- **Timing** — payment-processing extraction is the priority and Series C diligence is Q3. A prod rewrite that isn't on the critical path could be a distraction. If the current service works, it might be worth deferring.\n\n**If you do it**, I'd suggest:\n- Run both consumers in the same consumer group during cutover, verify parity with shadow mode\n- Keep it in a single `main.go` + a handful of packages — resist the urge to over-structure a Go project this small\n- franz-go over confluent-kafka-go (pure Go, no CGO/librdkafka dependency — simpler builds on EKS)\n\nBottom line: the rewrite makes technical sense, but the timing and second-language tax are the real questions. If the Kotlin version is stable and just \"ugly,\" I'd wait until after the payment-processing push.",
+  "timestamp": "2026-05-18T09:21:24Z",
+  "latency_ms": 20276,
+  "exit_code": 0,
+  "output_length_chars": 1818,
+  "output_length_tokens_approx": 454,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

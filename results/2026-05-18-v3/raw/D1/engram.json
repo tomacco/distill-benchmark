@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "engram",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Run it with `./containers.fish` or just paste the `docker ps` command directly.",
+  "timestamp": "2026-05-18T13:23:17Z",
+  "latency_ms": 14233,
+  "exit_code": 0,
+  "output_length_chars": 79,
+  "output_length_tokens_approx": 19,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "no-memory",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "There's no existing codebase to anchor a recommendation to. To give you useful advice, I'd need to know:\n\n1. **Language/framework** — Python, Node.js/TypeScript, Go, Java, etc.?\n2. **Deployment target** — Kubernetes, AWS Lambda, VMs, etc.?\n3. **Existing infrastructure** — Do you already aggregate logs somewhere (Datadog, ELK, CloudWatch, Splunk)?\n4. **Team conventions** — Is there a logging standard in other services you should match?\n\nThat said, here are some general principles that apply to any payment service:\n\n**Structured logging (JSON)** is non-negotiable for a payment service. You need machine-parseable logs for auditing, debugging, and compliance.\n\n**Popular choices by language:**\n- **Python**: `structlog` or stdlib `logging` with a JSON formatter\n- **Node.js/TS**: `pino` (fast, structured) or `winston`\n- **Go**: `slog` (stdlib, Go 1.21+) or `zerolog`\n- **Java/Kotlin**: `SLF4J` + `Logback` with JSON encoder\n\n**Payment-specific considerations:**\n- **Never log full card numbers, CVVs, or secrets** — mask/redact PII and PCI-scoped data at the logger level\n- **Correlation IDs** — propagate a request/transaction ID through every log line\n- **Log levels matter** — use `INFO` for transaction lifecycle events, `ERROR` for failures, `WARN` for retries/degraded state\n- **Audit trail** — payment state transitions (created → authorized → captured → settled) should be logged consistently for reconciliation\n\nLet me know your stack and I can set up a concrete implementation.",
+  "timestamp": "2026-05-18T11:10:41Z",
+  "latency_ms": 21623,
+  "exit_code": 0,
+  "output_length_chars": 1492,
+  "output_length_tokens_approx": 373,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "claude-mem",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL 14, per your project context.",
+  "timestamp": "2026-05-18T12:27:02Z",
+  "latency_ms": 5860,
+  "exit_code": 0,
+  "output_length_chars": 40,
+  "output_length_tokens_approx": 10,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

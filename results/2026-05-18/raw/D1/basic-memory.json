@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "basic-memory",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "```bash\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nWant me to save this as a script file, or is the one-liner enough?",
+  "timestamp": "2026-05-18T08:51:31Z",
+  "latency_ms": 5293,
+  "exit_code": 0,
+  "output_length_chars": 142,
+  "output_length_tokens_approx": 35,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

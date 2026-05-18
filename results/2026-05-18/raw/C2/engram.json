@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "engram",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No. The team already evaluated and rejected DynamoDB (and MongoDB). The decision was explicit — PostgreSQL is the standard, and the preference is to use PostgreSQL extensions over adding new infrastructure.\n\nFor sub-millisecond key-value reads, **Redis** is already in the stack. Use it for the session store:\n\n- You're already running Redis in production\n- It's purpose-built for this exact access pattern\n- No new infrastructure to operate or on-call for\n- Simple key-value with TTL is Redis's sweet spot\n\nIf you need persistence/durability beyond Redis's RDB/AOF, back it with PostgreSQL as the source of truth and use Redis as the read-through cache.",
+  "timestamp": "2026-05-18T09:31:57Z",
+  "latency_ms": 8770,
+  "exit_code": 0,
+  "output_length_chars": 654,
+  "output_length_tokens_approx": 163,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a good fit here. You already have it in the stack (no new infrastructure), and session tokens map naturally to Redis's strengths:\n\n- **Simple key-value with TTL** is Redis's bread and butter — `SET token userId EX 3600` is all you need\n- **Fast reads** for what's likely a hot path (auth check on every request)\n- **Atomic expiry** handles cleanup automatically, no cron jobs to purge stale sessions\n\nA few things to keep in mind:\n\n- **Eviction policy**: Make sure you're not using `allkeys-lru` on a shared Redis instance, or a memory spike from another use case could silently evict valid sessions and log users out. Consider `volatile-lru` or a dedicated Redis database/instance for sessions.\n- **Persistence**: Decide if you care about sessions surviving a Redis restart. If not, the default is fine. If you do, enable RDB or AOF — but for most session token use cases, forcing a re-login after a restart is acceptable.\n- **Key prefix**: Namespace your keys (e.g., `session:<token>`) to avoid collisions with other Redis usage in the stack.\n\nNo reason to reach for anything more complex — this is exactly what Redis is for.",
+  "timestamp": "2026-05-18T11:09:03Z",
+  "latency_ms": 14051,
+  "exit_code": 0,
+  "output_length_chars": 1141,
+  "output_length_tokens_approx": 285,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

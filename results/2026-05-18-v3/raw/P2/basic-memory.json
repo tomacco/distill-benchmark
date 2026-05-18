@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "basic-memory",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "This uses Spring Boot Actuator, which exposes `/actuator/health` out of the box. The custom `DatabaseHealthIndicator` adds a PG connectivity check. You'll need the actuator dependency and config:\n\n**build.gradle.kts** (add to dependencies):\n```kotlin\nimplementation(\"org.springframework.boot:spring-boot-starter-actuator\")\n```\n\n**application.yml** (expose the health endpoint for the load balancer):\n```yaml\nmanagement:\n  endpoints:\n    web:\n      base-path: /actuator\n  endpoint:\n    health:\n      show-details: never  # don't leak internals externally\n  server:\n    port: 8081  # separate management port if desired\n```\n\n**Load balancer target**: point health checks at `GET /actuator/health` (returns `200` when up, `503` when down).\n\nThe custom `DatabaseHealthIndicator` ensures the LB pulls the instance out of rotation if PG connectivity is lost — not just if the JVM is alive. Actuator also auto-detects Redis and Kafka health if those starters are on the classpath, so you get those for free.",
+  "timestamp": "2026-05-18T12:42:03Z",
+  "latency_ms": 26370,
+  "exit_code": 0,
+  "output_length_chars": 1000,
+  "output_length_tokens_approx": 250,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

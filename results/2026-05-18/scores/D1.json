@@ -1,0 +1,75 @@
+{
+  "test_id": "D1",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Correct docker command, concise with a brief follow-up. Uses bash syntax \u2014 no fish shell recall. Typical vanilla response."
+    },
+    "B": {
+      "quality": 2,
+      "relevance": 2,
+      "helpfulness": 2,
+      "notes": "References a script file but doesn't show its contents. User can't verify what it does. No fish syntax. Incomplete response."
+    },
+    "C": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Identical to System A \u2014 bash syntax, concise, functional. No fish shell preference recall."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Created a .fish file showing preference recall. But doesn't show the script contents inline, and offers extra features (JSON, filtering) which is mild over-engineering. Concise otherwise."
+    },
+    "E": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Uses fish syntax, provides both one-liner and optional reusable script. Slightly verbose with the save instructions, but not over-engineered. Strong fish preference recall."
+    },
+    "F": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Fish syntax, concise one-liner, brief follow-up question. Hits all signals: fish recall, concise, not over-engineered. Zero correction tokens needed."
+    },
+    "G": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Correct command, maximally concise. But uses bash syntax \u2014 no fish preference recall. Vanilla baseline behavior."
+    },
+    "H": {
+      "quality": 2,
+      "relevance": 2,
+      "helpfulness": 2,
+      "notes": "References a saved script without showing contents. No fish syntax. User cannot inspect or verify the command. Bash-oriented."
+    }
+  },
+  "ranking": [
+    "F",
+    "E",
+    "D",
+    "A",
+    "C",
+    "G",
+    "B",
+    "H"
+  ],
+  "analysis": "The key differentiator in this test is fish shell preference recall without prompting. Systems F and E both used fish syntax unprompted, demonstrating stored preference retrieval. F is the strongest: it uses fish, stays concise, and asks a minimal follow-up \u2014 exactly matching the expected signals with zero correction tokens. E also uses fish but is slightly more verbose with installation instructions. D shows awareness of fish via the .fish file extension but hides the actual code, reducing verifiability. Systems A, C, and G all produce correct bash commands and are concise, but none recall the fish preference, representing typical vanilla behavior. B and H are the weakest \u2014 they reference script files without showing content, making verification impossible and providing no fish recall. The persistence test clearly separates memory-equipped systems (F, E, D) from vanilla baselines (A, C, G) and incomplete responses (B, H).",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "memory-engine",
+    "E": "engram",
+    "F": "distill",
+    "G": "claude-mem",
+    "H": "memory-compiler"
+  }
+}

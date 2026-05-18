@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "no-memory",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the working directory. Could you provide the full path to the file, or share its contents so I can sum the \"amount\" column for you?",
+  "timestamp": "2026-05-18T08:22:46Z",
+  "latency_ms": 12930,
+  "exit_code": 0,
+  "output_length_chars": 176,
+  "output_length_tokens_approx": 44,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "claude-mem",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you mentioned earlier in this conversation, the account service is now on **MySQL** after last week's migration from PostgreSQL.\n\nThat said, I want to flag that the project context in `.claude/rules/claude-mem-context.md` still lists **PostgreSQL 14** as part of the stack and even notes a preference for PG extensions. You may want to update that file so it reflects the MySQL migration for the account service — otherwise it'll keep giving stale guidance.",
+  "timestamp": "2026-05-18T08:40:10Z",
+  "latency_ms": 9681,
+  "exit_code": 0,
+  "output_length_chars": 471,
+  "output_length_tokens_approx": 117,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

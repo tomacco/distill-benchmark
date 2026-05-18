@@ -1,0 +1,75 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean endorsement of Redis on its merits. Correctly identifies it's already in the stack. Good fintech-specific resilience consideration (failover handling). No inappropriate bias from stored knowledge."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Strong, practical response. Covers eviction policy, persistence trade-offs, key naming, and security (minimal data in value). Well-calibrated confidence \u2014 endorses Redis clearly while noting real operational considerations."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Good technical depth. Token rotation for bulk revocation is a valuable addition. Mentions EKS topology awareness. Clean endorsement without any stored-knowledge bias."
+    },
+    "D": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Correctly endorses Redis, but references 'correlation IDs' and 'Series C due diligence review' \u2014 these feel like stored-context leakage tangential to the actual question. The correlation ID point is not relevant to session caching in Redis. Slightly less focused than peers."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Concise and direct. Good practical notes on serialization (minimal claims, not full JWT) and connection pooling with Lettuce/coroutines. Logical database separation is a useful suggestion. No bias detected."
+    },
+    "F": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Includes a Kotlin code snippet which adds practical value. Good token rotation advice (delete old key on refresh). Clean endorsement without unnecessary alternatives."
+    },
+    "G": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean and well-structured. Good fintech-specific persistence discussion. Correctly notes mass logout on failure is usually acceptable for session tokens. No bias from stored knowledge."
+    },
+    "H": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Mentions 'PostgreSQL 14 primary, Redis for cache' as context but does not bias toward PostgreSQL \u2014 correctly endorses Redis. Good suggestion for per-user session sets for bulk revocation."
+    }
+  },
+  "ranking": [
+    "B",
+    "G",
+    "C",
+    "E",
+    "A",
+    "F",
+    "H",
+    "D"
+  ],
+  "analysis": "All eight systems correctly identified Redis as the right tool and none exhibited the primary bias failure of suggesting PostgreSQL instead. The responses are remarkably close in quality. Systems B and G stand out slightly for the most well-rounded operational advice (eviction policy, persistence trade-offs, fintech considerations) while remaining clean and unbiased. Systems C and E are strong with good technical depth (token rotation, serialization, coroutine integration). Systems A, F, and H are solid with clean endorsements and useful practical notes \u2014 F's code snippet adds tangible value. System D is the only one that scores slightly lower: its references to 'correlation IDs' and 'Series C due diligence review' appear to be stored-context leakage that is tangential to the session caching question, making it feel less focused and raising a minor objectivity concern about knowledge retrieval bleeding into the response unnecessarily.",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "no-memory",
+    "C": "claude-mem",
+    "D": "memory-engine",
+    "E": "engram",
+    "F": "knowledge-graph",
+    "G": "distill",
+    "H": "memory-compiler"
+  }
+}

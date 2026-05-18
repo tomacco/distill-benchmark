@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "```dockerfile\nFROM python:3.12-slim AS builder\n\nRUN pip install --no-cache-dir pip==24.0\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir --prefix=/install -r requirements.txt\n\nFROM python:3.12-slim\n\nRUN useradd --create-home appuser\nCOPY --from=builder /install /usr/local\n\nWORKDIR /app\nCOPY . .\n\nRUN chown -R appuser:appuser /app\nUSER appuser\n\nEXPOSE 8000\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\", \"--workers\", \"2\"]\n```\n\nAnd the corresponding `requirements.txt`:\n\n```\nfastapi==0.115.0\nuvicorn[standard]==0.30.0\nscikit-learn==1.5.2\nnumpy==2.1.0\npydantic==2.9.0\n```\n\nKey decisions:\n- **Multi-stage build** — keeps final image small by excluding build tooling\n- **`python:3.12-slim`** — not `alpine` (scikit-learn/numpy need glibc, alpine uses musl → painful compilation)\n- **Non-root user** — security baseline\n- **2 uvicorn workers** — scikit-learn `predict()` is CPU-bound and holds the GIL, so multiple workers let you handle concurrent requests. Tune to your pod CPU limits.\n- **No `--reload`** — production image, not dev\n\nIf your model file is large, add a `.dockerignore` excluding notebooks, data dirs, `.git`, etc. to keep build context small. If the model is fetched at runtime (S3/GCS), drop it from `COPY . .` entirely.",
+  "timestamp": "2026-05-18T08:35:16Z",
+  "latency_ms": 13988,
+  "exit_code": 0,
+  "output_length_chars": 1268,
+  "output_length_tokens_approx": 317,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

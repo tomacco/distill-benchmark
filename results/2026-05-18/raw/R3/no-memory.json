@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "no-memory",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "I'd be happy to help you build a React settings page component! \n\nJust to clarify — by \"pair with Dev,\" do you mean:\n\n1. **A colleague named Dev** you want to collaborate with (in which case, let's just get started and they can join in)\n2. **Some tool or integration** you're expecting to use\n\nAlso, to get us started on the right track, could you share a few details:\n\n- Is this for an existing project? If so, what's the path to the codebase?\n- What kind of settings should the page include (e.g., profile info, notifications, theme, privacy)?\n- Are you using any specific UI library (e.g., Material UI, Tailwind, shadcn/ui)?\n- TypeScript or JavaScript?\n\nOnce I know the scope, we can start building it out together.",
+  "timestamp": "2026-05-18T08:23:49Z",
+  "latency_ms": 10391,
+  "exit_code": 0,
+  "output_length_chars": 718,
+  "output_length_tokens_approx": 179,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

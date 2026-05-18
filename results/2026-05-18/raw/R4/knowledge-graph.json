@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "knowledge-graph",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your existing Postgres expertise and the \"minimal deps\" philosophy, here are the practical options ranked:\n\n**1. PostgreSQL + TimescaleDB extension (lowest friction)**\n- You already run PG 14 — TimescaleDB is just an extension\n- Hypertables give you automatic time-based partitioning\n- Continuous aggregates handle pre-computed rollups\n- No new operational burden, your team already knows PG\n\n**2. ClickHouse (best raw analytics performance)**\n- Columnar storage, purpose-built for analytical queries\n- Orders of magnitude faster than row-store PG on large aggregations\n- Tradeoff: new infrastructure to operate on EKS, another system for on-call\n\n**3. PostgreSQL with partitioning + materialized views (zero new deps)**\n- Native declarative partitioning + `pg_partman`\n- Materialized views for common query patterns\n- May hit a ceiling depending on data volume, but gets you surprisingly far\n\n**My recommendation:** Start with option 3 (plain PG). If you're seeing billions of rows or sub-second dashboard queries are a hard requirement, jump to TimescaleDB — it's the smallest operational leap. Only go ClickHouse if the analytics workload clearly outgrows what PG can handle.\n\nWorth checking with Sofia on whether the payment-processing service will feed events into this analytics service — if so, you already have Kafka in the pipeline and can stream straight into whichever store you pick.\n\nWhat kind of data volumes and query patterns are you looking at?",
+  "timestamp": "2026-05-18T09:26:46Z",
+  "latency_ms": 17251,
+  "exit_code": 0,
+  "output_length_chars": 1467,
+  "output_length_tokens_approx": 366,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

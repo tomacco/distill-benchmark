@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "no-memory",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Here are some strong options depending on your specific needs:\n\n**Column-oriented databases (best for analytical queries on large datasets):**\n- **ClickHouse** — Extremely fast for aggregation queries, open-source, handles billions of rows well. Great if you're self-hosting.\n- **Apache Druid** — Real-time analytics, good for time-series and event data with sub-second queries.\n- **DuckDB** — Embedded columnar database, excellent for analytical workloads. Great if you don't need a separate server process.\n\n**Cloud-managed options:**\n- **BigQuery** (GCP) — Serverless, scales massively, pay-per-query pricing.\n- **Redshift** (AWS) — Columnar, integrates well with the AWS ecosystem.\n- **Snowflake** — Multi-cloud, separates storage and compute, good concurrency handling.\n\n**Other considerations:**\n- **TimescaleDB** — If your analytics are primarily time-series data (built on PostgreSQL).\n- **Apache Pinot** — If you need real-time analytics with low latency at LinkedIn-scale.\n\n**Key factors to narrow it down:**\n1. **Query patterns** — Ad-hoc exploratory queries vs. pre-defined dashboards?\n2. **Data volume & ingestion rate** — Batch loads or real-time streaming?\n3. **Latency requirements** — Sub-second for user-facing, or seconds-ok for internal dashboards?\n4. **Operational preference** — Self-hosted vs. managed service?\n5. **Budget** — Open-source vs. commercial?\n\nFor most teams starting a new analytics service, **ClickHouse** (self-hosted) or **BigQuery/Snowflake** (managed) are the most common choices. Happy to go deeper on any of these if you share more about your constraints.",
+  "timestamp": "2026-05-18T08:24:05Z",
+  "latency_ms": 16017,
+  "exit_code": 0,
+  "output_length_chars": 1598,
+  "output_length_tokens_approx": 399,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

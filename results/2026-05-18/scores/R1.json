@@ -1,0 +1,75 @@
+{
+  "test_id": "R1",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Completely generic payment service advice. No Kotlin, no gRPC, no Kafka, no PostgreSQL choice, no EKS, no Sofia, no monolith context. Requires the user to specify their stack. Zero retrieval of stored knowledge."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Hits nearly every signal: gRPC, Kafka, PG 14, Flyway, auth/account services, notification-service, Sofia, Series C, monolith context, DynamoDB constraint. Kotlin implied via coroutines but not named explicitly. No EKS mention. Knowledge woven in very naturally \u2014 reads like a colleague who knows the codebase. 'What I'd skip' section shows deep contextual reasoning."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Hits all major signals: Kotlin, PostgreSQL, gRPC, Flyway, Kafka, EKS/ArgoCD, auth-service, account-service, Sofia, Marcus, Series C. Most complete coverage of expected signals. However, the 'Technology & Architecture (already decided)' header feels like a retrieval dump rather than organic advice. Slightly mechanical presentation."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Strong coverage: Kotlin + coroutines, gRPC, Kafka, PostgreSQL, Flyway, Sofia, Marcus, Linear, Series C, DynamoDB/MongoDB rejected. No EKS mention. Well-organized and naturally presented. Testing section adds practical value. Slightly more structured-feeling than the most natural responses."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Covers Kotlin + gRPC, PostgreSQL 14, Kafka, Flyway, EKS, mTLS, Sofia, Series C, auth-service. Mentions DynamoDB/MongoDB rejection. Feature flags for gradual rollout is a nice practical touch. Solid but slightly less contextually rich than the top responses (no Marcus, no account-service staging status)."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Excellent natural integration: gRPC, Kafka, PostgreSQL, Flyway, Sofia, account-service, notification-service, monolith migration, Series C, Kotlin coroutines. Strangler fig strategy and dual-write discussion show deep understanding of the migration context. Alignment questions for Sofia are genuinely useful. No explicit Kotlin or EKS mention. Reads like a seasoned teammate."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Covers PostgreSQL, gRPC, Kafka, Flyway, Sofia, Series C, account-service, auth-service, notification-service. Kotlin not explicitly named, no EKS. Strangler fig and feature flag advice shows migration awareness. Very natural voice. Slightly less comprehensive on stack specifics than top contenders but reads extremely naturally."
+    },
+    "H": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Hits most signals: Kotlin + gRPC, PostgreSQL 14, Kafka, Flyway, EKS/ArgoCD, Sofia, Series C. However, opens with 'Based on your knowledge base' which is an unnatural meta-reference to the retrieval system itself. Suggests event sourcing which contradicts the pragmatic tone of the codebase. The retrieval is visible rather than invisible."
+    }
+  },
+  "ranking": [
+    "B",
+    "F",
+    "D",
+    "E",
+    "C",
+    "G",
+    "H",
+    "A"
+  ],
+  "analysis": "System A is a clear outlier \u2014 it retrieved zero stored knowledge and produced entirely generic payment service advice, requiring the user to specify their own stack. Systems B through H all demonstrated meaningful retrieval, but varied significantly in naturalness and precision. System B stands out for weaving knowledge seamlessly into advice that reads like an informed colleague, hitting nearly every signal while the 'What I'd skip' section demonstrates genuine contextual reasoning rather than retrieval dumping. System F is a close second with its natural voice and strong migration-context awareness, particularly the nuanced Sofia alignment questions. Systems D and E are strong middle performers with comprehensive coverage and good presentation. System C has the most complete signal coverage (only one to explicitly name EKS/ArgoCD alongside Kotlin, Kafka, PostgreSQL, and Sofia) but loses points for the mechanical 'already decided' framing that makes the retrieval visible. System G is highly natural but slightly less comprehensive on explicit stack details. System H suffers from the 'Based on your knowledge base' opener which breaks the illusion of organic knowledge and suggests event sourcing in a context that seems to favor pragmatism. The key differentiator among the top systems is not what knowledge was retrieved, but how invisibly it was integrated \u2014 the best responses made the user feel understood, not analyzed.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "claude-mem",
+    "C": "memory-compiler",
+    "D": "memory-engine",
+    "E": "knowledge-graph",
+    "F": "engram",
+    "G": "basic-memory",
+    "H": "distill"
+  }
+}

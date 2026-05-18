@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "no-memory",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created:\n\n**Dockerfile** — Multi-stage build that:\n- **Stage 1 (builder):** Installs gcc/g++ needed to compile native extensions (numpy, scikit-learn), then pip-installs dependencies into a separate prefix\n- **Stage 2 (runtime):** Copies only the installed packages into a clean `python:3.12-slim` image — no compilers in the final image, keeping it small\n- Runs as a non-root `appuser` for security\n- Includes a healthcheck hitting `/health`\n\n**app/main.py** — FastAPI app with:\n- `POST /predict` — accepts transaction features, returns `fraud_probability` and `is_fraud`\n- `GET /health` — basic liveness check\n- Loads a joblib-serialized scikit-learn model from `models/fraud_model.joblib` at startup\n\n**To use it:** drop your trained model as `models/fraud_model.joblib`, then:\n\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n```\n\nTest with:\n```bash\ncurl -X POST http://localhost:8000/predict \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"amount\": 499.99, \"merchant_category\": 3, \"transaction_hour\": 2, \"distance_from_home\": 150.0, \"is_online\": 1}'\n```\n\nAdjust the `Transaction` fields in `main.py` to match whatever features your trained model expects.",
+  "timestamp": "2026-05-18T11:14:31Z",
+  "latency_ms": 31982,
+  "exit_code": 0,
+  "output_length_chars": 1205,
+  "output_length_tokens_approx": 301,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

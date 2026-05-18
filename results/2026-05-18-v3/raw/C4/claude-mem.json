@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "claude-mem",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Given your stack (Kotlin, EKS, structured logging with correlation IDs already adopted), here's what I'd recommend:\n\n## Stack\n\n- **SLF4J + Logback** — standard, zero surprises. Already what auth-service and notification-service use if they're idiomatic Kotlin/Spring.\n- **logstash-logback-encoder** — JSON structured output, plays well with your EKS log pipeline.\n- **kotlin-logging** (`io.github.microutils:kotlin-logging`) — thin Kotlin wrapper over SLF4J. Cleaner than raw SLF4J in Kotlin code.\n\n## Correlation IDs\n\nSince you've already adopted this pattern, use **MDC (Mapped Diagnostic Context)** via a gRPC interceptor so every log line in a request automatically includes the correlation ID:\n\n```kotlin\nclass CorrelationIdInterceptor : ServerInterceptor {\n    override fun <Req, Resp> interceptCall(\n        call: ServerCall<Req, Resp>,\n        headers: Metadata,\n        next: ServerCallHandler<Req, Resp>\n    ): ServerCall.Listener<Req> {\n        val correlationId = headers.get(CORRELATION_ID_KEY)\n            ?: UUID.randomUUID().toString()\n        val ctx = Context.current().withValue(CORRELATION_ID_CTX, correlationId)\n        return Contexts.interceptCall(ctx, call, headers, object : ServerCallHandler<Req, Resp> {\n            override fun startCall(call: ServerCall<Req, Resp>, headers: Metadata): ServerCall.Listener<Req> {\n                MDC.put(\"correlationId\", correlationId)\n                return next.startCall(call, headers)\n            }\n        })\n    }\n}\n```\n\n## Logback config (`logback.xml`)\n\n```xml\n<configuration>\n    <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n        <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\">\n            <includeMdcKeyName>correlationId</includeMdcKeyName>\n        </encoder>\n    </appender>\n\n    <root level=\"INFO\">\n        <appender-ref ref=\"STDOUT\" />\n    </root>\n\n    <!-- Payment-specific: log all tx activity at DEBUG in non-prod -->\n    <logger name=\"com.helios.payment\" level=\"${LOG_LEVEL:-INFO}\" />\n</configuration>\n```\n\n## Gradle deps\n\n```kotlin\nimplementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n## Usage\n\n```kotlin\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"payment initiated\" }  // correlationId auto-included via MDC\nlogger.warn { \"retry attempt=$attempt for txId=$txId\" }\n```\n\n**Skip**: Log4j2 (unnecessary complexity for your needs), custom log frameworks, anything that requires extra infra. JSON to stdout + EKS FluentBit/Fluentd to your log aggregator is the simplest path.\n\nWant me to scaffold the actual files in the payment-processing service?",
+  "timestamp": "2026-05-18T12:27:43Z",
+  "latency_ms": 19757,
+  "exit_code": 0,
+  "output_length_chars": 2724,
+  "output_length_tokens_approx": 681,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

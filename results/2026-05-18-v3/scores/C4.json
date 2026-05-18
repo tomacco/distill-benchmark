@@ -1,0 +1,75 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clear recall of structured logging with correlation IDs as 'already an adopted standard.' Practical with kotlin-logging, Logback, JSON encoder. Good PCI-aware logging advice. Mentions correlation IDs prominently. Tone is confident but not rigid. Slightly less complete than B/G on config examples."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall, presents as 'you've already adopted.' Full stack: kotlin-logging (current oshai package), Logback, logstash encoder with complete logback.xml. Mentions auth-service, MDCContext for coroutines, PCI awareness. Balanced tone \u2014 established pattern, not mandate. Most complete and practical response."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 3,
+      "notes": "Explicitly references 'noted in corrections.md as adopted' \u2014 strong recall signal. Uses older microutils kotlin-logging package. Mentions auth-service and notification-service. Framing of 'this is already decided' is slightly more rigid than ideal. Solid code examples but MDC usage is manual/verbose."
+    },
+    "D": {
+      "recall": 3,
+      "strength": 2,
+      "contradiction_handling": 3,
+      "notes": "Recommends structured JSON logging and MDC but does NOT frame it as an established team decision. Uses 'traceId' instead of 'correlationId.' Actively recommends against kotlin-logging, which conflicts with team patterns. No mention of existing services. Generic recommendation rather than recalled knowledge."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clear recall: 'structured logging with correlation IDs already adopted.' Mentions auth-service and notification-service. Detailed gRPC interceptor code. Uses older microutils package. Balanced tone. Slightly verbose but thorough and practical."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "References 'team standards' and 'established decisions' with 'per critical-corrections.' Good coroutine-aware MDC detail. Mentions auth-service and notification-service. Doesn't recommend kotlin-logging wrapper in deps (just raw SLF4J), slight inconsistency. Complete gRPC interceptor example."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Explicitly references 'team standard (per critical-corrections).' Uses current oshai kotlin-logging. Complete examples: code, interceptor, logback.xml. Mentions gRPC, EKS alignment. Balanced tone \u2014 'aligns with your stack' rather than 'you must.' Concise and well-structured."
+    },
+    "H": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No recall whatsoever \u2014 asks for language, framework, deployment target, and team conventions that should already be known. Generic advice. Does mention correlation IDs and structured logging as general best practices, but shows zero memory of team decisions. Complete failure on the correction recall dimension."
+    }
+  },
+  "ranking": [
+    "B",
+    "G",
+    "A",
+    "E",
+    "F",
+    "C",
+    "D",
+    "H"
+  ],
+  "analysis": "Systems B and G are the strongest, both clearly recalling structured logging with correlation IDs as an established team standard, providing complete practical implementations with kotlin-logging (current oshai package), Logback, logstash-logback-encoder, and full logback.xml configs. B edges ahead with its MDCContext coroutine detail and PCI awareness. A, E, and F form a strong middle tier \u2014 all clearly recall the team decision with appropriate strength and provide practical guidance, though each has minor gaps (A lacks config XML, E is slightly verbose, F omits kotlin-logging from deps). C recalls well but uses the older microutils package and frames the decision slightly too rigidly. D is notably weaker: it recommends the right tools generically but fails to present this as a recalled team decision, uses 'traceId' instead of 'correlationId,' and actively advises against kotlin-logging \u2014 contradicting established patterns. H fails entirely on recall, asking for basic context (language, stack, team conventions) that a memory-equipped system should already know.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "basic-memory",
+    "C": "memory-engine",
+    "D": "knowledge-graph",
+    "E": "claude-mem",
+    "F": "engram",
+    "G": "memory-compiler",
+    "H": "no-memory"
+  }
+}

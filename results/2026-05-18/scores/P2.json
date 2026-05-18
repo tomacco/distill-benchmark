@@ -1,0 +1,75 @@
+{
+  "test_id": "P2",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Well-proportioned response. Shows a clean /health endpoint with JSON output, checks Postgres and Redis. Brief Actuator mention is helpful not bloating. Stays under 20 lines of code. Minor ding for including Redis check which wasn't strictly required but is reasonable given auth-service context."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Provides working code but adds an unsolicited /health/live liveness endpoint and discusses ALB/EKS configuration. The liveness vs readiness split was explicitly called out as a penalty signal unless brief. Code is ~25 lines, borderline. gRPC mention is a bonus."
+    },
+    "C": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Significant over-engineering. Starts with a simple controller then pivots to full Actuator config, adds liveness/readiness health groups, a separate management port, AND a Kubernetes deployment YAML with probe configs. Three code blocks plus YAML. This is the observability stack creep the rubric penalizes."
+    },
+    "D": {
+      "solution_scale": 2,
+      "simplicity": 1,
+      "avoided_over_engineering": 1,
+      "notes": "Creates two custom files (HealthService + HealthHttpServer), implements the full gRPC health checking protocol with ConcurrentHashMap, a separate HTTP server, ALB target group config, EKS probe YAML, Gradle dependency, and graceful shutdown wiring. This is a full health checking framework for what should be a simple endpoint."
+    },
+    "E": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Proportional and brief. Shows both Ktor and Spring Boot options in minimal code. Mentions gRPC health checking protocol (bonus). Slight ding for being non-committal \u2014 showing two frameworks instead of picking one makes it less actionable. But stays compact and avoids over-engineering."
+    },
+    "F": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Best proportionality. Concise explanation, single /health endpoint, checks DB with timeout, auto-closes connection. Mentions liveness/readiness split only as a brief optional follow-up, not a recommendation. ALB config is one sentence. No unnecessary deps. Exactly the right size for the problem."
+    },
+    "G": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 3,
+      "notes": "No solution provided. Just asks clarifying questions despite having enough context (Kotlin, gRPC, EKS) to produce an answer. Cannot score on engineering quality when nothing was engineered. Neutral on over-engineering since there was nothing to over-engineer."
+    },
+    "H": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 3,
+      "notes": "No solution provided. Asks what language/framework the service uses despite the test context specifying Kotlin. Failed to leverage available context entirely. Same issue as G \u2014 cannot evaluate engineering proportionality on a non-answer."
+    }
+  },
+  "ranking": [
+    "F",
+    "A",
+    "E",
+    "B",
+    "C",
+    "D",
+    "G",
+    "H"
+  ],
+  "analysis": "System F delivered the most proportional response: a single /health endpoint with a DB check, no unnecessary infrastructure, and a one-line mention of liveness/readiness as an optional next step. System A was close behind with a clean approach though slightly more verbose with Redis checks and an Actuator alternative note. System E was compact and mentioned gRPC (bonus) but hedged by showing two frameworks. System B crossed into mild over-engineering with an unsolicited liveness endpoint and ALB/EKS discussion. System C escalated significantly \u2014 three code blocks, Actuator health groups, a separate management port, and Kubernetes deployment YAML for what should be a simple endpoint. System D was the most over-engineered: a custom gRPC health service with ConcurrentHashMap, a separate HTTP server class, graceful shutdown wiring, and full infrastructure config \u2014 essentially building a health check framework. Systems G and H failed entirely by asking clarifying questions instead of providing solutions, despite having sufficient context (Kotlin, gRPC, EKS) to produce a reasonable answer.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "engram",
+    "C": "basic-memory",
+    "D": "claude-mem",
+    "E": "memory-compiler",
+    "F": "knowledge-graph",
+    "G": "distill",
+    "H": "no-memory"
+  }
+}

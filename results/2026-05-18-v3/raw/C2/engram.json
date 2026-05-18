@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "engram",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No. The team already evaluated and rejected DynamoDB. The decision was PostgreSQL for everything, with extensions preferred over new infrastructure.\n\nFor sub-millisecond key-value reads, you already have **Redis** in the stack. Use it for the session store — it's purpose-built for this exact access pattern and doesn't add any new infrastructure.\n\nIf you need persistence beyond Redis TTLs, back it with PostgreSQL using a simple `sessions` table and lazy-write or write-through from Redis.",
+  "timestamp": "2026-05-18T13:22:36Z",
+  "latency_ms": 8066,
+  "exit_code": 0,
+  "output_length_chars": 491,
+  "output_length_tokens_approx": 122,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

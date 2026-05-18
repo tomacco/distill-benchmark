@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "knowledge-graph",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your existing Postgres expertise and the rejection of DynamoDB/MongoDB, here are solid options:\n\n**Start here: PostgreSQL with analytics extensions**\n- You already run PG 14 — consider **Citus** (distributed PG) or **TimescaleDB** for time-series analytics. Zero new stack to learn, your team's PG expertise carries over directly.\n- Partitioning + materialized views + proper indexing can get you surprisingly far before needing a separate system.\n\n**If PG hits a wall at scale:**\n- **ClickHouse** — columnar store, purpose-built for analytical queries on large datasets. Extremely fast aggregations, good compression. Runs well on EKS.\n- **Apache Druid** — real-time analytics, plays well with Kafka (which you already run). Better if you need sub-second queries on streaming + historical data combined.\n\n**My recommendation:** Start with PostgreSQL (maybe + Citus/TimescaleDB) since it fits your \"minimal deps\" preference and your team knows it cold. Only move to ClickHouse if you're hitting actual performance limits — don't pre-optimize.\n\nGiven Series C due diligence in Q3, keeping the stack simple and proven is a plus. A separate analytics DB is justifiable later, but adding infra complexity now without a proven need would be over-engineering.\n\nWant me to sketch out a PG-based analytics schema or benchmark approach?",
+  "timestamp": "2026-05-18T13:17:45Z",
+  "latency_ms": 16413,
+  "exit_code": 0,
+  "output_length_chars": 1333,
+  "output_length_tokens_approx": 333,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

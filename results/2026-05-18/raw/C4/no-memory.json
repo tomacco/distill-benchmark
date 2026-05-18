@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "no-memory",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "There's no existing codebase here, so I need a bit more context to give you a good recommendation. The right logging setup depends on several factors:\n\n**Key questions:**\n\n1. **What language/framework** is the payment service built with? (e.g., Python/FastAPI, Node/Express, Go, Java/Spring)\n2. **Where will it run?** (Kubernetes, AWS Lambda, ECS, bare VMs)\n3. **Do you have an existing observability stack?** (e.g., Datadog, Grafana/Loki, ELK, CloudWatch)\n\n**General guidance for a payment service:**\n\n- **Structured logging (JSON)** — essential for a payment service. You need searchable, parseable logs for auditing and debugging.\n- **Correlation IDs** — trace a single payment through all steps (initiation, provider call, webhook, settlement).\n- **PII redaction** — never log full card numbers, CVVs, or sensitive customer data. Mask/truncate by default.\n- **Log levels** — `INFO` for payment lifecycle events, `WARN` for retries/degraded states, `ERROR` for failures.\n- **Audit trail** — payment state transitions should be logged at `INFO` with enough detail for compliance (amount, currency, status, timestamps) without sensitive data.\n\n**Common choices by language:**\n\n| Language | Library | Why |\n|----------|---------|-----|\n| Python | `structlog` | Structured, composable processors for redaction |\n| Node.js | `pino` | Fast, JSON-native, low overhead |\n| Go | `slog` (stdlib) or `zerolog` | Structured, zero-alloc options |\n| Java | `SLF4J` + `Logback` | Industry standard, MDC for correlation |\n\nLet me know your stack and I can set up a concrete logging module with the right configuration.",
+  "timestamp": "2026-05-18T08:20:53Z",
+  "latency_ms": 25853,
+  "exit_code": 0,
+  "output_length_chars": 1605,
+  "output_length_tokens_approx": 401,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

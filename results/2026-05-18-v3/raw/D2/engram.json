@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "engram",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "PostgreSQL. You already have deep team expertise, strong consistency guarantees, and everything you need for complex aggregations built in.\n\nFor the reporting service specifically:\n\n- **Materialized views** for precomputed aggregation queries\n- **pg_cron** to schedule refreshes (already aligned with your infra preferences)\n- **Table partitioning** (by date range) if the reporting dataset grows large\n- **Read replica** dedicated to reporting, so heavy queries don't impact transactional workloads\n\nIf you eventually need OLAP-style analytics at scale, consider **CitusDB** (PostgreSQL extension) or **TimescaleDB** before reaching for a separate system. Keeps the operational surface area minimal.\n\nNo reason to introduce new database infrastructure here.",
+  "timestamp": "2026-05-18T13:23:26Z",
+  "latency_ms": 8528,
+  "exit_code": 0,
+  "output_length_chars": 758,
+  "output_length_tokens_approx": 189,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

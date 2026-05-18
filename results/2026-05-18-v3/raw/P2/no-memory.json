@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "no-memory",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no existing `auth-service` in this workspace — it's an empty benchmark directory with just a README. I need a bit more context to help you:\n\n1. **Where is the auth-service?** Is it in a different repo/directory, or should I create one from scratch?\n2. **What framework/language** is the auth-service built with (e.g., Express/Node, Flask/Python, Go, Spring Boot)?\n3. **What should the health check return?** A simple `200 OK` with `{\"status\": \"ok\"}`, or does your load balancer expect a specific response format (e.g., checking DB connectivity, upstream dependencies)?\n\nIf you point me to the actual service code, I can add the endpoint right away.",
+  "timestamp": "2026-05-18T11:12:16Z",
+  "latency_ms": 16673,
+  "exit_code": 0,
+  "output_length_chars": 656,
+  "output_length_tokens_approx": 164,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "no-memory",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here are the key considerations for building a payment processing service:\n\n## Security & Compliance\n- **PCI DSS compliance** — If handling card data directly, you must meet PCI DSS requirements. Consider using tokenization via providers like Stripe or Braintree to minimize your PCI scope.\n- **Never store raw card numbers** — Use tokens or references from your payment provider.\n- **Encrypt sensitive data** at rest and in transit (TLS everywhere).\n- **Audit logging** — Log every payment event (without sensitive data) for compliance and debugging.\n\n## Architecture\n- **Idempotency** — Payment requests must be idempotent. Use idempotency keys so retries don't create duplicate charges.\n- **State machine** — Model payment lifecycle clearly (created → authorized → captured → settled, or failed/refunded/disputed).\n- **Async processing** — Use webhooks/event queues for settlement notifications, refunds, and disputes rather than synchronous polling.\n- **Retry logic with backoff** — Payment provider APIs can be flaky; handle transient failures gracefully.\n\n## Reliability\n- **Exactly-once semantics** — The hardest problem. Combine idempotency keys, database transactions, and provider deduplication.\n- **Reconciliation** — Build a process to compare your records against the provider's ledger regularly.\n- **Circuit breakers** — If a provider is down, fail fast rather than queuing unbounded requests.\n- **Multi-provider support** — Consider abstracting the provider interface for failover or A/B testing.\n\n## Data Model\n- **Separate authorization from capture** — Many business flows need this split.\n- **Store provider references** — Keep the provider's transaction ID alongside your own.\n- **Currency handling** — Use integers (cents) not floats. Be explicit about currency codes (ISO 4217).\n- **Ledger/double-entry bookkeeping** — For accurate financial tracking.\n\n## Operational\n- **Monitoring & alerting** — Track success rates, latency, and error rates by provider/payment method.\n- **Dispute/chargeback handling** — Build workflows for responding to disputes.\n- **Refund flows** — Full and partial refunds, with proper state tracking.\n- **Testing** — Use provider sandbox/test environments. Test edge cases like timeouts, partial failures, and webhook redelivery.\n\n## Regulatory\n- **Strong Customer Authentication (SCA)** if operating in the EU (3D Secure).\n- **Tax calculation** — Determine if this service owns tax computation or delegates it.\n- **Data residency** — Some jurisdictions require payment data to stay in-region.\n\nWant me to dive deeper into any of these areas, or help design a specific component?",
+  "timestamp": "2026-05-18T11:13:03Z",
+  "latency_ms": 20166,
+  "exit_code": 0,
+  "output_length_chars": 2627,
+  "output_length_tokens_approx": 656,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

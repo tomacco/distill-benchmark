@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "This contradicts something I'm confident about from past sessions. The team already evaluated DynamoDB and rejected it.\n\n**Why DynamoDB was rejected at Helios:**\n- Need for **strong consistency** on financial data\n- Requirement for **multi-table transactions** (DynamoDB transactions are limited and expensive)\n- Team has **deep PostgreSQL expertise** — lower operational risk vs. adding a new datastore\n\n**For the session store specifically:**\n- You already have **Redis** in the stack — it gives you sub-millisecond reads on key-value lookups\n- Zero new infrastructure, zero new operational burden\n- Redis `SET` with TTL is purpose-built for sessions\n\nIf the session store requirements have changed (e.g., durability requirements that Redis doesn't meet, or scale beyond a single Redis cluster), let me know and we can revisit. But adding DynamoDB to the stack for something Redis already handles well seems like unnecessary complexity.",
+  "timestamp": "2026-05-18T08:30:14Z",
+  "latency_ms": 23606,
+  "exit_code": 0,
+  "output_length_chars": 938,
+  "output_length_tokens_approx": 234,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

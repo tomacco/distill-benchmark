@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "memory-compiler",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created:\n\n**`Dockerfile`** — Multi-stage build on `python:3.11-slim`. Runs as non-root `app` user, includes a healthcheck on `/health`, exposes port 8080.\n\n**`app/main.py`** — FastAPI app with two endpoints:\n- `GET /health` — liveness probe for EKS\n- `POST /predict` — accepts `{\"features\": [1.0, 2.0, ...]}`, returns `{\"score\": 0.87, \"is_fraud\": true, \"threshold\": 0.5}`\n\n**`requirements.txt`** — pinned deps, minimal set.\n\nTo use it, drop your trained model at `model/fraud_model.joblib` and build:\n\n```fish\ndocker build -t fraud-scoring .\ndocker run -p 8080:8080 -v ./model:/app/model fraud-scoring\n```\n\nOne note: since your internal APIs use gRPC, you may eventually want to add a gRPC interface alongside the REST one for internal callers. The REST endpoint works fine for external consumers or quick iteration.",
+  "timestamp": "2026-05-18T09:07:01Z",
+  "latency_ms": 34398,
+  "exit_code": 0,
+  "output_length_chars": 832,
+  "output_length_tokens_approx": 208,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 2,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Mentions pairing with Dev and keeping code straightforward, but doesn't identify Dev as junior or proactively assume React/TS. Minimal stored knowledge surfaced."
+    },
+    "B": {
+      "relevance": 3,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Knows React/TypeScript and references banking platform context. Mentions pairing with Dev but doesn't acknowledge junior status or calibrate complexity. gRPC mention may be relevant stored knowledge or a guess."
+    },
+    "C": {
+      "relevance": 3,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Knows Dev is 'ramping up' and references Marcus/Linear. Calibrates for Dev's level. Doesn't explicitly state React/TS or junior status but implies it naturally."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Explicitly surfaces Dev as junior frontend engineer, React/TS, 6 months, and user as senior backend engineer. Mentions Marcus/Linear. All relevant, but the opening line reads like reciting a dossier."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Surfaces Dev's role, experience, and stack. Explicitly mentions 'no over-engineering'. Offers teaching-oriented option for Dev. All surfaced knowledge is directly relevant and well-integrated into the response flow."
+    },
+    "F": {
+      "relevance": 1,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "No mention of Dev, no mention of React/TS, no stored knowledge surfaced at all. Responds as if starting from zero context. Clean but empty."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Identifies Dev as junior (React/TS, 6 months), knows user is senior backend engineer, frames it as collaboration opportunity. Relevant knowledge surfaced but the opening reads slightly mechanical."
+    },
+    "H": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Knows Dev is junior (~6mo, React/TS), calibrates for pairing session. SNS channels reference suggests deeper stored knowledge about the stack but may be slightly over-reaching. Good natural integration overall."
+    }
+  },
+  "ranking": [
+    "E",
+    "D",
+    "G",
+    "H",
+    "C",
+    "B",
+    "A",
+    "F"
+  ],
+  "analysis": "System E is the strongest performer, surfacing all key signals \u2014 Dev's junior status, React/TS stack, 6 months experience \u2014 while also proactively applying the 'no over-engineering' preference and offering a teaching-oriented approach, all woven naturally into the response. System D surfaces equally rich knowledge but reads more like reciting retrieved facts in the opening line. Systems G and H both identify Dev correctly and calibrate appropriately, with H integrating knowledge more naturally but potentially over-reaching with the SNS mention. System C takes a subtler approach, referencing Dev 'ramping up' and Marcus/Linear without explicitly stating stored facts, which feels natural but surfaces less. System B shows some domain knowledge (banking, gRPC) but misses the critical junior calibration. System A barely surfaces stored knowledge beyond knowing Dev exists. System F demonstrates zero retrieval \u2014 no mention of Dev, the stack, or any stored context whatsoever.",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "knowledge-graph",
+    "C": "engram",
+    "D": "distill",
+    "E": "memory-compiler",
+    "F": "no-memory",
+    "G": "memory-engine",
+    "H": "claude-mem"
+  }
+}

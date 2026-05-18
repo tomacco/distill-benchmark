@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "memory-engine",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "You're already on AWS (EKS, Terraform). Simplest option for a static marketing site:\n\n**S3 + CloudFront**\n\n- Drop the HTML/CSS/JS into an S3 bucket with static website hosting enabled\n- Put CloudFront in front for HTTPS and caching\n- No servers to manage, pennies/month at marketing-site traffic levels\n- You already have Terraform — add it as a module\n\nQuick Terraform sketch:\n\n```hcl\nresource \"aws_s3_bucket\" \"marketing\" {\n  bucket = \"helios-marketing-site\"\n}\n\nresource \"aws_s3_bucket_website_configuration\" \"marketing\" {\n  bucket = aws_s3_bucket.marketing.id\n  index_document { suffix = \"index.html\" }\n  error_document { key = \"404.html\" }\n}\n\nresource \"aws_cloudfront_distribution\" \"marketing\" {\n  origin {\n    domain_name = aws_s3_bucket.marketing.bucket_regional_domain_name\n    origin_id   = \"s3-marketing\"\n    origin_access_control_id = aws_cloudfront_origin_access_control.marketing.id\n  }\n  enabled             = true\n  default_root_object = \"index.html\"\n  # ... viewer certificate, aliases, etc.\n}\n```\n\nDeploy with `aws s3 sync ./site s3://helios-marketing-site` in a GitHub Actions step.\n\nThis keeps everything in your existing AWS/Terraform setup — no new vendors, no new billing, no new access controls. Tell him to avoid spinning up a separate Vercel/Netlify account when the infra is already there.",
+  "timestamp": "2026-05-18T13:01:06Z",
+  "latency_ms": 18352,
+  "exit_code": 0,
+  "output_length_chars": 1313,
+  "output_length_tokens_approx": 328,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

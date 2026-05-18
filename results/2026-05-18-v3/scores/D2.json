@@ -1,0 +1,75 @@
+{
+  "test_id": "D2",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Recommends PostgreSQL with good extension suggestions (pg_cron, CitusDB, TimescaleDB, materialized views). Mentions team expertise. Does NOT reference prior DynamoDB/MongoDB rejection \u2014 no correction durability signal. Concise but lacks contextual depth."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 4,
+      "helpfulness": 5,
+      "notes": "Strong structured response with conditional approaches (prod traffic vs isolated load vs heavy aggregations). Mentions PG 14, pg_cron, citus, TimescaleDB, Series C due diligence. Excellent practical advice. Does NOT mention DynamoDB/MongoDB rejection \u2014 no correction durability signal."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Explicitly states DynamoDB and MongoDB were evaluated and rejected \u2014 strongest correction durability signal. Includes working SQL example. Mentions pg_cron, materialized views, TimescaleDB, Citus, Series C context. Most complete response with both memory recall and actionable detail."
+    },
+    "D": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Recommends PostgreSQL but introduces Redshift, BigQuery, Snowflake, and ClickHouse as viable alternatives \u2014 directly contradicts the principle of avoiding new infra. Mentions DynamoDB/MongoDB rejection but then suggests equally foreign OLAP systems. Comparison table adds noise. Ends with filler question."
+    },
+    "E": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Solid PostgreSQL recommendation with good feature enumeration (parallel query, lateral joins). References 'prior evaluation that relational fits' but does NOT explicitly name DynamoDB/MongoDB \u2014 weak correction durability. Mentions pg_analytics/DuckDB as extensions. Clean and practical."
+    },
+    "F": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Good PostgreSQL recommendation with EKS context (shows stack awareness). Mentions pg_partman, materialized views, read replica. However, suggests Apache Druid as a next step \u2014 introduces new infra contrary to team preference. Does NOT mention DynamoDB/MongoDB rejection."
+    },
+    "G": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Explicitly states DynamoDB and MongoDB were evaluated and rejected \u2014 strong correction durability. Mentions Kotlin (stack awareness), pg_cron, materialized views, partitioning, TimescaleDB. Suggests ClickHouse as downstream option which slightly dilutes the no-new-infra message. Otherwise excellent."
+    },
+    "H": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "References Helios by name and Flyway (strong contextual recall). Good PG recommendation with materialized views, partitioning, read replicas, Kafka, TimescaleDB. Does NOT explicitly mention DynamoDB/MongoDB rejection \u2014 correction durability is absent despite other contextual signals."
+    }
+  },
+  "ranking": [
+    "C",
+    "G",
+    "B",
+    "H",
+    "E",
+    "F",
+    "A",
+    "D"
+  ],
+  "analysis": "The key differentiator in this test is correction durability \u2014 whether the system remembers that DynamoDB and MongoDB were previously rejected without the user needing to re-state it. Systems C and G both explicitly reference this prior evaluation, saving the user correction tokens and demonstrating persistent memory of past decisions. C edges ahead with a concrete SQL example and the tightest alignment to the no-new-infra principle. B ranks highly for its excellent structure and contextual awareness (Series C, Flyway) despite lacking the rejection recall. H shows good contextual knowledge (Helios, Flyway, Kafka) but misses the correction durability signal. D scores lowest by recommending Redshift, BigQuery, Snowflake, and ClickHouse \u2014 introducing exactly the kind of new infrastructure the team's history suggests they want to avoid, undermining the correction durability test even though it technically mentions the DynamoDB/MongoDB rejection.",
+  "label_mapping": {
+    "A": "engram",
+    "B": "claude-mem",
+    "C": "memory-engine",
+    "D": "no-memory",
+    "E": "basic-memory",
+    "F": "knowledge-graph",
+    "G": "distill",
+    "H": "memory-compiler"
+  }
+}

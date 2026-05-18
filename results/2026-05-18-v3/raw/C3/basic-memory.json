@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "basic-memory",
+  "prompt": "What database do we use for the account service?",
+  "output": "According to the knowledge vault, the architecture doc lists **PostgreSQL 14** as the primary database across the stack, including for the account service.\n\nHowever, you mentioned earlier that the account service was migrated to **MySQL** last week. The vault file hasn't been updated to reflect that change. Would you like me to update `vault/architecture.md` to record that the account service now uses MySQL?",
+  "timestamp": "2026-05-18T12:38:07Z",
+  "latency_ms": 10581,
+  "exit_code": 0,
+  "output_length_chars": 411,
+  "output_length_tokens_approx": 102,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

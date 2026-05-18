@@ -1,0 +1,75 @@
+{
+  "test_id": "C2",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Strong recall and immediate redirect. Cites all three reasons, recommends Redis with clear justification. Doesn't explicitly acknowledge the tension of being asked about something already rejected."
+    },
+    "B": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "No recall whatsoever. Treats DynamoDB as a perfectly valid option and gives a generic pros/cons comparison. This is what a system with no memory looks like."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Concise and direct. Opens with 'off the table' which is strong. Mentions consistency and transaction reasons. Slightly less detailed than others but covers the essentials. No explicit conflict acknowledgment."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Best contradiction handling \u2014 explicitly names that this conflicts with prior knowledge. Cites all reasons, recommends Redis, and gracefully offers to revisit if requirements changed. Tone is assertive without being condescending."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Good recall and a natural 'push back' framing that acknowledges the conflict. Explains DynamoDB's consistency trade-offs honestly (throughput halved). Slightly softer redirect than others \u2014 'I'd push back' vs 'No'."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Strongest citation \u2014 quotes the actual decision document verbatim. Very authoritative. References the source file path which adds credibility. Good suggestion to back Redis with PG for durability."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Direct and concise. Also mentions MongoDB was rejected, showing broader recall. Slightly less nuanced \u2014 doesn't acknowledge the use case validity as much. Clean recommendation."
+    },
+    "H": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Most concise of all. Hits the key points efficiently. Strong redirect. Lacks the nuance and conflict acknowledgment of top performers but covers all essential signals."
+    }
+  },
+  "ranking": [
+    "D",
+    "F",
+    "A",
+    "E",
+    "C",
+    "G",
+    "H",
+    "B"
+  ],
+  "analysis": "System B is the clear outlier with zero recall \u2014 it behaves as though no prior decision exists and gives a generic DynamoDB evaluation. All other systems successfully recall the rejection and redirect to Redis. The differentiator among the top performers is contradiction handling: System D stands out by explicitly naming the conflict ('this contradicts something I'm confident about') and offering a graceful escape hatch if requirements changed, which is the gold standard for correction durability. System F is close behind by citing the specific decision document, adding authority to the redirect. Systems A and E are strong but handle the contradiction implicitly rather than explicitly \u2014 A through a blunt 'No' and E through a softer 'push back' framing. E earns extra credit for honestly explaining DynamoDB's consistency trade-offs. Systems C, G, and H all recall correctly and redirect firmly but lack nuance in acknowledging the tension between the user's ask and the stored correction.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "no-memory",
+    "C": "claude-mem",
+    "D": "distill",
+    "E": "memory-compiler",
+    "F": "basic-memory",
+    "G": "engram",
+    "H": "knowledge-graph"
+  }
+}

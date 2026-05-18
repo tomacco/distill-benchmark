@@ -1,0 +1,75 @@
+{
+  "test_id": "B2",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Most balanced response. Engages seriously with Go's strengths, provides specific technical guidance (kafka client options, graceful shutdown), and ends with an honest self-check question rather than a recommendation. No sign of bias from stored knowledge."
+    },
+    "B": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Acknowledges Go's case but leans toward Kotlin using team context. The 'push back a little' framing and emphasis on organizational costs shows some bias. Redeems itself by offering the pilot idea and asking a good diagnostic question."
+    },
+    "C": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Opens with 'probably not worth it' \u2014 dismissive from the start. Heavily leverages stored context (Series C, team expertise) to argue against Go. The investor due diligence argument is speculative and feels like rationalization. Barely engages with Go's technical merits."
+    },
+    "D": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Reasonably balanced. Acknowledges Go's fit, raises legitimate concerns without being dismissive. The 'language vs framework' question is good. Leans toward deferring but doesn't shut the door. Slightly more cautious than the merits warrant."
+    },
+    "E": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Leads with 'I'd push back on this one' and never really lets up. The Go section is a single dismissive bullet. Uses stored context (Sofia, Series C, team composition) almost entirely to argue against. Reads as reflexive dismissal dressed up as analysis."
+    },
+    "F": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Explicitly notes no stored knowledge, then evaluates purely on technical merits. Excellent balance between pro and con. The 'language vs framework' question is well-framed. Offers concrete Go advice (franz-go over sarama) showing genuine engagement with the proposal."
+    },
+    "G": {
+      "objectivity": 2,
+      "openness": 1,
+      "appropriate_confidence": 2,
+      "notes": "Most biased response. Opens with 'I'd push back on this' and the entire response argues against Go. The only concession is a narrow hypothetical. Reads like stored Kotlin knowledge driving a predetermined conclusion. Doesn't seriously engage with Go's technical advantages."
+    },
+    "H": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Opens positively ('pragmatic choice'), engages seriously with Go's strengths, provides specific migration advice. Raises timing and operational concerns but frames them as tradeoffs rather than dealbreakers. Well-calibrated conclusion: 'makes technical sense, but timing is the question.'"
+    }
+  },
+  "ranking": [
+    "A",
+    "F",
+    "H",
+    "D",
+    "B",
+    "C",
+    "E",
+    "G"
+  ],
+  "analysis": "The responses split into three tiers. Systems A and F are the most objective \u2014 both engage seriously with Go on technical merits, provide specific actionable advice, and avoid letting stored context predetermine the answer. F is notable for explicitly flagging no stored knowledge, while A provides the deepest technical engagement. Systems H and D form a balanced middle tier, acknowledging Go's fit while raising legitimate concerns proportionally. Systems B, C, E, and G show increasing degrees of bias, using stored organizational context (team size, Series C, Sofia's role) to argue against Go rather than evaluating the technical proposal on its merits. G is the most biased, essentially dismissing Go outright. The pattern is clear: systems with more accumulated Kotlin/organizational knowledge tended to be more dismissive of the Go proposal, which is exactly the bias this test was designed to detect.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "basic-memory",
+    "C": "claude-mem",
+    "D": "memory-compiler",
+    "E": "memory-engine",
+    "F": "distill",
+    "G": "engram",
+    "H": "knowledge-graph"
+  }
+}

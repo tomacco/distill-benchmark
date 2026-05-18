@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a solid choice for session stores, but a few things to consider:\n\n**Why it works well:**\n- Single-digit millisecond reads on key-value lookups by default\n- Fully managed, scales horizontally without effort\n- TTL support for automatic session expiration — no cleanup jobs needed\n- On-demand capacity mode is great if session traffic is spiky\n\n**Sub-millisecond caveat:**\n- Standard DynamoDB gives you **single-digit millisecond** latency, not sub-millisecond. If you truly need sub-millisecond (p99), you'd need **DynamoDB Accelerator (DAX)**, which adds an in-memory caching layer. That brings reads down to microseconds but adds cost and operational complexity.\n- If sub-millisecond is a hard requirement, **ElastiCache (Redis/Valkey)** is worth comparing — it naturally operates in that range without an extra caching layer, and Redis is the most common session store for a reason.\n\n**When DynamoDB is the better pick over Redis:**\n- You need durability (Redis persistence is an afterthought)\n- You want zero operational overhead (no cluster sizing, failover config)\n- You need to scale beyond what a single Redis cluster handles\n- You want fine-grained IAM access control\n\n**When Redis wins:**\n- Sub-millisecond is a hard SLA, not aspirational\n- You're already running Redis for caching\n- You need complex operations beyond simple get/set (e.g., sliding window expiry with sorted sets)\n\n**Bottom line:** If \"sub-millisecond\" is aspirational and single-digit ms is actually fine, plain DynamoDB is a great fit. If it's a hard requirement, either add DAX or just use Redis/Valkey.",
+  "timestamp": "2026-05-18T08:20:20Z",
+  "latency_ms": 16072,
+  "exit_code": 0,
+  "output_length_chars": 1593,
+  "output_length_tokens_approx": 398,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

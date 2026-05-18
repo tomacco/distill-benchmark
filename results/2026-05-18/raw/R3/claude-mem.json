@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-mem",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "The workspace is essentially empty — no existing React project. A few questions before we scaffold this out:\n\n1. **Scope** — What does this settings page need to cover? User profile, notification preferences, security/2FA, billing, or something else?\n2. **Existing project** — Is this going into an existing React app (e.g., a frontend repo Dev already has)? If so, I can match whatever patterns are already there (router, state management, component style).\n3. **Component style** — Any preferences on:\n   - CSS approach (Tailwind, CSS Modules, styled-components)?\n   - Form library (React Hook Form, Formik, plain)?\n   - State management (React Query for server state, Zustand, Redux)?\n4. **API** — Will this hit a gRPC-web gateway or a REST BFF layer? That affects how we wire up data fetching.\n\nSince Dev is junior (React/TS, ~6mo), I'd suggest keeping it straightforward — React Hook Form + React Query is a clean combo that's easy to follow without too much abstraction. Happy to structure it so it's a good pairing/learning opportunity for him too.\n\nWhat are we building?",
+  "timestamp": "2026-05-18T08:45:12Z",
+  "latency_ms": 17948,
+  "exit_code": 0,
+  "output_length_chars": 1078,
+  "output_length_tokens_approx": 269,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

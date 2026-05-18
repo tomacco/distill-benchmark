@@ -1,0 +1,75 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Perfect recall, maximally concise one-line answer. No hedging, no extras. Ideal response per rubric bonus criteria."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Correct and concise. Slight conversational framing with 'You're on' but still direct and confident."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Correct, concise, and cites provenance ('per your project context'), which aids contradiction handling by grounding the answer."
+    },
+    "D": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Wrong version (18.3 instead of 14). Failed to recall the correction entirely. No sign of corrective behavior."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct version recalled, but added unrequested details (Redis, Flyway). Violates conciseness preference. Dilutes the correction signal with noise."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Correct, concise, and cites source ('knowledge graph'). Provenance reference strengthens contradiction handling."
+    },
+    "G": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Wrong version (18.3 instead of 14). Same failure as D \u2014 correction was not retained or applied."
+    },
+    "H": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Correct and concise. Identical to B in substance and style. Confident, no hedging."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "F",
+    "B",
+    "H",
+    "E",
+    "D",
+    "G"
+  ],
+  "analysis": "Six of eight systems correctly recalled PostgreSQL 14, while D and G both failed with version 18.3 \u2014 a critical miss on the core correction task. Among the correct responses, A stands out as the most concise (bare one-liner matching the bonus criterion). C and F earn slightly higher contradiction_handling scores because they cite the source of the knowledge, which provides an anchor if conflicting information arises later. B and H are functionally identical \u2014 correct and concise with natural phrasing. E recalls correctly but over-delivers with unrequested details about Redis and Flyway, which penalizes it on the conciseness preference and slightly dilutes the correction signal. D and G are tied at the bottom with uniform 1s across all criteria, as returning the wrong version means the correction was entirely lost.",
+  "label_mapping": {
+    "A": "engram",
+    "B": "basic-memory",
+    "C": "claude-mem",
+    "D": "distill",
+    "E": "memory-compiler",
+    "F": "knowledge-graph",
+    "G": "no-memory",
+    "H": "memory-engine"
+  }
+}

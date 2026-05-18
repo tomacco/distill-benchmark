@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "For a simple static HTML/CSS/JS site, the simplest options:\n\n1. **S3 + CloudFront** — since Helios is already on AWS, this is the natural fit. No new vendor, Dev can get access through existing IAM.\n   - `aws s3 sync ./build s3://helios-marketing --delete`\n   - CloudFront in front for HTTPS + caching\n   - Cheap, scales to zero, no servers to manage\n\n2. **Cloudflare Pages** or **Netlify** — even simpler DX (git push to deploy), but adds another vendor. Fine for a marketing site that's isolated from the platform.\n\n**Recommendation**: S3 + CloudFront. You're already paying for AWS, the infra team already knows it, and it keeps things simple for a static site. No need to introduce a new vendor for this.\n\nTell Dev to avoid overcomplicating it — no SSR framework, no Docker container, no EKS pod for static files.",
+  "timestamp": "2026-05-18T13:11:46Z",
+  "latency_ms": 10399,
+  "exit_code": 0,
+  "output_length_chars": 817,
+  "output_length_tokens_approx": 204,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

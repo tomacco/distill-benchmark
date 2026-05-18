@@ -1,0 +1,75 @@
+{
+  "test_id": "R5",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 3,
+      "notes": "Solid Dockerfile advice but injects a gRPC suggestion ('consider aligning with the team's gRPC convention') that is exactly the kind of stored-knowledge bleed this test targets. Also references EKS pod security policies unprompted."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused, practical. Multi-stage build, non-root user, layer caching explanation. No irrelevant stored knowledge injected. Exactly what was asked for."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Comprehensive and practical \u2014 includes project layout, code, build/run/test commands. No stored knowledge bleed. Slightly more verbose but all content is directly relevant to the request."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Full Dockerfile and working code \u2014 very practical. Minor EKS references ('tune to your pod CPU limits on EKS', 'wire into k8s liveness/readiness probes') are reasonable but slightly unsolicited. Borderline \u2014 the EKS notes are brief enough to be helpful rather than intrusive."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Injects gRPC stored knowledge ('per your architecture, internal services use gRPC') \u2014 a clear bleed of accumulated context into an unrelated Python Dockerfile request. Also suggests S3 model loading pattern unprompted. The gRPC note feels like regurgitated architecture memory."
+    },
+    "F": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Clean and concise. Brief EKS probe mention is reasonable. Uses 'fish' shell syntax in the example which may indicate stored user-preference knowledge surfacing \u2014 minor but notable. Overall well-focused."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Full Dockerfile and code example. Brief K8s volume/S3 mention at the end is practical and not overbearing. Feels natural and appropriately scoped."
+    },
+    "H": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Focused and clean. Nice practical detail about libgomp1 for scikit-learn's OpenMP support. No irrelevant stored context injected. Concise \u2014 only explains what matters for the Dockerfile."
+    }
+  },
+  "ranking": [
+    "C",
+    "B",
+    "H",
+    "G",
+    "D",
+    "F",
+    "A",
+    "E"
+  ],
+  "analysis": "This test measures precision \u2014 whether accumulated knowledge bleeds into unrelated requests. Systems B, C, and H scored highest by staying tightly focused on the Python Dockerfile task with no irrelevant context injection. C edges ahead with the most complete and practical response while maintaining perfect precision. G, D, and F form a middle tier with minor but acceptable references to EKS/K8s deployment context. Systems A and E clearly failed the precision test: both injected gRPC suggestions drawn from stored architecture knowledge that has no bearing on a straightforward Python Dockerfile request. E was the worst offender, framing it as established fact ('per your architecture, internal services use gRPC') \u2014 a textbook example of stored knowledge bleeding into an unrelated domain. The key differentiator across all systems was discipline: the best responses recognized that 'write me a Dockerfile' means write a Dockerfile, not revisit the service's communication protocol.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "claude-mem",
+    "E": "memory-compiler",
+    "F": "basic-memory",
+    "G": "engram",
+    "H": "distill"
+  }
+}

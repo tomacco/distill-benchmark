@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "distill",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "Good context. Payment processing is still in the monolith and planned for extraction. They're on EKS with gRPC. No existing service mesh mentioned.\n\nHere's the breakdown:\n\n## Service Mesh Basics\n\nA service mesh is an infrastructure layer that handles service-to-service communication. It works by deploying a **sidecar proxy** (Envoy in Istio's case) alongside each pod. All traffic flows through these proxies, which gives you:\n\n- **mTLS** — automatic mutual TLS between services (the inter-service auth you're asking about)\n- **Traffic management** — retries, circuit breaking, canary routing\n- **Observability** — distributed tracing, metrics, access logs without app changes\n- **Policy enforcement** — authorization policies (e.g., \"only `payment-service` can call `account-service/balance`\")\n\n## Do You Need Istio for This?\n\nBased on your stack (EKS, gRPC, Kotlin microservices), here's the tradeoff:\n\n**Arguments for Istio:**\n- You're mid-monolith extraction — more services coming (payment, transactions, reporting). Auth complexity grows non-linearly\n- gRPC + Istio is a well-trodden path; Envoy natively speaks gRPC\n- mTLS for free without touching application code\n- You already have ArgoCD, so Istio config-as-code fits naturally\n\n**Arguments against (or to defer):**\n- You only have 3 extracted services today. Istio adds significant operational overhead (control plane, sidecar resource usage, debugging complexity)\n- For just inter-service auth between two services, **simpler alternatives** exist:\n  - **JWT validation at the gRPC interceptor level** — your `auth-service` already issues JWTs. Services can validate tokens on incoming gRPC calls with a shared interceptor\n  - **AWS-native options** — EKS pod identity + IAM roles for service accounts, or AWS App Mesh (lighter than Istio)\n  - **mTLS via cert-manager + SPIFFE** without a full mesh\n\n## Recommendation\n\nGiven payment-service is still being extracted from the monolith:\n\n1. **Now**: implement gRPC interceptor-based auth using JWTs from `auth-service`. You already have the infra. Low overhead, no new moving parts.\n2. **Revisit Istio** when you have 5+ extracted services and need mesh-wide observability/policy. The migration path from interceptor-based auth to Istio mTLS is clean — Istio's `PERMISSIVE` mode lets you roll it out gradually.\n\nStarting with Istio for a two-service auth problem is over-engineering it at your current scale.",
+  "timestamp": "2026-05-18T11:26:57Z",
+  "latency_ms": 30419,
+  "exit_code": 0,
+  "output_length_chars": 2420,
+  "output_length_tokens_approx": 605,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 2,
+      "strength": 1,
+      "contradiction_handling": 3,
+      "notes": "Generic response with no team-specific recall. Mentions structured logging and correlation IDs but only as general best practices, not as an established team standard. Asks clarifying questions instead of applying known context."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall \u2014 opens with 'Based on your team standards', provides detailed Kotlin implementation with kotlin-logging, LogstashEncoder, and correlation ID propagation. References auth-service and notification-service patterns. Presents as team standard without being rigid."
+    },
+    "C": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Good recall \u2014 'you already adopted this with correlation IDs across all services.' Concise and practical but less detailed than top responses. Mentions existing services implicitly. Appropriate strength without over-enforcing."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Excellent recall with rich context \u2014 references adopted structured logging, auth-service and notification-service patterns, team member Sofia, Series C due diligence. Leaves room for deviation ('Sofia can confirm'). Payment-specific MDC fields are a nice touch."
+    },
+    "E": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Good recall \u2014 references 'adopted pattern per decisions.md', mentions Kafka consumers and gRPC. Concise and practical. Moderate strength, doesn't over-enforce. Less contextual richness than B/D."
+    },
+    "F": {
+      "recall": 3,
+      "strength": 2,
+      "contradiction_handling": 3,
+      "notes": "Moderate recall \u2014 mentions auth/notification services but hedges with 'likely already use it'. Uses 'traceId' instead of 'correlationId', suggesting weaker memory. Framed as a recommendation rather than an established team standard."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall \u2014 explicitly references 'corrections.md' and 'already adopted structured logging with correlation IDs'. Mentions auth-service and notification-service. Good balance of presenting as team standard while being practical. Includes gRPC interceptor implementation."
+    },
+    "H": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall \u2014 'already an adopted standard at Helios Financial (per your team's technology decisions)'. Mentions gRPC and Kafka propagation. Practical guidance with appropriate strength. Mentions PII concerns relevant to payment service."
+    }
+  },
+  "ranking": [
+    "D",
+    "B",
+    "G",
+    "H",
+    "E",
+    "C",
+    "F",
+    "A"
+  ],
+  "analysis": "System A stands out as the only response with no team-specific recall, treating the question as if no prior context exists \u2014 a clear failure for a memory/knowledge system. Systems B, D, G, and H form the top tier, all demonstrating strong recall of the structured logging with correlation IDs standard, referencing existing services (auth-service, notification-service), and recommending the correct Kotlin-specific libraries (kotlin-logging, logstash-logback-encoder). System D edges ahead by incorporating the richest contextual details (team member Sofia, Series C due diligence, payment-specific MDC fields), while B provides the most complete implementation code. Systems G and H both explicitly cite their knowledge sources (corrections.md and technology decisions respectively), which is good practice. Systems C and E show solid recall but with less contextual depth. System F is notably weaker than its peers \u2014 hedging with 'likely' and using 'traceId' instead of the team's established 'correlationId' terminology suggests incomplete memory retrieval. Across all systems that recalled the standard, none treated it as an immovable constraint, appropriately presenting it as the team's adopted pattern rather than an absolute rule.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "engram",
+    "C": "distill",
+    "D": "claude-mem",
+    "E": "basic-memory",
+    "F": "knowledge-graph",
+    "G": "memory-engine",
+    "H": "memory-compiler"
+  }
+}

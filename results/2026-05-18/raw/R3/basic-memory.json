@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "basic-memory",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Got it — Dev is your junior frontend engineer (React/TS, 6 months). You're senior backend, so this is a cross-functional pairing.\n\nBefore we start, a few questions to scope this out:\n\n1. **What settings?** User profile settings, app/account settings, notification preferences, or something else?\n2. **Is there an existing frontend codebase** I should look at for conventions (component structure, styling approach, state management)?\n3. **API backing** — does the settings endpoint already exist, or do we need to stub it?\n4. **Division of labor** — are you planning to handle the API/backend side while Dev builds the component, or are you both working on the frontend?\n\nIf there's existing frontend code in this repo or another location, point me to it and I can match the patterns Dev is already familiar with.",
+  "timestamp": "2026-05-18T08:55:16Z",
+  "latency_ms": 18042,
+  "exit_code": 0,
+  "output_length_chars": 813,
+  "output_length_tokens_approx": 203,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

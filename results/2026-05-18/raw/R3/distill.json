@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "There's no \"Dev\" agent or skill available in this environment. Here's what I can work with:\n\n**Available agents:** Explore, Plan, general-purpose, statusline-setup\n\n**Available skills:** /review, /simplify, /init, and others (none named \"Dev\")\n\nI can help you build the React component directly. To get started:\n\n- What should the settings page configure? (user profile, app preferences, notifications, etc.)\n- Is there an existing codebase/project I should look at, or are we starting fresh?\n- Any UI library in use? (MUI, Chakra, Tailwind, etc.)",
+  "timestamp": "2026-05-18T08:34:46Z",
+  "latency_ms": 10092,
+  "exit_code": 0,
+  "output_length_chars": 547,
+  "output_length_tokens_approx": 136,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

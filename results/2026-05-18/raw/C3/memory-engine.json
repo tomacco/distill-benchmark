@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "memory-engine",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on the stored project documentation, the account service uses **PostgreSQL 14** — that's the database listed in the tech stack.\n\nHowever, you mentioned earlier that the team migrated the account service to **MySQL** last week. This contradicts what's recorded in `memory/project.md`. If that migration has indeed been completed, the memory files should be updated to reflect this change.\n\nWould you like me to update the project memory to record that the account service now uses MySQL?",
+  "timestamp": "2026-05-18T09:12:25Z",
+  "latency_ms": 12921,
+  "exit_code": 0,
+  "output_length_chars": 492,
+  "output_length_tokens_approx": 123,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

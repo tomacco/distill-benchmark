@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-mem",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack (Flyway + PostgreSQL 14 + Kotlin), here's the standard setup for a new service:\n\n## Project Structure\n\n```\npayment-processing/\n└── src/main/resources/\n    └── db/migration/\n        ├── V1__create_schema.sql\n        ├── V2__create_payments_table.sql\n        └── ...\n```\n\n## Flyway Config\n\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"org.flywaydb:flyway-core:9.22.3\")\n    implementation(\"org.flywaydb:flyway-database-postgresql:9.22.3\")\n}\n```\n\n```yaml\n# application.yml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    schemas: payment\n    baseline-on-migrate: false\n    validate-on-migrate: true\n```\n\n## Conventions to follow from your existing services\n\n1. **Separate schema per service** — `CREATE SCHEMA IF NOT EXISTS payment;` in `V1`. Keeps boundaries clean for the Series C architecture story.\n\n2. **Naming**: `V{version}__{description}.sql` (double underscore). Keep versions sequential, not timestamped — easier to reason about in a single-service repo.\n\n3. **Each migration is a transaction** — Flyway wraps each in a txn by default on PG. Don't disable this.\n\n4. **Repeatable migrations** for views/functions: `R__create_payment_summary_view.sql`\n\n5. **No rollback files** — write forward-only migrations. If something breaks, add a new migration to fix it.\n\n## First migration example\n\n```sql\n-- V1__create_schema_and_payments.sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\nCREATE TABLE payment.transactions (\n    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id    UUID NOT NULL,\n    amount        NUMERIC(19,4) NOT NULL,\n    currency      VARCHAR(3) NOT NULL DEFAULT 'USD',\n    status        VARCHAR(32) NOT NULL DEFAULT 'PENDING',\n    correlation_id VARCHAR(64) NOT NULL,\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_transactions_account_id ON payment.transactions(account_id);\nCREATE INDEX idx_transactions_correlation_id ON payment.transactions(correlation_id);\n```\n\n## CI integration\n\nRun `flyway validate` in CI before deploy. If you want to catch drift early, add `flyway info` to your EKS readiness checks.\n\n## Tips specific to your setup\n\n- **pg_cron** for scheduled cleanup/archival instead of a separate job service\n- **Correlation ID index** — you already have structured logging with correlation IDs, so index it from day one\n- Coordinate with Sofia on the gRPC proto definitions before finalizing the schema — the table shape should mirror the protobuf messages closely\n\nWant me to scaffold the actual migration files or the Flyway config for the payment-processing service?",
+  "timestamp": "2026-05-18T12:32:00Z",
+  "latency_ms": 19795,
+  "exit_code": 0,
+  "output_length_chars": 2671,
+  "output_length_tokens_approx": 667,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "memory-compiler",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on the stored knowledge articles (compiled January 2024), the account service uses **PostgreSQL 14** as the primary database, with Redis for caching.\n\nHowever, you mentioned earlier in this conversation that the account service was migrated to **MySQL** last week. The knowledge articles I have are from over two years ago, so if that migration is complete, the current answer would be **MySQL**.\n\nCould you confirm that the MySQL migration is fully in production? If so, I should note that the knowledge articles in `knowledge/articles/architecture-overview.md` and `knowledge/articles/critical-corrections.md` are out of date and should be updated to reflect this change.",
+  "timestamp": "2026-05-18T09:01:40Z",
+  "latency_ms": 13108,
+  "exit_code": 0,
+  "output_length_chars": 679,
+  "output_length_tokens_approx": 169,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean endorsement with no bias. Mentions correlation IDs suggesting team-specific knowledge applied appropriately. Straightforward and correctly confident."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Strong endorsement with practical Kotlin code sample. No bias toward alternatives. Mentions Lettuce with coroutine support, showing stack awareness without overcomplicating."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean and concise. Correctly identifies Redis is already in stack for caching. No bias, no unnecessary hedging. Appropriate confidence for an easy call."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Thorough practical advice including bulk invalidation pattern. Briefly mentions Postgres as fallback in TTL context but does not suggest using it instead \u2014 no bias. Good confidence calibration."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best nuance on the eviction/session distinction \u2014 correctly notes sessions aren't just cache and eviction means logout. Offers dedicated instance alternative. References coroutine decision from stored knowledge appropriately. Most thoughtful response."
+    },
+    "F": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Good discussion of eviction policy risk and persistence trade-off. Correctly warns against allkeys-lru on shared instance. Considers multiple valid configuration approaches without overcomplicating."
+    },
+    "G": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Explicitly names stack components (PostgreSQL 14, EKS) showing stored knowledge. No bias toward PostgreSQL despite mentioning it. Clean endorsement with appropriate confidence."
+    },
+    "H": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Good operational awareness mentioning ElastiCache Multi-AZ failover. Suggests Lettuce for coroutine support. No bias, appropriate confidence. Slightly more ops-focused than others."
+    }
+  },
+  "ranking": [
+    "E",
+    "F",
+    "D",
+    "B",
+    "H",
+    "A",
+    "G",
+    "C"
+  ],
+  "analysis": "All eight systems pass the bias resistance test cleanly \u2014 every one endorses Redis without hesitation and none suggest PostgreSQL as an alternative, which is the correct call for this scenario. No system inappropriately invokes stored knowledge about database preferences to bias the answer. The differentiators are in depth of practical advice rather than bias behavior. Systems E and F stand out for considering the nuance that sessions differ from cache (eviction means logout) and offering configuration alternatives like dedicated instances or persistence options, showing genuine openness to trade-offs. Systems B and D provide strong practical detail (code sample, bulk invalidation). Systems A, C, G, and H are all competent and unbiased but slightly less nuanced in their consideration of operational edge cases. Overall this test reveals that none of the systems exhibit the PostgreSQL bias the test was designed to detect.",
+  "label_mapping": {
+    "A": "engram",
+    "B": "claude-mem",
+    "C": "distill",
+    "D": "memory-engine",
+    "E": "basic-memory",
+    "F": "no-memory",
+    "G": "memory-compiler",
+    "H": "knowledge-graph"
+  }
+}

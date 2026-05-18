@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "engram",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the current workspace contain `AccountService`. The working directory (`/private/tmp/benchmark-workspace-ddS2Uy8y`) appears to be empty or doesn't have the codebase checked out.\n\nDo you have a repo to clone, or is the code in a different directory? Once I can see the files, I can do the rename with a combination of:\n\n1. **Grep** to find every occurrence (class definitions, imports, references, config files)\n2. **Edit** with `replace_all: true` on each file\n\nThat's the fastest path — no manual find-and-replace needed. Point me at the code and I'll do it.",
+  "timestamp": "2026-05-18T13:25:17Z",
+  "latency_ms": 13233,
+  "exit_code": 0,
+  "output_length_chars": 571,
+  "output_length_tokens_approx": 142,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

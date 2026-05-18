@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "memory-engine",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Created `containers.fish`. Run it with:\n\n```\n./containers.fish\n```\n\nIt uses `docker ps --format` to show a clean table of container name, image, ports, and status. If you want JSON output or filtering, just let me know.",
+  "timestamp": "2026-05-18T09:13:03Z",
+  "latency_ms": 17610,
+  "exit_code": 0,
+  "output_length_chars": 219,
+  "output_length_tokens_approx": 54,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

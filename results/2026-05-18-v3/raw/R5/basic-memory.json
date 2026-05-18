@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "basic-memory",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created:\n\n**`Dockerfile`** — Multi-stage build on `python:3.12-slim`. Runs as non-root `app` user. Deps installed in a builder stage to keep the final image small.\n\n**`app/main.py`** — FastAPI app that loads a joblib-serialized scikit-learn model at startup. Two endpoints:\n- `POST /score` — accepts transaction features, returns fraud probability + boolean\n- `GET /health` — for EKS liveness/readiness probes\n\n**`requirements.txt`** — Pinned versions, minimal deps.\n\nAdjust the `Transaction` fields to match your actual model features. Drop your trained model into `models/fraud_model.joblib` and build:\n\n```fish\ndocker build -t fraud-scoring .\ndocker run -p 8000:8000 fraud-scoring\n```",
+  "timestamp": "2026-05-18T12:44:43Z",
+  "latency_ms": 32086,
+  "exit_code": 0,
+  "output_length_chars": 703,
+  "output_length_tokens_approx": 175,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Full tutorial-level explanation of service mesh basics. No reference to user's specific stack, team, or context. Generic comparison table is useful but the response reads like a blog post, not advice for a senior engineer with a known setup."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "References Helios, EKS, gRPC, Kotlin, ArgoCD, ~80 engineers. Still explains service mesh basics in full. Recommendation is reasonable but hedges. Mentions PCI DSS/SOC 2 which shows fintech awareness."
+    },
+    "C": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Opens by acknowledging context before diving in. Basics section is brief. Strong opinionated closing: 'Starting with Istio for a two-service auth problem is over-engineering it.' References specific extracted services and ArgoCD. Good calibration to the decision rather than the technology."
+    },
+    "D": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Hits the penalty phrase ('A service mesh is a dedicated infrastructure layer that handles service-to-service communication'). However, recovers with practical Kotlin code example and a direct 'Probably not yet' recommendation. Mentions Series C and Kotlin coroutines but fewer specific user details than top systems."
+    },
+    "E": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "References Sofia by name, specific services, OAuth2/JWT setup, team size. Still explains mesh basics at length. Phased recommendation is sensible but verbose. Ends with a hedging question rather than committing to the recommendation."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Concise mesh explanation, good comparison table. References Sofia, Series C due diligence, gRPC setup. Opinionated: 'auditors care about the outcome, not the tool.' Phased recommendation is practical. One of the better-calibrated responses for a senior engineer."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Opens by acknowledging the user's specific setup and preferences (minimal dependencies). References structured logging, correlation IDs, auth-service JWT infra, Series C. Direct 'Probably not yet' with clear reasoning. Kotlin code example fits their stack. Good senior-level calibration."
+    },
+    "H": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Practical ASCII diagram and YAML example. Mentions Istio ambient mode (shows currency). References EKS, gRPC, Kotlin, Series C, team size. Slightly long overall but well-structured. Comparison table includes latency/memory numbers which is senior-appropriate detail."
+    }
+  },
+  "ranking": [
+    "G",
+    "F",
+    "H",
+    "C",
+    "D",
+    "E",
+    "B",
+    "A"
+  ],
+  "analysis": "Systems G and F stand out by immediately acknowledging the user's specific context and jumping to the decision rather than teaching. G opens with the user's setup and preferences, gives a direct 'probably not yet' answer with Kotlin code, and references deep context like structured logging and correlation IDs. F is similarly concise and opinionated, with a practical comparison table and the strong line about auditors caring about outcomes. H is thorough with useful visuals and current knowledge (ambient mode) but runs slightly long. C delivers a punchy opinionated recommendation but still includes a basics section. D has practical Kotlin code but triggers the penalty phrase. E recalls good context (Sofia, specific services) but is verbose and hedges at the end. B is competent but still tutorial-ish. A is entirely generic \u2014 full service mesh explainer with no evidence of knowing anything about the user, their stack, or their situation, reading like documentation rather than personalized advice.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "memory-compiler",
+    "C": "distill",
+    "D": "engram",
+    "E": "basic-memory",
+    "F": "claude-mem",
+    "G": "memory-engine",
+    "H": "knowledge-graph"
+  }
+}

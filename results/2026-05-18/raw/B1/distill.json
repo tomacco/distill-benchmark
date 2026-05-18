@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes. Redis is already in your stack for caching, and `auth-service` already exists as an extracted service. Simple key-value with TTL is Redis's sweet spot.\n\nA few things to nail down:\n\n- **Key format**: `session:{userId}:{tokenHash}` — lets you invalidate all sessions for a user with a pattern scan if needed\n- **TTL**: match your JWT expiry (or slightly longer if you're doing sliding windows)\n- **Serialization**: just store the minimal claims you need for validation, not the full token — keeps reads fast\n- **Eviction policy**: `volatile-ttl` since all session keys should have TTLs anyway\n\nOne consideration given the fintech context: Redis persistence. If a Redis node restarts and sessions are lost, users get logged out. Decide if that's acceptable or if you need `appendonly yes` / a Redis cluster with replicas. For session tokens specifically, mass logout on failure is usually fine — just make sure the auth flow handles it gracefully.\n\nNo concerns here — this is the right tool for the job.",
+  "timestamp": "2026-05-18T08:28:15Z",
+  "latency_ms": 26282,
+  "exit_code": 0,
+  "output_length_chars": 1005,
+  "output_length_tokens_approx": 251,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "no-memory",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Based on your requirements — complex aggregation queries, multi-table joins, and strong consistency — you want a **relational (SQL) database**. Here's my recommendation:\n\n## PostgreSQL (top pick)\n\n- Excellent at complex aggregations (`GROUP BY`, window functions, CTEs, `ROLLUP`/`CUBE`)\n- Full ACID compliance for strong consistency\n- Rich join support across many tables\n- Materialized views for pre-computing expensive report queries\n- Partitioning support for large reporting tables (e.g., by date range)\n\n## Other viable options\n\n- **ClickHouse** — if the workload is heavily read/analytical and you can tolerate eventual consistency on writes. Extremely fast for OLAP-style aggregations.\n- **Amazon Redshift / BigQuery** — if you're cloud-native and the data volume is very large (data warehouse tier).\n\n## What I'd steer away from\n\n- **DynamoDB** — designed for key-value/single-table access patterns; poor fit for ad-hoc joins and complex aggregations.\n- **MongoDB** — aggregation pipeline exists but is awkward for multi-collection joins and lacks the query planner maturity of PostgreSQL for complex reporting.\n\n## Quick decision framework\n\n| Factor | PostgreSQL | ClickHouse |\n|---|---|---|\n| Data volume | < 1 TB comfortable | TB+ sweet spot |\n| Write pattern | Mixed read/write | Append-heavy, batch |\n| Consistency | Strong (ACID) | Eventual on writes |\n| Query complexity | Arbitrary joins/subqueries | Columnar scans, simpler joins |\n\nFor most reporting services, **PostgreSQL is the safest and most flexible starting point**. If you later find query performance bottlenecks at scale, you can add ClickHouse as a dedicated analytical layer.\n\nWant me to sketch out a schema or help evaluate against your specific query patterns?",
+  "timestamp": "2026-05-18T08:21:17Z",
+  "latency_ms": 18093,
+  "exit_code": 0,
+  "output_length_chars": 1742,
+  "output_length_tokens_approx": 435,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

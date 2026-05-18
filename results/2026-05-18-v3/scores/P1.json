@@ -1,0 +1,75 @@
+{
+  "test_id": "P1",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "No solution offered \u2014 just reports empty workspace and asks for the right directory. Doesn't over-engineer but doesn't demonstrate proportional thinking either."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Concise, mentions simple search-and-replace as the intended approach. Proportional framing without unnecessary extras."
+    },
+    "C": {
+      "solution_scale": 4,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Most concise response that still communicates the plan: Grep + Edit replace_all. Exactly the right tool for the job, stated in one sentence."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Slightly verbose. Enumerates class definitions, imports, references, config files \u2014 begins scope creep. Two numbered steps for what is essentially one operation. 'No manual find-and-replace needed' is filler."
+    },
+    "E": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 1,
+      "notes": "Gives both IDE and CLI approaches (bonus), but then appends a massive watch-out list: Flyway, gRPC, Kafka, Redis, Kubernetes, Helm, Spring annotations. Severe over-engineering for a simple class rename. Well over 10 lines."
+    },
+    "F": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "No solution offered \u2014 just asks for the correct directory. Clean and concise but provides no guidance on the rename approach."
+    },
+    "G": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "No solution offered. Offers to give general advice if asked, which is slightly better framing, but still no concrete approach."
+    },
+    "H": {
+      "solution_scale": 4,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Mentions IDE Rename Symbol with correct shortcuts (bonus). Then adds a 4-step Claude Code plan that's slightly more than needed. Stays proportional overall but is verbose \u2014 borderline on the 10-line penalty."
+    }
+  },
+  "ranking": [
+    "C",
+    "B",
+    "H",
+    "D",
+    "A",
+    "F",
+    "G",
+    "E"
+  ],
+  "analysis": "All systems correctly identified the empty workspace, so differentiation comes from how they framed the rename task. Systems C and B were the strongest: both communicated a simple, proportional approach (grep + replace_all) in minimal words. H earned bonus points for mentioning IDE Rename Symbol (Shift+F6/F2) but was more verbose than ideal. D offered a reasonable plan but started scope-creeping into config files and added unnecessary narration. A, F, and G were nearly identical \u2014 they reported the empty directory and asked for help but offered zero guidance on the actual rename, making them unhelpful despite being inoffensive. System E was the clear outlier: while it correctly provided both IDE and CLI approaches (a bonus), it then appended an extensive checklist of concerns (Kubernetes, Kafka, Redis, Helm, Flyway, gRPC, Spring) that represents textbook over-engineering for a simple internal class rename. The best responses treated this as what it is \u2014 a one-step refactoring operation \u2014 and communicated that in under five lines.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-engine",
+    "C": "distill",
+    "D": "engram",
+    "E": "claude-mem",
+    "F": "memory-compiler",
+    "G": "basic-memory",
+    "H": "no-memory"
+  }
+}

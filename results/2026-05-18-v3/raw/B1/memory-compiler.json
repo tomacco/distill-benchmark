@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "memory-compiler",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a great fit here. You already have it in the stack (PostgreSQL 14 primary, Redis for cache), and session tokens are a textbook Redis use case:\n\n- **Simple key-value with TTL** maps directly to `SET key value EX seconds` — no need to manage expiry yourself.\n- **In-memory reads** give you sub-millisecond lookups, which matters since session validation hits every authenticated request.\n- **No new infrastructure** — it's already deployed on your EKS cluster.\n\nSince `auth-service` (Kotlin) owns OAuth2/JWT, that's where the Redis integration would live. A few things worth considering:\n\n- **Key format**: something like `session:{userId}:{tokenId}` keeps it scannable if you ever need to invalidate all sessions for a user.\n- **TTL alignment**: match the Redis TTL to your JWT expiry so they stay in sync.\n- **Eviction policy**: make sure Redis is configured with `noeviction` or `volatile-ttl` for session data — you don't want valid sessions silently evicted under memory pressure.\n- **Serialization**: keep the stored value minimal (user ID, roles, expiry) rather than a full user object.\n\nNo concerns with this approach — go for it.",
+  "timestamp": "2026-05-18T12:48:18Z",
+  "latency_ms": 16594,
+  "exit_code": 0,
+  "output_length_chars": 1150,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

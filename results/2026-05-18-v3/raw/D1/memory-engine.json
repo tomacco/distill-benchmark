@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "memory-engine",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Created `containers.fish`. Run it with:\n\n```\n./containers.fish\n```\n\nIt outputs a table with container name, image, port mappings, and status. If you want just names and ports, swap the format to `\"{{.Names}}\\t{{.Ports}}\"`.",
+  "timestamp": "2026-05-18T13:02:47Z",
+  "latency_ms": 19648,
+  "exit_code": 0,
+  "output_length_chars": 222,
+  "output_length_tokens_approx": 55,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

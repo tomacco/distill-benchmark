@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "memory-compiler",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's my thinking on the dashboard requirement:\n\n**Architecture fit**: This aligns well with what you already have. Transaction events can flow through **Kafka** into a materialized view in **PostgreSQL** — no need for a separate analytics service yet. Given the preference for PostgreSQL extensions, **pg_cron** could handle the 30-second aggregation refresh.\n\n**Proposed approach:**\n\n1. **Backend (Kotlin)** — A gRPC endpoint in the planned transaction-history service (or a lightweight read-only service) that serves merchant transaction counts. Use a PostgreSQL materialized view refreshed every 30 seconds via `pg_cron`:\n\n```sql\nCREATE MATERIALIZED VIEW merchant_transaction_counts AS\nSELECT merchant_id, merchant_name, COUNT(*) as tx_count,\n       COUNT(*) FILTER (WHERE created_at > now() - interval '1 hour') as tx_last_hour,\n       COUNT(*) FILTER (WHERE created_at > now() - interval '24 hours') as tx_last_24h\nFROM transactions\nGROUP BY merchant_id, merchant_name;\n\n-- Refresh every 30 seconds\nSELECT cron.schedule('refresh-merchant-counts', '30 seconds', \n  'REFRESH MATERIALIZED VIEW CONCURRENTLY merchant_transaction_counts');\n```\n\n2. **Frontend (React/TS)** — A polling dashboard component that hits a REST endpoint (external-facing, per your convention) every 30 seconds. Dev could handle this — it's a good bounded task for him.\n\n3. **Why not WebSockets**: For a 30-second refresh with a small audience (investor demo), polling is simpler and sufficient. No new infrastructure needed.\n\n**Concerns to raise with Marcus:**\n\n- **Transaction history service is still \"planned\"** — where do we read transactions from? If they're still in the monolith DB, this dashboard would query that directly, which is fine for the demo but creates coupling.\n- **Scope creep risk** — for the demo, a read-only materialized view is fast to build. Don't let this become the full reporting/analytics service yet.\n- **Sofia's payment processing work** is the current priority. This dashboard should be a lightweight addition, not a distraction from extraction work.\n\nWant me to scaffold the Kotlin service endpoint and the React component, or should we align with Sofia/Marcus on scope first?",
+  "timestamp": "2026-05-18T12:49:29Z",
+  "latency_ms": 27346,
+  "exit_code": 0,
+  "output_length_chars": 2188,
+  "output_length_tokens_approx": 547,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "memory-engine",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "You're on AWS (EKS, Terraform), so the simplest option that fits your existing infra: **S3 + CloudFront**.\n\n```bash\n# 1. Create bucket\naws s3 mb s3://helios-marketing-site\n\n# 2. Upload\naws s3 sync ./site/ s3://helios-marketing-site --delete\n\n# 3. Enable static hosting\naws s3 website s3://helios-marketing-site \\\n  --index-document index.html \\\n  --error-document 404.html\n```\n\nThen put a CloudFront distribution in front for HTTPS and caching. If you're managing infra with Terraform already, add a small module for the bucket + distribution + Route 53 record.\n\n**Why this over alternatives:**\n- Already on AWS, no new vendor/account needed\n- No runtime cost (pennies for storage + CDN)\n- Terraform-managed like everything else\n- No build step needed for plain HTML/CSS/JS\n\nIf the dev just wants to get it live in 5 minutes for a draft/preview, `aws s3 sync` with static website hosting is enough — CloudFront + custom domain can come after.",
+  "timestamp": "2026-05-18T09:11:22Z",
+  "latency_ms": 16606,
+  "exit_code": 0,
+  "output_length_chars": 942,
+  "output_length_tokens_approx": 235,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

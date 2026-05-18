@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "memory-engine",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no existing auth-service source code in this workspace — just memory files describing the project. The auth-service is a Kotlin service using coroutines, structured logging, and running on AWS EKS.\n\nSince there's no codebase here to add the endpoint to, here's what the health check endpoint should look like for your Kotlin auth-service:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/health/HealthController.kt\n\n@RestController\nclass HealthController(\n    private val dataSource: DataSource,\n    private val redisTemplate: RedisTemplate<String, String>\n) {\n    @GetMapping(\"/health\")\n    suspend fun health(): ResponseEntity<Map<String, Any>> {\n        val checks = mapOf(\n            \"status\" to \"UP\",\n            \"db\" to checkDb(),\n            \"redis\" to checkRedis()\n        )\n        val overall = if (checks.values.all { it == \"UP\" || it is String && it == \"UP\" }) \"UP\" else \"DOWN\"\n        val status = if (overall == \"UP\") HttpStatus.OK else HttpStatus.SERVICE_UNAVAILABLE\n        return ResponseEntity.status(status).body(checks + (\"status\" to overall))\n    }\n\n    // Lightweight liveness probe for the load balancer\n    @GetMapping(\"/health/live\")\n    fun liveness() = ResponseEntity.ok(mapOf(\"status\" to \"UP\"))\n\n    private suspend fun checkDb(): String = try {\n        withContext(Dispatchers.IO) { dataSource.connection.use { it.isValid(2) } }\n        \"UP\"\n    } catch (e: Exception) {\n        logger.error(e) { \"DB health check failed\" }\n        \"DOWN\"\n    }\n\n    private suspend fun checkRedis(): String = try {\n        withContext(Dispatchers.IO) { redisTemplate.connectionFactory?.connection?.ping() }\n        \"UP\"\n    } catch (e: Exception) {\n        logger.error(e) { \"Redis health check failed\" }\n        \"DOWN\"\n    }\n\n    companion object {\n        private val logger = KotlinLogging.logger {}\n    }\n}\n```\n\nKey points:\n\n- **`/health/live`** — use this for the load balancer target group health check. It's fast, no dependency checks, won't flap.\n- **`/health`** — deep check with DB + Redis status, useful for readiness probes and debugging.\n- Uses coroutines (not RxJava, per your team's decision) and structured logging with `kotlin-logging`.\n- Make sure `/health/**` is excluded from your Spring Security filter chain so the LB can hit it unauthenticated:\n\n```kotlin\n// In your SecurityConfig\nhttp.authorizeHttpRequests {\n    it.requestMatchers(\"/health/**\").permitAll()\n    // ... existing rules\n}\n```\n\nFor the EKS side, configure your Kubernetes probes:\n\n```yaml\nlivenessProbe:\n  httpGet:\n    path: /health/live\n    port: 8080\n  periodSeconds: 10\nreadinessProbe:\n  httpGet:\n    path: /health\n    port: 8080\n  periodSeconds: 15\n```\n\nPoint your ALB target group health check at `/health/live` with a 5s timeout. Want me to create these files in the actual auth-service repo?",
+  "timestamp": "2026-05-18T13:05:18Z",
+  "latency_ms": 27744,
+  "exit_code": 0,
+  "output_length_chars": 2805,
+  "output_length_tokens_approx": 701,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

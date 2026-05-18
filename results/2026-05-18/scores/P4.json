@@ -1,0 +1,75 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Builds percentage rollout with deterministic user bucketing and Redis caching upfront. Reasonable but exceeds 'simplest approach' \u2014 the percentage column and hashing logic aren't needed for a dark launch toggle."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Boolean-only DB flag with Redis cache. Explicitly defers percentage rollouts: 'don't build that until you need it.' Good proportionality. ~30 lines claim is accurate. Loses a point for Redis caching layer when a simple DB read would suffice for one flag."
+    },
+    "C": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Includes percentage rollout and user bucketing from the start. Uses in-memory ConcurrentHashMap (simpler than Redis cache), but builds gradual rollout infrastructure before it's needed. Good 'why not vendor' section."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "JSONB metadata column adds speculative flexibility. Suggests a frontend REST API endpoint \u2014 scope creep beyond what was asked. The allowed_account_ids in metadata is building targeting infrastructure prematurely."
+    },
+    "E": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Redis-only approach is genuinely simple \u2014 no migration needed, instant toggling via CLI. Account-level targeting via Redis sets is elegant. Explicitly defers percentage rollouts. Loses a point because no persistence (Redis restart loses flags) which is a real operational concern left unaddressed."
+    },
+    "F": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Best proportionality: starts with env var (truly simplest), graduates to DB flag, and only mentions vendor tools to explicitly dismiss them as overkill. Recommends option 2 with ~20 lines. The only system that actually offers the simplest-first approach the rubric rewards. Uses Python instead of Kotlin (stack mismatch) but the proportionality thinking is correct."
+    },
+    "G": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Most over-engineered: builds percentage rollout AND allowed_ids array AND Redis caching AND deterministic hashing all upfront. The schema has 6 columns for a single dark-launch flag. Multi-step rollout plan with named test accounts suggests a feature management system, not the 'simplest approach.'"
+    },
+    "H": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Ratio as DOUBLE PRECISION plus JSONB metadata column is speculative design. Mentions pg_notify for sub-second propagation \u2014 additional infrastructure suggestion. Similar to A/C in complexity but the ratio-as-double adds unnecessary precision for a boolean use case."
+    }
+  },
+  "ranking": [
+    "F",
+    "B",
+    "E",
+    "A",
+    "C",
+    "H",
+    "D",
+    "G"
+  ],
+  "analysis": "System F is the clear winner on proportionality \u2014 it's the only response that starts with an environment variable (the actual simplest approach) and graduates to a DB flag, matching the rubric's emphasis on 'simplest adequate approach.' Systems B and E tie for second: B uses a boolean-only DB flag and explicitly defers percentage rollouts, while E takes a Redis-only approach that avoids migrations entirely. The middle tier (A, C, H) all build percentage-based gradual rollout infrastructure from the start \u2014 reasonable engineering but exceeding what 'simplest' demands for a single dark-launch flag. System D adds scope creep with a frontend API endpoint and JSONB metadata. System G is the most over-engineered, combining percentage rollouts, allowed_ids arrays, Redis caching, and deterministic hashing into what amounts to a mini feature-flag platform. The key differentiator across all responses is whether they build rollout infrastructure upfront or defer it \u2014 the rubric clearly rewards deferral, and most systems failed to resist the temptation to include gradual rollout from day one.",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "knowledge-graph",
+    "C": "distill",
+    "D": "memory-compiler",
+    "E": "engram",
+    "F": "no-memory",
+    "G": "memory-engine",
+    "H": "claude-mem"
+  }
+}

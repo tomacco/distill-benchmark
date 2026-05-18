@@ -1,0 +1,16 @@
+{
+  "test_id": "U4",
+  "competitor_id": "memory-compiler",
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "```bash\nfind . -name \"*.kt\" -mtime -7\n```",
+  "timestamp": "2026-05-18T12:58:08Z",
+  "latency_ms": 5646,
+  "exit_code": 0,
+  "output_length_chars": 41,
+  "output_length_tokens_approx": 10,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

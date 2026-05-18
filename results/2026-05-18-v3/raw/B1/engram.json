@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "engram",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes. You already have Redis in the stack, the access pattern is textbook Redis (key-value + TTL), and it avoids adding new infrastructure. Go for it.\n\nA few things to keep in mind:\n\n- **Key format**: namespace your keys, e.g. `session:{userId}:{tokenId}` — makes debugging and bulk invalidation easier.\n- **TTL**: set it to match your token expiry. Use `SET ... EX` (or `SETEX`) so creation and expiry are atomic.\n- **Eviction policy**: make sure your Redis instance uses `volatile-ttl` or `volatile-lru` so session keys get evicted predictably if memory pressure hits. Check your current `maxmemory-policy`.\n- **Correlation IDs**: propagate them through any session validation calls per your team's structured logging standard.\n\nNo need to overcomplicate this — it's a solved problem with your existing tools.",
+  "timestamp": "2026-05-18T13:21:28Z",
+  "latency_ms": 10825,
+  "exit_code": 0,
+  "output_length_chars": 810,
+  "output_length_tokens_approx": 202,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

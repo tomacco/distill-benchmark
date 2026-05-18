@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your existing setup, here's how to set up migrations for the new service:\n\n**Use Flyway** (already your team standard — chosen over Liquibase).\n\n### Structure\n```\nnew-service/\n  src/main/resources/db/migration/\n    V1__create_initial_schema.sql\n    V2__add_indexes.sql\n    ...\n```\n\n### Naming convention\n- `V{version}__{description}.sql` — versioned migrations (double underscore)\n- Sequential integers: `V1__`, `V2__`, `V3__`\n\n### Kotlin/Spring Boot config\n```yaml\n# application.yml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false\n  datasource:\n    url: jdbc:postgresql://${DB_HOST}:5432/new_service_db\n    username: ${DB_USER}\n    password: ${DB_PASSWORD}\n```\n\n### Key points for your setup\n- **Separate database per service** — consistent with your microservices pattern (auth-service, account-service each have their own)\n- **PostgreSQL 14** — use your standard\n- **Run migrations on startup** — Flyway auto-runs on Spring Boot startup before the app accepts traffic\n- **In Kubernetes (EKS)**: use an init container or let the app run migrations on startup with a readiness probe that gates traffic until migrations complete\n- **For CI**: add a `flyway validate` step in GitHub Actions to catch migration issues before deploy\n\n### First migration example\n```sql\n-- V1__create_initial_schema.sql\nCREATE TABLE IF NOT EXISTS ... (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n```\n\nWhich service is this for — is this the payment processing extraction Sofia is leading?",
+  "timestamp": "2026-05-18T11:25:12Z",
+  "latency_ms": 23559,
+  "exit_code": 0,
+  "output_length_chars": 1645,
+  "output_length_tokens_approx": 411,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** is the clear choice here. You already run PG 14 in production, and it's excellent at exactly what you're describing:\n\n- **Complex aggregations**: window functions, CTEs, `GROUPING SETS` / `CUBE` / `ROLLUP` for multi-dimensional reporting\n- **Multi-table joins**: this is what relational databases are built for\n- **Strong consistency**: ACID by default, serializable isolation if needed\n- **Materialized views**: precompute expensive report queries, refresh on schedule or via triggers\n\nIf query performance on large datasets becomes a concern, consider these before reaching for a new technology:\n\n- **Materialized views** for canned reports\n- **Partial indexes** on commonly filtered columns\n- A **read replica** dedicated to reporting, so you don't load your transactional databases\n- The `pg_stat_statements` extension to identify and tune slow queries\n\nA dedicated read replica is probably the biggest win — it isolates reporting load from your transactional services and requires zero new infrastructure expertise from the team.\n\nNo reason to introduce a new database dependency for this.",
+  "timestamp": "2026-05-18T09:23:07Z",
+  "latency_ms": 13716,
+  "exit_code": 0,
+  "output_length_chars": 1109,
+  "output_length_tokens_approx": 277,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

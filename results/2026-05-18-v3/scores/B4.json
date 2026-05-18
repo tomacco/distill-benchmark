@@ -1,0 +1,75 @@
+{
+  "test_id": "B4",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Leads with Kafka consumer \u2192 Redis as primary recommendation but hedges by acknowledging a simpler direct-PG approach might be faster for the demo. Presents two clear options and asks a good clarifying question. However, the default recommendation is still a Kafka pipeline for what is essentially a one-week demo."
+    },
+    "B": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Proposes materialized view + pg_cron which is reasonable, but frames Kafka event flow into PG as part of the approach and mentions gRPC. Good awareness of scope creep risk and team dynamics. Doesn't really compare alternative approaches\u2014presents one path as the answer."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Best proportionality. Opens with 'Don't build a new real-time service.' Explicitly rejects Kafka Streams, WebSockets, and new microservices as overkill. Simple PG materialized view + polling endpoint + React component. Asks the right scoping questions. Matches the demo context perfectly."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Very proportional: PG query \u2192 Redis cache \u2192 endpoint \u2192 polling. No Kafka, no materialized views, no new services. Practical and demo-appropriate. Loses points on openness because it presents a single approach without comparing alternatives, but the approach chosen is well-calibrated."
+    },
+    "E": {
+      "objectivity": 2,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Leads with Kafka consumer and suggests Kafka Streams for windowed aggregation\u2014this is the kind of over-engineering the rubric penalizes. Claims 'no new infrastructure' while proposing a Kafka Streams pipeline for a one-week demo. Lists what to avoid but the primary recommendation is itself heavy."
+    },
+    "F": {
+      "objectivity": 1,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Most over-engineered response. PG materialized view + pg_cron + Redis sorted sets + Kotlin sync job + gRPC server streaming + grpc-web proxy + protobuf definitions + Flyway migrations. Says 'pragmatic' but proposes gRPC streaming for an investor demo. The gap between stated intent and actual complexity is the largest of any response."
+    },
+    "G": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Kafka consumer \u2192 Redis \u2192 SSE endpoint. Includes a useful comparison table that shows good analytical thinking. Ironically dismisses materialized views as 'overkill for next week' while proposing a Kafka consumer with reactive Redis and SSE streaming. Mixed signals but generally aware of the demo constraint."
+    },
+    "H": {
+      "objectivity": 5,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "No stored knowledge bias possible since it has no context and asks for clarification. Appropriate uncertainty, but essentially unhelpful for the task. Correctly identifies that context is needed, but in a benchmark where other systems demonstrate the ability to work with context, this is a non-answer."
+    }
+  },
+  "ranking": [
+    "C",
+    "D",
+    "A",
+    "G",
+    "B",
+    "H",
+    "E",
+    "F"
+  ],
+  "analysis": "This test reveals a clear spectrum of proportionality. System C is the standout\u2014it explicitly frames the problem as 'don't build a new real-time service' and recommends the simplest viable approach (PG materialized view + polling), correctly identifying Kafka Streams and WebSockets as overkill for a demo. System D is similarly well-calibrated with a clean PG \u2192 Redis \u2192 poll chain. Systems A and G occupy the middle ground: both lean toward Kafka but show awareness of the demo constraint and present alternatives. System B is competent but presents its approach as the singular answer without meaningful comparison. System H avoids bias by having no context, but provides no value. Systems E and F represent the failure mode this test targets: E proposes Kafka Streams for a one-week demo while claiming simplicity, and F is the worst offender\u2014it layers PG materialized views, pg_cron, Redis sorted sets, a Kotlin sync job, gRPC streaming with protobuf definitions, and grpc-web proxying, all while labeling the approach 'pragmatic.' The correlation between stored knowledge density and over-engineering is striking: the systems that appear to know the most about the stack are the ones most likely to propose using all of it.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "memory-compiler",
+    "C": "memory-engine",
+    "D": "knowledge-graph",
+    "E": "basic-memory",
+    "F": "claude-mem",
+    "G": "engram",
+    "H": "no-memory"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a solid choice for session stores, but a few things to consider:\n\n**Why it works well:**\n- Single-digit millisecond reads by default on key-value lookups\n- Fully managed, scales horizontally without effort\n- TTL support for automatic session expiration\n- On-demand capacity mode avoids capacity planning headaches for unpredictable session traffic\n\n**Sub-millisecond caveat:**\n- Standard DynamoDB does **not** guarantee sub-millisecond reads. Typical latency is 1-5ms for eventually consistent reads, ~5-10ms for strongly consistent.\n- To get sub-millisecond, you'd need **DynamoDB Accelerator (DAX)**, which is an in-memory cache in front of DynamoDB. That adds cost and operational complexity.\n\n**Alternatives worth comparing:**\n- **ElastiCache (Redis/Valerian)** — true sub-millisecond latency natively, purpose-built for session stores, simpler data model. This is the more common choice when sub-millisecond is a hard requirement.\n- **CloudFront KeyValueStore** — if sessions are read at the edge.\n\n**Recommendation:**\n- If \"sub-millisecond\" is a hard SLA, **Redis/ElastiCache** is the more natural fit — it's in-memory by design and the most battle-tested session store in AWS.\n- If you're rounding and single-digit milliseconds is actually fine, standard DynamoDB works great and is simpler to operate long-term (no cluster management, no eviction policies, built-in TTL).\n- DynamoDB + DAX gets you sub-millisecond but you're paying for two services and DAX clusters need sizing/management — at that point Redis is usually simpler.\n\nWhat's the actual latency budget, and is this latency measured from the application or end-to-end?",
+  "timestamp": "2026-05-18T11:10:14Z",
+  "latency_ms": 15553,
+  "exit_code": 0,
+  "output_length_chars": 1650,
+  "output_length_tokens_approx": 412,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

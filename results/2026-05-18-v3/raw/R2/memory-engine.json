@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "memory-engine",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your project setup, here's how to set up Flyway migrations for the new service:\n\n## Project structure\n\n```\npayment-service/\n└── src/main/resources/db/migration/\n    ├── V1__create_payments_table.sql\n    ├── V2__add_payment_status_index.sql\n    └── ...\n```\n\n## Flyway config\n\n```kotlin\n// build.gradle.kts\nplugins {\n    id(\"org.flywaydb.flyway\") version \"9.22.3\"\n}\n\nflyway {\n    url = System.getenv(\"DB_URL\") ?: \"jdbc:postgresql://localhost:5432/payment_service\"\n    user = System.getenv(\"DB_USER\") ?: \"postgres\"\n    schemas = arrayOf(\"payment\")\n}\n```\n\n## Naming convention\n\nFollow the existing pattern from auth-service and account-service:\n\n- **Versioned**: `V{number}__{description}.sql` (double underscore)\n- **Repeatable**: `R__{description}.sql` (for views, functions)\n\n## First migration example\n\n```sql\n-- V1__create_payments_schema.sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\nCREATE TABLE payment.payments (\n    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id    UUID NOT NULL,\n    amount        NUMERIC(19, 4) NOT NULL,\n    currency      VARCHAR(3) NOT NULL,\n    status        VARCHAR(20) NOT NULL DEFAULT 'PENDING',\n    correlation_id VARCHAR(64) NOT NULL,\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment.payments(account_id);\nCREATE INDEX idx_payments_status ON payment.payments(status) WHERE status IN ('PENDING', 'PROCESSING');\n```\n\n## Key points\n\n- **Separate schema per service** — keeps boundaries clean for the microservices migration and makes the architecture legible for Series C due diligence.\n- **Each service owns its own Flyway migration history** (`flyway_schema_history` lives in its own schema).\n- **Never modify a migration that's already been applied** — create a new versioned migration instead.\n- **Use `TIMESTAMPTZ`** not `TIMESTAMP` — you're on PostgreSQL 14, use it properly.\n- **Partial indexes** (the `WHERE` clause above) — leverage PG capabilities instead of adding new infra.\n\n## CI integration\n\nIn your GitHub Actions workflow, run `flyway validate` on PR and `flyway migrate` on deploy via ArgoCD init containers, consistent with your existing setup.\n\nWant me to scaffold the full migration directory structure or the Kubernetes init container config?",
+  "timestamp": "2026-05-18T13:06:46Z",
+  "latency_ms": 23575,
+  "exit_code": 0,
+  "output_length_chars": 2335,
+  "output_length_tokens_approx": 583,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

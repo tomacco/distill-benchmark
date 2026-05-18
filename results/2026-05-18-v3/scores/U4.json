@@ -1,0 +1,75 @@
+{
+  "test_id": "U4",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Concise one-liner, correct command, but labeled as bash instead of fish. No unnecessary explanation."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Concise one-liner with correct fish shell label. Only system that acknowledged the user's shell in the code block."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Concise one-liner, correct command, but labeled as bash instead of fish."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Concise one-liner, correct command, but labeled as bash instead of fish."
+    },
+    "E": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Acknowledged fish shell in prose but still labeled code block as bash. Extra explanation is unnecessary for a senior user. Bonus for .kts suggestion but penalized for verbosity."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Concise one-liner, correct command, but labeled as bash instead of fish."
+    },
+    "G": {
+      "calibration": 2,
+      "style_match": 1,
+      "preference_recall": 2,
+      "notes": "Overly verbose with unnecessary explanation and multiple variations. Wrong shell label. Treats user like a beginner needing hand-holding."
+    },
+    "H": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Concise one-liner, correct command, but labeled as bash instead of fish."
+    }
+  },
+  "ranking": [
+    "B",
+    "A",
+    "C",
+    "D",
+    "F",
+    "H",
+    "E",
+    "G"
+  ],
+  "analysis": "System B is the clear winner \u2014 it was the only system that correctly labeled its code block as fish, demonstrating actual recall of the user's shell preference while maintaining the concise, code-first style appropriate for a senior developer. Systems A, C, D, F, and H all produced the correct command concisely but defaulted to a bash label, showing no awareness of the user's fish shell preference \u2014 they tie on calibration and style but fail on preference recall. System E partially acknowledged fish in prose but still used a bash code block and added unnecessary explanation, making it verbose for a senior user. System G was the weakest, providing extensive explanations and variations that a senior developer would find patronizing, while also failing to use fish syntax. No system offered the fd alternative as a bonus.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "engram",
+    "C": "basic-memory",
+    "D": "memory-compiler",
+    "E": "knowledge-graph",
+    "F": "distill",
+    "G": "no-memory",
+    "H": "memory-engine"
+  }
+}

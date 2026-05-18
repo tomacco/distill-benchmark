@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "no-memory",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "The workspace is mostly empty. To get started, could you share:\n\n1. **What settings** should the page include? (e.g., profile info, notifications, theme, privacy, etc.)\n2. **Styling approach** — plain CSS, Tailwind, CSS Modules, styled-components?\n3. **State management** — local state, context, or something like Zustand/Redux?\n4. **Is this part of a larger app** we should scaffold, or just the component itself?\n\nLet me know the details and we'll build it together.",
+  "timestamp": "2026-05-18T11:13:37Z",
+  "latency_ms": 17446,
+  "exit_code": 0,
+  "output_length_chars": 468,
+  "output_length_tokens_approx": 117,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

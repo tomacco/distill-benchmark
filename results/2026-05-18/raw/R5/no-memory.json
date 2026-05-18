@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "no-memory",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created:\n\n**Dockerfile** — Multi-stage build that:\n- **Stage 1 (builder):** Installs Python dependencies into a separate prefix so only the final artifacts carry over\n- **Stage 2 (runtime):** Copies installed packages and app code into a clean `python:3.12-slim` image, runs as a non-root `app` user on port 8000\n\n**app/main.py** — FastAPI service with:\n- `POST /predict` — accepts transaction features, returns `fraud_probability`, `is_fraud`, and the `threshold` used\n- `GET /health` — liveness check\n- Model loaded once at startup via `joblib`\n\n**Expected layout:**\n```\n.\n├── Dockerfile\n├── .dockerignore\n├── requirements.txt\n├── app/\n│   └── main.py\n└── model/\n    └── fraud_model.joblib   ← place your trained sklearn model here\n```\n\n**To build and run:**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n```\n\n**To test:**\n```bash\ncurl -X POST http://localhost:8000/predict \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"amount\": 499.99, \"merchant_category\": 3, \"transaction_hour\": 2, \"distance_from_home\": 120.5, \"is_online\": 1, \"velocity_last_hour\": 5}'\n```\n\nDrop your trained `fraud_model.joblib` into the `model/` directory before building. The model should be a scikit-learn classifier with a `predict_proba` method (e.g., `RandomForestClassifier`, `LogisticRegression`). Adjust the `Transaction` fields to match whatever features your model was trained on.",
+  "timestamp": "2026-05-18T08:24:44Z",
+  "latency_ms": 38068,
+  "exit_code": 0,
+  "output_length_chars": 1413,
+  "output_length_tokens_approx": 353,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

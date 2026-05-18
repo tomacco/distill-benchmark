@@ -1,0 +1,75 @@
+{
+  "test_id": "D2",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Concise and confident PG recommendation. References Series C due diligence, pg_cron, citus extension. No DynamoDB/MongoDB suggested. Shows strong contextual awareness of team stack and business situation."
+    },
+    "B": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Recommends PG but also suggests ClickHouse, Redshift, BigQuery as viable alternatives. Mentions DynamoDB/MongoDB even if to reject them \u2014 user would still need to re-explain prior rejections. No awareness of existing team stack, PG version, or business context. Classic vanilla response."
+    },
+    "C": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Solid PG recommendation referencing PG 14, Flyway, team expertise. Mentions TimescaleDB extension. Does not bring up DynamoDB/MongoDB. Slightly generic \u2014 doesn't reference prior evaluations or rejections explicitly."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Good PG recommendation with practical performance advice (pg_stat_statements, partial indexes). Does not mention DynamoDB/MongoDB. Less explicit about team context \u2014 says 'your transactional databases' but doesn't name PG 14 or reference prior evaluations."
+    },
+    "E": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Strong PG recommendation with full stack awareness (PG 14, Flyway, Kafka). Explicitly states DynamoDB and MongoDB were previously evaluated and rejected \u2014 textbook correction durability. Well-structured with clear rationale."
+    },
+    "F": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Excellent response. References 'past evaluations', PG 14, team expertise, pg_cron, Aurora on EKS. Explicitly notes DynamoDB/MongoDB were rejected and explains why that reasoning still holds. Most contextually rich response \u2014 zero correction tokens needed."
+    },
+    "G": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Concise and correct PG recommendation. Mentions pg_cron, partitioning, Series C. No DynamoDB/MongoDB. Good but sparse \u2014 lacks explicit reference to prior evaluations or team expertise depth."
+    },
+    "H": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Strong response referencing 'prior evaluation', PG 14, team expertise, financial data consistency requirement. Mentions pg_stat_statements, TimescaleDB extension. Shows clear memory of past decisions and their rationale."
+    }
+  },
+  "ranking": [
+    "F",
+    "A",
+    "H",
+    "E",
+    "C",
+    "G",
+    "D",
+    "B"
+  ],
+  "analysis": "The key differentiator in this test is correction durability \u2014 whether the system avoids suggesting previously rejected options (DynamoDB, MongoDB) without being reminded. Systems F, E, and H explicitly reference prior evaluations and rejections, requiring zero correction tokens from the user. System A shows deep contextual awareness (Series C, pg_cron, citus) without mentioning rejected options, placing it in the top tier. Systems C, G, and D give correct PostgreSQL recommendations with varying degrees of stack awareness but don't explicitly reference prior rejections \u2014 solid but not demonstrating correction durability. System B is clearly the weakest, presenting a generic database comparison that includes ClickHouse, Redshift, and BigQuery as alternatives, and mentions DynamoDB/MongoDB (even to reject them), showing no awareness of the team's prior evaluations or existing stack. A user receiving System B's response would need to spend correction tokens explaining prior rejections and team context, which is exactly what this test measures.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "no-memory",
+    "C": "basic-memory",
+    "D": "knowledge-graph",
+    "E": "memory-compiler",
+    "F": "memory-engine",
+    "G": "engram",
+    "H": "distill"
+  }
+}

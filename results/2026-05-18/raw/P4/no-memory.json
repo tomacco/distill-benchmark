@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "no-memory",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Here's the simplest approach, from least to most infrastructure:\n\n## 1. Environment Variable (simplest)\n\n```python\n# config.py\nimport os\nNEW_PAYMENT_FLOW = os.getenv(\"NEW_PAYMENT_FLOW\", \"false\").lower() == \"true\"\n\n# usage\nfrom config import NEW_PAYMENT_FLOW\n\nif NEW_PAYMENT_FLOW:\n    process_payment_v2(order)\nelse:\n    process_payment(order)\n```\n\nDeploy with `NEW_PAYMENT_FLOW=true` on specific instances. Zero dependencies, but requires a redeploy to toggle.\n\n## 2. Database/Config Flag (toggle without redeploy)\n\n```python\n# feature_flags.py\ndef is_enabled(flag_name: str, user_id: str | None = None) -> bool:\n    flag = db.query(\"SELECT enabled, allowed_user_ids FROM feature_flags WHERE name = %s\", flag_name)\n    if not flag:\n        return False\n    if flag.allowed_user_ids and user_id:\n        return user_id in flag.allowed_user_ids\n    return flag.enabled\n```\n\n```sql\nCREATE TABLE feature_flags (\n    name TEXT PRIMARY KEY,\n    enabled BOOLEAN DEFAULT FALSE,\n    allowed_user_ids TEXT[],  -- for percentage/user-targeted rollout\n    created_at TIMESTAMP DEFAULT now()\n);\n\nINSERT INTO feature_flags (name, enabled, allowed_user_ids)\nVALUES ('new_payment_flow', true, '{user_123,user_456}');\n```\n\nThis gives you per-user targeting (dark-launch to internal users first, then percentage rollout) with no redeploy.\n\n## 3. Use a library/service\n\nIf you expect many flags: [LaunchDarkly](https://launchdarkly.com), [Unleash](https://getunleash.io) (self-hosted), or [GrowthBook](https://growthbook.io) (open source). Overkill for one flag.\n\n---\n\n**Recommendation for a dark-launch:** Option 2. It's ~20 lines of code, lets you target internal users first, then gradually roll out by percentage — all without redeploying. Want me to build it out for your codebase?",
+  "timestamp": "2026-05-18T08:23:02Z",
+  "latency_ms": 15799,
+  "exit_code": 0,
+  "output_length_chars": 1767,
+  "output_length_tokens_approx": 441,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

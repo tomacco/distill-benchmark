@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "engram",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "```fish\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nIf you want it as a reusable fish script:\n\n```fish\n#!/usr/bin/env fish\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nSave to e.g. `~/.local/bin/dps`, `chmod +x` it, and run `dps`.",
+  "timestamp": "2026-05-18T09:32:33Z",
+  "latency_ms": 7826,
+  "exit_code": 0,
+  "output_length_chars": 277,
+  "output_length_tokens_approx": 69,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

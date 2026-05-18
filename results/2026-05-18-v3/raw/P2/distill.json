@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no existing auth-service code in this workspace — just distilled knowledge about the Helios stack. Based on that knowledge (Kotlin, Kubernetes on EKS, gRPC internal APIs), here's a health check endpoint for the load balancer:\n\nSince this is on EKS with a load balancer, you need an **HTTP health check** (ALB/NLB health checks use HTTP, not gRPC). A standard pattern for Kotlin microservices on Spring Boot:\n\n```kotlin\n// src/main/kotlin/com/helios/auth/health/HealthController.kt\npackage com.helios.auth.health\n\nimport org.springframework.web.bind.annotation.GetMapping\nimport org.springframework.web.bind.annotation.RestController\nimport org.springframework.http.ResponseEntity\n\n@RestController\nclass HealthController(\n    private val dataSource: javax.sql.DataSource\n) {\n    @GetMapping(\"/health\")\n    fun health(): ResponseEntity<Map<String, String>> {\n        return try {\n            dataSource.connection.use { it.isValid(2) }\n            ResponseEntity.ok(mapOf(\"status\" to \"healthy\"))\n        } catch (e: Exception) {\n            ResponseEntity.status(503).body(mapOf(\"status\" to \"unhealthy\", \"reason\" to (e.message ?: \"db check failed\")))\n        }\n    }\n\n    @GetMapping(\"/health/liveness\")\n    fun liveness(): ResponseEntity<Map<String, String>> =\n        ResponseEntity.ok(mapOf(\"status\" to \"alive\"))\n}\n```\n\n**Key points:**\n- `/health` — readiness check (verifies DB connectivity). Point the ALB target group here.\n- `/health/liveness` — liveness probe for Kubernetes. Always returns 200 if the process is up.\n- DB check has a 2-second timeout to avoid hanging health checks.\n\n**Kubernetes manifest additions:**\n\n```yaml\n# In your auth-service deployment\nlivenessProbe:\n  httpGet:\n    path: /health/liveness\n    port: 8080\n  initialDelaySeconds: 15\n  periodSeconds: 10\nreadinessProbe:\n  httpGet:\n    path: /health\n    port: 8080\n  initialDelaySeconds: 10\n  periodSeconds: 5\n```\n\nIf you're using Spring Boot Actuator instead, you can skip the custom controller and just expose the built-in endpoints:\n\n```yaml\n# application.yml\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: health\n  endpoint:\n    health:\n      show-details: never\n  server:\n    port: 8081  # separate management port\n```\n\nThen point the ALB at `/actuator/health` on port 8081.\n\nWant me to create the actual files, or do you have the auth-service repo checked out somewhere?",
+  "timestamp": "2026-05-18T11:23:39Z",
+  "latency_ms": 29911,
+  "exit_code": 0,
+  "output_length_chars": 2381,
+  "output_length_tokens_approx": 595,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

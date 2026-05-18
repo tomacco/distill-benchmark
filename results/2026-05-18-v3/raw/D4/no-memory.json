@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "no-memory",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "The workspace is essentially empty (just a README). There's no existing Kotlin/Kafka project to build on. Before I scaffold anything, I need to understand what you're working with:\n\n1. **Existing project?** Do you have a repo I should clone, or should I create a new project from scratch?\n2. **Build tool** — Gradle (Kotlin DSL) or Maven?\n3. **Kafka client** — Spring Kafka, or raw `kafka-clients` with coroutines?\n4. **Event format** — Avro with Schema Registry, Protobuf, or plain JSON?\n5. **What does `payment-completed` look like?** (fields like `paymentId`, `orderId`, `amount`, `currency`, `timestamp`?)\n6. **What should the consumer do** when it receives the event? (e.g., update order status, send notification, trigger fulfillment)\n\nHappy to scaffold the full consumer once I know the shape of your stack.",
+  "timestamp": "2026-05-18T11:11:36Z",
+  "latency_ms": 13212,
+  "exit_code": 0,
+  "output_length_chars": 814,
+  "output_length_tokens_approx": 203,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

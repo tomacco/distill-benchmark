@@ -1,0 +1,75 @@
+{
+  "test_id": "C2",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "No memory of the team's prior evaluation. Treats DynamoDB as a perfectly valid option and gives a generic AWS comparison. Zero corrective behavior."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Strong recall with clear 'No' redirect. Cites all three reasons. Recommends Redis as already in stack. Bonus: mentions Series C due diligence and audit trail, showing deeper context awareness. Tone is direct without being preachy."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Clear recall and strong redirect. Provides a Kotlin code example which is practical but somewhat unsolicited. References Helios Financial by name. Doesn't explicitly frame the user's suggestion as contradicting a prior decision."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Excellent balance: 'I'd actually recommend against' is firm but not condescending. Cites all three reasons clearly. Acknowledges use case validity at the end ('If you're not already using Redis for sessions'). Graceful contradiction handling."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Strong redirect with good reasoning. Adds valuable operational detail (IAM policies, monitoring, on-call runbooks). Good TL;DR summary. Slightly less explicit about this being a documented prior decision."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Recalls the rejection and recommends Redis. 'Off the table' is very direct but somewhat blunt \u2014 doesn't acknowledge the user's reasoning or the valid use case. Functional but lacks grace in handling the contradiction."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Best contradiction handling \u2014 explicitly names it as contradicting known information. Cites all reasons clearly. Leaves door open ('if Redis isn't sufficient... worth discussing') which acknowledges the use case without being dismissive. Not preachy."
+    },
+    "H": {
+      "recall": 4,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Recalls the rejection but is overly terse. 'PostgreSQL for everything' oversimplifies the decision. Doesn't cite specific reasons (strong consistency, transactions, expertise) in enough detail. Blunt contradiction handling."
+    }
+  },
+  "ranking": [
+    "G",
+    "D",
+    "B",
+    "E",
+    "C",
+    "F",
+    "H",
+    "A"
+  ],
+  "analysis": "System A stands alone as the only response with zero recall \u2014 it behaves as a generic assistant with no memory of the team's prior DynamoDB evaluation. All other systems (B\u2013H) successfully recalled the rejection and recommended Redis. The top tier (G, D) distinguished themselves through contradiction handling: G explicitly named the contradiction ('this contradicts something I'm confident about') and left the door open for discussion, while D struck an excellent balance of firmness and grace with 'I'd actually recommend against.' The middle tier (B, E, C) all performed well \u2014 B showed the deepest context recall (Series C due diligence), E added valuable operational detail, and C provided practical code. The lower tier among recalling systems (F, H) were effective but too blunt, handling the contradiction as a flat statement rather than a graceful redirect, and H oversimplified the original decision rationale.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "memory-engine",
+    "C": "knowledge-graph",
+    "D": "basic-memory",
+    "E": "memory-compiler",
+    "F": "claude-mem",
+    "G": "distill",
+    "H": "engram"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "claude-mem",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "Here's a commit message:\n\n```\nRemove legacy REST endpoints and OpenAPI specs from account-service\n\ngRPC migration for account-service is complete. Clean up:\n- Delete REST endpoint handlers (replaced by gRPC service impls)\n- Remove internal OpenAPI spec files (no longer needed)\n- Update CI pipeline to stop generating REST client stubs\n```",
+  "timestamp": "2026-05-18T08:46:13Z",
+  "latency_ms": 5734,
+  "exit_code": 0,
+  "output_length_chars": 339,
+  "output_length_tokens_approx": 84,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

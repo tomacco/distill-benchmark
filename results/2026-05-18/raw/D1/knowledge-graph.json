@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Run it with `./containers.sh`. It shows container names, status, and port mappings in a clean table.",
+  "timestamp": "2026-05-18T09:22:53Z",
+  "latency_ms": 13207,
+  "exit_code": 0,
+  "output_length_chars": 100,
+  "output_length_tokens_approx": 25,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

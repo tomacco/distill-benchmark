@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal, REST external, PostgreSQL), here's the simplest approach:\n\n## Merchant Bank Account Verification Endpoint\n\n**External REST endpoint** (partner-facing), delegates internally via gRPC.\n\n### Flow\n1. External REST: `POST /v1/merchants/{merchantId}/bank-accounts/verify`\n2. payment-service validates request, calls account-service via gRPC to confirm the account exists\n3. Initiates micro-deposit verification (two small deposits, merchant confirms amounts)\n\n### Why micro-deposits\n- Industry standard for ACH verification\n- No third-party dependency needed to start (Plaid/etc can be added later)\n- Fits your PostgreSQL model — just a `verification` table tracking state\n\n### Schema (Flyway migration)\n\n```sql\nCREATE TABLE bank_account_verification (\n    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    merchant_id   UUID NOT NULL,\n    bank_account_id UUID NOT NULL,\n    status        TEXT NOT NULL DEFAULT 'pending', -- pending | deposits_sent | verified | failed\n    deposit_1     NUMERIC(5,2),\n    deposit_2     NUMERIC(5,2),\n    attempts       INT NOT NULL DEFAULT 0,\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),\n    verified_at   TIMESTAMPTZ,\n    CONSTRAINT max_attempts CHECK (attempts <= 3)\n);\n```\n\n### gRPC (internal)\n\n```protobuf\nservice PaymentService {\n  rpc InitiateVerification(InitiateVerificationRequest) returns (VerificationResponse);\n  rpc ConfirmVerification(ConfirmVerificationRequest) returns (VerificationResponse);\n}\n```\n\n### REST (external)\n\n- `POST /v1/merchants/{id}/bank-accounts/verify` — initiates\n- `POST /v1/merchants/{id}/bank-accounts/verify/confirm` — merchant submits the two amounts\n\n### Key points\n- auth-service handles JWT validation as usual\n- Emit a `bank_account.verified` Kafka event when confirmed — notification-service picks it up, account-service updates status\n- 3-attempt limit, then require re-initiation\n- No need for a separate verification service — this lives cleanly in payment-service\n\nWant me to scaffold the Kotlin service code or the proto definitions?",
+  "timestamp": "2026-05-18T08:32:04Z",
+  "latency_ms": 29828,
+  "exit_code": 0,
+  "output_length_chars": 2071,
+  "output_length_tokens_approx": 517,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

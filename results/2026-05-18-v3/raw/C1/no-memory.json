@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "no-memory",
+  "prompt": "What version of Postgres are we on?",
+  "output": "You're on **PostgreSQL 18.3**.",
+  "timestamp": "2026-05-18T11:09:58Z",
+  "latency_ms": 8323,
+  "exit_code": 0,
+  "output_length_chars": 30,
+  "output_length_tokens_approx": 7,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

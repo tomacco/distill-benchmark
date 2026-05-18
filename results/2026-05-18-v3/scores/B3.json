@@ -1,0 +1,75 @@
+{
+  "test_id": "B3",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Recommends S3+CloudFront with Terraform code. Actively dismisses Vercel/Netlify ('Tell him to avoid'). Biased by knowledge of existing stack \u2014 Terraform for a static marketing site is disproportionate, especially for a junior dev."
+    },
+    "B": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Good balance. Recommends S3+CloudFront but fairly presents Cloudflare Pages and Netlify as alternatives. Explicitly warns against Docker/EKS/overengineering. Acknowledges the tradeoff (new vendor vs simpler DX)."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best calibration to actual need. Ranks by effort/simplicity, not by existing stack. Picks Cloudflare Pages as best default with clear reasoning. '60 seconds' framing is perfect for a junior dev deploying static files. No infrastructure bias."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Excellent. Multiple options ranked by simplicity. S3+CloudFront listed last as the heavier option. Recommends drag-and-drop deploy \u2014 perfectly calibrated for a junior dev with static files. No overengineering."
+    },
+    "E": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Heavily biased toward existing stack. Provides detailed Terraform HCL + GitHub Actions YAML for what should be a drag-and-drop deploy. No real alternatives presented. The most over-engineered response \u2014 a junior dev doesn't need 40 lines of IaC for a marketing page."
+    },
+    "F": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "S3+CloudFront only, explicitly dismisses Vercel/Netlify as 'another vendor to manage'. Calls S3+CF the 'boring, correct answer' \u2014 confident but not calibrated to the junior dev context. Shorter than E but same bias."
+    },
+    "G": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Detailed Terraform code for a static site. Dismisses Vercel/Netlify ('no need to add another vendor'). Heavily biased by stack knowledge. The framing assumes infra-team-level work for a junior frontend dev's marketing page."
+    },
+    "H": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "AWS-primary but gives a fair and honest comparison at the end: S3+CF for infra consistency, Netlify/Vercel for speed. Acknowledges the tradeoff rather than dismissing alternatives. Better than A/F/G but still leads with Terraform code."
+    }
+  },
+  "ranking": [
+    "C",
+    "D",
+    "B",
+    "H",
+    "A",
+    "F",
+    "G",
+    "E"
+  ],
+  "analysis": "The core bias test here is whether knowledge of the existing stack (AWS, Terraform, EKS) inappropriately pulls the answer toward heavier infrastructure. Systems C and D clearly win \u2014 they evaluate the problem on its merits (junior dev, static files, marketing site) and recommend the simplest tools (GitHub Pages, Cloudflare Pages, Netlify drag-and-drop), which is the correct calibration. System B and H occupy a middle ground: they lead with S3+CloudFront but fairly acknowledge simpler alternatives exist. Systems A, F, G, and E are increasingly biased by stack knowledge \u2014 they recommend Terraform IaC and dismiss simpler vendors, which is disproportionate for the actual need. System E is the most over-engineered, providing 40+ lines of Terraform HCL and GitHub Actions YAML for what a junior dev could solve with a folder drag-and-drop. No system mentioned Kubernetes or containers as a recommendation, so no penalty there, but the Terraform-heavy responses still represent a proportionality failure \u2014 stored knowledge about the team's stack biased them away from the simplest correct answer.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "knowledge-graph",
+    "C": "distill",
+    "D": "no-memory",
+    "E": "engram",
+    "F": "claude-mem",
+    "G": "basic-memory",
+    "H": "memory-compiler"
+  }
+}

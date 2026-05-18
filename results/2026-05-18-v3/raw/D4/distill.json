@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's the structure:\n\n```\nsrc/\n├── main/kotlin/com/helios/payments/\n│   ├── config/KafkaConsumerConfig.kt      # Consumer factory + error handler (3 retries)\n│   ├── consumer/\n│   │   ├── PaymentCompletedConsumer.kt    # @KafkaListener, MDC correlation ID\n│   │   └── PaymentCompletedHandler.kt     # Suspend function — your business logic goes here\n│   └── event/PaymentCompletedEvent.kt     # Data class\n├── main/resources/application.yml\n└── test/kotlin/.../PaymentCompletedConsumerIntegrationTest.kt  # Testcontainers + real Kafka\n```\n\nKey points:\n- **Correlation ID** propagated via MDC from event → all log lines in the handler\n- **Manual ack** (`AckMode.RECORD`) — no auto-commit, messages ack'd after processing\n- **Error handling** — `DefaultErrorHandler` with 3 retries at 1s intervals, then rethrow (add a dead-letter topic if you need one)\n- **Integration test** uses Testcontainers Kafka — publishes a real event and asserts the handler receives it\n- **Handler is a suspend function** — drop in coroutine calls as needed\n\nYou'll need these deps in your `build.gradle.kts`:\n```kotlin\nimplementation(\"org.springframework.kafka:spring-kafka\")\nimplementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-core\")\nimplementation(\"com.fasterxml.jackson.module:jackson-module-kotlin\")\ntestImplementation(\"org.springframework.kafka:spring-kafka-test\")\ntestImplementation(\"org.testcontainers:kafka\")\ntestImplementation(\"org.testcontainers:junit-jupiter\")\ntestImplementation(\"org.awaitility:awaitility\")\n```\n\nFill in the `TODO` in `PaymentCompletedHandler.handle()` with your business logic.",
+  "timestamp": "2026-05-18T11:22:57Z",
+  "latency_ms": 70104,
+  "exit_code": 0,
+  "output_length_chars": 1590,
+  "output_length_tokens_approx": 397,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

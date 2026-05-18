@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "memory-compiler",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Got it. Dev is your junior frontend engineer (React/TS, 6 months in). A few things before we start:\n\n1. **What does the settings page need to do?** User profile settings? App preferences? Notification settings? Some combination?\n\n2. **Is there an existing frontend codebase I should look at?** I don't see React source files in this workspace. If there's a repo or directory I should reference for existing patterns (routing, state management, component conventions), point me to it.\n\n3. **Pairing with Dev** — since Dev is still learning the domain, it'd help to know: are you looking for me to scaffold the component so you two can iterate on it together, or do you want a more teaching-oriented breakdown Dev can follow step-by-step?\n\nGive me the scope and I'll put together something concrete in React/TypeScript, keeping it straightforward (no over-engineering).",
+  "timestamp": "2026-05-18T12:55:40Z",
+  "latency_ms": 17990,
+  "exit_code": 0,
+  "output_length_chars": 867,
+  "output_length_tokens_approx": 216,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

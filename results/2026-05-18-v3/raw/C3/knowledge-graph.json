@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you mentioned earlier in this conversation, the account service has been migrated to **MySQL** as of last week.\n\nNote that the project knowledge graph (`knowledge-graph/graph.jsonl`) still references **PostgreSQL 14** as the stack database. You may want to update that to reflect the migration so the documentation stays accurate.",
+  "timestamp": "2026-05-18T13:12:33Z",
+  "latency_ms": 8708,
+  "exit_code": 0,
+  "output_length_chars": 344,
+  "output_length_tokens_approx": 86,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

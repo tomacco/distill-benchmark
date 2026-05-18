@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "memory-compiler",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you provide the path to the file, or would you like me to look somewhere else for it?",
+  "timestamp": "2026-05-18T12:54:06Z",
+  "latency_ms": 11041,
+  "exit_code": 0,
+  "output_length_chars": 151,
+  "output_length_tokens_approx": 37,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

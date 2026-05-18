@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "no-memory",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you mentioned earlier in our conversation, you switched the account service to **MySQL** last week, with the migration from PostgreSQL now complete.",
+  "timestamp": "2026-05-18T11:10:19Z",
+  "latency_ms": 4655,
+  "exit_code": 0,
+  "output_length_chars": 162,
+  "output_length_tokens_approx": 40,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

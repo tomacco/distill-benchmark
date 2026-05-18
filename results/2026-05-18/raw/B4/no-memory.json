@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "no-memory",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "This is an empty workspace — there's no existing codebase to build on. Before I start writing code, I have some questions that will shape the implementation:\n\n**Architecture questions:**\n1. **Backend stack** — Do you have a preferred language/framework? (e.g., Node/Express, Python/FastAPI, Go, etc.)\n2. **Frontend** — Any preference? (React, Vue, plain HTML+JS, etc.)\n3. **Data source** — Where are the transactions coming from? Is there an existing database, API, or event stream? Or should I mock the data for the demo?\n4. **\"Real-time\" mechanism** — WebSockets, Server-Sent Events, or simple polling from the client every 30s?\n\n**Scope questions:**\n5. Is this a standalone app, or does it need to integrate into an existing system?\n6. For the investor demo, does it need to look polished (charts, branded styling) or is a functional prototype enough?\n7. Should the 30-second refresh be server-push or client-pull?\n\nIf you want me to just pick reasonable defaults and build something demo-ready quickly, I can go with:\n- **Backend:** Node + Express with SSE or a simple polling endpoint\n- **Frontend:** React with a clean dashboard UI (recharts or similar)\n- **Data:** Mock transaction generator simulating realistic merchant data\n- **Update:** Client polls every 30s (simplest, most reliable for a demo)\n\nLet me know your preferences or if I should just run with those defaults.",
+  "timestamp": "2026-05-18T08:19:50Z",
+  "latency_ms": 20733,
+  "exit_code": 0,
+  "output_length_chars": 1382,
+  "output_length_tokens_approx": 345,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

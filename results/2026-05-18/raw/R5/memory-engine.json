@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "memory-engine",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Key decisions in the Dockerfile:\n\n- **Multi-stage build** -- keeps the final image small by separating pip install from runtime\n- **`python:3.11-slim`** -- minimal base, avoids full Debian bloat\n- **Non-root user** -- runs as `app` user (important for EKS pod security policies)\n- **No `--workers` flag** -- let your k8s horizontal scaling handle concurrency rather than multiple uvicorn workers per pod; add `--workers N` if you prefer fewer, fatter pods\n\nExpected directory layout:\n\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py          # FastAPI app, loads model, defines /predict endpoint\n└── models/\n    └── fraud_model.joblib  # serialized scikit-learn pipeline\n```",
+  "timestamp": "2026-05-18T09:17:38Z",
+  "latency_ms": 24282,
+  "exit_code": 0,
+  "output_length_chars": 693,
+  "output_length_tokens_approx": 173,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

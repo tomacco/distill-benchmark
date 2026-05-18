@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you provide the path to the file, or would you like me to look somewhere else?\n\nIn the meantime, here's a quick one-liner you can run once the file is available:\n\n```bash\nawk -F',' 'NR>1 {sum+=$3} END {print sum}' transactions.csv\n```\n\nOr if you paste/create the file, I can parse and sum it for you.",
+  "timestamp": "2026-05-18T13:16:24Z",
+  "latency_ms": 12077,
+  "exit_code": 0,
+  "output_length_chars": 366,
+  "output_length_tokens_approx": 91,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

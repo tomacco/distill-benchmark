@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "engram",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "Given your stack (AWS), the simplest option: **S3 + CloudFront**.\n\n**Setup:**\n\n1. Create an S3 bucket with static website hosting enabled\n2. Put CloudFront in front for HTTPS + caching\n3. Point DNS (Route 53) to the CloudFront distribution\n\n**Why this over alternatives:**\n- Already on AWS, no new vendor\n- Zero servers to manage\n- Costs pennies/month for a marketing site\n- CloudFront gives global CDN + free HTTPS\n\n**Quick Terraform sketch** (since you're already using Terraform):\n\n```hcl\nresource \"aws_s3_bucket\" \"marketing\" {\n  bucket = \"helios-marketing-site\"\n}\n\nresource \"aws_s3_bucket_website_configuration\" \"marketing\" {\n  bucket = aws_s3_bucket.marketing.id\n  index_document { suffix = \"index.html\" }\n  error_document { key = \"404.html\" }\n}\n\nresource \"aws_cloudfront_distribution\" \"marketing\" {\n  origin {\n    domain_name              = aws_s3_bucket.marketing.bucket_regional_domain_name\n    origin_id                = \"s3-marketing\"\n    origin_access_control_id = aws_cloudfront_origin_access_control.marketing.id\n  }\n\n  enabled             = true\n  default_root_object = \"index.html\"\n\n  default_cache_behavior {\n    allowed_methods        = [\"GET\", \"HEAD\"]\n    cached_methods         = [\"GET\", \"HEAD\"]\n    target_origin_id       = \"s3-marketing\"\n    viewer_protocol_policy = \"redirect-to-https\"\n\n    forwarded_values {\n      query_string = false\n      cookies { forward = \"none\" }\n    }\n  }\n\n  restrictions {\n    geo_restriction { restriction_type = \"none\" }\n  }\n\n  viewer_certificate {\n    cloudfront_default_certificate = true\n  }\n}\n```\n\n**Deployment:** Dev can add a GitHub Actions step that syncs to S3 and invalidates the CloudFront cache:\n\n```yaml\n- run: aws s3 sync ./dist s3://helios-marketing-site --delete\n- run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CF_DIST_ID }} --paths \"/*\"\n```\n\nDev's a frontend person — this keeps it simple for him. No containers, no K8s. Just push files.",
+  "timestamp": "2026-05-18T13:22:00Z",
+  "latency_ms": 13284,
+  "exit_code": 0,
+  "output_length_chars": 1928,
+  "output_length_tokens_approx": 482,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

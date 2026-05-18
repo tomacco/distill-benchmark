@@ -1,0 +1,75 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 1,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "No recognition of Dev as a person or junior engineer. No mention of React/TS stack from memory. Asks reasonable clarifying questions but shows zero retrieved knowledge."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Identifies Dev as junior frontend engineer with React/TS and 6 months experience. Calibrates complexity appropriately ('no unnecessary abstractions'). Knowledge feels naturally woven into the response without over-dumping. Suggests structuring for Dev to extend \u2014 growth opportunity signal."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Knows Dev is junior React/TS ~6mo. Suggests straightforward approach and learning opportunity. However, asks about gRPC-web gateway and multiple state management options which feels slightly over-engineered for a junior-calibrated response. Some unnecessary technical breadth."
+    },
+    "D": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 1,
+      "notes": "Completely misidentifies 'Dev' as an agent or tool rather than a team member. No retrieved knowledge about the team. Asks generic questions. This is a clear failure of retrieval."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Knows Dev is junior frontend (React/TS, 6 months) and that user is senior backend. Good calibration. Division of labor question is thoughtful. Slightly expository in stating retrieved knowledge but still feels natural."
+    },
+    "F": {
+      "relevance": 1,
+      "precision": 4,
+      "naturalness": 2,
+      "notes": "Does not recognize Dev as a team member \u2014 asks if it's a colleague or a tool. No knowledge of stack (asks TypeScript or JavaScript?). Complete retrieval failure. Generic onboarding questions."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Strong retrieval \u2014 knows Dev is junior frontend (React/TS, 6 months), user is senior backend. References 'banking platform' and 'Marcus' and 'Linear' which shows deep context retrieval. However, some of that extra context (Marcus, Linear) may be slightly beyond what's needed here, lowering precision slightly."
+    },
+    "H": {
+      "relevance": 3,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Knows Dev is junior and calibrates accordingly ('clear props, minimal abstraction, well-typed with TypeScript'). But doesn't explicitly surface Dev's role, experience level, or stack from memory \u2014 the knowledge is implied rather than demonstrated. Good precision \u2014 no irrelevant info."
+    }
+  },
+  "ranking": [
+    "B",
+    "G",
+    "E",
+    "C",
+    "H",
+    "A",
+    "F",
+    "D"
+  ],
+  "analysis": "System B delivers the strongest overall performance: it retrieves Dev's role and experience level naturally, calibrates complexity without over-engineering, and weaves knowledge organically into a practical response. System G shows the deepest retrieval (referencing Marcus, Linear, banking platform) but slightly over-indexes on stored context that isn't directly relevant to the task. System E performs well with clean retrieval and a thoughtful division-of-labor question. System C retrieves well but introduces unnecessary technical complexity (gRPC-web, multiple state management options) that conflicts with the junior-calibrated approach. System H implies knowledge of Dev's level but doesn't explicitly surface it, making retrieval harder to confirm. Systems A and F show no meaningful retrieval \u2014 A asks generic questions, F doesn't even recognize Dev as a person. System D is the worst performer, misinterpreting 'Dev' as a tool or agent, demonstrating complete retrieval failure.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-compiler",
+    "C": "claude-mem",
+    "D": "distill",
+    "E": "basic-memory",
+    "F": "no-memory",
+    "G": "memory-engine",
+    "H": "engram"
+  }
+}

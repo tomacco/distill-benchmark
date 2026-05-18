@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "claude-mem",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes — straightforward call. You already run Redis, the access pattern is a textbook fit (key-value + TTL), and it avoids adding new infra. Go for it.\n\nA few things to nail down:\n\n- **Key format**: `session:{userId}:{tokenId}` — lets you invalidate per-user or per-token.\n- **TTL**: Set it to match your token expiry (e.g., `SETEX` / `SET EX`). Don't rely on application-side expiry alone.\n- **Eviction policy**: Confirm your Redis instance uses `volatile-ttl` or `volatile-lru` so session keys with TTLs get evicted predictably under memory pressure, not random production keys.\n- **Serialization**: Just store the token string or a minimal JSON blob. Don't over-structure it.\n\nSince auth-service is already in prod (Kotlin), you can use Lettuce (async, coroutine-friendly) if you're not already:\n\n```kotlin\nsuspend fun cacheSession(userId: String, tokenId: String, token: String, ttlSeconds: Long) {\n    redis.setex(\"session:$userId:$tokenId\", ttlSeconds, token)\n}\n\nsuspend fun getSession(userId: String, tokenId: String): String? {\n    return redis.get(\"session:$userId:$tokenId\")\n}\n```\n\nNo new infra, no new operational burden, clean fit. Ship it.",
+  "timestamp": "2026-05-18T12:25:56Z",
+  "latency_ms": 12919,
+  "exit_code": 0,
+  "output_length_chars": 1150,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

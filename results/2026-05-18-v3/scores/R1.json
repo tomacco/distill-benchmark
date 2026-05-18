@@ -1,0 +1,75 @@
+{
+  "test_id": "R1",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Hits every expected signal: Kotlin, gRPC, EKS/ArgoCD, PostgreSQL, Kafka, auth/account-service pattern, Sofia, Marcus, Series C. The 'already decided' framing is excellent \u2014 presents stack knowledge as shared assumptions, not regurgitated facts."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Covers gRPC, PostgreSQL, Kafka, Flyway, Sofia, Series C, strangler fig. Kotlin mentioned only in passing (resilience4j reference). No EKS mention. Extraction strategy section is a nice addition. Slightly less natural integration of team context compared to top performers."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Hits all major signals: Kotlin, gRPC, PostgreSQL 14, Kafka, EKS, Flyway, DynamoDB/MongoDB rejected. Sofia and Marcus mentioned naturally. Series C context woven into recommendations. Opening line immediately signals deep familiarity with the team and project."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Strong on PostgreSQL, Kafka, gRPC, auth/account-service, Flyway, Sofia, Series C. No explicit Kotlin or EKS mention. Transactional outbox/Debezium and strangler fig suggestions show sophistication. Clarifying questions to Sofia feel natural and practical."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Covers Kotlin, gRPC, PostgreSQL, Kafka, Flyway, Sofia, Marcus, Series C. No EKS mention. The parenthetical '(corrections: no DynamoDB/MongoDB)' feels like exposed metadata \u2014 slightly unnatural, as if showing retrieval mechanics rather than organic knowledge."
+    },
+    "F": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Hits Kotlin, EKS, gRPC, PostgreSQL, Kafka, Flyway, auth/account-service. Missing Sofia and Series C bonuses. 'Based on your stack and where Helios is at' is good framing but the response lacks the team/people context that stronger answers include."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Covers Kotlin coroutines, gRPC, PostgreSQL, Kafka, Flyway, Sofia, Series C, auth/account-service. No EKS mention. Redis suggestion is somewhat speculative/injected. Good technical depth with advisory locks and transactional outbox. Questions to Sofia are practical."
+    },
+    "H": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Generic payment processing advice with zero team-specific knowledge. No Kotlin, no gRPC, no EKS, no PostgreSQL, no Kafka, no Sofia, no Series C, no monolith context. Mentions generic providers (Stripe, Braintree) and generic concerns (SCA, tax, data residency) without any connection to Helios's actual stack or situation."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "E",
+    "B",
+    "D",
+    "G",
+    "F",
+    "H"
+  ],
+  "analysis": "Systems A and C are the clear top performers, both surfacing the full expected signal set \u2014 Kotlin, gRPC, EKS, PostgreSQL, Kafka, existing service patterns, Sofia, and Series C context \u2014 with natural integration that treats this knowledge as shared team assumptions rather than retrieved facts. A's 'already decided' framing and C's confident opening referencing Sofia and Helios's stack both demonstrate organic knowledge weaving. System E is close behind, hitting nearly all signals but with a slightly mechanical '(corrections: no DynamoDB/MongoDB)' parenthetical that exposes retrieval mechanics. Systems B, D, and G form a solid middle tier, each covering most signals but missing one or two (typically Kotlin or EKS) while adding valuable technical depth like strangler fig patterns and transactional outbox. System F covers the technical stack but lacks team context (no Sofia, no Series C). System H is a clear outlier \u2014 a competent but entirely generic payment processing guide with no evidence of stored knowledge about Helios's stack, team, or migration context, exactly the behavior the rubric penalizes most heavily.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "basic-memory",
+    "C": "knowledge-graph",
+    "D": "engram",
+    "E": "memory-engine",
+    "F": "distill",
+    "G": "claude-mem",
+    "H": "no-memory"
+  }
+}

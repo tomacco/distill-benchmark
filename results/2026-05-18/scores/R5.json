@@ -1,0 +1,75 @@
+{
+  "test_id": "R5",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Good Dockerfile and app structure, but injects gRPC suggestion ('since your internal APIs use gRPC') which is clearly stored knowledge bleeding into an unrelated request. Uses fish shell syntax suggesting profile knowledge. The gRPC note is the exact kind of bleed this test is designed to catch."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Clean Dockerfile with good explanations. EKS pod security policies mentioned briefly as justification for non-root user \u2014 reasonable and proportional. HPA mention is brief. S3 tip for large models is practical Docker advice, not infrastructure bleed. Stays focused."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Most technically thorough Dockerfile \u2014 includes gcc for wheel builds, healthcheck, libgomp note. 'Tune to your EKS pod vCPU allocation' is a brief, relevant mention tied to the workers config choice. Practical and well-explained without over-indexing on infrastructure context."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Good practical response with layout diagram, but 'just push the image to ECR and deploy via ArgoCD like your other services' is a clear dump of stored infrastructure knowledge. The user asked for a Dockerfile, not deployment guidance. 'Like your other services' is a tell that stored context is being regurgitated."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Excellent focus. Provides Dockerfile, app code, layout, build commands, and a curl test example \u2014 everything needed, nothing extraneous. Zero infrastructure bleed. No EKS, no gRPC, no ArgoCD. Stays completely on-task with practical, actionable output. Best precision of all responses."
+    },
+    "F": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Good explanations for Dockerfile choices. 'Important for EKS pod security policies' and 'let your k8s horizontal scaling handle concurrency' are brief and used as justification for design decisions rather than unprompted infrastructure advice. Slightly more k8s context than needed but proportional."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused response. Good Dockerfile with pinned versions, practical explanations (musl vs glibc, GIL, .dockerignore). Zero infrastructure bleed \u2014 no EKS, no deployment pipeline mentions. All advice is Docker/Python-specific. Excellent precision."
+    },
+    "H": {
+      "relevance": 3,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "No irrelevant knowledge injected \u2014 perfectly precise. However, the response is quite brief and lacks detail compared to others (no requirements.txt, no curl example, minimal explanation). Clean and focused but less helpful overall due to brevity."
+    }
+  },
+  "ranking": [
+    "E",
+    "G",
+    "C",
+    "B",
+    "F",
+    "H",
+    "A",
+    "D"
+  ],
+  "analysis": "This test measures precision \u2014 whether accumulated knowledge about a user's infrastructure (EKS, gRPC, ArgoCD, Kotlin) bleeds into a straightforward Python Dockerfile request. Systems E and G excelled by staying completely on-task with zero infrastructure bleed while still being thorough and practical. Systems B, C, and F struck a reasonable balance, mentioning EKS only briefly as justification for specific Dockerfile choices (non-root user, worker count) rather than as unsolicited infrastructure advice. System H was perfectly precise but too brief to be maximally useful. Systems A and D clearly failed the precision test: A injected a gRPC suggestion based on stored knowledge about the user's internal APIs, and D dumped ArgoCD/ECR deployment instructions with the tell-tale phrase 'like your other services' \u2014 both are textbook examples of stored context bleeding into an unrelated request. The best responses (E, G) demonstrate that you can be helpful and thorough without injecting every piece of stored context you have about a user's environment.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "engram",
+    "C": "claude-mem",
+    "D": "basic-memory",
+    "E": "no-memory",
+    "F": "memory-engine",
+    "G": "distill",
+    "H": "knowledge-graph"
+  }
+}

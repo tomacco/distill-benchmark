@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "memory-compiler",
+  "prompt": "What version of Postgres are we on?",
+  "output": "**PostgreSQL 14** — it's the primary database, with Redis used for caching. Migrations are managed via Flyway.",
+  "timestamp": "2026-05-18T09:01:09Z",
+  "latency_ms": 9060,
+  "exit_code": 0,
+  "output_length_chars": 110,
+  "output_length_tokens_approx": 27,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

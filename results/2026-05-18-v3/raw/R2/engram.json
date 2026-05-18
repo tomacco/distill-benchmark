@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "engram",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Use Flyway, same as the other services. Here's the setup for a Kotlin service on PostgreSQL:\n\n**build.gradle.kts**\n```kotlin\nplugins {\n    id(\"org.flywaydb.flyway\") version \"9.22.3\"\n}\n\ndependencies {\n    implementation(\"org.flywaydb:flyway-core\")\n    runtimeOnly(\"org.postgresql:postgresql\")\n}\n\nflyway {\n    url = \"jdbc:postgresql://localhost:5432/payment_service\"\n    user = \"postgres\"\n    schemas = arrayOf(\"payment\")\n}\n```\n\n**Migration structure:**\n```\nsrc/main/resources/db/migration/\n├── V1__create_schema.sql\n├── V2__create_payments_table.sql\n├── V3__add_idempotency_key_index.sql\n```\n\n**Key conventions to follow:**\n\n1. **Versioned migrations only** — `V{number}__{description}.sql`. No repeatable migrations for financial data.\n2. **One schema per service** — use `CREATE SCHEMA IF NOT EXISTS payment;` in V1 so each service owns its namespace.\n3. **Always wrap DDL in transactions** — Flyway does this by default on PostgreSQL, but be explicit for multi-statement migrations.\n4. **Separate schema changes from data backfills** — keeps migrations fast and rollback-friendly.\n\n**application.yml:**\n```yaml\nspring:\n  flyway:\n    enabled: true\n    schemas: payment\n    baseline-on-migrate: false\n    validate-on-migrate: true\n```\n\n**For local dev**, add a Flyway Gradle task so you can run migrations outside the app:\n\n```shell\n./gradlew flywayMigrate -Dflyway.url=jdbc:postgresql://localhost:5432/payment_service\n```\n\n**For EKS deployments**, run migrations as a Kubernetes init container or a pre-deploy Job rather than on app startup — prevents multiple pods racing to migrate simultaneously.\n\nA few things specific to payment processing:\n- Add `idempotency_key` columns with unique constraints early — retrofitting is painful.\n- Use `BIGINT` or `NUMERIC` for monetary amounts, never floating point.\n- Include `created_at` / `updated_at` with `TIMESTAMPTZ` (not `TIMESTAMP`) on every table.\n\nIf this is the payment processing extraction Sofia is leading, coordinate with her on which tables migrate out of the monolith and whether you need a transition period with cross-schema views.",
+  "timestamp": "2026-05-18T13:26:56Z",
+  "latency_ms": 18959,
+  "exit_code": 0,
+  "output_length_chars": 2092,
+  "output_length_tokens_approx": 523,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "memory-engine",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your project context, this is already decided: **structured logging with correlation IDs** (noted in corrections.md as adopted).\n\nFor the Kotlin payment service, use **kotlin-logging** (wrapper around SLF4J) with **Logback** and **JSON output** via `logstash-logback-encoder`. This aligns with your stack (EKS, minimal dependencies, convention over configuration).\n\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\n    implementation(\"ch.qos.logback:logback-classic:1.4.14\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n}\n```\n\n```kotlin\n// PaymentService.kt\nimport mu.KotlinLogging\nimport org.slf4j.MDC\n\nprivate val logger = KotlinLogging.logger {}\n\nfun processPayment(paymentId: String, correlationId: String) {\n    MDC.put(\"correlationId\", correlationId)\n    MDC.put(\"paymentId\", paymentId)\n    try {\n        logger.info { \"Processing payment\" }\n        // ...\n        logger.info { \"Payment completed\" }\n    } catch (e: Exception) {\n        logger.error(e) { \"Payment failed\" }\n        throw e\n    } finally {\n        MDC.clear()\n    }\n}\n```\n\n```xml\n<!-- logback.xml -->\n<configuration>\n    <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n        <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n    </appender>\n    <root level=\"INFO\">\n        <appender-ref ref=\"STDOUT\"/>\n    </root>\n</configuration>\n```\n\nKey points:\n- **MDC** carries correlation IDs across the request (propagate from gRPC metadata/Kafka headers)\n- **JSON output** works directly with whatever log aggregator you're using on EKS (CloudWatch, Datadog, etc.)\n- **kotlin-logging** gives you lazy message evaluation (`{ }` lambdas) — no string concatenation overhead\n- Consistent with what auth-service and notification-service should already be doing",
+  "timestamp": "2026-05-18T13:02:27Z",
+  "latency_ms": 17711,
+  "exit_code": 0,
+  "output_length_chars": 1856,
+  "output_length_tokens_approx": 464,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

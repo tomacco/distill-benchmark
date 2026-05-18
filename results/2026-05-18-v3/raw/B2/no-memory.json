@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "no-memory",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "That's a reasonable instinct. For a service that's basically \"consume from Kafka, transform, push to SNS,\" Go is a natural fit. A few thoughts:\n\n**Arguments for the rewrite:**\n- Go's standard library + a Kafka client (e.g. `confluent-kafka-go` or `segmentio/kafka-go`) + the AWS SDK is genuinely all you need. No framework, no dependency injection, no annotation magic.\n- The operational profile is better — smaller binary, faster startup, lower memory footprint. Matters if you're running many instances or care about cold starts.\n- Concurrency is straightforward with goroutines for parallel dispatch.\n\n**Arguments for caution:**\n- \"Over-engineered\" Kotlin might just need simplification, not a full rewrite. If the issue is too many abstractions/layers, that's fixable in-place.\n- If your team is primarily JVM-shop, you're trading individual service simplicity for organizational complexity (different build tooling, different observability patterns, different on-call debugging skills).\n- Make sure you're not underestimating the edge cases the Kotlin version already handles — retry logic, dead-letter handling, backpressure, graceful shutdown. Those tend to accumulate for good reasons.\n\n**If you do go ahead:**\n- `segmentio/kafka-go` is simpler if you don't need the full librdkafka feature set; `confluent-kafka-go` is more battle-tested.\n- Structure it as a single `main.go` with a small `handler` package. Resist the urge to over-abstract in Go too.\n- Get the consumer group rebalancing and graceful shutdown right from day one — that's where most Kafka consumer bugs live.\n\nThe rewrite is probably worth it if the Kotlin version is genuinely just this one pipeline and you or your team are comfortable with Go. If it's grown tentacles into other systems, simplifying the Kotlin is lower risk.\n\nWant me to sketch out a Go project structure for this?",
+  "timestamp": "2026-05-18T11:09:20Z",
+  "latency_ms": 17066,
+  "exit_code": 0,
+  "output_length_chars": 1860,
+  "output_length_tokens_approx": 465,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

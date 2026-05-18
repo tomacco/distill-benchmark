@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-mem",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack (Flyway + PostgreSQL 14) and existing service patterns, here's the recommended setup:\n\n## Project Structure\n\n```\npayment-processing/\n└── src/main/resources/\n    └── db/migration/\n        ├── V1__create_schema.sql\n        ├── V1.1__create_payments_table.sql\n        ├── V1.2__create_ledger_entries_table.sql\n        └── V1.3__add_indexes.sql\n```\n\n## Flyway Config\n\n```kotlin\n// build.gradle.kts\nplugins {\n    id(\"org.flywaydb.flyway\") version \"9.22.3\"\n}\n\nflyway {\n    url = System.getenv(\"DB_URL\") ?: \"jdbc:postgresql://localhost:5432/payment_processing\"\n    user = System.getenv(\"DB_USER\") ?: \"postgres\"\n    schemas = arrayOf(\"payment\")\n    locations = arrayOf(\"classpath:db/migration\")\n    baselineOnMigrate = false\n    cleanDisabled = true          // never allow clean in prod\n    outOfOrder = false\n    validateOnMigrate = true\n}\n```\n\n## Baseline Migration\n\n```sql\n-- V1__create_schema.sql\nCREATE SCHEMA IF NOT EXISTS payment;\nSET search_path TO payment;\n\n-- Use a dedicated role for least privilege\nGRANT USAGE ON SCHEMA payment TO payment_service;\nALTER DEFAULT PRIVILEGES IN SCHEMA payment\n    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO payment_service;\n```\n\n## Key Conventions\n\n1. **Versioning**: `V{major}.{minor}__description.sql` — bump major per release, minor per migration within a release\n2. **One concern per file** — easier to review, easier to rollback mentally\n3. **Always include rollback comments** at the top of each file (Flyway Community doesn't auto-undo, but the comments serve as runbooks):\n   ```sql\n   -- ROLLBACK: DROP TABLE payment.payments;\n   ```\n4. **Separate schema migrations from data migrations** — prefix data migrations with `V{x}.9x__` so they sort last\n5. **Idempotent where possible** — `CREATE INDEX CONCURRENTLY IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`\n\n## CI Integration\n\n```yaml\n# In your EKS deployment, run migrations as an init container\ninitContainers:\n  - name: flyway-migrate\n    image: flyway/flyway:9.22.3\n    args: [\"migrate\"]\n    envFrom:\n      - secretRef:\n          name: payment-processing-db-creds\n```\n\n## Things to Coordinate with Sofia\n\n- **Separate database per service** (not shared schemas) — cleaner ownership boundary, better for the Series C architecture story\n- **pg_cron** for any scheduled cleanup (e.g., expiring pending payments) rather than adding a new scheduler dependency\n- **Correlation ID columns** on key tables so structured logging traces end-to-end across services\n\nThis mirrors what auth-service and account-service already do. Want me to scaffold the initial migration files for payment-processing?",
+  "timestamp": "2026-05-18T08:44:54Z",
+  "latency_ms": 20188,
+  "exit_code": 0,
+  "output_length_chars": 2613,
+  "output_length_tokens_approx": 653,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

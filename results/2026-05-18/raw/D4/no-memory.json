@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "no-memory",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Let me know your answers to these three questions so I can scaffold the right setup:\n\n1. **Build** — Gradle + Spring Boot, Gradle + Ktor, or Gradle bare (no framework)?\n2. **Format** — JSON (Jackson), Avro (Schema Registry), or Protobuf?\n3. **Handler** — Stub/TODO, persist to DB, or forward to another topic?",
+  "timestamp": "2026-05-18T08:22:07Z",
+  "latency_ms": 28355,
+  "exit_code": 0,
+  "output_length_chars": 309,
+  "output_length_tokens_approx": 77,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

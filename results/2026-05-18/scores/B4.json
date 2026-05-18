@@ -1,0 +1,75 @@
+{
+  "test_id": "B4",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Excellent proportionality. Proposes PG materialized view + simple polling \u2014 no new infra. Explicitly rejects Kafka/WebSockets/SSE with clear reasoning tied to the demo context. Asks smart clarifying questions about what 'real-time' actually means and whether this is demo-scoped or production-bound. Flags investor due diligence concern appropriately."
+    },
+    "B": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Over-engineers for a demo. Introduces a Kafka consumer + Redis aggregation + SSE pipeline. Claims 'no new infra' but builds a multi-component streaming architecture. Doesn't seriously consider simpler alternatives like a PG query or materialized view. The SSE choice over WebSockets is sensible, but the overall solution is heavier than the demo timeline warrants."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Very proportional. PG materialized view + Redis cache + REST polling. Explicitly says 'don't over-engineer.' Asks good scoping questions about where data lives and who builds what. Appropriately skips Kafka and WebSockets. Slight bonus for acknowledging team bandwidth concerns."
+    },
+    "D": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 2,
+      "notes": "No bias visible, but also no useful recommendation. Asks basic questions (language? framework? data source?) that should be known from context. Proposes Node+Express defaults that ignore the Kotlin/Spring stack. Excessive uncertainty for a system that should have context. Not biased, but not helpful \u2014 essentially a blank-slate response."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best balance of options. Presents PG materialized view as the demo-fast path and Kafka consumer as the production-ready alternative, letting the user choose based on where data lives. Doesn't push one approach dogmatically. Appropriate confidence \u2014 recommends simple but acknowledges when the complex path is justified."
+    },
+    "F": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Jumps to Kafka consumer + Redis time-bucketed counters + SSE. Assumes event stream exists. More complex than needed for a demo \u2014 time-bucketed Redis keys with rotation are an over-engineered pattern for 30s refresh. Does acknowledge it's demo-scoped and mentions PG persistence as a later step, but doesn't seriously consider PG-first as the simpler path."
+    },
+    "G": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Most proportional response. Explicitly pushes back on extracting a reporting service or adding Kafka consumers for a demo. Flags the performance risk (table size) with a concrete threshold. References team preferences (PG extensions) naturally. Strong 'what I'd push back on' section shows good judgment about scope. Suggests iterative approach implicitly."
+    },
+    "H": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Most over-engineered response. Proposes Kafka consumer + Redis with key rotation + gRPC server stream + SSE gateway \u2014 four components for a demo dashboard. Introduces gRPC streaming complexity, then acknowledges Dev shouldn't deal with gRPC-web and adds an SSE gateway on top. The architecture diagram alone has more boxes than a one-week demo should. Provides time estimates (a plus) but the effort reflects the over-engineering."
+    }
+  },
+  "ranking": [
+    "G",
+    "E",
+    "A",
+    "C",
+    "D",
+    "B",
+    "F",
+    "H"
+  ],
+  "analysis": "The responses split into three tiers on proportionality. Top tier (G, E, A, C) correctly identified that a one-week investor demo needs a simple PG materialized view with polling \u2014 minimal new infrastructure, fast to build, easy to debug. G stands out for explicitly pushing back on scope creep and flagging concrete risks. E earns top marks for presenting both simple and complex paths without bias, letting context determine the choice. Middle tier (D, B) \u2014 D shows no bias but also no useful context awareness, essentially starting from zero. B builds a reasonable but over-scoped Kafka+Redis+SSE pipeline. Bottom tier (F, H) are clearly biased toward event-driven streaming architectures inappropriate for a demo timeline. H is the most egregious, proposing a four-component architecture with gRPC streaming and Redis key rotation for what amounts to a 30-second counter refresh. The bias pattern is clear: systems with strong event-driven knowledge applied it indiscriminately regardless of the demo constraint, while systems with better calibration matched solution complexity to the actual need.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "engram",
+    "C": "basic-memory",
+    "D": "no-memory",
+    "E": "memory-compiler",
+    "F": "knowledge-graph",
+    "G": "distill",
+    "H": "claude-mem"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "R2",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Immediately recommends Flyway with full Kotlin/Gradle setup, EKS deployment advice, and payment-specific tips (NUMERIC for money, idempotency keys). Mentions Sofia naturally. Does not explicitly note the Liquibase vote or PG 14 version. Extra context (EKS init containers, payment column advice) is relevant rather than noise."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Explicitly mentions Flyway was a team vote over Liquibase and calls out PostgreSQL 14 \u2014 two key signals. Good Kotlin/Gradle context and references to existing services. Slightly formulaic opener and the 'Key conventions from your stack' section reads a bit like retrieved facts listed sequentially."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Covers Flyway, PG 14, Kotlin context, and good SQL examples. However, injects several tangential knowledge items (pg_cron suggestion, protobuf alignment, correlation ID logging, Series C story) that feel like a knowledge dump rather than focused guidance. Repeatable migrations advice contradicts System A's financial-data caveat."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Opens with 'Based on your vault' which is an unnatural giveaway of memory retrieval mechanics. Sub-versioning convention (V1.1) is non-standard for Flyway. Tacks on a Kafka mention unprompted. Does not mention Liquibase vote or PG 14 explicitly. Practical setup is adequate but weaker than peers."
+    },
+    "E": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Surfaces zero stored knowledge \u2014 asks the user what stack they use despite the expected context being Flyway/Kotlin/PostgreSQL. Suggests Alembic, Prisma, Knex as options, directly violating the signal to not recommend alternatives. Natural tone for a no-context assistant, but that is the failure mode here."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Strong response: recommends Flyway, references auth-service/account-service patterns, mentions PG 14 explicitly, Kotlin/Gradle config, partial indexes, ArgoCD integration. Series C due diligence mention is contextual rather than forced. Knowledge feels organically woven into practical advice."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Concise and hits key signals: explicitly states Flyway was chosen over Liquibase, mentions PG 14, Kotlin/Spring Boot config, EKS deployment. Sofia question at end feels organic. Slightly less detailed than top responses but matches the 'concise and actionable' bonus signal well."
+    },
+    "H": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Good practical setup with Kotlin/Gradle, mentions PG 14 cluster, fintech-aware advice (NUMERIC for money, TIMESTAMPTZ timezone warning). Sofia coordination mention is natural. Does not mention Liquibase vote. 'Based on your stack' opener is slightly formulaic but overall well-integrated."
+    }
+  },
+  "ranking": [
+    "A",
+    "F",
+    "G",
+    "H",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "analysis": "Systems A and F lead the pack with the most natural, comprehensive, and actionable responses \u2014 both immediately recommend Flyway with full Kotlin/Gradle configuration, practical migration examples, and organically woven contextual knowledge. A edges ahead with its EKS deployment pattern and payment-domain specifics; F earns its spot with explicit PG 14 references and clean structural advice. Systems G, H, and B form a strong middle tier: G is the most concise and explicitly mentions the Liquibase vote; H provides good fintech-aware detail; B uniquely hits both the Liquibase vote and PG 14 signals but reads slightly more like retrieved facts. System C provides rich content but crosses into knowledge-dumping territory with tangential mentions of pg_cron, protobuf alignment, and correlation ID logging. System D is undermined by the 'Based on your vault' opener that exposes retrieval mechanics and an unprompted Kafka tangent. System E represents a complete retrieval failure \u2014 it has no stored knowledge and asks the user to specify their stack, suggesting alternatives like Alembic and Prisma that directly contradict expected behavior.",
+  "label_mapping": {
+    "A": "engram",
+    "B": "memory-compiler",
+    "C": "claude-mem",
+    "D": "basic-memory",
+    "E": "no-memory",
+    "F": "memory-engine",
+    "G": "distill",
+    "H": "knowledge-graph"
+  }
+}

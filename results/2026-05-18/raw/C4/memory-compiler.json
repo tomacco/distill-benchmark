@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "memory-compiler",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your project's established decisions, here's what to use:\n\n**Structured logging with correlation IDs** — this is already an adopted standard at Helios Financial (per your team's technology decisions).\n\nFor the Kotlin payment service specifically:\n\n- **Library**: Use [Logback](https://logback.qos.ch/) with [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured JSON output. This is the standard pairing for Kotlin/JVM services.\n- **Facade**: SLF4J (comes with Logback)\n- **Format**: JSON structured logs — required for correlation ID propagation across your gRPC services and Kafka consumers\n- **Correlation IDs**: Propagate via MDC (Mapped Diagnostic Context). For gRPC, use an interceptor to extract/inject the correlation ID from metadata into the MDC. For Kafka, pull it from message headers.\n\nA minimal setup would look like:\n\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"ch.qos.logback:logback-classic:1.4.14\")\n    implementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n}\n```\n\n```kotlin\n// Usage\nprivate val logger = LoggerFactory.getLogger(PaymentService::class.java)\n\nMDC.put(\"correlationId\", correlationId)\nlogger.info(\"Processing payment\", kv(\"amount\", amount), kv(\"merchantId\", merchantId))\n```\n\nKey fields to always include in payment logs: `correlationId`, `merchantId`, `amount`, `paymentStatus`, and `transactionId`. Since this is a financial service, make sure sensitive fields (card numbers, account details) are **never** logged.\n\nWant me to scaffold the logging configuration files (`logback.xml`, gRPC interceptor, Kafka header extractor)?",
+  "timestamp": "2026-05-18T09:02:00Z",
+  "latency_ms": 19736,
+  "exit_code": 0,
+  "output_length_chars": 1643,
+  "output_length_tokens_approx": 410,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you provide the file path, or would you like me to look somewhere else for it?",
+  "timestamp": "2026-05-18T09:25:25Z",
+  "latency_ms": 11043,
+  "exit_code": 0,
+  "output_length_chars": 144,
+  "output_length_tokens_approx": 36,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

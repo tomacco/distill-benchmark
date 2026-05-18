@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "no-memory",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "There's no existing codebase here — just an empty benchmark workspace. To build this dashboard, I'd need some context:\n\n1. **Existing system** — Is there an existing app/repo I should be building on? Where does the transaction data live (database type, schema, API)?\n2. **Tech stack** — Any preferences? (e.g., React frontend, Node/Python backend, specific DB)\n3. **Data source** — Are transactions in a SQL database, event stream (Kafka, etc.), or an API?\n4. **Scope for the demo** — Does Marcus need a fully deployed app, or is a local demo sufficient?\n\nIf you point me at the repo or give me the stack/data details, I can start building it out.",
+  "timestamp": "2026-05-18T11:09:50Z",
+  "latency_ms": 17001,
+  "exit_code": 0,
+  "output_length_chars": 647,
+  "output_length_tokens_approx": 161,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "B3",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Practical and well-calibrated. Suggests S3+CloudFront and Cloudflare Pages/Netlify. No over-engineering. Concise advice tailored to a junior dev."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Excellent ranked list of simple options. GitHub Pages, Cloudflare, Netlify, S3+CloudFront. No over-engineering. Best calibration to simplicity with multiple alternatives fairly presented."
+    },
+    "C": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 4,
+      "notes": "Correctly avoids EKS, but defaults to Terraform HCL for a static site a junior dev needs to deploy. No mention of simpler alternatives like Netlify or GitHub Pages. Stored stack knowledge biased the response toward unnecessary complexity."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Practical recommendation with S3+CloudFront primary and Cloudflare/Netlify as alternatives. Good calibration. No over-engineering. Slight AWS preference but acknowledges simpler paths."
+    },
+    "E": {
+      "objectivity": 2,
+      "openness": 1,
+      "appropriate_confidence": 3,
+      "notes": "Heavily biased toward existing stack. Provides full Terraform HCL and GitHub Actions YAML for a simple static site. Zero mention of simpler alternatives like Netlify, GitHub Pages, or Cloudflare. Classic over-engineering driven by stored context about the team's stack."
+    },
+    "F": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best calibration to 'simplest' requirement. Five options ranked by ease, with GitHub Pages and Netlify correctly identified as simplest. S3+CloudFront appropriately listed last as most complex. Practical per-option guidance."
+    },
+    "G": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Leads with Terraform HCL which adds unnecessary complexity, but redeems itself by offering Cloudflare Pages/Netlify as simpler alternatives. Mixed \u2014 stored stack knowledge pulled the primary recommendation toward over-engineering."
+    },
+    "H": {
+      "objectivity": 4,
+      "openness": 2,
+      "appropriate_confidence": 4,
+      "notes": "Practical S3+CloudFront with simple bash commands (good for a junior dev). Mentions Terraform briefly. However, no non-AWS alternatives suggested at all \u2014 no Netlify, GitHub Pages, or Cloudflare. Limited openness to options outside existing vendor."
+    }
+  },
+  "ranking": [
+    "F",
+    "B",
+    "A",
+    "D",
+    "G",
+    "H",
+    "C",
+    "E"
+  ],
+  "analysis": "Systems F and B performed best by correctly calibrating to the actual need \u2014 a junior dev deploying static files \u2014 and presenting multiple simple options ranked by ease, with the simplest options (GitHub Pages, Netlify, Cloudflare Pages) featured prominently. Systems A and D also performed well with practical advice and no over-engineering, though they slightly favored AWS. Systems G and H showed moderate bias toward the existing stack (Terraform/AWS) but at least G acknowledged simpler alternatives. System C defaulted to Terraform HCL without mentioning any non-AWS alternatives, suggesting stored knowledge about the team's stack inappropriately biased the response. System E performed worst \u2014 full Terraform + GitHub Actions config with zero mention of simpler alternatives, a clear case of stored infrastructure context dominating over the actual requirement of 'simplest way to host static files.'",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "distill",
+    "C": "engram",
+    "D": "knowledge-graph",
+    "E": "basic-memory",
+    "F": "no-memory",
+    "G": "memory-compiler",
+    "H": "memory-engine"
+  }
+}

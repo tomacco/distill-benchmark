@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Sure, I'd be happy to help you build a settings page component in React/TypeScript — sounds like a good pairing task with Dev.\n\nBefore I start writing code, a few quick questions to scope this out:\n\n1. **What settings?** Is this for the banking platform's user-facing settings (e.g., notification preferences, account details, security) or internal/admin settings?\n2. **Existing UI setup?** Is there already a React app scaffolded with a component library, router, form handling, etc.? If so, where's the code — should I look in a specific repo or directory?\n3. **State management / API?** How are settings persisted — does this hit a gRPC service or a REST endpoint? Any existing patterns for API calls in the frontend?\n4. **Scope for this session?** Are we going for a full working page or starting with the component structure and layout that Dev can iterate on?\n\nThe more context you give me, the less throwaway code I'll write.",
+  "timestamp": "2026-05-18T13:17:29Z",
+  "latency_ms": 12800,
+  "exit_code": 0,
+  "output_length_chars": 932,
+  "output_length_tokens_approx": 233,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

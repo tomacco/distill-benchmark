@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "claude-mem",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's a pragmatic approach given your stack — minimal new infra, demo-ready fast.\n\n## Architecture\n\n```\nKafka (txn events) → consumer → Redis (sorted sets / hashes) → gRPC stream → frontend\n```\n\n### Why this shape\n\n- **Kafka consumer** — you already have txn events flowing. Add a lightweight consumer in Kotlin that aggregates counts per merchant into Redis.\n- **Redis** — you already run it. Use `HINCRBY` on a hash keyed by time bucket (`merchant_txn_counts:{window}`). TTL the keys so old windows expire automatically.\n- **gRPC server stream** — internal services already use gRPC. Expose a `StreamMerchantCounts` RPC that pushes every 30s. Fits the \"gRPC over REST internally\" decision.\n- **For the demo frontend** — a thin REST/SSE endpoint or websocket gateway that Dev can consume from React. Don't make him deal with gRPC-web for a demo.\n\n### Redis schema\n\n```\n# Hash per 30s window\nHINCRBY merchant_txn_counts:current {merchant_id} 1\n\n# Periodic rotate (every 30s):\nRENAME merchant_txn_counts:current merchant_txn_counts:prev\n# Read from prev, push to subscribers, TTL it\nEXPIRE merchant_txn_counts:prev 120\n```\n\n### Kotlin consumer sketch\n\n```kotlin\n@KafkaListener(topics = [\"transactions\"])\nsuspend fun onTransaction(event: TransactionEvent) {\n    redis.hincrBy(\"merchant_txn_counts:current\", event.merchantId, 1)\n}\n\n// Scheduled push every 30s\n@Scheduled(fixedRate = 30_000)\nsuspend fun rotateBucketAndPush() {\n    redis.rename(\"merchant_txn_counts:current\", \"merchant_txn_counts:prev\")\n    val counts = redis.hgetAll(\"merchant_txn_counts:prev\")\n    redis.expire(\"merchant_txn_counts:prev\", 120)\n    // push to gRPC subscribers / SSE clients\n    dashboardSubscribers.forEach { it.send(counts) }\n}\n```\n\n### What to skip for the demo\n\n- **No pg_cron or materialized views** — Redis is faster for this and you already have it. Persist to PG later if you need historical analytics.\n- **No new service** — bolt this onto account-service (staging) or a thin `dashboard-service` if Sofia prefers isolation for payment-processing.\n- **No Grafana/Metabase** — custom UI gives a better investor impression. Dev can use a simple bar chart (recharts) with SSE updates.\n\n### Tasks (rough split)\n\n| Who | What | ~Effort |\n|---|---|---|\n| You | Kafka consumer + Redis aggregation + gRPC stream | 1-2d |\n| Dev | React dashboard with SSE/websocket, recharts | 1-2d |\n| Sofia | Review, make sure it doesn't interfere with payment-processing work | 1h |\n\nWant me to scaffold the Kotlin consumer, the proto definition, or the SSE gateway?",
+  "timestamp": "2026-05-18T08:39:46Z",
+  "latency_ms": 24241,
+  "exit_code": 0,
+  "output_length_chars": 2532,
+  "output_length_tokens_approx": 633,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

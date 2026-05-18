@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "memory-engine",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here are the key considerations for the payment processing service, given Helios's stack and constraints:\n\n## Architecture\n\n- **Kotlin + coroutines**, consistent with existing services (auth, account)\n- **gRPC** for internal comms (already decided), REST+OpenAPI for any external-facing endpoints (merchant webhooks, etc.)\n- Integrate with **account-service** for balance checks/updates\n- Use **Kafka** for async events (payment initiated, completed, failed) — notification-service already consumes from Kafka\n\n## Data & Consistency\n\n- **PostgreSQL** — this is a payments domain, you need ACID transactions, strong consistency, and multi-table txns (corrections: no DynamoDB/MongoDB)\n- Consider PostgreSQL advisory locks or `SELECT FOR UPDATE` for idempotency and preventing double-processing\n- **Idempotency keys** on every mutation endpoint — non-negotiable for payments\n- **Flyway** for schema migrations (already standardized)\n\n## Payment-Specific Concerns\n\n- **State machine** for payment lifecycle: `CREATED → AUTHORIZED → CAPTURED → SETTLED` (and `FAILED`, `REFUNDED`, `DISPUTED`)\n- Store the full audit trail — every state transition with timestamps, actor, reason\n- **Idempotent retries** with external payment providers (Stripe, Adyen, etc.)\n- **Reconciliation** — design for it from day one; you'll need to match internal records against provider settlement reports\n- PCI DSS scope — minimize it by tokenizing via the provider; never store raw card data\n\n## Operational\n\n- **Structured logging with correlation IDs** (already adopted) — critical for tracing payment flows across services\n- Dead letter queues for failed Kafka events\n- Circuit breakers on external provider calls\n- Property-based tests for state machine transitions; integration tests against a real PostgreSQL instance (per your testing preferences)\n\n## Series C Readiness\n\n- Clean domain boundaries — payment processing should own its own data, no shared DB with account-service\n- OpenAPI specs for external APIs, Protobuf definitions for gRPC\n- Monitoring/alerting on payment success rates, latency percentiles, and reconciliation drift\n\nSofia is leading this — coordinate with her on the gRPC contract definitions and with Marcus on the Linear specs. Want me to scaffold the service structure or draft the state machine implementation?",
+  "timestamp": "2026-05-18T13:06:22Z",
+  "latency_ms": 25840,
+  "exit_code": 0,
+  "output_length_chars": 2316,
+  "output_length_tokens_approx": 579,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

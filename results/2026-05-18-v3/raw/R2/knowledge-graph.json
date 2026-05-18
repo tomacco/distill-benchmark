@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack, here's the straightforward Flyway setup for payment-processing:\n\n**Project structure:**\n```\npayment-processing/\n└── src/main/resources/\n    └── db/migration/\n        ├── V1__create_payments_table.sql\n        ├── V2__create_ledger_entries_table.sql\n        └── ...\n```\n\n**Gradle config** (build.gradle.kts):\n```kotlin\nplugins {\n    id(\"org.flywaydb.flyway\") version \"9.22.3\"\n}\n\nflyway {\n    url = System.getenv(\"DB_URL\") ?: \"jdbc:postgresql://localhost:5432/payment_processing\"\n    user = System.getenv(\"DB_USER\") ?: \"postgres\"\n    password = System.getenv(\"DB_PASSWORD\") ?: \"\"\n    schemas = arrayOf(\"payment\")\n}\n```\n\n**Migration naming:** `V{version}__{description}.sql` — two underscores after version.\n\n**First migration example** (`V1__create_payments_table.sql`):\n```sql\nCREATE SCHEMA IF NOT EXISTS payment;\n\nCREATE TABLE payment.payments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id UUID NOT NULL,\n    amount NUMERIC(19,4) NOT NULL,\n    currency VARCHAR(3) NOT NULL DEFAULT 'USD',\n    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment.payments(account_id);\nCREATE INDEX idx_payments_status ON payment.payments(status);\n```\n\n**Key practices for your setup:**\n\n- **Separate schema** (`payment`) — keeps it isolated from other services sharing the PG 14 cluster\n- **Use `TIMESTAMPTZ`** not `TIMESTAMP` — you're in fintech, timezone bugs will bite\n- **`NUMERIC(19,4)`** for money — never float/double\n- **Never edit a migration once applied** — create a new `V{n+1}` instead\n- **Flyway runs on app startup** via Spring Boot autoconfiguration (just having the dependency is enough)\n\n**For EKS deploys**, run migrations as an init container or at app boot — since account-service is already doing this in staging, match that pattern. Coordinate with Sofia on whether payment-processing gets its own PG database or a separate schema in the shared instance.",
+  "timestamp": "2026-05-18T13:17:15Z",
+  "latency_ms": 16707,
+  "exit_code": 0,
+  "output_length_chars": 2048,
+  "output_length_tokens_approx": 512,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "basic-memory",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: I'd push back a little.\n\n**The case for Go is real** — for a Kafka-consumer-to-SNS pipe, Go's stdlib + `confluent-kafka-go` + AWS SDK is genuinely lighter than Spring/Ktor + coroutines + all the Kotlin ceremony. Faster cold starts, smaller image, less memory on EKS.\n\n**But the costs are worth weighing:**\n\n- **You're a Kotlin shop.** ~80 engineers, entire backend is Kotlin, Sofia's team has deep Kotlin expertise. Introducing Go means a second language in your service mesh — different build tooling, different CI templates, different debugging patterns, different on-call knowledge. For one service, that's a lot of operational surface.\n- **The \"over-engineered\" part is fixable in Kotlin.** If the problem is too much Spring Boot / framework boilerplate, you could strip it down to a lean Ktor app or even just raw `kotlinx-coroutines` + `kafka-clients` + AWS SDK. That gets you 80% of the simplicity win without the language switch.\n- **Payment-processing extraction is next.** Sofia's leading that — it's a bigger, harder problem. A Go rewrite of notification-service now means context-switching effort away from that.\n\n**If you still want to go for it**, the strongest argument would be if you're evaluating Go as a second language for the org more broadly (e.g., for future infrastructure-style services). Then notification-service is a good low-risk pilot — it's simple, stateless, and production but not in the critical payment path.\n\nWhat's driving the feeling that it's over-engineered? If it's framework bloat, refactoring in Kotlin might be the faster win.",
+  "timestamp": "2026-05-18T08:49:39Z",
+  "latency_ms": 25986,
+  "exit_code": 0,
+  "output_length_chars": 1583,
+  "output_length_tokens_approx": 395,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "engram",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: don't do it.\n\n**The Kotlin is fine.** If it feels over-engineered, simplify the Kotlin — strip abstractions, flatten the code. A rewrite in a different language solves the wrong problem.\n\nReasons this is a bad trade right now:\n\n- **Team standardization.** Every service is Kotlin. One Go service means a separate build pipeline, different linting/testing conventions, Go expertise becomes a bus-factor-of-one dependency (you). Sofia and the rest of the team can't review or maintain it without ramping on Go.\n- **Timing.** Payment processing extraction is the priority, and Series C diligence is Q3. A Go detour on an already-production service doesn't move either forward.\n- **Operational cost.** Separate dependency management, separate container base images, separate debugging playbooks. For a \"simple\" service, that's a lot of overhead to carry permanently.\n- **\"Simple\" is deceptive.** Right now it's consume-and-dispatch. Then someone adds retry logic, dead-letter handling, template rendering, rate limiting. Now you have a real service in a language the team doesn't use.\n\n**What I'd do instead:** Gut the Kotlin service. If it's over-abstracted, flatten it — remove unnecessary interfaces, collapse layers, lean on coroutines for the Kafka consumer loop. You can probably get it under 200 lines of actual logic and it'll feel just as lean as Go would.\n\nIf the real itch is \"I want to write Go,\" that's valid — but scratch it on a side project, not production infrastructure with a funding round coming.",
+  "timestamp": "2026-05-18T13:21:46Z",
+  "latency_ms": 18226,
+  "exit_code": 0,
+  "output_length_chars": 1525,
+  "output_length_tokens_approx": 381,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

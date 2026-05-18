@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "engram",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on what you told me earlier this session, the account service is now on **MySQL** after last week's migration from PostgreSQL.\n\nNote: the project context I have on file still references PostgreSQL 14 as the database across services. You may want to update that documentation to reflect the MySQL migration for the account service.",
+  "timestamp": "2026-05-18T13:22:44Z",
+  "latency_ms": 7929,
+  "exit_code": 0,
+  "output_length_chars": 336,
+  "output_length_tokens_approx": 84,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

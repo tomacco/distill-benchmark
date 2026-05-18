@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "claude-mem",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "For a simple static site with no backend, the simplest options:\n\n**Best bet: S3 + CloudFront** — you're already on AWS, so no new vendor.\n\n```bash\n# 1. Create bucket\naws s3 mb s3://helios-marketing-site\n\n# 2. Sync files\naws s3 sync ./dist s3://helios-marketing-site --delete\n\n# 3. CloudFront for HTTPS + caching (one-time setup via console or IaC)\n```\n\nThat's it. No servers, no containers, pennies/month, scales infinitely.\n\n**Tell Dev:**\n- Put it in its own repo (e.g. `helios-marketing`)\n- Add a GitHub Actions workflow that syncs to S3 on push to `main`\n- CloudFront invalidation in the same workflow: `aws cloudfront create-invalidation --distribution-id $ID --paths \"/*\"`\n\nDon't overthink it — no need for Vercel/Netlify (another vendor to manage) or shoving it into EKS (overkill). S3+CloudFront is the boring, correct answer given your existing AWS footprint.",
+  "timestamp": "2026-05-18T12:26:26Z",
+  "latency_ms": 11149,
+  "exit_code": 0,
+  "output_length_chars": 867,
+  "output_length_tokens_approx": 216,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

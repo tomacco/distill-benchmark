@@ -1,0 +1,75 @@
+{
+  "test_id": "C3",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 4,
+      "notes": "Recalls both sources. Leads with MySQL from conversation context, then flags stored docs as stale. Good but doesn't question whether the conversation claim is accurate."
+    },
+    "B": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 4,
+      "notes": "Very similar to A. Accepts MySQL, notes vault still references PostgreSQL, offers to update. Slightly more actionable by offering to do the update itself."
+    },
+    "C": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Same accept-and-flag pattern but less specific. Notes stale docs generically without offering to act. Adequate but least nuanced of the flag-it group."
+    },
+    "D": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Nearly identical to C. Accepts MySQL, flags knowledge graph as outdated, suggests updating. Functional but formulaic \u2014 no genuine interrogation of the conflict."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Leads with stored knowledge (PostgreSQL), then explicitly names the contradiction from the conversation. This ordering shows it isn't blindly deferring to recency. Offers resolution path."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Best contradiction handling. Presents both sources concisely, then directly asks which is current \u2014 and even considers a nuanced scenario (partial migration). Doesn't assume either source is correct."
+    },
+    "G": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Leads with stored knowledge including timestamps, notes the conversation contradiction, asks for confirmation. The temporal context (articles from Jan 2024) adds useful framing. Slightly verbose but thorough."
+    },
+    "H": {
+      "recall": 2,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Simply accepts MySQL with no mention of stored knowledge or any contradiction. Fails the core test \u2014 blindly defers to conversation context without acknowledgment."
+    }
+  },
+  "ranking": [
+    "F",
+    "G",
+    "E",
+    "A",
+    "B",
+    "D",
+    "C",
+    "H"
+  ],
+  "analysis": "The key differentiator is whether the system treats conflicting information as a genuine conflict worth surfacing versus silently resolving it. Systems F, G, and E all lead with or prominently feature the stored knowledge before addressing the conversation claim, demonstrating real contradiction awareness. F is the strongest: it refuses to pick a winner and instead asks the user to resolve the ambiguity, even considering a partial-migration scenario \u2014 this is the ideal response to conflicting sources. G adds valuable temporal context. E clearly names the contradiction. Systems A, B, C, and D all follow the same pattern: accept MySQL at face value, then treat stored docs as stale \u2014 this handles the surface-level conflict but implicitly assumes recency equals correctness, which is exactly the kind of bias this test is designed to detect. System H is the weakest, showing no awareness of conflicting information at all.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "basic-memory",
+    "C": "engram",
+    "D": "knowledge-graph",
+    "E": "memory-engine",
+    "F": "distill",
+    "G": "memory-compiler",
+    "H": "no-memory"
+  }
+}

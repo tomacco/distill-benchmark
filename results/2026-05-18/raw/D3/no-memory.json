@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "no-memory",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal / REST external, EKS), here's the simplest approach:\n\n## REST endpoint (external-facing)\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/verify\n```\n\nThe payment service owns this. It:\n\n1. **Validates the request** — account number, routing number, account holder name\n2. **Calls auth-service via gRPC** — confirms the caller is authorized for this merchant\n3. **Calls account-service via gRPC** — pulls merchant details if needed (e.g. legal entity match)\n4. **Runs verification** — micro-deposits or instant verification via your bank/payment processor's API (Stripe, Plaid, etc.)\n5. **Stores result** — verification status on the bank account record in the payment service's own DB\n\n## Key decisions\n\n- **Own the bank account data in payment-service**, not account-service. Bank accounts are a payment concern. Keeping them in account-service creates coupling you'll regret.\n- **Use micro-deposits or instant verification** depending on your processor. If you're already integrated with Stripe/Plaid, use their verification flow rather than building your own — it handles the compliance surface.\n- **Keep it synchronous if instant, async if micro-deposits.** Micro-deposits take days, so return `202 Accepted` with a status field and add a `POST .../confirm` endpoint for when the merchant confirms the deposit amounts.\n\n## Skeleton\n\n```kotlin\n// REST controller\n@PostMapping(\"/v1/merchants/{merchantId}/bank-accounts/verify\")\nsuspend fun verifyBankAccount(\n    @PathVariable merchantId: String,\n    @RequestBody req: VerifyBankAccountRequest\n): ResponseEntity<BankAccountVerification> {\n    authClient.assertMerchantAccess(merchantId) // gRPC\n    val result = bankAccountService.initiateVerification(merchantId, req)\n    return if (result.instant) ResponseEntity.ok(result)\n           else ResponseEntity.accepted().body(result)\n}\n```\n\n```kotlin\n// For micro-deposit confirmation\n@PostMapping(\"/v1/merchants/{merchantId}/bank-accounts/{bankAccountId}/confirm\")\nsuspend fun confirmMicroDeposits(\n    @PathVariable merchantId: String,\n    @PathVariable bankAccountId: String,\n    @RequestBody req: ConfirmDepositsRequest\n): ResponseEntity<BankAccountVerification> {\n    authClient.assertMerchantAccess(merchantId)\n    val result = bankAccountService.confirmVerification(bankAccountId, req)\n    return ResponseEntity.ok(result)\n}\n```\n\nNo need for a separate verification microservice or event-driven flow here — it's a straightforward request/response operation that belongs in the payment service. If your processor handles verification natively, the `bankAccountService` is mostly a thin wrapper around their SDK.",
+  "timestamp": "2026-05-18T08:21:38Z",
+  "latency_ms": 20974,
+  "exit_code": 0,
+  "output_length_chars": 2658,
+  "output_length_tokens_approx": 664,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No occurrences of `AccountService` found in the current workspace (`/private/tmp/benchmark-workspace-fxJvE30N`). The directory appears to be empty or doesn't contain any files with that class name.\n\nAre you working in a different directory? If so, let me know the path and I'll scan it for all `AccountService` references and rename them.",
+  "timestamp": "2026-05-18T08:32:40Z",
+  "latency_ms": 10266,
+  "exit_code": 0,
+  "output_length_chars": 338,
+  "output_length_tokens_approx": 84,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

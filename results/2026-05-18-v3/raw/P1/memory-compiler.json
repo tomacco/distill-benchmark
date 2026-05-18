@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "memory-compiler",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "There are no files containing `AccountService` in the current workspace (`/private/tmp/benchmark-workspace-JFt4qFIz`). The directory appears to be empty or doesn't contain any code with that class name.\n\nCould you point me to the correct directory or repository where the codebase lives?",
+  "timestamp": "2026-05-18T12:52:45Z",
+  "latency_ms": 10022,
+  "exit_code": 0,
+  "output_length_chars": 287,
+  "output_length_tokens_approx": 71,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

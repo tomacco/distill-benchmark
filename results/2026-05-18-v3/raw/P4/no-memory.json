@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "no-memory",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Here's the simplest approach, ranked by complexity:\n\n## 1. Environment variable (simplest)\n\n```python\n# config.py\nENABLE_NEW_PAYMENT_FLOW = os.environ.get(\"ENABLE_NEW_PAYMENT_FLOW\", \"false\") == \"true\"\n\n# usage\nif config.ENABLE_NEW_PAYMENT_FLOW:\n    return new_payment_flow(request)\nreturn legacy_payment_flow(request)\n```\n\nDeploy with `ENABLE_NEW_PAYMENT_FLOW=true` on specific instances. No code change needed to toggle.\n\n## 2. Database-backed flag (per-user targeting)\n\n```python\n# models.py\nclass FeatureFlag(Model):\n    name = CharField(unique=True)\n    enabled = BooleanField(default=False)\n    allowed_user_ids = JSONField(default=list)  # empty = applies to all\n\n# usage\ndef is_enabled(flag_name, user_id=None):\n    flag = FeatureFlag.objects.get(name=flag_name)\n    if not flag.enabled:\n        return False\n    if flag.allowed_user_ids:\n        return user_id in flag.allowed_user_ids\n    return True\n```\n\nThis lets you roll out to specific users (internal testers, % of traffic, etc.) without redeploying.\n\n## 3. Use an existing library/service\n\nIf you expect more flags over time, consider **LaunchDarkly**, **Unleash**, **Flipt**, or language-specific libs like `django-waffle` / `flipper` (Ruby) / `flagsmith`.\n\n---\n\n**My recommendation for a dark-launch:** go with **option 2**. It's ~20 lines of code, lets you target internal users first, then gradually roll out by percentage — which is exactly what dark-launching needs. An env var (option 1) is simpler but forces all-or-nothing per deployment.\n\nWant me to implement one of these in your codebase?",
+  "timestamp": "2026-05-18T11:12:43Z",
+  "latency_ms": 14613,
+  "exit_code": 0,
+  "output_length_chars": 1566,
+  "output_length_tokens_approx": 391,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Jumps straight to percentage-based rollout with Redis caching layer. Not the 'simplest' \u2014 a boolean toggle would suffice for a dark launch. Uses existing infra which is good, but the gradual rollout machinery is premature."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Nearly identical to A \u2014 percentage rollout, Redis cache, stable hashing. Mentions graduating to a proper service later (good), but the default solution already includes rollout percentages, serialization, and CHECK constraints beyond what 'simplest' demands."
+    },
+    "C": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Most over-scoped response. Includes percentage rollout, Redis cache, AND a React frontend component with a useFeatureFlags hook. Adding a frontend flag layer when asked for the simplest backend dark-launch toggle is clear over-engineering."
+    },
+    "D": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 4,
+      "notes": "Excellent layered approach: starts with env var (truly simplest), then DB flag for per-user targeting, then mentions vendors only as a third option. Recommends option 2 with clear rationale. Mentions vendors but appropriately deprioritizes them. Uses Python instead of Kotlin (context mismatch) but proportionality is spot-on."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Same percentage-rollout-first pattern as A/B. Good 'why this over LaunchDarkly' section and mentions adding overrides later, but the default solution includes percentage rollout and Redis hash caching \u2014 more than needed for 'simplest approach.'"
+    },
+    "F": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Best proportionality. Starts with env var (simplest possible), then a per-user allowlist (still simple). Explicitly says skip third-party services. Adds practical advice (dual-write, cleanup deadline, observability) without adding implementation complexity. Perfect match for 'simplest approach' request."
+    },
+    "G": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Only DB-backed system that defaults to a simple boolean toggle without percentage rollout. Explicitly defers rollout_pct to later. Good restraint. Loses a point on simplicity because it skips the even simpler env-var option, but among the DB-based solutions this is the most proportional."
+    },
+    "H": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Clean Redis-only approach with an enum for type safety. Per-account override is appropriate for dark-launch targeting. No percentage rollout by default \u2014 mentions adding it later. Slightly more structured than needed (enum class, separate module path) but well-contained."
+    }
+  },
+  "ranking": [
+    "F",
+    "D",
+    "G",
+    "H",
+    "A",
+    "B",
+    "E",
+    "C"
+  ],
+  "analysis": "The responses split into two tiers based on proportionality. F and D correctly interpret 'simplest approach' by starting with the truly minimal solution (environment variable) and layering up only as needed, with F being the best overall for explicitly rejecting vendor solutions and keeping implementation to a handful of lines. G and H form a strong middle tier \u2014 both default to simple boolean toggles without premature percentage-rollout machinery, with G being slightly better for its explicit 'add rollout_pct later' restraint. The remaining systems (A, B, E, C) all jump directly to percentage-based gradual rollout with Redis caching, stable user hashing, and Flyway migrations \u2014 a reasonable production pattern but clearly more than the 'simplest approach' requested. C is the weakest, adding a React frontend component that was never asked for. Notably, D and F use Python rather than Kotlin (a context-awareness gap), but their proportionality judgment is superior to the Kotlin-aware systems that over-built the solution.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "memory-engine",
+    "C": "basic-memory",
+    "D": "no-memory",
+    "E": "claude-mem",
+    "F": "distill",
+    "G": "knowledge-graph",
+    "H": "engram"
+  }
+}

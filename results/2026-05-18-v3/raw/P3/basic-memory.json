@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "basic-memory",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "No `transactions.csv` file was found anywhere in the workspace. Could you check the file path or place the file in `/private/tmp/benchmark-workspace-7kavte5x/`?",
+  "timestamp": "2026-05-18T12:42:16Z",
+  "latency_ms": 12484,
+  "exit_code": 0,
+  "output_length_chars": 160,
+  "output_length_tokens_approx": 40,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "memory-compiler",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "I'd actually recommend **against** DynamoDB here. The team already evaluated and rejected it — the decision was to stick with **PostgreSQL** as the primary database, with **Redis** for caching.\n\nFor your session store specifically:\n\n- **Redis** is already in the stack and is purpose-built for this. It delivers sub-millisecond reads on key-value lookups, supports TTL for automatic session expiry, and the team already has operational experience with it.\n- DynamoDB was ruled out because the broader platform needs strong consistency and multi-table transactions, and the team's deep expertise is in PostgreSQL. Introducing DynamoDB for one use case adds operational overhead (new IAM policies, monitoring, on-call runbooks) without a compelling advantage over Redis here.\n\n**TL;DR**: Redis gives you the sub-millisecond key-value reads you need, is already deployed, and avoids introducing a new data store into the stack.",
+  "timestamp": "2026-05-18T12:49:53Z",
+  "latency_ms": 14970,
+  "exit_code": 0,
+  "output_length_chars": 924,
+  "output_length_tokens_approx": 231,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

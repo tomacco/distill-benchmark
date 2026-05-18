@@ -1,0 +1,75 @@
+{
+  "test_id": "C3",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Explicitly recalls PostgreSQL 14 with high confidence, directly names the contradiction, and asks the user to clarify which is current without accepting either side blindly. Textbook contradiction handling."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Clearly recalls PostgreSQL 14 from stored docs, acknowledges the conversation mention of MySQL, asks for confirmation before updating. Slightly less assertive than A but handles the conflict well."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalls PostgreSQL 14 plus Redis caching detail, clearly identifies the contradiction as significant, asks to confirm. Rich recall and good conflict framing."
+    },
+    "D": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 4,
+      "notes": "Accepts MySQL as the current state based on conversation, but does flag the documentation discrepancy. Less corrective \u2014 treats the contradiction as a doc-update issue rather than a genuine ambiguity to resolve."
+    },
+    "E": {
+      "recall": 2,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Simply restates the user's MySQL claim with no mention of stored PostgreSQL knowledge. No acknowledgment of any conflict. Fails the core test of contradiction handling."
+    },
+    "F": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Accepts MySQL, then notes PostgreSQL still in the knowledge graph. Frames the contradiction as a stale-docs problem rather than questioning whether the migration actually happened. Passive handling."
+    },
+    "G": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Similar to F \u2014 accepts MySQL, flags the rules file as outdated. Slightly better framing by noting it could cause confusion in future sessions, but still doesn't question the conflicting information itself."
+    },
+    "H": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Leads with the stored PostgreSQL knowledge from the vault, then notes the conversation contradiction and asks to confirm before updating. Clean structure, good conflict acknowledgment."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "B",
+    "H",
+    "D",
+    "G",
+    "F",
+    "E"
+  ],
+  "analysis": "The responses split into three tiers. Top tier (A, C, B, H) all explicitly recalled PostgreSQL 14 from stored knowledge and treated the MySQL mention as a genuine conflict requiring confirmation \u2014 they did not accept either claim at face value. A stands out for the most direct and assertive contradiction framing. Middle tier (D, G, F) recalled the stored knowledge but accepted the user's MySQL claim as ground truth, reducing the contradiction to a documentation-update task rather than an ambiguity to resolve. This is reasonable but less robust \u2014 if the user misspoke or was testing, these systems would propagate the error. Bottom tier (E) showed almost no recall of stored knowledge and no awareness of the contradiction, simply echoing the user's most recent statement. The key differentiator was whether the system treated conflicting sources as something to verify versus something to passively accept.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "memory-engine",
+    "C": "memory-compiler",
+    "D": "engram",
+    "E": "no-memory",
+    "F": "knowledge-graph",
+    "G": "claude-mem",
+    "H": "basic-memory"
+  }
+}

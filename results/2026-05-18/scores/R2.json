@@ -1,0 +1,75 @@
+{
+  "test_id": "R2",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Recommends Flyway, mentions PG14, Kotlin/Gradle context, Sofia coordination, practical setup with Testcontainers. Does not mention Liquibase was the alternative considered. Knowledge feels naturally integrated via 'same as your other services'."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Solid Flyway + PG14 recommendation with practical CI integration. References existing service patterns. No mention of Liquibase evaluation. pg_cron suggestion is slightly tangential but contextually reasonable."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Explicitly mentions team chose Flyway over Liquibase \u2014 hits key signal. Mentions PG14, Sofia, Kotlin/Spring Boot. However, 'Based on the knowledge base' is a major naturalness penalty \u2014 reveals the retrieval mechanism directly."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Good Flyway recommendation with strong technical depth (partial indexes, enum transaction gotcha). EKS/ArgoCD integration is contextual. No mention of team's Liquibase evaluation. Feels completely natural \u2014 no sign of retrieval."
+    },
+    "E": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Complete retrieval failure \u2014 asks clarifying questions about stack, language, and database that should already be known. Lists Alembic, Prisma, Knex as alternatives, directly violating expected behavior. No stored knowledge surfaced."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Hits many signals: Flyway, PG14, Sofia, existing service patterns. But injects Series C architecture story and Kafka outbox pattern which feel like stored knowledge being surfaced beyond what the question requires. Slightly over-stuffed."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 2,
+      "naturalness": 3,
+      "notes": "Comprehensive but clearly dumping stored knowledge \u2014 Sofia coordination, Series C story, pg_cron, correlation IDs, EKS deployment, dedicated roles. Much of this is tangential to the migration setup question. The V{major}.{minor} convention is non-standard and potentially confusing."
+    },
+    "H": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Best balance. Explicitly states 'chosen over Liquibase by team vote' \u2014 key signal. Mentions PG14, Kotlin/Gradle, practical setup, monolith extraction context. Concise and actionable. Every piece of stored knowledge is relevant to the question asked. Minor naturalness ding for the direct 'team standard' framing."
+    }
+  },
+  "ranking": [
+    "H",
+    "A",
+    "D",
+    "B",
+    "F",
+    "C",
+    "G",
+    "E"
+  ],
+  "analysis": "System H stands out by hitting the most expected signals (Flyway, Liquibase team vote, PG14, Kotlin/Gradle context) while maintaining tight precision \u2014 every piece of surfaced knowledge directly serves the question. System A is a close second with excellent practical depth and natural integration, though it misses the Liquibase evaluation signal. System D scores highest on naturalness with zero retrieval artifacts and strong technical advice, but lacks team-specific context. System B is solid but generic. System F and G both surface rich stored knowledge but over-index on it \u2014 F injects Series C and Kafka context, while G is the worst offender with correlation IDs, dedicated roles, and non-standard versioning. System C correctly identifies the Liquibase decision but fatally breaks naturalness with 'Based on the knowledge base.' System E represents a complete retrieval failure, surfacing no stored knowledge and suggesting the very alternatives the team has already evaluated and rejected.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-compiler",
+    "C": "distill",
+    "D": "memory-engine",
+    "E": "no-memory",
+    "F": "basic-memory",
+    "G": "claude-mem",
+    "H": "engram"
+  }
+}

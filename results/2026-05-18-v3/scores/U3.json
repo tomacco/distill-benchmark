@@ -1,0 +1,75 @@
+{
+  "test_id": "U3",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 5,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Perfectly senior-level analysis with a sound client-token approach, but extremely verbose. Uses Java instead of Kotlin (likely the user's language). Multiple detailed sections including 'why not the others' and a gateway variant push this well past concise."
+    },
+    "B": {
+      "calibration": 5,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Good recommendation with Redis bypass. Uses Kotlin. Nice detail on not populating cache during bypass window. Still fairly long but more focused than most. Addresses constraints well including graceful degradation."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Most concise of the group while still being thorough. Kotlin code, direct recommendation, addresses the Redis round-trip concern preemptively. Gets to the point quickly. 'Skip' section is brief. Closest to the under-300-word bonus target among strong responses."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 4,
+      "notes": "Restates the core issue (penalty). Very verbose with redundant explanations. References specific architecture details (gRPC, correlation IDs, Redis in stack) showing good context recall, but the delivery is padded. Slightly over-explains for a senior audience."
+    },
+    "E": {
+      "calibration": 5,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Sound client-token approach in Kotlin. Senior-level. But includes an unnecessary alternative approach at the end ('if you want even less client involvement') which violates the 'be opinionated, don't enumerate' signal. Moderate length."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Very long response. Uses Java pseudocode rather than Kotlin. Restates the core issue (penalty). 'Watch out for' section with three sub-points adds bulk. Implementation effort estimate is helpful but overall this reads as exhaustive rather than opinionated. Generic feel."
+    },
+    "G": {
+      "calibration": 5,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Focused Redis dirty-flag recommendation in Kotlin. Good edge case coverage that's practical rather than padded. Addresses constraints (2000 TPS math, graceful degradation). Slightly long but well-structured. References Redis already in stack."
+    },
+    "H": {
+      "calibration": 5,
+      "style_match": 2,
+      "preference_recall": 4,
+      "notes": "Strong context recall (gRPC, staging, correlation IDs, Redis in stack). But quite verbose with 'one more thing' and 'edge case to watch' sections extending length. Good technical content buried in too many words for a concise-preferring user."
+    }
+  },
+  "ranking": [
+    "C",
+    "B",
+    "G",
+    "E",
+    "A",
+    "H",
+    "D",
+    "F"
+  ],
+  "analysis": "All eight systems correctly diagnosed the problem and recommended viable solutions (either Redis dirty-flag or client-side token). The main differentiator was style match: the rubric heavily penalizes verbosity and rewards opinionated, concise answers. System C stood out as the most concise while still being technically complete, using Kotlin (matching the likely user stack), and avoiding problem restatement. Systems B and G were close behind with focused recommendations and good constraint awareness. Systems A, D, F, and H all suffered from excessive length \u2014 D and F additionally restated the problem. System F used Java pseudocode rather than Kotlin, suggesting weaker user preference recall. The Redis dirty-flag approach (B, C, D, G, H) and the client-token approach (A, E, F) are both valid; the Redis approach is arguably more proportional since it requires no client changes, which aligns with the 'don't over-engineer' constraint.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-mem",
+    "C": "memory-engine",
+    "D": "basic-memory",
+    "E": "engram",
+    "F": "no-memory",
+    "G": "knowledge-graph",
+    "H": "memory-compiler"
+  }
+}

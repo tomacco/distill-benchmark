@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "engram",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "```dockerfile\nFROM python:3.11-slim AS builder\n\nWORKDIR /app\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir --prefix=/install -r requirements.txt\n\nFROM python:3.11-slim\n\nWORKDIR /app\n\nRUN adduser --disabled-password --no-create-home appuser\n\nCOPY --from=builder /install /usr/local\nCOPY . .\n\nUSER appuser\n\nEXPOSE 8000\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\nAnd a matching `requirements.txt`:\n\n```\nfastapi>=0.110,<1\nuvicorn[standard]>=0.29,<1\nscikit-learn>=1.4,<2\nnumpy>=1.26,<2\npydantic>=2,<3\n```\n\nKey choices:\n\n- **Multi-stage build** — keeps the final image small by discarding build deps.\n- **`python:3.11-slim`** — slim base avoids bloat from full Debian packages. 3.11 has good scikit-learn/numpy compatibility.\n- **Non-root user** — required for EKS pod security policies.\n- **No `--reload`** — production CMD. Add `--workers 4` if you need multi-process concurrency (or rely on HPA scaling pods instead).\n\nIf the model artifact is large, consider pulling it from S3 at startup rather than baking it into the image — keeps the image layer small and lets you update the model without rebuilding.",
+  "timestamp": "2026-05-18T09:36:10Z",
+  "latency_ms": 13098,
+  "exit_code": 0,
+  "output_length_chars": 1147,
+  "output_length_tokens_approx": 286,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

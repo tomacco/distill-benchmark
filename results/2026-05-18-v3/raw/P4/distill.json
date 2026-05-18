@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No existing codebase or stored knowledge to work from. Here's the simplest approach:\n\n## Simplest Feature Flag: Config-based toggle\n\n**Option 1 — Environment variable (simplest possible)**\n```bash\nENABLE_NEW_PAYMENT_FLOW=false\n```\n```python\n# or whatever your language\nnew_payment_enabled = os.getenv(\"ENABLE_NEW_PAYMENT_FLOW\", \"false\") == \"true\"\n\nif new_payment_enabled:\n    return new_payment_flow(request)\nreturn legacy_payment_flow(request)\n```\n\n**Option 2 — Per-user rollout (still simple, more useful for dark launch)**\n```python\nPAYMENT_V2_ALLOWLIST = {\"user_123\", \"user_456\"}  # internal testers\n\ndef use_new_payment(user_id: str) -> bool:\n    if os.getenv(\"PAYMENT_V2_ALL\") == \"true\":\n        return True\n    return user_id in PAYMENT_V2_ALLOWLIST\n```\n\n## Recommendation\n\nFor a dark launch specifically:\n- **Start with Option 2** — you want to target internal users / beta testers, not flip it globally\n- Store the allowlist in config/DB, not code, so you can add users without deploys\n- Add percentage-based rollout when you're ready to go wider (`hash(user_id) % 100 < rollout_pct`)\n- Skip third-party feature flag services (LaunchDarkly, etc.) unless you already have one — they're overkill for a single flag\n\n## What to watch for\n- **Dual-write**: if the new flow writes to different tables/services, you need both paths to produce consistent data\n- **Cleanup deadline**: set a date to remove the flag — dead flags accumulate fast\n- **Observability**: log which path each request took so you can compare error rates\n\nWant me to implement this in your actual codebase, or do you need the percentage-based rollout logic?",
+  "timestamp": "2026-05-18T11:24:13Z",
+  "latency_ms": 22980,
+  "exit_code": 0,
+  "output_length_chars": 1631,
+  "output_length_tokens_approx": 407,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "knowledge-graph",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given Helios's stack and the Series C timeline, here are the key considerations for the payment-processing service:\n\n## Architecture\n\n- **Kotlin + gRPC** internally, consistent with auth-service and the rest of the stack\n- **PostgreSQL 14** — you need strong consistency and multi-table transactions for payments (this is exactly why DynamoDB/MongoDB were rejected)\n- **Kafka** for async event publishing (payment initiated, completed, failed) so notification-service and account-service can react\n- **Idempotency keys** on every mutation endpoint — payments must never double-process\n\n## Data Design\n\n- Separate database (service owns its data), Flyway migrations from day one\n- Payment state machine with explicit states (`CREATED → PENDING → COMPLETED | FAILED → REFUNDED`)\n- Full audit trail — append-only ledger table, no soft deletes on transaction records\n- Store amounts as `BIGINT` (cents/minor units), never floating point\n\n## Reliability\n\n- **Transactional outbox pattern** — write payment record + Kafka event in one PG transaction, poll/CDC to publish. Avoids dual-write inconsistencies\n- Retry with exponential backoff for downstream provider calls\n- Circuit breaker around external payment provider APIs\n- Dead letter queue for failed event processing\n\n## Security & Compliance\n\n- PCI DSS scope — tokenize card data via provider, never store PANs\n- mTLS between services on EKS\n- Field-level encryption for sensitive data at rest\n- Rate limiting on payment creation endpoints\n\n## Operational\n\n- Reconciliation job — compare internal ledger against provider settlement reports daily\n- Structured logging with correlation IDs across the gRPC call chain\n- Metrics: payment success rate, latency percentiles, provider error rates\n- Feature flags for gradual rollout (route % of traffic to new service)\n\n## Coordination\n\nSofia is leading this extraction — sync with her on the service boundary and which endpoints migrate first. Given Q3 due diligence, I'd suggest starting with the read path (payment history/status) to prove the service out, then migrate writes.\n\nWant me to scaffold the project structure or dig into any of these areas?",
+  "timestamp": "2026-05-18T09:26:03Z",
+  "latency_ms": 21019,
+  "exit_code": 0,
+  "output_length_chars": 2149,
+  "output_length_tokens_approx": 537,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

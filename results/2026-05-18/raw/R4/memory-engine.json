@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "memory-engine",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and preferences, I'd recommend **PostgreSQL with analytics-oriented extensions** rather than introducing new infrastructure:\n\n- **TimescaleDB** — PostgreSQL extension for time-series/analytics workloads. Hypertables give you automatic partitioning, continuous aggregates for pre-computed rollups, and compression for older data. Your team already has PG expertise, and it runs on your existing PostgreSQL 14 setup.\n- **pg_partman + materialized views** — if the workload is simpler, native partitioning with pre-aggregated materialized views may be enough without adding any extension.\n\nFor the read-heavy pattern specifically:\n- Continuous aggregates (TimescaleDB) or refreshed materialized views handle the \"fast reads on large datasets\" requirement by pre-computing common queries\n- Read replicas on RDS/Aurora can isolate analytics load from transactional services\n- Your existing Redis layer can cache hot dashboard queries\n\nThis keeps the stack minimal — no new database to operate, no new expertise to hire for, and it aligns with the clean architecture story for Series C due diligence. If you outgrow it later, the data is still in PostgreSQL and easy to migrate.",
+  "timestamp": "2026-05-18T09:17:14Z",
+  "latency_ms": 17376,
+  "exit_code": 0,
+  "output_length_chars": 1189,
+  "output_length_tokens_approx": 297,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

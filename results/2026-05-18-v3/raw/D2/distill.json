@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "For the reporting service, **PostgreSQL** is the clear fit:\n\n- **Already your primary DB** — team has deep expertise, lower operational risk\n- **Strong consistency** — ACID transactions across tables, exactly what financial reporting needs\n- **Complex aggregations** — window functions, CTEs, materialized views handle multi-table reporting well\n- **DynamoDB and MongoDB were already evaluated and rejected** for these exact reasons\n\nSpecific recommendations for the reporting service:\n\n- **Materialized views** for expensive aggregation queries that don't need real-time freshness\n- **Read replicas** if report queries start competing with transactional workload\n- **Partitioning** (e.g., by date range) on large transaction/event tables to keep query performance predictable\n- **pg_cron or a Kotlin job** to refresh materialized views on a schedule\n\nIf query volume grows significantly later, you could add a read-optimized layer (e.g., TimescaleDB extension for time-series reporting, or ClickHouse as a downstream analytics store fed via Kafka), but start with plain PostgreSQL — it'll likely handle the load fine at your current scale.",
+  "timestamp": "2026-05-18T11:21:16Z",
+  "latency_ms": 25487,
+  "exit_code": 0,
+  "output_length_chars": 1140,
+  "output_length_tokens_approx": 285,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "claude-mem",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Two files created. Here's the setup:\n\n**`HealthService.kt`** — Standard gRPC health checking protocol implementation. Manages per-service status in a `ConcurrentHashMap`. Default state is `SERVING`.\n\n**`HealthHttpServer.kt`** — Thin HTTP server on port `8081` (configurable via `HEALTH_HTTP_PORT` env var) exposing `GET /healthz`. Delegates to the gRPC health service internally. Returns `200 {\"status\":\"ok\"}` or `503 {\"status\":\"unavailable\"}`.\n\n### Wiring it into your server startup\n\n```kotlin\n// In your gRPC server bootstrap:\nval healthService = HealthService()\nval healthHttp = HealthHttpServer(healthService = healthService)\n\nval grpcServer = ServerBuilder.forPort(grpcPort)\n    .addService(healthService)\n    // ... other services\n    .build()\n    .start()\n\nhealthHttp.start()\n\n// On shutdown:\nhealthService.setStatus(\"\", ServingStatus.NOT_SERVING)\nhealthHttp.stop()\ngrpcServer.shutdown()\n```\n\n### ALB target group config\n\n- **Protocol**: HTTP\n- **Port**: 8081\n- **Path**: `/healthz`\n- **Healthy threshold**: 2\n- **Interval**: 10s\n\n### EKS probe (if using gRPC probes)\n\n```yaml\nlivenessProbe:\n  grpc:\n    port: 50051\n  initialDelaySeconds: 5\n  periodSeconds: 10\nreadinessProbe:\n  httpGet:\n    path: /healthz\n    port: 8081\n  periodSeconds: 5\n```\n\n### Gradle dependency (if not already present)\n\n```kotlin\nimplementation(\"io.grpc:grpc-services:1.62.2\")  // includes health proto\n```\n\nThe `setStatus()` method lets you flip to `NOT_SERVING` during graceful shutdown or if a downstream dependency (PG, Redis) becomes unhealthy.",
+  "timestamp": "2026-05-18T08:43:32Z",
+  "latency_ms": 46398,
+  "exit_code": 0,
+  "output_length_chars": 1531,
+  "output_length_tokens_approx": 382,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

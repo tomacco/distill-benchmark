@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "claude-mem",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a good fit here. You already have it in the stack, and session tokens are a textbook Redis use case — simple key-value lookups with TTL expiry, no relational queries needed.\n\nA few practical notes:\n\n- **Use `SET key value EX ttl`** (or `SETEX`) — atomic set-with-expiry avoids orphaned keys.\n- **Key format**: something like `session:{userId}:{tokenId}` keeps it scannable and avoids collisions.\n- **Consider `maxmemory-policy allkeys-lru`** if this Redis instance is shared, so session keys don't crowd out other cached data. Or use a dedicated logical database (`SELECT 1`).\n- **Token rotation**: if you need to invalidate all sessions for a user (password change, compromise), a sorted set per user tracking active token IDs makes bulk revocation straightforward.\n\nSince you're on EKS, make sure your Redis client (Lettuce or Jedis) is configured for your ElastiCache/Redis topology — cluster mode, connection pooling, timeouts. Lettuce with coroutines works well if auth-service is already using them.\n\nNo reason to overcomplicate this. Redis is the right tool.",
+  "timestamp": "2026-05-18T08:38:51Z",
+  "latency_ms": 11602,
+  "exit_code": 0,
+  "output_length_chars": 1079,
+  "output_length_tokens_approx": 269,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

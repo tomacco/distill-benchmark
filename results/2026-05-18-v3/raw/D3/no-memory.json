@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "no-memory",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal / REST external, EKS), here's the simplest approach:\n\n## REST endpoint (external-facing)\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/verify\n```\n\nRequest body:\n```json\n{\n  \"routingNumber\": \"...\",\n  \"accountNumber\": \"...\",\n  \"accountType\": \"CHECKING\"\n}\n```\n\n## Implementation sketch\n\n```kotlin\n@PostMapping(\"/v1/merchants/{merchantId}/bank-accounts/verify\")\nsuspend fun verifyBankAccount(\n    @PathVariable merchantId: String,\n    @RequestBody request: VerifyBankAccountRequest\n): VerifyBankAccountResponse {\n    // gRPC call to auth-service to validate the caller\n    val caller = authClient.authenticate(grpcContext())\n\n    // gRPC call to account-service to confirm merchant exists + is active\n    val merchant = accountClient.getMerchant(merchantId)\n\n    // Call your bank verification provider (Plaid, Stripe, etc.)\n    val result = bankVerificationProvider.verify(\n        routingNumber = request.routingNumber,\n        accountNumber = request.accountNumber,\n        accountType = request.accountType\n    )\n\n    // Persist result\n    bankAccountRepository.save(merchant.id, result)\n\n    return VerifyBankAccountResponse(\n        status = result.status,  // VERIFIED, PENDING, FAILED\n        bankAccountId = result.id\n    )\n}\n```\n\n## Key decisions\n\n- **REST externally, gRPC to auth-service and account-service** — consistent with your existing pattern.\n- **Delegate actual verification to a provider interface** — swap Plaid/Stripe/micro-deposits behind `BankVerificationProvider` without changing the endpoint.\n- **Don't build micro-deposit logic yourself** — use a provider. That's the single biggest complexity trap here.\n- **Store verification status on the bank account record**, not as a separate entity. One table, one status field.\n\n## What to skip\n\n- No need for async/callback flows unless your provider requires it (micro-deposits do, instant verification doesn't).\n- No separate \"bank-account-service\" — keep it as a domain within payment-service.\n- No event publishing yet — add it when another service actually needs to react to verification.\n\nWant me to flesh out any specific part — the provider interface, the gRPC calls, or the persistence layer?",
+  "timestamp": "2026-05-18T11:11:22Z",
+  "latency_ms": 17685,
+  "exit_code": 0,
+  "output_length_chars": 2215,
+  "output_length_tokens_approx": 553,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

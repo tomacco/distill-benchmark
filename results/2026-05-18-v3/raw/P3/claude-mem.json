@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "claude-mem",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "No `transactions.csv` found in the working directory. Could you provide the file or confirm the correct path?\n\nIn the meantime, here's a quick one-liner you can run once the file is in place:\n\n```bash\nawk -F',' 'NR>1 {sum+=$3} END {print sum}' transactions.csv\n```\n\nOr if the amounts might be quoted/have whitespace, a Kotlin snippet:\n\n```kotlin\nimport java.io.File\n\nval sum = File(\"transactions.csv\")\n    .readLines()\n    .drop(1)\n    .sumOf { it.split(\",\")[2].trim().toBigDecimal() }\n\nprintln(sum)\n```\n\nDrop the file in `/private/tmp/benchmark-workspace-3BWDIm42/` and I'll parse and sum it for you.",
+  "timestamp": "2026-05-18T12:30:55Z",
+  "latency_ms": 11128,
+  "exit_code": 0,
+  "output_length_chars": 601,
+  "output_length_tokens_approx": 150,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

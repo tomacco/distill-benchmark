@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "knowledge-graph",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Given your stack, here's the simplest approach that doesn't over-engineer it:\n\n**Architecture: PG → Redis cache → gRPC/REST endpoint → frontend polling**\n\n1. **Scheduled Kotlin coroutine** (every 25s) runs an aggregate query against PG and writes results to Redis\n2. **Single endpoint** serves the cached counts from Redis\n3. **Frontend polls** every 30s (or SSE if Dev prefers)\n\nWhy this way:\n- No new infrastructure — you already have PG, Redis, Kafka\n- Redis avoids hammering PG with repeated aggregate queries from multiple dashboard clients\n- 30s freshness is trivial with a cache refresh job; no need for Kafka streaming or materialized views\n\n**PG query:**\n```sql\nSELECT merchant_id, merchant_name, COUNT(*) as txn_count,\n       COUNT(*) FILTER (WHERE created_at > now() - interval '24 hours') as txn_count_24h\nFROM transactions t\nJOIN merchants m ON t.merchant_id = m.id\nGROUP BY merchant_id, merchant_name\nORDER BY txn_count_24h DESC;\n```\n\n**Redis key:** `dashboard:merchant_txn_counts` — store as a JSON blob with a timestamp. One key, one read on the hot path.\n\n**Kotlin side:** A `@Scheduled` or coroutine `ticker` in whichever service owns transactions (likely `payment-processing` or `account-service`) that refreshes the cache. Expose via a simple REST endpoint since this is for a frontend dashboard.\n\nWant me to scaffold the Kotlin service code and the endpoint?",
+  "timestamp": "2026-05-18T13:12:07Z",
+  "latency_ms": 20450,
+  "exit_code": 0,
+  "output_length_chars": 1379,
+  "output_length_tokens_approx": 344,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

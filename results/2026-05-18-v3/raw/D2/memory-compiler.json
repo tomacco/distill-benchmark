@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "memory-compiler",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Given your requirements — complex aggregation queries across multiple tables with strong consistency — and the team's existing stack, **PostgreSQL** is the clear recommendation. Here's why:\n\n**It's already your primary database.** Helios runs PostgreSQL 14, so the team has deep expertise, existing tooling (Flyway for migrations), and operational knowledge.\n\n**It fits the workload perfectly:**\n- Complex aggregation queries across multiple tables are exactly what a relational database excels at — joins, window functions, CTEs, and `GROUP BY` are first-class citizens\n- Strong consistency is guaranteed by default (ACID transactions)\n- Multi-table transactions are natively supported\n\n**For reporting-specific considerations:**\n- **Materialized views** can pre-compute expensive aggregations and refresh on a schedule\n- **Partitioning** (e.g., by date range) keeps query performance strong as data grows\n- **Read replicas** can isolate reporting load from transactional services if needed\n- If you eventually need near-real-time dashboards, you could feed Kafka events into a dedicated reporting PostgreSQL instance to avoid impacting the primary\n\n**If scale becomes a concern later**, you could layer on TimescaleDB (a PostgreSQL extension) for time-series reporting data, or add a materialized view / CQRS pattern with a dedicated read model — all without leaving the PostgreSQL ecosystem.\n\nNo need to introduce a new database technology when PostgreSQL handles this use case natively and the team already knows it well.",
+  "timestamp": "2026-05-18T12:51:01Z",
+  "latency_ms": 23775,
+  "exit_code": 0,
+  "output_length_chars": 1525,
+  "output_length_tokens_approx": 381,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

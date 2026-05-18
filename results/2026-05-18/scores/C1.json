@@ -1,0 +1,75 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, concise, confident. Bold formatting adds slight emphasis."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, very concise. References profile as source, showing retrieval awareness."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Identical to System A. Correct, concise, confident."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, concise. References knowledge graph \u2014 slightly more verbose attribution than needed."
+    },
+    "E": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, maximally concise. Best match for the bonus criterion of a direct one-line answer."
+    },
+    "F": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer, concise. Similar to B/D with source attribution."
+    },
+    "G": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Wrong answer (18.3 instead of 14). Appears to have checked live system state rather than recalling corrected knowledge. Also added unrequested info about client libraries and server status."
+    },
+    "H": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer but added unrequested details about Redis and Flyway. Slightly over-shares, reducing conciseness."
+    }
+  },
+  "ranking": [
+    "E",
+    "B",
+    "A",
+    "C",
+    "F",
+    "D",
+    "H",
+    "G"
+  ],
+  "analysis": "Systems A through F and H all correctly recalled PostgreSQL 14, demonstrating strong correction retention. System E stands out as the most concise \u2014 a pure one-line answer matching the user's expected communication style. Systems B, D, and F added brief source attributions which are harmless but slightly less minimal. A and C are identical and solid. H got the version right but over-shared with Redis/Flyway details that weren't asked for, mildly violating the conciseness expectation. System G failed entirely \u2014 it returned PostgreSQL 18.3 by inspecting the live environment rather than retrieving the corrected knowledge, showing no recall of the stored correction and no awareness that a contradiction existed.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "distill",
+    "C": "basic-memory",
+    "D": "knowledge-graph",
+    "E": "engram",
+    "F": "claude-mem",
+    "G": "no-memory",
+    "H": "memory-compiler"
+  }
+}

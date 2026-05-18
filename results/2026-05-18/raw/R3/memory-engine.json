@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "memory-engine",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Based on the team info, **Dev** is your junior frontend engineer (React/TypeScript, 6 months tenure). Since you're a senior backend engineer, pairing with Dev on a React settings page component makes sense.\n\nBefore I start writing anything, a few quick questions:\n\n1. **Which service's settings?** Is this for the banking platform's user-facing settings (e.g., account preferences, notification settings), or an internal admin/config page?\n2. **Existing frontend code?** Is there a frontend repo or directory I should look at for existing patterns, component libraries, routing setup, etc.? I don't see one in this workspace.\n3. **Design/spec?** Does Marcus have a spec in Linear, or are we figuring out the shape as we go?\n\nKnowing the existing frontend conventions will help me write something consistent with what Dev is already familiar with, rather than introducing unfamiliar patterns.",
+  "timestamp": "2026-05-18T09:16:56Z",
+  "latency_ms": 15831,
+  "exit_code": 0,
+  "output_length_chars": 891,
+  "output_length_tokens_approx": 222,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

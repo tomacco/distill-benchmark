@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "Here's a commit message:\n\n```\nRemove legacy REST endpoints and OpenAPI specs from account-service\n\ngRPC migration is complete — delete the old REST handlers, internal\nOpenAPI spec files, and CI steps that generated REST client stubs.\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\n```",
+  "timestamp": "2026-05-18T13:18:43Z",
+  "latency_ms": 6401,
+  "exit_code": 0,
+  "output_length_chars": 307,
+  "output_length_tokens_approx": 76,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

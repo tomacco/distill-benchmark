@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "distill",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "```fish\ndocker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\"\n```\n\nWant it as a saved script file, or is the one-liner enough?",
+  "timestamp": "2026-05-18T08:31:01Z",
+  "latency_ms": 6803,
+  "exit_code": 0,
+  "output_length_chars": 135,
+  "output_length_tokens_approx": 33,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

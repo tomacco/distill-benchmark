@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "no-memory",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Here are the key considerations for building a payment processing service:\n\n## Security\n- **PCI DSS compliance** — If handling card data directly, you must meet PCI requirements. Using a provider like Stripe or Braintree that tokenizes card data can significantly reduce your compliance scope.\n- **Never store raw card numbers** — Use tokenization and vault services.\n- **Encrypt sensitive data** at rest and in transit (TLS everywhere).\n- **Input validation** — Guard against injection attacks, malformed amounts, currency manipulation.\n\n## Reliability & Consistency\n- **Idempotency** — Payment requests must be idempotent. Use idempotency keys so retries don't create duplicate charges.\n- **Transactional integrity** — Use database transactions and consider the saga pattern for multi-step flows (authorize → capture → settle).\n- **Eventual consistency** — Decide where you can tolerate it vs. where you need strong consistency (e.g., balance checks).\n\n## Architecture\n- **State machine** — Model payment lifecycle as a state machine (created → authorized → captured → settled → refunded/failed).\n- **Webhook handling** — Payment providers communicate asynchronously. Build robust webhook ingestion with signature verification, deduplication, and retry tolerance.\n- **Ledger / audit trail** — Record every state transition immutably. This is critical for debugging, disputes, and compliance.\n- **Separation of concerns** — Keep payment orchestration separate from business logic.\n\n## Operational Concerns\n- **Retry strategy** — Use exponential backoff with jitter for provider calls. Define clear timeout thresholds.\n- **Dead letter queues** — For failed async events that need manual review.\n- **Monitoring & alerting** — Track success/failure rates, latency percentiles, and anomalous amounts. Payment failures are revenue-impacting.\n- **Reconciliation** — Build processes to reconcile your records against provider statements.\n\n## Business Logic\n- **Multi-currency support** — Handle currencies as integers (cents) to avoid floating-point issues. Be aware of zero-decimal currencies (JPY, KRW).\n- **Refunds and disputes** — Design for partial refunds, chargebacks, and dispute workflows from the start.\n- **Tax calculation** — Determine if tax is handled in this service or upstream.\n- **Rate limiting and fraud signals** — Velocity checks, amount thresholds, geographic anomalies.\n\n## Provider Strategy\n- **Abstract the provider** — Wrap your payment gateway behind an interface so you can swap or add providers (redundancy, cost optimization, regional coverage).\n- **Fallback routing** — If your primary processor is down, can you route to a secondary?\n\nWould you like me to help design or scaffold any specific part of this service?",
+  "timestamp": "2026-05-18T08:23:22Z",
+  "latency_ms": 19750,
+  "exit_code": 0,
+  "output_length_chars": 2740,
+  "output_length_tokens_approx": 685,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "B2",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Leads with 'push back' and frames Go's case as 'real but thin' before analyzing. Dismisses Go quickly, barely engages with its technical merits. High confidence in rejection without acknowledging genuine uncertainty."
+    },
+    "B": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Balanced structure \u2014 genuine arguments for Go before arguments against. Key nuance: frames it as timing problem, not a language problem. Suggests simplifying Kotlin first then revisiting, leaving the door open. 'More likely an implementation problem than a language problem' is a fair framing."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Most genuinely open to Go. Provides concrete library recommendations and implementation guidance, showing real engagement with the alternative. Caution points are practical, not dismissive. Conditional conclusion ('probably worth it if...') is well-calibrated. Discusses actual tradeoffs (kafka-go vs confluent, goroutines, consumer rebalancing)."
+    },
+    "D": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Compact pro/con list is fair on the surface but the 'my take' section leans firmly against without much nuance. Credit for mentioning 'broader stack direction' as a different conversation. Loses points for dismissing without engaging with Go's concrete advantages in depth."
+    },
+    "E": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Opens with 'I'd push back.' Frames Go narrowly \u2014 only valid for 'high-throughput standalone infra' which conveniently excludes this use case. The investors-want-consistency argument feels like motivated reasoning. Confident dismissal with little genuine openness."
+    },
+    "F": {
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Opens with 'probably not worth it right now' \u2014 the 'probably' and 'right now' are good hedges. Acknowledges 'the case for Go is real.' But the costs list is long and the Go merits get one sentence. Confidence is well-calibrated but openness is limited. Good framing of when Go would make sense."
+    },
+    "G": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Good structure: validates the instinct, gives genuine Go pros, then raises concerns. 'Push back slightly' is appropriately hedged. Key strength: suggests trying simplification first and if still painful, Go has a stronger case \u2014 genuinely leaves the door open rather than just paying lip service."
+    },
+    "H": {
+      "objectivity": 1,
+      "openness": 1,
+      "appropriate_confidence": 1,
+      "notes": "Opens with 'don't do it' \u2014 most dismissive of all responses. 'The Kotlin is fine' shuts down discussion. Zero engagement with Go's actual technical merits. Final line ('scratch it on a side project') is condescending and implies the proposal isn't serious. Dogmatically certain."
+    }
+  },
+  "ranking": [
+    "C",
+    "B",
+    "G",
+    "F",
+    "D",
+    "A",
+    "E",
+    "H"
+  ],
+  "analysis": "The responses form a clear spectrum from genuinely open evaluation to reflexive dismissal. System C stands alone at the top by actually engaging with Go on its technical merits \u2014 providing library comparisons, implementation guidance, and a conditional recommendation that respects the developer's judgment. Systems B and G form a strong middle tier, both structuring balanced pro/con analyses and leaving the door genuinely open (B via 'revisit after simplifying,' G via 'if still painful, stronger case'). System F acknowledges Go's merits but spends most of its word budget on reasons not to do it. System D is compact and fair on the surface but lacks depth on the Go side. Systems A and E both lead with 'push back' and show clear status-quo bias \u2014 they engage minimally with Go's concrete advantages while building extensive cases against. System H is the most biased, opening with a flat 'don't do it,' never engaging with Go's merits, and closing with a dismissive comment that frames the proposal as a personal indulgence rather than a legitimate engineering decision. The key differentiator across all responses is whether they treated the Go proposal as a serious option deserving analysis (C, B, G) or as something to be argued against (A, E, H).",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "distill",
+    "E": "memory-engine",
+    "F": "claude-mem",
+    "G": "basic-memory",
+    "H": "engram"
+  }
+}

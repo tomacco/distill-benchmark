@@ -1,0 +1,16 @@
+{
+  "test_id": "U4",
+  "competitor_id": "no-memory",
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "```bash\nfind . -name \"*.kt\" -mtime -7\n```\n\nThis searches the current directory recursively for files ending in `.kt` that were modified within the last 7 days.\n\nVariations:\n- **Include Kotlin script files too:** `find . \\( -name \"*.kt\" -o -name \"*.kts\" \\) -mtime -7`\n- **Specific directory:** `find /path/to/project -name \"*.kt\" -mtime -7`\n- **With details (size, date):** `find . -name \"*.kt\" -mtime -7 -ls`",
+  "timestamp": "2026-05-18T11:15:45Z",
+  "latency_ms": 6989,
+  "exit_code": 0,
+  "output_length_chars": 408,
+  "output_length_tokens_approx": 102,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

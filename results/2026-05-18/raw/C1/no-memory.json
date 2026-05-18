@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "no-memory",
+  "prompt": "What version of Postgres are we on?",
+  "output": "You have **PostgreSQL 18.3** installed (client libraries via `libpq` at `/opt/homebrew/opt/libpq/bin/psql`). There doesn't appear to be a local Postgres server running — only the `psql` client and `pg_config` are available.",
+  "timestamp": "2026-05-18T08:20:04Z",
+  "latency_ms": 13148,
+  "exit_code": 0,
+  "output_length_chars": 223,
+  "output_length_tokens_approx": 55,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

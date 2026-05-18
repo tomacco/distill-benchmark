@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "No stored knowledge found. Responding directly.\n\n---\n\nThe instinct is reasonable — a Kafka consumer → SNS dispatcher is a natural fit for Go. A few things to weigh:\n\n**Arguments for Go:**\n- Tiny binary, fast cold start, minimal memory — good for a service this simple\n- Kafka (sarama/franz-go) and AWS SDK are mature in Go\n- Less ceremony than Kotlin for a service with no domain logic\n- Easier to reason about concurrency model for consumer groups\n\n**Arguments against (or at least: pause on):**\n- You already have Kotlin Kafka infrastructure (serialization, consumer config, error handling, DLQ patterns). Are you rewriting that too, or does Go get a fresh implementation?\n- If the team is Kotlin-heavy, a Go service becomes the one oddball everyone context-switches into for on-call\n- \"Over-engineered\" might be solvable by stripping the Kotlin version rather than rewriting. What specifically feels heavy — Spring? Coroutines? DI?\n\n**Key question:** Is the pain the language, or the framework? If it's Spring Boot wrapping what should be 200 lines of consumer logic, you could also consider a lightweight Kotlin approach (plain coroutines + raw kafka client, no framework). Same team expertise, fraction of the boilerplate.\n\nIf you do go ahead with Go: franz-go over sarama (better API, actively maintained), and keep it as a single `main.go` + `handler.go` — resist the urge to over-structure a 300-line service.",
+  "timestamp": "2026-05-18T08:29:03Z",
+  "latency_ms": 47322,
+  "exit_code": 0,
+  "output_length_chars": 1417,
+  "output_length_tokens_approx": 354,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

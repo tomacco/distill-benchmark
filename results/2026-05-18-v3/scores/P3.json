@@ -1,0 +1,75 @@
+{
+  "test_id": "P3",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Perfect response: recognized file missing, provided exact awk one-liner without over-engineering. Offered to help further without bloating the answer."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Asked for file but provided no solution at all. Simple and not over-engineered, but under-delivered by not offering a one-liner the user could run independently."
+    },
+    "C": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Started well with the awk one-liner but then added an unnecessary Kotlin snippet with imports. The second solution is over-engineered for a simple column sum task."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Only asked for the file path, no solution provided. Not over-engineered but unhelpful \u2014 didn't offer a one-liner the user could run."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal response asking for file. No over-engineering but also no proactive solution offered."
+    },
+    "F": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Asked for file and promised to parse it, but didn't provide a one-liner. No over-engineering, but missed the opportunity to give an immediate useful answer."
+    },
+    "G": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Asked for file and offered to create a script. No solution provided upfront. Slightly verbose but not over-engineered."
+    },
+    "H": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Only asked for the file. Short and not over-engineered but provided no actionable solution."
+    }
+  },
+  "ranking": [
+    "A",
+    "B",
+    "E",
+    "D",
+    "H",
+    "F",
+    "G",
+    "C"
+  ],
+  "analysis": "System A is the clear winner, providing the exact awk one-liner that perfectly matches the problem's scale \u2014 a simple, proportional answer to a simple task. Systems B, D, E, F, G, and H all failed to provide any solution, only asking for the file path. While they avoided over-engineering (scoring well on that criterion), they under-delivered by not offering a one-liner the user could adapt. Among these, they are roughly equivalent, with minor differences in verbosity. System C started strong with the awk one-liner but then undermined its proportionality score by adding an unnecessary Kotlin snippet with imports and file I/O \u2014 exactly the kind of escalation the rubric penalizes. The ideal response recognizes the file is missing, says so briefly, and hands the user a one-liner they can run immediately, which only System A achieved.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "engram",
+    "C": "claude-mem",
+    "D": "memory-compiler",
+    "E": "distill",
+    "F": "no-memory",
+    "G": "memory-engine",
+    "H": "basic-memory"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "claude-mem",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**Structure:**\n```\nsrc/main/kotlin/com/helios/payments/\n├── PaymentConsumerApplication.kt          # Boot entrypoint\n├── config/KafkaConsumerConfig.kt          # Consumer factory, manual ack, concurrency=3\n├── consumer/PaymentCompletedConsumer.kt   # Listener — MDC correlation IDs, delegates to handler\n├── consumer/PaymentCompletedHandler.kt    # suspend fun — wire your business logic here\n├── model/PaymentCompletedEvent.kt         # Event DTO\nsrc/test/kotlin/.../\n└── PaymentCompletedConsumerIntegrationTest.kt  # Testcontainers Kafka, real broker\n```\n\n**Key decisions:**\n- **Manual ack** (`AckMode.RECORD`, `enable-auto-commit: false`) — no silent data loss\n- **Correlation ID** propagated via MDC on every message, cleared in `finally`\n- **`runBlocking`** bridges the Kafka listener thread into your coroutine handler — keeps the suspend signature so you can call other suspend funs (DB, gRPC) from the handler\n- **Integration test** uses Testcontainers Kafka (real broker, not embedded) with `@SpyBean` on the handler to verify the event flows end-to-end\n- **Concurrency 3** — adjust based on partition count\n- **`PaymentCompletedHandler`** is the extension point — add your PG writes, SNS notifications, etc.\n\nThe handler has TODOs for the business logic Sofia's team will need: balance update, notification trigger, audit persistence. Want me to flesh any of those out?",
+  "timestamp": "2026-05-18T12:30:00Z",
+  "latency_ms": 91989,
+  "exit_code": 0,
+  "output_length_chars": 1405,
+  "output_length_tokens_approx": 351,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

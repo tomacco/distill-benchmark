@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "claude-mem",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and preferences, a few options worth considering:\n\n**PostgreSQL (extend what you have)**\n- You already run PG 14 and prefer PG extensions over new infra\n- **Citus** extension gives you distributed analytical queries on large datasets\n- **pg_partitioning** + materialized views + parallel query can get you surprisingly far\n- **TimescaleDB** if the analytics are time-series heavy\n- Keeps your operational story clean for Series C due diligence — no new database to justify\n\n**ClickHouse (if PG isn't enough)**\n- Column-oriented, purpose-built for analytical reads\n- 10-100x faster than row-stores on aggregation queries over large datasets\n- Runs well on EKS, Kafka integration is native (you already have Kafka)\n- SQL-compatible, so lower learning curve for the team\n- Tradeoff: another piece of infra to operate\n\n**My recommendation:** Start with PostgreSQL + Citus or partitioning + materialized views. Measure. If you're hitting walls on query latency at scale, then ClickHouse is the natural next step — and you can feed it from Kafka with minimal plumbing.\n\nThis follows your \"prefer PG extensions over new infra\" principle and keeps the architecture story simple. What kind of data volumes and query patterns are you looking at? That'd help narrow it down.",
+  "timestamp": "2026-05-18T08:45:27Z",
+  "latency_ms": 14205,
+  "exit_code": 0,
+  "output_length_chars": 1280,
+  "output_length_tokens_approx": 320,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

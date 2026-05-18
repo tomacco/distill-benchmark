@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "engram",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "The workspace is essentially empty — no existing React project. A few questions before I scaffold anything:\n\n1. **What does this settings page need to do?** User profile settings? App preferences? Notification toggles? Account/billing?\n2. **Is there an existing React project repo I should be working in?** Or are we starting fresh here?\n3. **Component library** — are you using anything (MUI, Radix, shadcn/ui, custom design system)?\n4. **State management** — local state, React Query, Zustand, or does the settings page talk to a specific backend API?\n\nSince Dev is junior, I'll keep the component straightforward — clear props, minimal abstraction, well-typed with TypeScript. Just need to know what we're building.",
+  "timestamp": "2026-05-18T09:35:48Z",
+  "latency_ms": 16501,
+  "exit_code": 0,
+  "output_length_chars": 718,
+  "output_length_tokens_approx": 179,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

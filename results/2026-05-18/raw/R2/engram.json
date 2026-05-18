@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "engram",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Use Flyway — it's the team standard (chosen over Liquibase by team vote).\n\n**Setup:**\n\nAdd the Flyway dependency to your `build.gradle.kts`:\n\n```kotlin\ndependencies {\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.flywaydb:flyway-database-postgresql\")\n}\n```\n\n**Migration structure:**\n\n```\nsrc/main/resources/db/migration/\n├── V1__create_initial_schema.sql\n├── V2__add_indexes.sql\n└── ...\n```\n\n**Naming convention:** `V{version}__{description}.sql` (double underscore).\n\n**`application.yml` config:**\n\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false\n    schemas: your_service_schema\n```\n\n**Key points for Helios services:**\n\n- **Use a dedicated schema** per service (not the `public` schema) to keep boundaries clean during the monolith extraction.\n- **Never use `flyway repair` or edit applied migrations** in staging/production — always create a new migration to fix issues.\n- **Include rollback comments** — Flyway community edition doesn't support undo migrations, so document the rollback SQL in a comment block at the top of each migration.\n- **Stick to PostgreSQL** — if you need scheduling or vectors, use `pg_cron` / `pgvector` rather than adding new infra.\n\n**Example first migration:**\n\n```sql\n-- Rollback: DROP TABLE IF EXISTS your_service.payments CASCADE; DROP SCHEMA IF EXISTS your_service;\nCREATE SCHEMA IF NOT EXISTS your_service;\n\nCREATE TABLE your_service.payments (\n    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id UUID NOT NULL,\n    amount NUMERIC(19,4) NOT NULL,\n    currency VARCHAR(3) NOT NULL,\n    status VARCHAR(32) NOT NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON your_service.payments(account_id);\nCREATE INDEX idx_payments_status ON your_service.payments(status);\n```\n\nRun locally with `./gradlew flywayMigrate` or let Spring Boot auto-apply on startup. CI should validate migrations against a clean PostgreSQL 14 instance in GitHub Actions before merge.",
+  "timestamp": "2026-05-18T09:35:31Z",
+  "latency_ms": 19477,
+  "exit_code": 0,
+  "output_length_chars": 2094,
+  "output_length_tokens_approx": 523,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

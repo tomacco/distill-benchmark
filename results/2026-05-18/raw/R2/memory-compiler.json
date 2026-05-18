@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "memory-compiler",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack, here's how to set up migrations for the new service using **Flyway** with **PostgreSQL 14**:\n\n## Project structure\n\n```\npayment-processing/\n└── src/main/resources/\n    └── db/migration/\n        ├── V1__create_payments_table.sql\n        ├── V2__add_payment_status_index.sql\n        └── ...\n```\n\nFlyway convention: `V{version}__{description}.sql` (double underscore).\n\n## Flyway config\n\nIn your `application.yml` (assuming Spring Boot with Kotlin):\n\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: true\n    schemas: payment_processing\n  datasource:\n    url: jdbc:postgresql://${DB_HOST}:5432/helios\n    username: ${DB_USER}\n    password: ${DB_PASSWORD}\n```\n\nUse a **dedicated schema** (`payment_processing`) rather than a separate database — keeps things simple while maintaining isolation from the monolith tables.\n\n## First migration example\n\n```sql\n-- V1__create_payments_schema.sql\nCREATE SCHEMA IF NOT EXISTS payment_processing;\n\nCREATE TABLE payment_processing.payments (\n    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    account_id    UUID NOT NULL,\n    amount        NUMERIC(19,4) NOT NULL,\n    currency      TEXT NOT NULL DEFAULT 'USD',\n    status        TEXT NOT NULL DEFAULT 'PENDING',\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nCREATE INDEX idx_payments_account_id ON payment_processing.payments(account_id);\nCREATE INDEX idx_payments_status ON payment_processing.payments(status) WHERE status IN ('PENDING', 'PROCESSING');\n```\n\n## CI integration\n\nIn your GitHub Actions workflow, run migrations before deployment:\n\n```yaml\n- name: Run Flyway migrations\n  run: ./gradlew flywayMigrate -Dflyway.url=jdbc:postgresql://${{ secrets.DB_HOST }}:5432/helios\n```\n\n## Key points\n\n- **One schema per service** — the existing `auth-service` and `account-service` already follow this pattern\n- **Never modify a released migration** — create a new `V{n+1}` file instead\n- **Use repeatable migrations** (`R__`) for views or functions that need to be recreated\n- **Test migrations** with integration tests against a real Postgres (Testcontainers works well here, no mocks)\n- Consider `pg_cron` if you need scheduled cleanup jobs rather than adding a new dependency\n\nWant me to scaffold the actual migration files and Gradle config for the payment processing service?",
+  "timestamp": "2026-05-18T09:05:49Z",
+  "latency_ms": 24143,
+  "exit_code": 0,
+  "output_length_chars": 2425,
+  "output_length_tokens_approx": 606,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "For a simple static HTML/CSS/JS site, the simplest options:\n\n1. **S3 + CloudFront** — since Helios is already on AWS, this is the path of least resistance. No new vendor, IAM is already set up, and Dev can deploy with a single `aws s3 sync` command.\n\n2. **Cloudflare Pages** or **Netlify** — even simpler DX (git push to deploy), but adds another vendor to manage.\n\n**Recommendation**: S3 + CloudFront. You're already on AWS, so:\n\n```bash\n# Create bucket, enable static hosting\naws s3 mb s3://helios-marketing-site\naws s3 website s3://helios-marketing-site --index-document index.html\n\n# Deploy\naws s3 sync ./build s3://helios-marketing-site --delete\n\n# Add CloudFront for HTTPS + caching\naws cloudfront create-distribution --origin-domain-name helios-marketing-site.s3.amazonaws.com\n```\n\nNo containers, no EKS overhead, pennies/month for a marketing site. CloudFront gives him HTTPS and a CDN for free essentially.\n\nIf Dev wants the absolute fastest setup with zero AWS config, Cloudflare Pages or Netlify with a GitHub repo works too — just `git push` and it's live. But that's a conversation about whether Marcus wants another vendor in the mix.",
+  "timestamp": "2026-05-18T09:21:37Z",
+  "latency_ms": 12140,
+  "exit_code": 0,
+  "output_length_chars": 1148,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

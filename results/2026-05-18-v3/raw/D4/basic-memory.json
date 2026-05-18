@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "basic-memory",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created under `payment-processing/`:\n\n```\nsrc/main/kotlin/co/helios/payment/\n├── PaymentProcessingApplication.kt        — Spring Boot entry point\n├── model/\n│   └── PaymentCompletedEvent.kt           — event DTO (paymentId, accountId, amount, currency, completedAt, correlationId)\n├── config/\n│   └── KafkaConsumerConfig.kt             — consumer factory + listener container (3 concurrent, RECORD ack, retry w/ backoff)\n└── consumer/\n    └── PaymentCompletedConsumer.kt        — @KafkaListener that bridges into coroutines via runBlocking(MDCContext())\n\nsrc/main/resources/\n├── application.yml                        — Kafka config, topic name, retry settings\n└── logback-spring.xml                     — structured JSON logging (logstash encoder) with correlationId + paymentId in MDC\n\nsrc/test/kotlin/co/helios/payment/consumer/\n└── PaymentCompletedConsumerIntegrationTest.kt  — Testcontainers Kafka, publishes event, awaits consumption\n```\n\nKey design choices matching your stack:\n\n- **Coroutines** — consumer bridges to `suspend fun processPayment()` via `runBlocking(MDCContext())` so correlation IDs propagate through the coroutine context\n- **Structured logging** — `correlationId` and `paymentId` set in MDC, emitted as JSON fields via logstash-logback-encoder\n- **Integration test** — real Kafka via Testcontainers (no mocks for infra), awaitility for async assertion\n- **Retry** — `DefaultErrorHandler` with `FixedBackOff(1000ms, 2 retries)` = 3 total attempts before DLT (you can wire a dead-letter topic later)\n- **`processPayment`** is a `suspend` stub — wire in your reconciliation/ledger/notification logic there\n\nNext steps when you're ready: add a dead-letter topic handler, wire `processPayment` to the account-service via gRPC, and add Flyway migrations if this service needs its own PG tables.",
+  "timestamp": "2026-05-18T12:41:24Z",
+  "latency_ms": 119231,
+  "exit_code": 0,
+  "output_length_chars": 1830,
+  "output_length_tokens_approx": 457,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

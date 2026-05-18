@@ -1,0 +1,75 @@
+{
+  "test_id": "U4",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Concise one-liner which is good, but uses ```bash tag showing no awareness of user's fish shell preference. No fd suggestion."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Identical to A \u2014 correct command, concise, but ```bash tag ignores fish preference."
+    },
+    "C": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Over-explains with variations and descriptions \u2014 wrong calibration for a senior user who wants a concise one-liner. bash tag, no fish awareness."
+    },
+    "D": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Same as A/B \u2014 concise but no fish shell awareness."
+    },
+    "E": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Explicitly acknowledges fish shell which shows preference recall. Adds useful .kts variation. Still uses ```bash tag which is a minor inconsistency. Slightly verbose for a senior user."
+    },
+    "F": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Same as A/B/D \u2014 concise but no fish awareness."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Only system to use ```fish tag, directly showing fish shell awareness. Maximally concise one-liner with no unnecessary explanation. No fd suggestion keeps it from a perfect 5 on preference recall."
+    },
+    "H": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 2,
+      "notes": "Same as A/B/D/F \u2014 concise but bash tag, no fish awareness."
+    }
+  },
+  "ranking": [
+    "G",
+    "E",
+    "A",
+    "B",
+    "D",
+    "F",
+    "H",
+    "C"
+  ],
+  "analysis": "The core find command is identical across all systems and works correctly in fish shell. The differentiator is fish shell awareness and communication style. System G stands out as the only response using the ```fish code tag, demonstrating actual recall of the user's shell preference while maintaining maximum conciseness \u2014 the ideal combination for a senior user. System E is the runner-up by explicitly acknowledging fish shell usage, though it still uses a ```bash tag and adds slightly more text than needed. Systems A, B, D, F, and H are functionally identical \u2014 correct and concise but completely unaware of the fish shell preference, defaulting to bash tagging. System C scores lowest overall: while the command is correct, the verbose explanation with multiple variations is poorly calibrated for a senior developer who just wants a quick one-liner. No system suggested fd as a modern alternative, which was a bonus opportunity missed across the board.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "basic-memory",
+    "C": "no-memory",
+    "D": "distill",
+    "E": "knowledge-graph",
+    "F": "memory-compiler",
+    "G": "engram",
+    "H": "claude-mem"
+  }
+}

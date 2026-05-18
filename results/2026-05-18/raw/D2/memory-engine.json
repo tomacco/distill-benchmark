@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "memory-engine",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Given your stack and past evaluations, the answer here is straightforward: **PostgreSQL**.\n\nHere's why it's the right fit for the reporting service:\n\n**Alignment with your existing stack:**\n- You're already running PostgreSQL 14 across Helios — the team has deep PG expertise.\n- No new operational burden (monitoring, backups, on-call runbooks already exist).\n\n**Fits the requirements:**\n- **Complex aggregations** — PG handles multi-table JOINs, window functions, CTEs, and GROUP BY rollups natively.\n- **Strong consistency** — ACID transactions out of the box, which matters for financial reporting.\n- **Materialized views** — great for precomputing expensive report queries with `REFRESH MATERIALIZED VIEW CONCURRENTLY`.\n\n**Considerations for a reporting-specific workload:**\n- **Read replica** — route report queries to a dedicated replica so you don't impact transactional services. Aurora PostgreSQL on EKS makes this easy, or a standard RDS read replica.\n- **Partitioning** — use declarative table partitioning (by date range) if you expect large volumes of transaction/event data.\n- **pg_cron or Flyway-managed jobs** — for scheduling materialized view refreshes or aggregation table updates.\n\nDynamoDB and MongoDB were already evaluated and rejected for good reasons (relational model fits the domain, need for multi-table transactions, existing PG expertise). Nothing about the reporting use case changes that calculus — if anything, complex aggregations make the case for PostgreSQL even stronger.\n\nIf reporting load eventually outgrows what a read replica can handle, the next step would be something like **ClickHouse** or piping data through Kafka into a dedicated OLAP store — but I'd start with PG and only add complexity when the numbers demand it.",
+  "timestamp": "2026-05-18T09:13:23Z",
+  "latency_ms": 19327,
+  "exit_code": 0,
+  "output_length_chars": 1765,
+  "output_length_tokens_approx": 441,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

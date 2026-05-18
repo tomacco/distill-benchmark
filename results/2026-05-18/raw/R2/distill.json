@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on the knowledge base, here's how to set up migrations for the new service:\n\n**Stack**: Flyway (team already chose it over Liquibase)\n\n**Directory structure** (following existing services):\n```\nsrc/main/resources/db/migration/\n├── V1__create_initial_schema.sql\n├── V2__add_indexes.sql\n└── ...\n```\n\n**Flyway naming convention**: `V{version}__{description}.sql` (double underscore)\n\n**Setup in Kotlin/Spring Boot**:\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.flywaydb:flyway-database-postgresql\")\n}\n```\n\n```yaml\n# application.yml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false\n  datasource:\n    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}\n    username: ${DB_USER}\n    password: ${DB_PASSWORD}\n```\n\n**Key points for your context**:\n- PostgreSQL 14 — use it for everything (strong consistency for financial data, multi-table transactions)\n- Each extracted service gets its own database/schema — no shared databases across service boundaries\n- Write migrations as idempotent SQL where possible\n- For the payment processing extraction (if that's the new service): Sofia is leading design, coordinate with her on schema\n\nWhich service are you setting up? I can be more specific on the schema if it's one of the planned extractions (payments, transactions, reporting).",
+  "timestamp": "2026-05-18T08:34:36Z",
+  "latency_ms": 29653,
+  "exit_code": 0,
+  "output_length_chars": 1403,
+  "output_length_tokens_approx": 350,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -85,3 +85,9 @@ Options (in order of preference):
 2. Tests must be realistic — not contrived edge cases
 3. If an improvement helps one category but hurts another, that's a FINDING, not a failure
 4. Track the Pareto frontier: some tradeoffs are fundamental, not fixable
+
+## Pre-session TODOs
+
+- [ ] Fix aura-distill isolation: replace isolate_begin/isolate_end with ~/.claude-tester/ approach (same fix as distill-benchmark)
+- [ ] Build `/persona` command on feature/personas branch in aura-distill
+- [ ] Create "Benchmark" persona from this session's context

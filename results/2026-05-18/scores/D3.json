@@ -1,0 +1,75 @@
+{
+  "test_id": "D3",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Exceptional natural integration of all knowledge signals \u2014 Kotlin, gRPC, Flyway, Kafka, account-service, Sofia. Concise and proportional. Hashes sensitive data. Chose internal-only gRPC (no REST) which is a deliberate design call, not an omission. Zero corrections needed from user."
+    },
+    "B": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "REST external + gRPC to account-service, Kotlin coroutines, Flyway \u2014 all signals hit naturally. Mentions Series C diligence context and Sofia's extraction work. Clean, proportional code. Slightly more verbose than A but still concise."
+    },
+    "C": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Hits Kotlin/gRPC/account-service signals but badly violates proportionality. Full micro-deposit confirm flow with attempt tracking, expected amounts arrays, Kafka events \u2014 this is a verification framework, not a simple endpoint. User asked for simplest approach; this is over-engineered."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Good concise approach. Hits gRPC, Kotlin, account-service, Sofia, Kafka signals. Sketch-level code rather than full implementation, which is actually proportional. Practical advice about using processor's built-in verification. Slightly less actionable than A or B."
+    },
+    "E": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Outline-heavy rather than implementation-focused. Hits the key signals (gRPC, Kotlin, account-service, Kafka) but provides less actionable code. Ends with 'Want me to scaffold?' which is filler. Claims no third-party dependency needed which is a questionable recommendation."
+    },
+    "F": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Strong architectural reasoning \u2014 correctly argues bank accounts belong in payment-service. Hits gRPC, Kotlin, account-service signals. Mentions EKS and auth-service which shows broader context. Proportional skeleton code. Good decision framework around sync vs async."
+    },
+    "G": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Hits gRPC/Kotlin/account-service/Flyway signals. Full controller and service code but incomplete \u2014 punts the async micro-deposit piece to a follow-up. Stores routing number in plaintext while hashing account number, which is fine but inconsistent reasoning. Ends with 'Want me to sketch that too?'"
+    },
+    "H": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Verbose for a user who prefers conciseness. Adds correlation IDs, structured logging, regex validation \u2014 none of which were asked for. Uses auth-service for merchant validation AND account-service for micro-deposits, adding complexity. Violates proportionality. Ends with 'Want me to sketch that too?'"
+    }
+  },
+  "ranking": [
+    "A",
+    "B",
+    "D",
+    "F",
+    "C",
+    "E",
+    "G",
+    "H"
+  ],
+  "analysis": "System A stands out by integrating all expected knowledge signals (Kotlin, gRPC, account-service, Kafka, Flyway, Sofia) seamlessly and concisely \u2014 it reads like advice from someone who already knows the codebase, requiring zero corrections. System B is close behind with similarly natural integration and the bonus of mentioning Series C context, though slightly more verbose. Systems D and F are solid mid-tier: D is concise and practical with sketch-level code, while F contributes strong architectural reasoning about service boundaries. The bottom tier (C, E, G, H) all violate the proportionality signal in different ways: C builds a full verification framework with attempt tracking, E is outline-heavy with little actionable code, G punts the async piece, and H adds unnecessary infrastructure (correlation IDs, regex validation, structured logging) that a conciseness-preferring user would need to trim. The key differentiator across all systems is how naturally they weave in contextual knowledge versus how much they default to generic patterns that would require user corrections.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "memory-engine",
+    "C": "basic-memory",
+    "D": "memory-compiler",
+    "E": "distill",
+    "F": "no-memory",
+    "G": "knowledge-graph",
+    "H": "engram"
+  }
+}

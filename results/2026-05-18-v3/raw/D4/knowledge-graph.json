@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "",
+  "timestamp": "2026-05-18T13:15:40Z",
+  "latency_ms": 120073,
+  "exit_code": 143,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

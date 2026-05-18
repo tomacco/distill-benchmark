@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No. DynamoDB was explicitly rejected at Helios. The reasons: you need strong consistency, multi-table transactions, and the team has deep PostgreSQL expertise.\n\nFor sub-millisecond key-value reads on session data, **Redis** is the right call — it's already in your stack. You can use it as a session store with TTL-based expiry, and it'll comfortably deliver sub-millisecond reads.\n\nIf you need durability beyond Redis, back it with PostgreSQL — sessions written to PG, cached in Redis with a short TTL or invalidation on write. But for most session store patterns, Redis alone is sufficient.",
+  "timestamp": "2026-05-18T09:22:12Z",
+  "latency_ms": 8518,
+  "exit_code": 0,
+  "output_length_chars": 592,
+  "output_length_tokens_approx": 148,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

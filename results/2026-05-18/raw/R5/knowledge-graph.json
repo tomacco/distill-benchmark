@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "knowledge-graph",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "**What this does:**\n\n- **Multi-stage build** — installs gcc/g++ (needed to compile some scikit-learn/numpy deps) in a builder stage, then copies only the installed packages into the final slim image. Keeps the image small.\n- **Non-root user** — runs as `appuser` for security.\n- **Expected layout:**\n  - `model/` — directory containing your serialized scikit-learn model (e.g. `model/fraud_model.joblib`)\n  - `app/main.py` — FastAPI app that loads the model and serves `/predict`\n\nBuild and run:\n\n```bash\ndocker build -t fraud-scoring .\ndocker run -p 8000:8000 fraud-scoring\n```",
+  "timestamp": "2026-05-18T09:27:04Z",
+  "latency_ms": 17764,
+  "exit_code": 0,
+  "output_length_chars": 578,
+  "output_length_tokens_approx": 144,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

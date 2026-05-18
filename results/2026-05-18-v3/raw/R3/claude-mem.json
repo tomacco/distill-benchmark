@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-mem",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "The workspace is mostly empty — no existing React project yet. A few questions before we scaffold this out:\n\n1. **New project or existing?** — Should I create a fresh React/TS app here (Vite?), or will this component slot into an existing frontend repo you'll copy it into?\n\n2. **Settings scope** — What settings are we exposing? Some possibilities given your stack:\n   - User profile (name, email, avatar)\n   - Notification preferences (SNS channels)\n   - API keys / auth tokens\n   - Team/org settings\n   - Something else?\n\n3. **State management** — Are you using anything (React Query, Zustand, Redux) or keeping it simple with local state + fetch for now?\n\n4. **Component library** — Any UI kit (Radix, shadcn/ui, MUI) or rolling your own?\n\nSince Dev is junior (React/TS, ~6mo), I'll keep the component straightforward — clear types, minimal abstraction, good for a pairing session where you can walk through patterns together.",
+  "timestamp": "2026-05-18T12:32:16Z",
+  "latency_ms": 16401,
+  "exit_code": 0,
+  "output_length_chars": 930,
+  "output_length_tokens_approx": 232,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

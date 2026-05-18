@@ -1,0 +1,75 @@
+{
+  "test_id": "D1",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Uses .fish extension showing fish shell awareness. Concise with a useful tip about customizing format. No over-engineering. Recalls fish preference without being told."
+    },
+    "B": {
+      "quality": 2,
+      "relevance": 4,
+      "helpfulness": 2,
+      "notes": "References .fish file showing fish awareness, and is very concise. However, no actual code or command is shown in the response, making it hard to use without context. Too terse to be actionable on its own."
+    },
+    "C": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 4,
+      "notes": "Good one-liner command, concise, and offers a follow-up. However uses ```bash syntax marker, suggesting no fish shell awareness. The docker command itself is shell-agnostic but framing is bash."
+    },
+    "D": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Explicitly creates containers.sh (bash script), showing zero fish shell awareness. Functional but fails the key persistence test of recalling the user's shell preference."
+    },
+    "E": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Bare one-liner with bash marker. Concise (good), but no fish awareness. Maximally terse which partially matches conciseness preference but misses the shell preference entirely."
+    },
+    "F": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Identical to E in substance. Bash-framed one-liner, no fish awareness. Concise but misses the key preference recall signal."
+    },
+    "G": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Bash one-liner with a follow-up question. Slightly more helpful than bare one-liners but still no fish shell awareness. The follow-up is reasonable but not necessary."
+    },
+    "H": {
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Nearly identical to G. Bash-framed one-liner with a script offer. No fish awareness. The follow-up question adds marginal helpfulness but the core preference was missed."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "B",
+    "G",
+    "H",
+    "E",
+    "F",
+    "D"
+  ],
+  "analysis": "The critical differentiator in this persistence test is fish shell awareness. System A stands out clearly by creating a .fish file and providing a concise, practical response \u2014 demonstrating recalled preference without prompting. System B also shows fish awareness via the .fish filename but fails to include any actual code, severely limiting its helpfulness. System C is the best of the non-fish-aware responses: a clean one-liner with a sensible follow-up, though the bash marker reveals no stored preference recall. Systems E, F, G, and H are functionally near-identical bash one-liners with minor variations in follow-up questions. System D scores lowest on relevance by explicitly creating a .sh bash script, the strongest signal of zero preference recall. The gap between A and the rest is the primary finding: only A (and partially B) saved the user from having to correct the shell preference, which is the core metric for this test.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "engram",
+    "C": "distill",
+    "D": "basic-memory",
+    "E": "claude-mem",
+    "F": "knowledge-graph",
+    "G": "memory-compiler",
+    "H": "no-memory"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "R4",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Proactively surfaces DynamoDB/Mongo rejection with reasons (team expertise, consistency), leads with TimescaleDB as PG extension, mentions 'PG extensions over new infra' preference naturally, addresses fast reads. Knowledge is woven seamlessly into the recommendation."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Leads with ClickHouse over PG-based options despite team's known preference for PG extensions. 'Critical corrections on file' is an unnatural phrase that reveals stored knowledge mechanics. DynamoDB/MongoDB rejection mentioned only as an afterthought note. Includes Druid as a third option adding noise."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Excellent PG-first approach with Citus and columnar extensions. Naturally references 'prefer PG extensions over new infra' principle and Series C due diligence. However, does not explicitly mention or explain the DynamoDB/MongoDB rejection, which is a key expected signal."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Strong TimescaleDB-first recommendation with clean PG-extension rationale. Mentions team PG expertise and extension preference naturally. Like C, does not explicitly mention DynamoDB/MongoDB rejection or explain why they were ruled out."
+    },
+    "E": {
+      "relevance": 1,
+      "precision": 1,
+      "naturalness": 3,
+      "notes": "Generic response with no evidence of stored knowledge. Recommends BigQuery, Redshift, Snowflake, DuckDB \u2014 all irrelevant to the team's constraints. Asks 'what cloud/infra are you on?' which should already be known. No mention of DynamoDB/MongoDB rejection, PG expertise, or any team preferences."
+    },
+    "F": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Concise and direct. Immediately states team rejected DynamoDB/MongoDB and focuses entirely on PG-based solutions. Covers partitioning, materialized views, TimescaleDB, and newer options like pg_analytics. Slightly mechanical listing style but highly relevant and precise. Bonus for mentioning pg_cron and Flyway."
+    },
+    "G": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Good knowledge surfacing \u2014 mentions PG expertise, DynamoDB/MongoDB rejection, Kafka, Series C due diligence, and 'minimal deps' preference. Slightly verbose with Druid recommendation adding some noise. 'Your team knows it cold' feels natural."
+    },
+    "H": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Explicitly lists constraints upfront including consistency requirements, PG expertise, and DynamoDB/MongoDB rejection with reason (relational model fit). Notes ClickHouse's eventual consistency tradeoff \u2014 a sophisticated detail. 'Based on your past decisions' header is slightly mechanical but the rest flows well."
+    }
+  },
+  "ranking": [
+    "A",
+    "H",
+    "F",
+    "D",
+    "C",
+    "G",
+    "B",
+    "E"
+  ],
+  "analysis": "System A is the strongest overall \u2014 it proactively surfaces the DynamoDB/MongoDB rejection with clear reasoning, leads with TimescaleDB as a PG extension aligned with team preferences, and weaves all stored knowledge naturally into the recommendation without any visible seams. System H is close behind with excellent constraint enumeration and the sophisticated observation about ClickHouse's eventual consistency, though its framing is slightly more mechanical. System F earns high marks for being the most concise and staying purely within PG-based solutions, directly mentioning the rejection. Systems C and D both give excellent PG-first recommendations with natural knowledge integration but miss the explicit DynamoDB/MongoDB rejection signal. System G surfaces good knowledge including Series C context but adds some noise. System B underperforms by leading with ClickHouse despite the team's known PG preference, and the phrase 'critical corrections on file' breaks naturalness. System E shows no evidence of stored knowledge whatsoever \u2014 it gives a generic database survey that ignores all team context, constraints, and prior decisions.",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "memory-compiler",
+    "C": "claude-mem",
+    "D": "basic-memory",
+    "E": "no-memory",
+    "F": "engram",
+    "G": "knowledge-graph",
+    "H": "distill"
+  }
+}

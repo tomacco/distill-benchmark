@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "no-memory",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Given your requirements — complex aggregation queries, multi-table joins, and strong consistency — a **relational (SQL) database** is the natural fit. DynamoDB and MongoDB were previously evaluated and rejected, which makes sense since neither excels at ad-hoc cross-table aggregations.\n\n**Top recommendations:**\n\n1. **PostgreSQL** — Best default choice. Excellent aggregation support (window functions, CTEs, materialized views), strong consistency via ACID transactions, and rich indexing options (partial, expression, GIN/GiST). Free and battle-tested.\n\n2. **Amazon Redshift / Google BigQuery / Snowflake** — If the reporting workload is analytical (large scans, heavy aggregations over historical data), a columnar/OLAP engine will outperform a row-store like Postgres by 10-100x on those queries. Worth considering if data volume is large or query patterns are read-heavy.\n\n3. **ClickHouse** — Open-source columnar option if you want OLAP performance without managed-service costs. Strong at aggregations, weaker at point lookups and updates.\n\n**How to decide between them:**\n\n| Factor | PostgreSQL | OLAP (Redshift/BQ/Snowflake/ClickHouse) |\n|---|---|---|\n| Data volume | Up to low TB | TB+ |\n| Query pattern | Mixed read/write | Read-heavy analytics |\n| Latency needs | Low (ms) | Higher (seconds) ok |\n| Update frequency | Real-time | Batch/near-real-time ok |\n| Operational cost | Low | Higher |\n\n**My suggestion:** Start with **PostgreSQL** unless your data volume or query complexity clearly demands an OLAP engine. Postgres handles most reporting workloads well, and you avoid the operational overhead of a separate analytical store. If you later hit performance walls on aggregation queries, you can layer in materialized views or migrate the reporting path to an OLAP system.\n\nWant me to dig into any of these options in more detail, or help sketch out a schema design?",
+  "timestamp": "2026-05-18T11:11:04Z",
+  "latency_ms": 17495,
+  "exit_code": 0,
+  "output_length_chars": 1883,
+  "output_length_tokens_approx": 470,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

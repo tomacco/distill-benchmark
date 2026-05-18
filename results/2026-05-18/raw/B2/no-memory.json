@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "no-memory",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "That's a pretty common and reasonable move. A Kafka consumer that fans out to SNS is exactly the kind of service where Go shines — it's basically glue with some concurrency.\n\n**Arguments for Go here:**\n\n- The Kafka consumer + SNS producer pattern maps naturally to goroutines and channels\n- Significantly less boilerplate than a typical Kotlin/Spring setup (no dependency injection framework, no annotation magic, no 30s startup time)\n- Single static binary — simpler deploys, smaller container images\n- Lower memory footprint, which matters if you're running many instances for partition parallelism\n\n**Things to watch out for:**\n\n- **Kafka client maturity** — `confluent-kafka-go` (librdkafka wrapper) is solid but CGO complicates cross-compilation. `segmentio/kafka-go` and `IBM/sarama` are pure Go alternatives with different trade-offs\n- **Error handling discipline** — Kotlin's type system catches things at compile time that Go won't. Be deliberate about retry/backoff logic for SNS calls and consumer offset commits\n- **Schema handling** — if you're using Avro/Protobuf with a schema registry, check that the Go ecosystem support matches what you had in Kotlin\n- **Graceful shutdown** — get the consumer group rebalance and in-flight SNS call draining right from the start. Easy to get wrong, painful to fix later\n\n**Honest question to ask yourself:** is the Kotlin version actually causing problems (slow deploys, high resource usage, hard to modify), or does it just *feel* heavy? If it's working fine and rarely changes, a rewrite might not be worth the effort. If it's actively painful to maintain or deploy, Go is a great fit for this workload.\n\nIf you want, I can help scaffold the Go service or sketch out the architecture.",
+  "timestamp": "2026-05-18T08:19:16Z",
+  "latency_ms": 16326,
+  "exit_code": 0,
+  "output_length_chars": 1738,
+  "output_length_tokens_approx": 434,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

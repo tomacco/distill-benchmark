@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "no-memory",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The working directory appears to be mostly empty — there's only a `README.md` and no files containing `AccountService`. There's no codebase here to rename across.\n\nIf you have a codebase elsewhere, point me to it (e.g. `cd /path/to/project`). Otherwise, here's the fastest approach for when you do have the files:\n\n**Quickest method — search-and-replace with your editor/IDE:**\n\nMost IDEs (VS Code, IntelliJ, etc.) have a **Rename Symbol** refactoring (usually `F2` or `Shift+F6`) that handles class references, imports, and type annotations in one shot. This is the safest option.\n\n**If you want me to do it here in Claude Code:**\n\n1. I'll `Grep` for all occurrences of `AccountService`\n2. Use `Edit` with `replace_all: true` on each file to rename `AccountService` → `BankAccountService`\n3. Rename any files like `AccountService.ts` → `BankAccountService.ts`\n4. Update import paths that reference the old filename\n\nJust point me at your project directory and I'll handle it.",
+  "timestamp": "2026-05-18T11:11:59Z",
+  "latency_ms": 22759,
+  "exit_code": 0,
+  "output_length_chars": 976,
+  "output_length_tokens_approx": 244,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

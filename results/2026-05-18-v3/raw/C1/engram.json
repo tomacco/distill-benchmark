@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "engram",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL 14.",
+  "timestamp": "2026-05-18T13:22:27Z",
+  "latency_ms": 4841,
+  "exit_code": 0,
+  "output_length_chars": 14,
+  "output_length_tokens_approx": 3,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

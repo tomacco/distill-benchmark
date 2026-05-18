@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "basic-memory",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "**No — DynamoDB was already evaluated and explicitly rejected by your team.** The decision is documented in `vault/decisions.md`:\n\n> NEVER suggest DynamoDB — rejected (strong consistency, multi-table txns, PG expertise)\n\nThe rationale was:\n- **Strong consistency requirements** — you're a banking platform; eventual consistency on sessions in a fintech context is risky.\n- **Multi-table transaction needs** — DynamoDB's transaction model is limited compared to what you already have.\n- **Team expertise is in PostgreSQL** — operational overhead of adopting a new data store.\n\nFor sub-millisecond key-value reads on sessions, you already have **Redis** in your stack. It's a natural fit here:\n\n- True sub-millisecond latency on simple GET/SET\n- You already run it for caching, so no new infrastructure\n- Supports TTL natively (ideal for session expiry)\n- The team already knows it\n\nIf you need session data to survive Redis restarts, you could back it with PostgreSQL as the source of truth and use Redis as the hot read layer — which aligns with your existing architecture.",
+  "timestamp": "2026-05-18T08:50:56Z",
+  "latency_ms": 17564,
+  "exit_code": 0,
+  "output_length_chars": 1073,
+  "output_length_tokens_approx": 268,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

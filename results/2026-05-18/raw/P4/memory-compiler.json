@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "memory-compiler",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "There's no existing feature flag infrastructure in the repo. Here's the simplest approach given your stack:\n\n## Simplest: Config-driven flag in PostgreSQL + Redis\n\nSince you already have PostgreSQL and Redis, you don't need a third-party service. A single table + cached lookup is enough to dark-launch the payment flow:\n\n**1. Flyway migration** — add a `feature_flags` table:\n\n```sql\nCREATE TABLE feature_flags (\n    key       VARCHAR(128) PRIMARY KEY,\n    enabled   BOOLEAN NOT NULL DEFAULT FALSE,\n    metadata  JSONB,  -- optional: % rollout, allowed user IDs, etc.\n    updated_at TIMESTAMP NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (key, enabled, metadata)\nVALUES ('new_payment_flow', false, '{\"allowed_account_ids\": []}');\n```\n\n**2. Kotlin service** — read-through Redis cache:\n\n```kotlin\nclass FeatureFlags(\n    private val redis: RedisCommands<String, String>,\n    private val db: DSLContext  // or your preferred DB access\n) {\n    fun isEnabled(flag: String, accountId: String? = null): Boolean {\n        val cached = redis.get(\"ff:$flag\")\n        if (cached != null) return evaluateFlag(cached, accountId)\n\n        val row = db.selectFrom(FEATURE_FLAGS).where(FEATURE_FLAGS.KEY.eq(flag)).fetchOne()\n            ?: return false\n        redis.setex(\"ff:$flag\", 30, row.toJson())  // 30s TTL\n        return evaluateFlag(row.toJson(), accountId)\n    }\n}\n```\n\n**3. Usage in the payment flow** (gRPC handler or wherever the routing happens):\n\n```kotlin\nif (featureFlags.isEnabled(\"new_payment_flow\", request.accountId)) {\n    newPaymentService.process(request)\n} else {\n    legacyPaymentService.process(request)\n}\n```\n\n**4. Frontend** — expose flags via your existing REST API for external clients:\n\n```typescript\nconst { enabled } = await fetch('/api/v1/feature-flags/new_payment_flow').then(r => r.json());\n```\n\n## Why this over LaunchDarkly / Unleash\n\n- Zero new infra — you already run PostgreSQL + Redis\n- 30s cache TTL means you can flip the flag in the DB and it propagates in under a minute\n- The `metadata` JSONB column gives you percentage rollouts or account-allowlisting when you need it\n- If you outgrow this later (many flags, audit trails, segmentation), you can migrate to a dedicated service then\n\n## To dark-launch\n\n1. Deploy the new payment service behind the flag (off by default)\n2. Add specific test account IDs to `metadata.allowed_account_ids`\n3. Gradually widen: allowlist → percentage rollout → fully enabled\n\nWant me to scaffold the actual migration and Kotlin code in the repo?",
+  "timestamp": "2026-05-18T09:04:56Z",
+  "latency_ms": 29165,
+  "exit_code": 0,
+  "output_length_chars": 2519,
+  "output_length_tokens_approx": 629,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

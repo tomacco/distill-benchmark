@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "No existing code in the workspace yet. Based on the knowledge base: Kotlin, Kafka, coroutines, structured logging with correlation IDs, integration tests over mocks.\n\nA few questions before I scaffold:\n\n- **Consuming service** — is this consumer going in `account-service` (to update balances), `notification-service` (to send receipts), or a new service?\n- **Event schema** — do you have an existing `PaymentCompleted` event definition (Avro/Protobuf/JSON), or should I define one?\n- **Consumer group** — any naming convention, or should I follow `{service-name}-{topic}`?\n- **Build system** — Gradle with Kotlin DSL? And are you using `spring-kafka` or a lighter client like `kafka-clients` directly with coroutines?\n\nHappy to make reasonable defaults and go if you'd rather not answer all of these.",
+  "timestamp": "2026-05-18T08:32:29Z",
+  "latency_ms": 25289,
+  "exit_code": 0,
+  "output_length_chars": 801,
+  "output_length_tokens_approx": 200,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "engram",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "No `transactions.csv` file exists in the workspace. Could you provide the file path or paste the CSV content?",
+  "timestamp": "2026-05-18T13:25:55Z",
+  "latency_ms": 9693,
+  "exit_code": 0,
+  "output_length_chars": 109,
+  "output_length_tokens_approx": 27,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

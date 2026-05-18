@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "basic-memory",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Created three files:\n\n- **`Dockerfile`** — Multi-stage build on `python:3.11-slim`. Deps installed in a builder stage, only the runtime artifacts are copied to the final image. Runs as non-root `appuser`.\n- **`requirements.txt`** — FastAPI, uvicorn, scikit-learn, joblib, numpy, pydantic.\n- **`app/main.py`** — Loads a joblib model from `model/fraud_model.joblib`, exposes `POST /score` (returns fraud probability + boolean) and `GET /health`.\n\nExpected layout:\n\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py\n└── model/\n    └── fraud_model.joblib   ← your trained sklearn model\n```\n\nBuild and run:\n\n```fish\ndocker build -t fraud-scoring .\ndocker run -p 8000:8000 fraud-scoring\n```\n\nAdjust the `Transaction` fields in `app/main.py` to match whatever features your model was trained on. This fits your existing EKS/ECR pipeline — just push the image to ECR and deploy via ArgoCD like your other services.",
+  "timestamp": "2026-05-18T08:56:11Z",
+  "latency_ms": 30148,
+  "exit_code": 0,
+  "output_length_chars": 923,
+  "output_length_tokens_approx": 230,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

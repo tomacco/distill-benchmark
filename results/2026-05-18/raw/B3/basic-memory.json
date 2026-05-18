@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "basic-memory",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "Given your stack (AWS, Terraform, GitHub Actions), the simplest option is an **S3 bucket + CloudFront**:\n\n1. **S3 static website hosting** — drop HTML/CSS/JS in a bucket, enable static hosting\n2. **CloudFront** in front for HTTPS + caching + custom domain\n3. **Terraform** it since you're already using Terraform for everything\n\nRough setup:\n\n```hcl\nresource \"aws_s3_bucket\" \"marketing\" {\n  bucket = \"helios-marketing-site\"\n}\n\nresource \"aws_s3_bucket_website_configuration\" \"marketing\" {\n  bucket = aws_s3_bucket.marketing.id\n  index_document { suffix = \"index.html\" }\n  error_document { key = \"404.html\" }\n}\n\nresource \"aws_cloudfront_distribution\" \"marketing\" {\n  origin {\n    domain_name = aws_s3_bucket_website_configuration.marketing.website_endpoint\n    origin_id   = \"s3-marketing\"\n    custom_origin_config {\n      http_port              = 80\n      https_port             = 443\n      origin_protocol_policy = \"http-only\"\n      origin_ssl_protocols   = [\"TLSv1.2\"]\n    }\n  }\n  enabled             = true\n  default_root_object = \"index.html\"\n  # ... viewer cert, aliases, etc.\n}\n```\n\n**Deploy**: Add a GitHub Actions step that syncs the folder to S3 and invalidates the CloudFront cache:\n\n```yaml\n- run: aws s3 sync ./site s3://helios-marketing-site --delete\n- run: aws cloudfront create-invalidation --distribution-id $CF_DIST_ID --paths \"/*\"\n```\n\nThis stays inside your existing infra (AWS + Terraform + GH Actions), no new vendors, no new tooling. Costs practically nothing for a marketing site.",
+  "timestamp": "2026-05-18T08:49:56Z",
+  "latency_ms": 16976,
+  "exit_code": 0,
+  "output_length_chars": 1502,
+  "output_length_tokens_approx": 375,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

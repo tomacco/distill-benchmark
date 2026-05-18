@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "basic-memory",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Honest take: the instinct makes sense, but I'd push back slightly.\n\n**In favor of Go:**\n- Kafka consumer + SNS dispatch is genuinely simple — Go's stdlib + a couple of libs handle this well\n- Lower resource footprint on EKS\n- Faster cold starts if you ever need to scale aggressively\n- Matches your \"no over-engineering\" preference\n\n**Against:**\n- Your entire backend is Kotlin. One Go service means a second build pipeline, separate dependency management, different observability patterns (your structured logging + correlation ID setup would need reimplementing)\n- 80 engineers all writing Kotlin — who maintains the Go service when you're busy? Hiring/onboarding friction for one service is hard to justify\n- The \"over-engineered\" feeling is probably the Kotlin boilerplate, not a language problem. A slim Kotlin service with coroutines + `kafka-clients` + AWS SDK can be ~200 lines of actual logic\n\n**My suggestion:** Before rewriting in Go, try stripping the current Kotlin service down first. Remove any framework abstractions that aren't earning their keep (Spring wrappers around what could be plain coroutine consumers, DI where a top-level function works). If it's still painful after that, then the Go rewrite has a stronger case — and you'll have a clearer spec from the simplification pass.\n\nIf you do go the Go route, the operational cost is the real thing to budget for — not the rewrite itself.",
+  "timestamp": "2026-05-18T12:36:43Z",
+  "latency_ms": 19370,
+  "exit_code": 0,
+  "output_length_chars": 1410,
+  "output_length_tokens_approx": 352,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

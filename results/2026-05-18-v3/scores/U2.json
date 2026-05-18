@@ -1,0 +1,75 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Subject line good at 58 chars. Body is the most prose-heavy \u2014 full sentences explaining each action plus a summary sentence ('All traffic now flows through gRPC'). Adequate but over-explains for a senior audience."
+    },
+    "B": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Most concise of all responses. Em dash style is punchy. Body is a single terse clause covering all three removals. No Co-Authored-By (may or may not be desired). Zero filler in framing text."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "No preamble at all \u2014 just the commit block. Subject line is clean and short. Body is one terse sentence. Maximum signal-to-noise ratio."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Clean em dash style in body. Subject line slightly long but under 72 chars. Minimal framing. Solid overall, just marginally more verbose than B or C."
+    },
+    "E": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "The commit itself is fine, but the unsolicited explanation paragraph ('This is concise, uses imperative mood...') is exactly the kind of filler the rubric penalizes. A senior dev doesn't need Git conventions explained."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Body uses two separate sentences where one would suffice. The first sentence ('gRPC migration... is complete.') is a standalone statement that adds little beyond what the subject already says. Trailing blank line in the commit block is a minor sloppiness."
+    },
+    "G": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Subject line at 71 chars \u2014 just under the limit but pushing it. 'for your change' in the framing is mildly hand-holdy. Body is fine but uses 'the old' as filler words."
+    },
+    "H": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Very similar to G but with a shorter, better subject line ('layer' vs 'infrastructure'). Clean framing. Body is one well-constructed sentence. Slight verbosity with 'the old' and 'now that the gRPC migration is complete' but minor."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "D",
+    "H",
+    "A",
+    "G",
+    "F",
+    "E"
+  ],
+  "analysis": "The top performers (B and C) share a commitment to zero-filler output \u2014 B delivers the tersest body with an em dash construction, while C eliminates even the framing text and drops straight into the commit block. D and H form a solid middle tier with clean, conventional commits that are only marginally more verbose. A, G, and F are competent but each adds unnecessary words: A over-explains in the body, G adds 'for your change' in the intro, and F splits the body into two sentences where one suffices. E finishes last despite a perfectly adequate commit message because it appended an unsolicited explanation of Git conventions \u2014 precisely the kind of condescending filler that signals miscalibration to a senior engineer's expertise level.",
+  "label_mapping": {
+    "A": "basic-memory",
+    "B": "claude-mem",
+    "C": "distill",
+    "D": "knowledge-graph",
+    "E": "memory-compiler",
+    "F": "engram",
+    "G": "no-memory",
+    "H": "memory-engine"
+  }
+}

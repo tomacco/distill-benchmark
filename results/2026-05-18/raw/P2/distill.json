@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no auth-service code in the workspace. I need more context:\n\n- Is the auth-service repo elsewhere on disk, or does it need to be cloned?\n- What framework is it using? (Spring Boot, Ktor, plain gRPC?)\n\nIf you point me to the codebase I'll add the endpoint. If this is a new service, tell me the framework and I'll wire it up.",
+  "timestamp": "2026-05-18T08:32:55Z",
+  "latency_ms": 14714,
+  "exit_code": 0,
+  "output_length_chars": 332,
+  "output_length_tokens_approx": 83,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "engram",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given you already have Redis in the stack, use it as your feature flag store. No new infrastructure, no third-party service.\n\n## Approach: Redis-backed feature flags\n\n**1. Flag storage in Redis**\n\n```kotlin\n// FeatureFlags.kt\nobject FeatureFlags {\n    private val redis: RedisCommands<String, String> // your existing client\n\n    fun isEnabled(flag: String, default: Boolean = false): Boolean =\n        redis.get(\"feature:$flag\")?.toBoolean() ?: default\n\n    fun isEnabledForAccount(flag: String, accountId: String): Boolean =\n        redis.sismember(\"feature:$flag:accounts\", accountId)\n}\n```\n\n**2. Usage in the payment flow**\n\n```kotlin\nsuspend fun processPayment(request: PaymentRequest): PaymentResult {\n    if (FeatureFlags.isEnabledForAccount(\"new-payment-flow\", request.accountId)) {\n        return newPaymentService.process(request)\n    }\n    return legacyPaymentService.process(request)\n}\n```\n\n**3. Control via Redis CLI**\n\n```fish\n# Enable for specific accounts (dark launch)\nredis-cli SADD feature:new-payment-flow:accounts \"acct_123\" \"acct_456\"\n\n# Global rollout\nredis-cli SET feature:new-payment-flow true\n\n# Kill switch\nredis-cli DEL feature:new-payment-flow\n```\n\n## Why this over alternatives\n\n- **No new dependencies** — Redis is already there\n- **Instant toggling** — no redeploy, no restart\n- **Account-level granularity** — dark-launch to specific accounts first\n- **Kill switch** — `DEL` the key and it's off immediately\n- PostgreSQL-backed flags would work too but Redis gives you sub-ms reads and no migration\n\nOnce you're past dark launch and the flag is permanent-on, delete the flag check and the legacy path. Don't let flags accumulate — add a `# TODO: remove flag new-payment-flow by Q3` comment at the call site.\n\nIf you later need percentage-based rollouts or more sophisticated targeting, you can extend `isEnabled` to check a rollout percentage against a hash of the account ID. But start with the account set — it's enough for dark launch.",
+  "timestamp": "2026-05-18T09:34:45Z",
+  "latency_ms": 18555,
+  "exit_code": 0,
+  "output_length_chars": 1971,
+  "output_length_tokens_approx": 492,
+  "versions": {
+    "competitor": "0.83.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

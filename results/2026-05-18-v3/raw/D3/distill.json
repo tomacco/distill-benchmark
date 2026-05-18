@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given the stack (Kotlin, gRPC internal / REST external, PostgreSQL, EKS) and that payment processing is next for extraction:\n\n## Simplest approach: micro-deposit verification\n\n**REST endpoint** (external-facing, for merchant onboarding):\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/verify\n```\n\n**Request body:**\n```json\n{\n  \"account_number\": \"...\",\n  \"routing_number\": \"...\",\n  \"micro_deposit_amounts\": [0.32, 0.45]  // merchant confirms the two amounts\n}\n```\n\n**Flow:**\n1. Merchant adds bank account → you initiate two micro-deposits (separate endpoint or part of account creation)\n2. Merchant comes back with the amounts they received → hits this verify endpoint\n3. Endpoint matches amounts against stored values in PostgreSQL, marks account as `VERIFIED`\n\n**Implementation sketch (Kotlin):**\n\n```kotlin\n// payment-service: gRPC internal definition\nservice BankAccountVerification {\n  rpc InitiateMicroDeposits(InitiateRequest) returns (InitiateResponse);\n  rpc VerifyMicroDeposits(VerifyRequest) returns (VerifyResponse);\n}\n\n// REST controller wraps the gRPC calls for external partners\n@PostMapping(\"/v1/merchants/{merchantId}/bank-accounts/verify\")\nsuspend fun verifyBankAccount(\n    @PathVariable merchantId: UUID,\n    @RequestBody req: VerifyRequest\n): ResponseEntity<VerifyResponse> {\n    val result = bankAccountService.verifyMicroDeposits(merchantId, req.amounts)\n    return when (result) {\n        is Verified -> ResponseEntity.ok(VerifyResponse(status = \"VERIFIED\"))\n        is Failed -> ResponseEntity.badRequest().body(VerifyResponse(status = \"FAILED\", attemptsRemaining = result.remaining))\n    }\n}\n```\n\n**Key considerations:**\n- **Flyway migration** for a `bank_account_verifications` table (status, micro-deposit amounts, attempt count)\n- **Cap attempts at 3** — lock the account verification after 3 failures (fraud prevention)\n- **Kafka event** on verification success → `notification-service` can confirm to merchant\n- **gRPC between services** — if `account-service` owns the bank account record, `payment-service` calls it via gRPC to update verification status\n\n**Alternatively**, if you want to skip micro-deposits entirely: integrate with Plaid's Auth product for instant verification. More upfront integration work, but better UX. Depends on whether Sofia's design already picked a path.\n\nWant me to scaffold the service structure or the Flyway migration?",
+  "timestamp": "2026-05-18T11:21:47Z",
+  "latency_ms": 30188,
+  "exit_code": 0,
+  "output_length_chars": 2388,
+  "output_length_tokens_approx": 597,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

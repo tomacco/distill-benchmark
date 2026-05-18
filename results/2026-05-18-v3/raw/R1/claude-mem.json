@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "claude-mem",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given your stack and where you are in the migration, here's what matters for `payment-processing`:\n\n## Data Integrity\n\n- **Idempotency keys** on every mutation endpoint — payments getting processed twice is the worst-case scenario\n- **Transactional outbox pattern** with Kafka — don't publish events unless the DB commit succeeds\n- **PostgreSQL advisory locks** for concurrent payment attempts on the same account\n- PG's `SERIALIZABLE` isolation for balance operations, or explicit `SELECT ... FOR UPDATE`\n\n## Service Design\n\n- **gRPC** internally (consistent with your migration), REST/webhook endpoints only for external PSP callbacks\n- **Kotlin coroutines** for async PSP calls — set aggressive timeouts, circuit breakers (Resilience4j)\n- **State machine** for payment lifecycle (`INITIATED → AUTHORIZED → CAPTURED → SETTLED`, plus `FAILED`, `REFUNDED`, `DISPUTED`) — persist every transition\n- Flyway migrations, same as other services\n\n## Operational\n\n- **Structured logging with correlation IDs** — trace a payment end-to-end across auth-service → account-service → payment-processing → PSP\n- **Dead letter queue** on Kafka for failed payment events — you need manual review, not silent drops\n- **Separate read/write models** if reporting volume is high — don't let reconciliation queries hit the hot path\n- Redis for rate limiting and short-lived idempotency caches\n\n## Compliance / Due Diligence\n\n- PCI DSS scope — **never store raw card data**; tokenize via PSP. Keep this service out of PCI scope if possible\n- Audit log table (append-only) for every state change — you'll want this for Series C due diligence\n- Reconciliation job (pg_cron) to catch drift between your ledger and PSP records\n\n## What to Settle with Sofia Early\n\n1. **PSP choice** — drives the integration surface (Stripe/Adyen/etc.)\n2. **Double-entry ledger vs. simple balance** — double-entry is more work upfront but makes reconciliation and auditing trivial\n3. **Saga vs. orchestration** for multi-step flows (auth → capture → settle) — I'd lean orchestrator given you already have Kafka\n4. **Account-service boundary** — who owns the balance? If account-service, payment-processing calls it via gRPC; if payment-processing owns a ledger, account-service reads from events\n\nWant me to scaffold the service structure, draft the Flyway migrations for the ledger schema, or spec out the gRPC proto definitions?",
+  "timestamp": "2026-05-18T12:31:39Z",
+  "latency_ms": 23389,
+  "exit_code": 0,
+  "output_length_chars": 2387,
+  "output_length_tokens_approx": 596,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

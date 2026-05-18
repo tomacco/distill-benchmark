@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "claude-mem",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the workspace reference `AccountService`. The directory appears to be empty (or only contains the `.claude` config).\n\nSince there's no code here to rename, here's the fastest approach for your actual codebase:\n\n**IntelliJ (recommended for Kotlin):** Place cursor on `AccountService` → **Shift+F6** → type `BankAccountService` → Enter. It handles class name, file name, references, imports, gRPC service definitions, and Flyway references won't auto-update but will be flagged.\n\n**CLI alternative if you prefer:**\n\n```bash\n# 1. Find all occurrences first\nrg 'AccountService' --files-with-matches\n\n# 2. Rename the file\nmv AccountService.kt BankAccountService.kt\n\n# 3. Replace all references\nsed -i 's/AccountService/BankAccountService/g' $(rg -l 'AccountService')\n```\n\n**Watch out for:**\n- **Flyway migrations** — don't rename references in already-applied migrations\n- **gRPC proto files** — if there's an `AccountService` service definition in `.proto`, rename there too and regenerate stubs\n- **Kafka topic names / Redis keys** — if they embed the class name as a string\n- **Kubernetes manifests / Helm charts** — service names in EKS configs\n- **Spring/DI annotations** — `@Qualifier(\"accountService\")` style string refs\n\nWant me to do the rename if you point me at the actual repo?",
+  "timestamp": "2026-05-18T12:30:18Z",
+  "latency_ms": 17906,
+  "exit_code": 0,
+  "output_length_chars": 1296,
+  "output_length_tokens_approx": 324,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

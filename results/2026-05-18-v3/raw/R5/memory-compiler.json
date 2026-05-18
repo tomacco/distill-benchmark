@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "memory-compiler",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Notes on the setup:\n\n- **Multi-stage build** keeps the final image small (no pip cache or build artifacts).\n- **Non-root `appuser`** — standard practice for EKS workloads.\n- **Model loading** — the Dockerfile expects your serialized model (e.g. `model/fraud_model.joblib`) to be either baked in via `COPY model/ model/` or mounted at runtime. Uncomment/adjust the `COPY` line depending on your CI pipeline. If models are large, pulling from S3 at startup is another common pattern.\n- **gRPC note** — per your architecture, internal services use gRPC. If this service will be called by other internal services, you may want to add a gRPC interface alongside FastAPI (which handles external REST). For now this just serves the FastAPI endpoint since that's what you asked for.",
+  "timestamp": "2026-05-18T12:56:36Z",
+  "latency_ms": 30904,
+  "exit_code": 0,
+  "output_length_chars": 774,
+  "output_length_tokens_approx": 193,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

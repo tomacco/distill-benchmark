@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "distill",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL 14, per your profile.",
+  "timestamp": "2026-05-18T08:29:50Z",
+  "latency_ms": 4049,
+  "exit_code": 0,
+  "output_length_chars": 32,
+  "output_length_tokens_approx": 8,
+  "versions": {
+    "competitor": "0.10.0-user-model-v2",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

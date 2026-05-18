@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Key decisions:\n- **`python:3.11-slim`** — small image, broad scikit-learn compatibility\n- **`libgomp1`** — required for scikit-learn's parallel estimators (OpenMP)\n- **Non-root user** — runs as `appuser` for security\n- **`--no-cache-dir`** — keeps image smaller\n- **Layer ordering** — requirements copied first so dependency layer is cached across code changes\n\nAssumes your app entrypoint is at `app/main:app`. Adjust the `CMD` if your layout differs.",
+  "timestamp": "2026-05-18T11:26:26Z",
+  "latency_ms": 18370,
+  "exit_code": 0,
+  "output_length_chars": 452,
+  "output_length_tokens_approx": 113,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

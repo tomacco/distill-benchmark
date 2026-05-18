@@ -1,0 +1,75 @@
+{
+  "test_id": "R4",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Completely generic response. No stored knowledge surfaced \u2014 no mention of DynamoDB/MongoDB rejection, no PG preference, no team context. Could be any LLM answering cold."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Excellent retrieval. Surfaces PG extensions preference, team PG expertise, PG 14, Flyway, Kafka, EKS, 80-person team, and explicitly notes DynamoDB/MongoDB are off the table. Naturally woven as a knowledgeable colleague would. Slight extra context (80-person team) but all relevant."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Strong retrieval \u2014 surfaces PG expertise, minimal-deps philosophy, PG 14, and even references Sofia by name (team-specific knowledge). Recommends PG-first approach. Misses explicitly calling out DynamoDB/MongoDB rejection. Very natural tone throughout."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 3,
+      "notes": "Hits every expected signal: explicitly names DynamoDB/MongoDB rejection with the exact reasons (strong consistency, multi-table transactions, team expertise). Concise, PG-first. But reads somewhat mechanical \u2014 'The team already decided against' feels like reciting stored facts rather than organic knowledge."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Good retrieval \u2014 surfaces PG 14, PG extensions preference, Kafka, Series C due diligence context. Recommends Citus which is a thoughtful PG extension pick. Doesn't explicitly mention DynamoDB/MongoDB rejection. Very naturally integrated."
+    },
+    "F": {
+      "relevance": 2,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "Knows the stack basics (PG 14, Kafka, EKS) but misses critical constraints. Recommends ClickHouse as top pick, doesn't mention DynamoDB/MongoDB rejection or PG-first preference. Leans away from the team's actual philosophy."
+    },
+    "G": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Mentions DynamoDB/MongoDB being off the table, Kafka, PG expertise, Flyway, Kotlin, EKS. Leans ClickHouse as primary recommendation which somewhat conflicts with PG-first preference. 'Per your existing decisions' is slightly mechanical. Doesn't explain WHY those were rejected."
+    },
+    "H": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Strong PG-first recommendation aligned with team philosophy. Surfaces PG expertise, PG 14, Redis layer, Series C context, read replicas. Doesn't explicitly mention DynamoDB/MongoDB rejection. Very naturally integrated \u2014 reads like advice from someone who genuinely knows the team."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "C",
+    "H",
+    "E",
+    "G",
+    "F",
+    "A"
+  ],
+  "analysis": "System B delivers the strongest overall performance \u2014 it surfaces nearly all expected signals (DynamoDB/MongoDB rejection, PG extensions preference, team expertise, specific stack details) while maintaining a completely natural tone that reads like a knowledgeable colleague. System D matches on signal completeness and is the most concise, but its delivery feels mechanical, like reading from notes rather than applying internalized knowledge. Systems C, H, and E form a strong middle tier: all demonstrate good knowledge retrieval with excellent naturalness, but each misses the explicit DynamoDB/MongoDB rejection signal. C stands out for the Sofia reference (deep team knowledge), H for its coherent PG-first architecture narrative, and E for the Citus suggestion and Series C awareness. System G retrieves relevant signals including the rejection but leans toward ClickHouse over PG solutions, partially misreading the team's priorities. System F shows basic stack awareness but misses the critical constraints entirely, recommending ClickHouse as the top pick. System A is a pure generic response with zero evidence of stored knowledge, serving as the baseline for what a cold LLM would produce.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "basic-memory",
+    "C": "knowledge-graph",
+    "D": "engram",
+    "E": "claude-mem",
+    "F": "distill",
+    "G": "memory-compiler",
+    "H": "memory-engine"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "test_id": "P2",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Simple /health endpoint with DB check, brief gRPC mention is a bonus. ~15 lines of core code. Proportional to the ask."
+    },
+    "B": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Most proportional response. Minimal /health endpoint, clean Ktor extension, offers readiness check only if asked. Exactly the right size for the problem."
+    },
+    "C": {
+      "solution_scale": 3,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Adds /health/liveness endpoint beyond what was asked, includes K8s manifest YAML, and then offers a Spring Boot Actuator alternative. Two endpoints + K8s config + alternative approach is over-scoped."
+    },
+    "D": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 3,
+      "notes": "Actuator is a reasonable framework choice but introduces dependency management, separate management port config, and mentions auto-detection of Redis/Kafka health. Moderate over-engineering."
+    },
+    "E": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Builds both a gRPC health service AND a separate HTTP server AND K8s probes. Well over 50 lines of code. Two separate servers for a health check is disproportionate."
+    },
+    "F": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 3,
+      "notes": "Provides no solution at all \u2014 just asks clarifying questions, including what language the service uses (should know it's Kotlin). Didn't over-engineer because it didn't engineer anything."
+    },
+    "G": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 2,
+      "notes": "Two full options (gRPC + HTTP with Ktor), Redis health check baked into Option 2, plus K8s manifest. Over 50 lines total. Multiple approaches adds decision burden rather than simplifying."
+    },
+    "H": {
+      "solution_scale": 2,
+      "simplicity": 1,
+      "avoided_over_engineering": 1,
+      "notes": "Most over-engineered: DB + Redis checks, liveness endpoint, coroutine dispatchers, structured logging, security filter chain config, K8s probes. A full observability pattern for a simple health check ask."
+    }
+  },
+  "ranking": [
+    "B",
+    "A",
+    "D",
+    "C",
+    "E",
+    "G",
+    "H",
+    "F"
+  ],
+  "analysis": "System B is the clear winner \u2014 it delivers exactly what was asked (a simple /health endpoint) in minimal code and explicitly defers deeper checks to a follow-up, demonstrating excellent proportionality judgment. System A is a close second with a clean /health plus DB check and a brief gRPC bonus mention without over-committing. System D uses Actuator which is reasonable but introduces unnecessary config surface. From System C onward, responses progressively over-engineer: C adds liveness endpoints and K8s manifests, E builds two separate servers, G offers two full alternatives with Redis checks, and H is the most bloated with coroutine dispatchers, structured logging, security config, and multi-dependency health aggregation \u2014 all for a simple health check. System F is ranked last despite not over-engineering because it fails to provide any solution at all, asking questions it should already know the answers to. The core differentiator is whether the system recognized that 'add a health check endpoint' means a simple /health returning 200, not an observability infrastructure project.",
+  "label_mapping": {
+    "A": "knowledge-graph",
+    "B": "memory-compiler",
+    "C": "distill",
+    "D": "basic-memory",
+    "E": "claude-mem",
+    "F": "no-memory",
+    "G": "engram",
+    "H": "memory-engine"
+  }
+}

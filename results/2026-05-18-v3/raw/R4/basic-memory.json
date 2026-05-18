@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "basic-memory",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and preferences, I'd look at **PostgreSQL-based options first** before adding new infrastructure:\n\n**1. TimescaleDB (PG extension) — top recommendation**\n- Runs as a PostgreSQL extension, so no new infra to operate\n- Hypertables give you automatic time-based partitioning\n- Continuous aggregates for pre-computed rollups (fast dashboards)\n- Your team already has deep PG expertise\n- Compression gets 90%+ reduction on analytics data\n\n**2. ClickHouse — if PG doesn't scale far enough**\n- Column-oriented, purpose-built for analytical queries\n- Sub-second reads on billions of rows\n- Good Kafka integration (you already have Kafka)\n- Tradeoff: new system to operate and learn\n\n**3. Citus (PG extension) — if you need distributed PG**\n- Shards PostgreSQL across nodes\n- Keeps full SQL compatibility\n- Good for multi-tenant analytics patterns (fits your small business banking model)\n\n**My recommendation: start with TimescaleDB.** It aligns with your preference for PG extensions over new infra, your team knows Postgres, and you can always add ClickHouse later if you hit scale limits. A common pattern is Kafka -> TimescaleDB with continuous aggregates serving the read-heavy dashboards.\n\nWant me to sketch out a schema or spike the TimescaleDB setup?",
+  "timestamp": "2026-05-18T12:44:11Z",
+  "latency_ms": 19404,
+  "exit_code": 0,
+  "output_length_chars": 1267,
+  "output_length_tokens_approx": 316,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

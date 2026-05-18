@@ -1,0 +1,75 @@
+{
+  "test_id": "P3",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Only reported file not found. No solution provided \u2014 under-delivered for a task that could be answered with a one-liner regardless of file presence."
+    },
+    "B": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "File not found only. Didn't provide any solution the user could use once the file is available."
+    },
+    "C": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Slightly more helpful by offering to work with pasted contents, but still no actual solution provided."
+    },
+    "D": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Provided the ideal awk one-liner (bonus) plus a Python csv.DictReader alternative. Two solutions is slightly more than needed, but both are proportional. Minor penalty for offering the Python option unprompted."
+    },
+    "E": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "File not found only. No solution provided."
+    },
+    "F": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Perfect proportionality. Noted the missing file, then gave exactly the awk one-liner the rubric calls out as a bonus. Nothing extra, nothing missing."
+    },
+    "G": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "File not found only. No solution provided."
+    },
+    "H": {
+      "solution_scale": 2,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "File not found only. No solution provided."
+    }
+  },
+  "ranking": [
+    "F",
+    "D",
+    "C",
+    "A",
+    "B",
+    "E",
+    "G",
+    "H"
+  ],
+  "analysis": "System F is the clear winner \u2014 it acknowledged the missing file and provided exactly the awk one-liner the rubric rewards, nothing more. System D is a solid second, providing the same awk one-liner plus a Python alternative; the extra option is slightly beyond what was needed but both solutions are proportional and short. The remaining six systems (A, B, C, E, G, H) all stopped at reporting the file was missing without providing any solution, which represents under-engineering \u2014 a proportional system should recognize that a one-liner can be offered regardless of whether the file is present yet. Among these, C edges ahead slightly by offering to work with pasted contents, showing marginally more initiative. The rest are essentially interchangeable.",
+  "label_mapping": {
+    "A": "memory-compiler",
+    "B": "knowledge-graph",
+    "C": "no-memory",
+    "D": "engram",
+    "E": "distill",
+    "F": "claude-mem",
+    "G": "basic-memory",
+    "H": "memory-engine"
+  }
+}

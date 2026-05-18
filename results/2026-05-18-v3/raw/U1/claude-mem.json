@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "claude-mem",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "## Service Mesh — How It Works\n\nA service mesh inserts a **sidecar proxy** (e.g., Envoy) next to every pod. All traffic flows through the proxy transparently. The mesh handles:\n\n1. **mTLS** — automatic cert issuance/rotation, encrypted pod-to-pod traffic\n2. **AuthZ policies** — L7 rules (e.g., \"only payment-service can call account-service's `/transfer` endpoint\")\n3. **Observability** — request-level metrics, distributed tracing, access logs — free\n4. **Traffic management** — retries, circuit breaking, canary routing\n\nThe control plane (Istiod in Istio's case) pushes config to all sidecar proxies. Your app code doesn't change.\n\n## Do You Need Istio Specifically?\n\nFor your situation — 4 services on EKS, gRPC internal, payment-processing coming next — here's the honest breakdown:\n\n**Arguments for Istio:**\n- mTLS between payment-service ↔ account-service with zero app code changes\n- AuthZ policies declarative in YAML, auditable (good for Series C due diligence)\n- You get observability across gRPC calls for free (Envoy natively speaks gRPC)\n- As you decompose further, the cost of adding mesh pays off more\n\n**Arguments against (right now):**\n- Istio is **heavy operational overhead** for 4 services. Sidecar memory/CPU tax, upgrade pain, debugging proxy issues\n- You're already on gRPC — you can do mTLS at the gRPC layer with cert-manager + SPIFFE directly\n- AuthZ can live in a gRPC interceptor (Kotlin coroutine-friendly) with JWT or shared CA validation\n\n## Lighter Alternatives Worth Evaluating\n\n| Option | mTLS | AuthZ | Overhead | Complexity |\n|---|---|---|---|---|\n| **Istio** | auto | L7 policies | high (sidecar per pod) | high |\n| **Linkerd** | auto | basic policies | much lower | medium |\n| **gRPC-native mTLS + interceptor** | manual certs (cert-manager) | code-level | zero sidecar tax | low |\n| **AWS App Mesh** | auto (Envoy) | basic | medium | medium (but AWS-managed) |\n\n## My Take Given Your Context\n\nAt 4 services on EKS with gRPC already in place:\n\n1. **Short term** — gRPC-native mTLS with cert-manager + a shared Kotlin interceptor for authz. Sofia probably has opinions here since she architected the gRPC setup. Minimal new infra, auditable, no sidecar tax.\n\n2. **If you hit 8-10+ services** — revisit Linkerd (not Istio). It's dramatically simpler, Rust-based proxies are lighter, and it handles mTLS/observability without the config sprawl. Istio is overkill until you need its advanced traffic management.\n\n3. **For due diligence** — what matters is \"we have mutual authentication and encrypted transport between services, with auditable access policies.\" gRPC mTLS + interceptor achieves that. A mesh is a nice story but auditors care about the outcome, not the tool.\n\nWant me to sketch out the gRPC interceptor approach in Kotlin, or a cert-manager setup for mTLS on EKS?",
+  "timestamp": "2026-05-18T12:33:17Z",
+  "latency_ms": 27698,
+  "exit_code": 0,
+  "output_length_chars": 2815,
+  "output_length_tokens_approx": 703,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

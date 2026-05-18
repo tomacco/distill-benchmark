@@ -1,0 +1,75 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Best calibrated. Skips basics entirely, gives direct 'Skip Istio now' recommendation. References Sofia by name, the auth-service rewrite, Series C, Kotlin interceptor pattern in auth-common module. Even estimates effort ('half-day task'). Code example is practical and concise. ASCII diagram adds clarity without being tutorial-level."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Good senior-level response with both Kotlin and YAML code examples. Direct recommendation. References team of ~80 engineers, Series C, specific services. But less personalized than top responses \u2014 doesn't mention Sofia or team-specific patterns. The cert-manager mTLS approach is slightly different from A's interceptor approach."
+    },
+    "C": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Most generic response. 'It depends on what problem you're solving' is the exact hedging the rubric penalizes. Comparison table is useful but textbook-like. No code examples. No reference to specific team members, Series C, or team preferences. Feels like a generic senior answer, not a personalized one."
+    },
+    "D": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Opens with 'Good context' which is direct. References auth-service, payment still in monolith, EKS, gRPC. The compliance/fintech audit caveat is a strong contextual addition. Table format is concise. No code example but well-structured. References Series C due diligence."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "References Sofia by name, Series C, ~80 engineers, Kotlin code. Good code example using cert-based identity extraction. Slightly more verbose than necessary \u2014 the mesh explanation section is longer than it needs to be for a senior audience. Mentions AWS App Mesh as an alternative which shows awareness of their EKS stack."
+    },
+    "F": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Good technical content but ends with 'Want me to sketch out...' which is filler. References auth-service, OAuth2/JWT, EKS, Sofia, PCI. Short/medium term framing is useful. But the mesh explanation section is slightly tutorial-ish and the overall response is more verbose than the top performers."
+    },
+    "G": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Opens with 'Here's how a Kubernetes service mesh works' \u2014 slightly tutorial framing. The traffic flow diagram is basic. References Sofia, EKS, gRPC, ~80 engineers. Ends with 'If you want, I can look into...' which is unnecessary padding. Recommends Linkerd/ambient mode which is reasonable but less decisive than 'skip it for now'."
+    },
+    "H": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Very direct and opinionated. 'You Probably Don't Need Istio' header sets the tone. TL;DR at end is excellent style matching. References 'minimal dependencies \u2014 aligns with your team preferences', Series C timeline, specific service count. Good Kotlin interceptor code. Doesn't reference Sofia by name, slightly less personalized than A."
+    }
+  },
+  "ranking": [
+    "A",
+    "H",
+    "D",
+    "E",
+    "B",
+    "F",
+    "G",
+    "C"
+  ],
+  "analysis": "System A is the clear winner \u2014 it demonstrates the strongest user model with references to Sofia by name, the auth-service rewrite context, Series C implications, and even effort estimates ('half-day task'). It's maximally concise and opinionated ('Skip Istio now'). System H is a close second with excellent directness and a TL;DR summary, but lacks the personal touches like naming team members. Systems D and E form a solid middle tier \u2014 both reference specific context and give direct recommendations, with D being more concise and E slightly more verbose but including Sofia. System B is technically competent with good code examples but feels less personalized. Systems F and G both suffer from slight tutorial framing and end with unnecessary 'want me to...' questions. System C is the weakest \u2014 it hedges with 'it depends', provides no code, and shows no awareness of the user's specific team context, preferences, or constraints. The key differentiator across all systems is the degree to which they demonstrate knowledge of the user's specific situation versus giving a generic (if technically correct) senior-level answer.",
+  "label_mapping": {
+    "A": "claude-mem",
+    "B": "engram",
+    "C": "no-memory",
+    "D": "distill",
+    "E": "knowledge-graph",
+    "F": "memory-compiler",
+    "G": "basic-memory",
+    "H": "memory-engine"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "claude-mem",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "No `transactions.csv` file exists in the workspace. Can you provide the file path or drop it into `/private/tmp/benchmark-workspace-IusBvwlt/`?\n\nOnce it's there, a quick one-liner:\n\n```bash\nawk -F',' 'NR>1 {sum+=$3} END {print sum}' transactions.csv\n```",
+  "timestamp": "2026-05-18T08:43:46Z",
+  "latency_ms": 13566,
+  "exit_code": 0,
+  "output_length_chars": 253,
+  "output_length_tokens_approx": 63,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

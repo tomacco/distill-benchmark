@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "memory-compiler",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Here's my honest take — I'd push back on this one.\n\n**The case for Go is real but thin here.** Yes, a Kafka consumer → SNS dispatcher is conceptually simple, and Go would give you a smaller binary, lower memory footprint, and fast startup. That's appealing.\n\n**But the costs outweigh that:**\n\n- **Your entire backend is Kotlin.** Auth-service, account-service, notification-service, and the upcoming payment service are all Kotlin. Introducing Go means a second language in the stack for a team of ~80 engineers. That's a second set of libraries, build tooling, CI templates, observability patterns, and on-call knowledge.\n\n- **You already have solved problems in Kotlin.** Structured logging with correlation IDs, gRPC for internal APIs, Kotlin coroutines — all of these are team decisions that are baked into your Kotlin services. A Go rewrite means re-solving all of that from scratch.\n\n- **The notification service is already in production and working.** Rewriting a working production service to save some boilerplate is high risk for low reward, especially when the payment service extraction is the active priority.\n\n- **\"Over-engineered\" has a cheaper fix.** If the Kotlin service has too many abstractions, simplify *within* Kotlin. Strip unnecessary layers, flatten the architecture. That's a day of work, not a multi-week rewrite + migration.\n\n**When I'd change my mind:** If you were spinning up a genuinely new, isolated service (say, a lightweight sidecar or a CLI tool) and wanted to try Go, that's a much safer place to experiment. But rewriting a production service that already works isn't the right moment.\n\nThe higher-leverage move right now is probably helping Sofia land the payment service extraction cleanly in Kotlin, not opening a second language front.",
+  "timestamp": "2026-05-18T12:48:41Z",
+  "latency_ms": 23158,
+  "exit_code": 0,
+  "output_length_chars": 1779,
+  "output_length_tokens_approx": 444,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

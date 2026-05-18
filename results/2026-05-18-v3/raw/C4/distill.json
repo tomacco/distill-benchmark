@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your stack and existing decisions:\n\n- **Use structured logging** — this is already an adopted standard across Helios services (with correlation IDs)\n- **Library**: [kotlin-logging](https://github.com/oshai/kotlin-logging) (Kotlin idiomatic wrapper) backed by **Logback** + **logstash-logback-encoder** for JSON output\n- **Format**: JSON structured logs — required for correlation ID propagation across your Kafka-based event streams\n- **Ship to**: CloudWatch (you're on EKS) or an ELK/OpenSearch stack if that's what the other services use\n\nMinimal setup:\n\n```kotlin\n// build.gradle.kts\nimplementation(\"io.github.oshai:kotlin-logging-jvm:5.1.0\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```kotlin\n// In your service\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"Payment processed\" } // simple\nlogger.withLoggingContext(\"correlationId\" to correlationId) {\n    logger.info { \"Payment initiated for account=$accountId amount=$amount\" }\n}\n```\n\nKey things for a **payment service** specifically:\n- **Always log correlation IDs** — matches your existing pattern\n- **Never log full card numbers / PII** — mask in a logging filter\n- **Log payment state transitions** (initiated → processing → completed/failed) at INFO level\n- **Log upstream gateway responses** at DEBUG with response codes at INFO\n\nWant me to scaffold the logging config (`logback-spring.xml`) with correlation ID + PII masking?",
+  "timestamp": "2026-05-18T11:20:45Z",
+  "latency_ms": 24302,
+  "exit_code": 0,
+  "output_length_chars": 1444,
+  "output_length_tokens_approx": 361,
+  "versions": {
+    "competitor": "0.10.0-user-model-v3",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

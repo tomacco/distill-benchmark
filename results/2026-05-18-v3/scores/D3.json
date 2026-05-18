@@ -1,0 +1,75 @@
+{
+  "test_id": "D3",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Hits all signals: Kotlin, gRPC to account-service, REST external, coroutines (not RxJava), Kafka events, Flyway, Sofia reference. Proportional \u2014 complete but not over-engineered. Natural integration of knowledge, zero corrections needed."
+    },
+    "B": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Knows the stack well \u2014 Kotlin, gRPC internal, REST external, EKS, Sofia. Slightly less polished implementation (mixed gRPC service definition with REST controller feels confused). Plaid alternative is nice but adds length. ~0-1 corrections needed."
+    },
+    "C": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Kotlin and gRPC present but introduces auth-service (not in expected context). Provider abstraction is slightly over-engineered for 'keep it simple' preference. 'What to skip' section is good. ~1 correction needed (auth-service reference unclear, no account-service gRPC call shown clearly)."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 3,
+      "helpfulness": 4,
+      "notes": "Leads with gRPC as primary endpoint, REST as secondary \u2014 inverts the expected pattern (REST external, gRPC internal). Doesn't clearly reference account-service as existing. Good security (hashing), mentions Sofia. But orientation is off. ~2 corrections needed."
+    },
+    "E": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Excellent knowledge integration: Kotlin, gRPC to account-service (explicit client), REST external, coroutines (explicitly 'no RxJava per your team's decision'), PostgreSQL. Concise and proportional. Zero corrections needed. Clean implementation."
+    },
+    "F": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Knows the full stack \u2014 gRPC to account-service, REST external, Kotlin coroutines, Kafka event, Flyway. Slightly verbose with the inline micro-deposit generation logic. Good but not as clean as A or E. ~0 corrections needed."
+    },
+    "G": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Leads with gRPC and explicitly says 'No REST wrapper yet' \u2014 wrong for a merchant-facing endpoint that should be REST external. account-service barely mentioned. Hashing is good. Missing key context about REST/gRPC split and existing services. ~2 corrections needed."
+    },
+    "H": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Comprehensive \u2014 gRPC to account-service, Kotlin, Kafka, Flyway, hashing, partial index. Knows Sofia, mentions PCI hygiene. But overly detailed for 'keep it simple' preference \u2014 the response is the longest and least proportional. ~0 corrections needed but violates conciseness signal."
+    }
+  },
+  "ranking": [
+    "A",
+    "E",
+    "F",
+    "B",
+    "H",
+    "C",
+    "D",
+    "G"
+  ],
+  "analysis": "Systems A and E are the clear top performers \u2014 both integrate all expected knowledge (Kotlin, gRPC to account-service, REST external, coroutines over RxJava, PostgreSQL/Flyway) naturally and proportionally, requiring zero user corrections. A edges ahead with slightly more complete architecture (Kafka events, DB-level constraints, two-phase verify/confirm flow) while staying clean. E matches on knowledge integration and is notably concise with an explicit 'no RxJava' callout showing deep team context. F and B form a solid second tier \u2014 both know the stack well but are slightly less polished in presentation. H knows everything but is disproportionately verbose for a 'keep it simple' user preference. C is competent but introduces an unexpected auth-service and doesn't clearly demonstrate account-service knowledge. D and G both mishandle the REST/gRPC orientation \u2014 D makes gRPC primary with REST as afterthought, and G explicitly defers REST, which would both trigger immediate user corrections. The key differentiator across all systems is whether they naturally knew the REST-external/gRPC-internal split and the existence of account-service, which separates the knowledge-rich responses (A, E, F, B, H) from the more generic ones (C, D, G).",
+  "label_mapping": {
+    "A": "memory-engine",
+    "B": "distill",
+    "C": "no-memory",
+    "D": "claude-mem",
+    "E": "memory-compiler",
+    "F": "basic-memory",
+    "G": "engram",
+    "H": "knowledge-graph"
+  }
+}

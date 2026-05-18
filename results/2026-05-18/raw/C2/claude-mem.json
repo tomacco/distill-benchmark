@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "claude-mem",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is off the table — your team already evaluated and rejected it due to strong consistency and multi-table transaction requirements.\n\nFor sub-millisecond key-value reads, **Redis** is the better fit here and it's already in your stack. You can use it as the session store directly:\n\n- Sub-millisecond reads on simple lookups — Redis excels at this\n- Built-in TTL for session expiry\n- You already operate it, so no new infra to manage\n- If you need durability, back it with PostgreSQL as the source of truth\n\nIf the concern is Redis availability, AWS ElastiCache with Multi-AZ gives you replication and automatic failover on EKS without adding a new dependency.",
+  "timestamp": "2026-05-18T08:40:00Z",
+  "latency_ms": 9215,
+  "exit_code": 0,
+  "output_length_chars": 667,
+  "output_length_tokens_approx": 166,
+  "versions": {
+    "competitor": "v13",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

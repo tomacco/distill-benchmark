@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "memory-compiler",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and the critical constraints on record, here are the best options for the analytics service:\n\n**Top recommendation: ClickHouse**\n- Purpose-built for analytical (OLAP) queries on large datasets\n- Columnar storage gives excellent read performance on aggregations\n- Handles billions of rows with sub-second query times\n- You can ingest from Kafka directly, which fits your existing messaging layer\n- Runs well on AWS (EKS-compatible or ClickHouse Cloud)\n\n**Alternative: TimescaleDB**\n- Extension on top of PostgreSQL — your team already has strong Postgres expertise\n- Great for time-series analytics (common in fintech reporting)\n- Familiar SQL interface, works with Flyway for migrations\n- Lower operational overhead since it's \"just Postgres\" under the hood\n\n**Keep in mind:**\n- Both integrate well with your Kotlin backend via standard JDBC drivers\n- Per your existing decisions, DynamoDB and MongoDB are off the table\n- You could also keep PostgreSQL 14 with materialized views and partitioning if the dataset isn't massive yet, deferring a specialized store until you outgrow it\n\nFor a fintech analytics service where you need fast reads on large datasets, I'd lean toward **ClickHouse** for raw analytical power or **TimescaleDB** if minimizing operational complexity and leveraging team Postgres expertise is the priority. Want me to dig into either option further or sketch out an integration with your Kafka pipeline?",
+  "timestamp": "2026-05-18T09:06:27Z",
+  "latency_ms": 18720,
+  "exit_code": 0,
+  "output_length_chars": 1441,
+  "output_length_tokens_approx": 360,
+  "versions": {
+    "competitor": "0.1.0",
+    "claude": "2.1.109 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}
