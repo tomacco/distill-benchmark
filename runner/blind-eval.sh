@@ -14,7 +14,8 @@ set -euo pipefail
 PROJ_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUNNER_DIR="$PROJ_ROOT/runner"
 
-CLAUDE_BIN="node /opt/homebrew/opt/claude-code-npm/libexec/lib/node_modules/@anthropic-ai/claude-code/cli.js"
+CLAUDE_BIN="${CLAUDE_BIN:-node /opt/homebrew/opt/claude-code-npm/libexec/lib/node_modules/@anthropic-ai/claude-code/cli.js}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 
 # Colors
 RED='\033[0;31m'
@@ -71,4 +72,4 @@ mkdir -p "$SCORES_DIR"
 
 # Delegate to Python worker (avoids bash 3 limitations with associative arrays)
 export PROJ_ROOT RAW_DIR SCORES_DIR FILTER_TEST CLAUDE_BIN
-python3 "$RUNNER_DIR/blind_eval_worker.py"
+$PYTHON_BIN "$RUNNER_DIR/blind_eval_worker.py"

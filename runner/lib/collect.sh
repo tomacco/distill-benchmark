@@ -5,7 +5,8 @@
 
 set -euo pipefail
 
-CLAUDE_BIN="node /opt/homebrew/opt/claude-code-npm/libexec/lib/node_modules/@anthropic-ai/claude-code/cli.js"
+CLAUDE_BIN="${CLAUDE_BIN:-node /opt/homebrew/opt/claude-code-npm/libexec/lib/node_modules/@anthropic-ai/claude-code/cli.js}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
 TIMEOUT_SECONDS=120
 
 # Detect Claude Code version (cached)
@@ -39,8 +40,12 @@ collect_run() {
     if [ -n "$system_prompt_file" ] && [ -f "$system_prompt_file" ]; then
         cmd_args+=(--append-system-prompt-file "$system_prompt_file")
     fi
+    # Optional model pin for within-run consistency (e.g. BENCH_MODEL=sonnet)
+    if [ -n "${BENCH_MODEL:-}" ]; then
+        cmd_args+=(--model "$BENCH_MODEL")
+    fi
 
-    start_time=$(python3 -c 'import time; print(int(time.time()*1000))')
+    start_time=$($PYTHON_BIN -c 'import time; print(int(time.time()*1000))')
 
     # Run with isolation env vars and timeout
     (
@@ -63,7 +68,7 @@ collect_run() {
     kill "$wd" 2>/dev/null || true
     wait "$wd" 2>/dev/null || true
 
-    end_time=$(python3 -c 'import time; print(int(time.time()*1000))')
+    end_time=$($PYTHON_BIN -c 'import time; print(int(time.time()*1000))')
     latency_ms=$((end_time - start_time))
 
     # Read output

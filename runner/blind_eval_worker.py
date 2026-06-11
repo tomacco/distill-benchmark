@@ -67,6 +67,9 @@ def get_expected_signals(test_id):
 def run_eval(prompt):
     """Run Claude with an evaluation prompt and return output."""
     cmd = CLAUDE_BIN.split() + ["--dangerously-skip-permissions", "-p", prompt]
+    eval_model = os.environ.get("EVAL_MODEL", "")
+    if eval_model:
+        cmd += ["--model", eval_model]
     try:
         result = subprocess.run(
             cmd,
