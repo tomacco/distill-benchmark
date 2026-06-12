@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Payment processing is already planned for extraction from your monolith. Given Helios Financial's stack and fintech context, here's what matters most:\n\n**Data / Correctness**\n- Use PostgreSQL with ACID transactions — essential for payment state machines (idempotency keys, debit/credit pairs). No NoSQL here.\n- Design for idempotency at the API layer from day one — retries will happen.\n- Use Flyway for migrations (already your standard).\n\n**Architecture Fit**\n- Internal API: gRPC (your standard post-migration), with OpenAPI REST for any external payment partner integrations.\n- Publish payment events to Kafka (`payment.initiated`, `payment.settled`, `payment.failed`) — `account-service` and `notification-service` will need to consume them.\n- Correlation IDs for structured logging (your existing standard).\n\n**Compliance & Security**\n- PCI-DSS scope — clarify early whether you're storing card data or tokenizing via a provider (Stripe, Adyen, etc.). Tokenizing dramatically reduces compliance burden.\n- Audit log table for every state transition — immutable, append-only.\n- Secrets management: AWS Secrets Manager or Parameter Store for API keys; do not put payment provider credentials in env vars or config files.\n\n**Reliability**\n- Outbox pattern for Kafka publishing (prevents lost events if the DB commits but the broker publish fails).\n- Idempotent consumers on the Kafka side too.\n- Dead-letter queue for failed payment events.\n\n**Key decision to nail first**: Are you building the payment rails in-house (unlikely at Series B) or wrapping a payment provider (Stripe/Adyen)? That determines 80% of the design. If wrapping a provider, the service is mostly a thin orchestration layer with strong state tracking.",
+  "timestamp": "2026-06-12T23:14:28Z",
+  "latency_ms": 24760,
+  "exit_code": 0,
+  "output_length_chars": 1735,
+  "output_length_tokens_approx": 433,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

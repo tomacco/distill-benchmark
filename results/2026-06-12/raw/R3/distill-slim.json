@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill-slim",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "What sections does the settings page need? (e.g. user profile, notifications, security, API keys) And should I include actual API fetch calls with loading/error states, or just the UI scaffold for Dev to wire up?",
+  "timestamp": "2026-06-12T23:15:22Z",
+  "latency_ms": 30658,
+  "exit_code": 0,
+  "output_length_chars": 212,
+  "output_length_tokens_approx": 53,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

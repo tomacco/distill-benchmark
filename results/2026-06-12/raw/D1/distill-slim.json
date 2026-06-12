@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "distill-slim",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Created `containers.sh`. Run it with `bash containers.sh` or `chmod +x containers.sh && ./containers.sh`.\n\nThe one-liner `docker ps --format \"table {{.Names}}\\t{{.Ports}}\\t{{.Status}}\"` works just as well if you don't need a file.",
+  "timestamp": "2026-06-12T23:11:06Z",
+  "latency_ms": 8335,
+  "exit_code": 0,
+  "output_length_chars": 230,
+  "output_length_tokens_approx": 57,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

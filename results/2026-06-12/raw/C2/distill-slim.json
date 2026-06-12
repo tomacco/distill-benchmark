@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB has already been evaluated and rejected for this stack — the decision is in the knowledge base. The reasons: financial data requires strong consistency and multi-table transactions, and team expertise is PostgreSQL.\n\nFor sub-millisecond key-value session reads, **Redis** is the standard fit — purpose-built for it, and doesn't conflict with any recorded constraints. You'd keep PostgreSQL as the source of truth and use Redis purely as the session cache.\n\nWant me to check `knowledge/decisions.md` for any Redis-specific notes before going further?",
+  "timestamp": "2026-06-12T23:10:17Z",
+  "latency_ms": 9793,
+  "exit_code": 0,
+  "output_length_chars": 562,
+  "output_length_tokens_approx": 140,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

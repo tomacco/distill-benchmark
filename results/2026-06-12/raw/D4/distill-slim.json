@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill-slim",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Three files created, one for the test:\n\n**`PaymentCompletedEvent`** — plain data class with `correlationId` for log tracing.\n\n**`PaymentCompletedConsumer`** — `@KafkaListener` with manual ack. Sets MDC (`correlationId`, `paymentId`) before delegating, clears after. Re-throws on failure so Spring Kafka's configured error handler / DLQ policy kicks in. Uses `runBlocking` to bridge into the coroutine world.\n\n**`PaymentCompletedHandler`** — `suspend fun` where your actual business logic lives. Separated from the listener so the handler is easy to test in isolation.\n\n**`PaymentCompletedConsumerIntegrationTest`** — uses `@EmbeddedKafka` (no mocks), publishes a real event, asserts side-effects.\n\nA couple of things you'll need to wire up in `application.yml`:\n\n```yaml\nkafka:\n  consumer:\n    group-id: payment-service\n  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}\n```\n\nAnd in your `KafkaConsumerConfig`, make sure you're using `MANUAL_IMMEDIATE` ack mode and a deserializer that handles `PaymentCompletedEvent` (e.g. `JsonDeserializer` from `spring-kafka`). Let me know if you want that config written out too.",
+  "timestamp": "2026-06-12T23:12:53Z",
+  "latency_ms": 59397,
+  "exit_code": 0,
+  "output_length_chars": 1137,
+  "output_length_tokens_approx": 284,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your preference for minimal dependencies and existing PostgreSQL + Redis, the simplest approach is a database-backed flag — no new service needed.\n\n**A `feature_flags` table:**\n\n```sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    rollout_pct SMALLINT NOT NULL DEFAULT 0  -- 0-100, for gradual rollout\n);\n\nINSERT INTO feature_flags VALUES ('new_payment_flow', false, 0);\n```\n\n**Kotlin lookup (cached in Redis, ~1s TTL):**\n\n```kotlin\n@Service\nclass FeatureFlagService(\n    private val jdbc: NamedParameterJdbcTemplate,\n    private val redis: StringRedisTemplate\n) {\n    fun isEnabled(flag: String, accountId: String? = null): Boolean {\n        val cached = redis.opsForValue().get(\"ff:$flag\")\n        val (enabled, pct) = if (cached != null) {\n            cached.split(\",\").let { it[0].toBoolean() to it[1].toInt() }\n        } else {\n            jdbc.queryForMap(\"SELECT enabled, rollout_pct FROM feature_flags WHERE name = :name\", mapOf(\"name\" to flag))\n                .let { (it[\"enabled\"] as Boolean) to (it[\"rollout_pct\"] as Int) }\n                .also { (e, p) -> redis.opsForValue().set(\"ff:$flag\", \"$e,$p\", 1, TimeUnit.SECONDS) }\n        }\n        if (!enabled) return false\n        if (pct >= 100) return true\n        return accountId != null && (accountId.hashCode().absoluteValue % 100) < pct\n    }\n}\n```\n\n**Usage in payment flow:**\n\n```kotlin\nif (featureFlagService.isEnabled(\"new_payment_flow\", accountId)) {\n    // new path\n} else {\n    // existing path\n}\n```\n\n**Dark-launch sequence:**\n1. Deploy with `enabled=false` — flag exists, nothing runs\n2. Set `rollout_pct=1` + `enabled=true` to test on ~1% of accounts\n3. Ramp `rollout_pct` as confidence grows; set `100` to fully cut over\n\n**Main tradeoff:** This is intentionally bare-bones — no UI, no audit log, no per-user overrides beyond the percentage hash. If you later need targeting rules or a kill-switch UI, [Unleash](https://www.getunleash.io/) (self-hosted) adds that without a SaaS dependency, but you'd know when you need it.",
+  "timestamp": "2026-06-12T23:14:02Z",
+  "latency_ms": 24826,
+  "exit_code": 0,
+  "output_length_chars": 2081,
+  "output_length_tokens_approx": 520,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

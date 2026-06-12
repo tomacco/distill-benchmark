@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "distill-slim",
+  "prompt": "What database do we use for the account service?",
+  "output": "My knowledge base says the team uses PostgreSQL 14 for the account service. However, earlier in this conversation you mentioned completing a migration to MySQL last week — that conflicts with what's stored.\n\nIf the migration is confirmed, the knowledge base needs updating. Want me to update `knowledge/` to reflect the MySQL switch?",
+  "timestamp": "2026-06-12T23:10:27Z",
+  "latency_ms": 8290,
+  "exit_code": 0,
+  "output_length_chars": 335,
+  "output_length_tokens_approx": 83,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

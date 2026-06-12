@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill-slim",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what the Dockerfile does and what it expects:\n\n**Structure**\n```\nproject/\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py        # FastAPI app with /predict and /health endpoints\n└── models/\n    └── fraud_model.pkl\n```\n\n**Key decisions:**\n- **Multi-stage build** — builder installs deps, final image is clean slim; shaves ~200–400 MB off the image\n- **Non-root user** (`app`) — avoids running as root in production\n- **`uv` for installs** — significantly faster than plain pip in the builder stage\n- **`MODEL_PATH` env var** — lets you swap the model file at runtime without rebuilding (`-e MODEL_PATH=/mnt/models/v2.pkl`)\n- **1 worker** — scikit-learn models are not thread-safe when loaded multiple times; keep 1 worker and scale via replicas (Kubernetes HPA, ECS tasks, etc.) rather than forking\n\n**Minimal `requirements.txt`:**\n```\nfastapi>=0.111\nuvicorn[standard]>=0.30\nscikit-learn>=1.5\njoblib>=1.4\nnumpy>=1.26\n```\n\n**Build & run:**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8080:8080 -v ./models:/app/models fraud-scorer\n```\n\nIf you want, I can also generate the `app/main.py` with the model loading and `/predict` endpoint.",
+  "timestamp": "2026-06-12T23:16:10Z",
+  "latency_ms": 20465,
+  "exit_code": 0,
+  "output_length_chars": 1212,
+  "output_length_tokens_approx": 303,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

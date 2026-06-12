@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill-slim",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already standardized on **structured logging with correlation IDs** across all services. Match that pattern:\n\n**Stack for the payment service (Kotlin):**\n- **`kotlin-logging`** — idiomatic SLF4J wrapper for Kotlin\n- **`logback`** — implementation (standard, no surprises)\n- **`logstash-logback-encoder`** — structured JSON output (required for EKS → CloudWatch/aggregator)\n- **MDC** — for correlation IDs (consistent with other services)\n\n`build.gradle.kts`:\n```kotlin\nimplementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n`logback.xml`:\n```xml\n<configuration>\n  <appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n  </appender>\n  <root level=\"INFO\">\n    <appender-ref ref=\"JSON\"/>\n  </root>\n</configuration>\n```\n\nUsage with correlation IDs (match existing services):\n```kotlin\nimport mu.KotlinLogging\nimport org.slf4j.MDC\n\nprivate val log = KotlinLogging.logger {}\n\nfun processPayment(paymentId: String, correlationId: String) {\n    MDC.put(\"correlationId\", correlationId)\n    MDC.put(\"paymentId\", paymentId)\n    try {\n        log.info { \"Processing payment\" }\n        // ...\n    } finally {\n        MDC.clear()\n    }\n}\n```\n\nThis is the minimal, conventional choice — no new infra, consistent with auth/account/notification services.",
+  "timestamp": "2026-06-12T23:10:56Z",
+  "latency_ms": 26609,
+  "exit_code": 0,
+  "output_length_chars": 1478,
+  "output_length_tokens_approx": 369,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

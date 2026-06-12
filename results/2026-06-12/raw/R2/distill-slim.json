@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill-slim",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** with PostgreSQL. Here's the standard setup for a new Kotlin service:\n\n**1. Dependency (build.gradle.kts)**\n```kotlin\ndependencies {\n    implementation(\"org.flywaydb:flyway-core:9.x.x\")\n    implementation(\"org.flywaydb:flyway-database-postgresql:9.x.x\")\n}\n```\n\n**2. Migration files** — place in `src/main/resources/db/migration/`:\n```\nV1__create_initial_schema.sql\nV2__add_indexes.sql\nV3__add_audit_columns.sql\n```\nNaming: `V{version}__{description}.sql` — versions must be strictly increasing.\n\n**3. Application config** (`application.yml`):\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false   # false for new services — no legacy data\n    validate-on-migrate: true\n```\n\n**4. For tests** — use a separate schema or Testcontainers with a fresh PostgreSQL instance so each test suite starts clean.\n\n**A few Helios-specific notes:**\n- Follow the same correlation-ID logging pattern on your service's datasource beans so migration runs show up in your structured logs.\n- Your CI pipeline (GitHub Actions) runs migrations on deploy via ArgoCD — make sure the K8s job/init-container runs `flyway migrate` before the app pods start, not in parallel. Look at how `account-service` handles this as a reference.\n- Never use `flyway repair` in prod without a team review — financial data means migration history integrity matters.\n\nDo you want me to look at an existing service's setup to give you a more concrete template to copy from?",
+  "timestamp": "2026-06-12T23:14:50Z",
+  "latency_ms": 19920,
+  "exit_code": 0,
+  "output_length_chars": 1524,
+  "output_length_tokens_approx": 381,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

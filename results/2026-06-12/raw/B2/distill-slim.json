@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill-slim",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "A few things to weigh here:\n\n**Against the rewrite:**\n- Your entire backend stack is Kotlin — `auth-service`, `account-service`, everything. Introducing Go creates a second language to hire for, maintain tooling around (linting, testing conventions, Docker base images, CI templates), and on-call for.\n- Sofia is the Kotlin expert and you two are closely collaborating on service extraction. A Go service becomes an island she can't easily review or contribute to.\n- \"Over-engineered\" is usually fixable within the language — you can simplify the Kotlin without the cost of a rewrite.\n\n**In favor:**\n- Go is genuinely well-suited for this shape of service (Kafka consumer + SNS dispatch, no DB, stateless). The stdlib + `confluent-kafka-go` + AWS SDK would be lean.\n- Memory and startup time would improve, which matters if you're scaling this horizontally.\n\n**My take:** Not worth it. The simplicity argument applies to the *problem*, not the language — if the Kotlin is over-engineered, strip it down in Kotlin. The org cost of a polyglot service outweighs the fit for a service this simple, especially mid-monolith extraction when you and Sofia have a lot of shared work ahead.\n\nIf the over-engineering is specific (e.g., unnecessary abstraction layers, DI framework bloat, coroutine complexity where none is needed), I can help gut it.",
+  "timestamp": "2026-06-12T23:05:54Z",
+  "latency_ms": 23502,
+  "exit_code": 0,
+  "output_length_chars": 1345,
+  "output_length_tokens_approx": 336,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

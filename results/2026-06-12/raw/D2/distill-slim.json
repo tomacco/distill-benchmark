@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill-slim",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — the clear answer given your stack and domain.\n\nYour team already evaluated and rejected DynamoDB and MongoDB for exactly this use case (strong consistency + multi-table transactions for financial data). PostgreSQL is your existing primary database, and it handles complex aggregation well.\n\nConcrete options for making it work for reporting:\n\n- **Read replica** — point the reporting service at a dedicated read replica to isolate query load from transactional traffic. Zero new infra to learn.\n- **Materialized views** — pre-aggregate heavy reports on a schedule (e.g. daily summaries), refreshed via `REFRESH MATERIALIZED VIEW CONCURRENTLY`. Good for latency-sensitive dashboards.\n- **Partitioning** — partition large tables (transactions, events) by date range. Dramatically speeds up time-bounded aggregation queries.\n- **TimescaleDB** (if time-series reporting is the core workload) — a PostgreSQL extension, so it's fully compatible with your existing tooling and Flyway migrations.\n\nIf you hit a wall with PostgreSQL on analytical throughput, the next step would be a proper OLAP layer (ClickHouse or Redshift feeding off Kafka), but that's only worth the operational cost if read replica + materialized views can't keep up.\n\nStart with a read replica — it's likely enough.",
+  "timestamp": "2026-06-12T23:11:26Z",
+  "latency_ms": 18829,
+  "exit_code": 0,
+  "output_length_chars": 1309,
+  "output_length_tokens_approx": 327,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

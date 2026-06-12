@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill-slim",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no auth-service code in this workspace. Where is the auth-service located? I need to see the existing routing/framework setup to add the endpoint in the right place.",
+  "timestamp": "2026-06-12T23:13:25Z",
+  "latency_ms": 17575,
+  "exit_code": 0,
+  "output_length_chars": 173,
+  "output_length_tokens_approx": 43,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

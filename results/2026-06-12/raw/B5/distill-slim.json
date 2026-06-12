@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — you already have it in your stack.\n\nIt's the exact fit here: purpose-built for this pattern, TTL is native (`SET key value EX 300`), and no new infra to operate or justify. In-memory means sub-millisecond latency for cache hits.\n\nIf you need the cache to survive pod restarts, set `appendonly no` (pure cache mode) and let Redis handle eviction with `maxmemory-policy allkeys-lru`. If you don't care about persistence at all, that's the default behavior anyway.\n\nQuick Kotlin example with Jedis or Lettuce:\n```kotlin\n// Store with 5-min TTL\nredis.set(requestHash, jsonBlob, SetArgs.Builder.ex(300))\n\n// Fetch\nval cached = redis.get(requestHash)\n```\n\nNo other option makes sense given Redis is already deployed and this is a pure cache workload.",
+  "timestamp": "2026-06-12T23:06:55Z",
+  "latency_ms": 17480,
+  "exit_code": 0,
+  "output_length_chars": 758,
+  "output_length_tokens_approx": 189,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

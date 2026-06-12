@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. Your reasoning is solid and it aligns with the existing stack.\n\n**Why it fits:**\n- Redis is already in your stack as your caching layer — no new dependency\n- Session tokens are a textbook Redis use case: key-value with TTL expiry is Redis's core strength\n- `auth-service` issues JWTs, so you'd store `token_id → user_id/metadata` with TTL matching token expiry, enabling fast revocation lookups without hitting Postgres\n\n**One thing to be deliberate about:** since this is a fintech platform, decide upfront whether you need revocation support. If so, store tokens in Redis (not just validate them via JWT signature). The TTL handles expiry naturally; on logout/revoke you just `DEL` the key.\n\n**Suggested key pattern:**\n```\nsession:{token_id}  →  { user_id, issued_at, scope }  EX <ttl_seconds>\n```\n\nNo reservations — go for it.",
+  "timestamp": "2026-06-12T23:05:29Z",
+  "latency_ms": 16727,
+  "exit_code": 0,
+  "output_length_chars": 872,
+  "output_length_tokens_approx": 218,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

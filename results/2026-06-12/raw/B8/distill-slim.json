@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill-slim",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "This is a side project, but the decisions against MongoDB and DynamoDB at Helios are still in the knowledge base — worth noting: MongoDB would be a natural CMS fit (document model, flexible schemas), but given the team has evaluated and rejected it, and your existing expertise is PostgreSQL, **PostgreSQL with JSONB** is the strong recommendation here.\n\n**Why it fits the CMS use case well:**\n\n- **Varying schemas**: Use a `content_type` column + `metadata JSONB` column per content record. Fixed fields (title, slug, author, published_at) stay typed columns; type-specific fields go in JSONB.\n- **Blog posts**: Clean relational columns + JSONB for SEO fields, custom fields per post type.\n- **Media metadata**: JSONB handles the heterogeneous shape (image EXIF vs. video duration vs. audio codec).\n- **User-generated content**: JSONB validation via `CHECK` constraints or application-layer schemas (e.g. Zod) keeps it flexible but not chaotic.\n\n**Practical schema sketch:**\n\n```sql\nCREATE TABLE content (\n  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        TEXT NOT NULL,          -- 'post', 'media', 'comment'\n  slug        TEXT UNIQUE,\n  title       TEXT,\n  author_id   UUID REFERENCES users,\n  published_at TIMESTAMPTZ,\n  metadata    JSONB NOT NULL DEFAULT '{}'\n);\n\nCREATE INDEX ON content USING GIN (metadata);\nCREATE INDEX ON content (type, published_at DESC);\n```\n\n**Secondary option:** SQLite (via [Turso](https://turso.tech) for edge/distributed) if you want near-zero ops overhead for a side project. Also supports JSON columns. Makes sense if you expect low traffic and want simplicity over power.\n\nStick with PostgreSQL if you want to reuse the team's operational knowledge and tooling (Flyway migrations, existing infra patterns).",
+  "timestamp": "2026-06-12T23:09:55Z",
+  "latency_ms": 37029,
+  "exit_code": 0,
+  "output_length_chars": 1766,
+  "output_length_tokens_approx": 441,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

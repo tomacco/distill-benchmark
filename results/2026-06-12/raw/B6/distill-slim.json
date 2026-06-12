@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill-slim",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — it's the clear winner for this task.\n\n- Queries CSVs directly (no load step), handles out-of-core processing so 50GB is fine on modest RAM\n- Aggregations are plain SQL — trivial to write\n- Native JSON export with `COPY ... TO 'output.json'`\n- One-time install, no project scaffolding needed\n\n**Second choice: Python + Polars** (lazy/streaming mode) if you want more programmatic control over the output shape.\n\nAvoid pandas — it'll try to load the whole file and OOM on most machines.\n\n**DuckDB example (CLI):**\n\n```sql\n-- run: duckdb\nCOPY (\n  SELECT\n    merchant_id,\n    COUNT(*)           AS transaction_count,\n    SUM(amount)        AS total_amount,\n    AVG(amount)        AS avg_amount,\n    MIN(created_at)    AS first_txn,\n    MAX(created_at)    AS last_txn\n  FROM read_csv_auto('data.csv')\n  GROUP BY merchant_id\n) TO 'summary.json' (FORMAT JSON, ARRAY true);\n```\n\nOr as a one-liner:\n\n```bash\nduckdb -c \"COPY (SELECT merchant_id, COUNT(*), SUM(amount) FROM read_csv_auto('data.csv') GROUP BY 1) TO 'out.json' (FORMAT JSON, ARRAY true)\"\n```\n\n**If you need a Python script** (e.g., more complex output shaping):\n\n```python\nimport duckdb, json\n\ncon = duckdb.connect()\nresult = con.execute(\"\"\"\n    SELECT merchant_id, COUNT(*) AS txn_count, SUM(amount) AS total\n    FROM read_csv_auto('data.csv')\n    GROUP BY merchant_id\n\"\"\").fetchdf()\n\nresult.to_json('summary.json', orient='records', indent=2)\n```\n\nInstall: `pip install duckdb` or grab the CLI binary — no other dependencies.",
+  "timestamp": "2026-06-12T23:07:15Z",
+  "latency_ms": 18726,
+  "exit_code": 0,
+  "output_length_chars": 1502,
+  "output_length_tokens_approx": 375,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill-slim",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal, REST external, Kafka, PostgreSQL, EKS), here's the simplest approach:\n\n**Use micro-deposit verification** — it's the standard for bank account ownership without a third-party dependency.\n\n### Endpoint design\n\nExternal REST (for merchant-facing):\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\nBody: { \"amounts\": [0.12, 0.34] }  // merchant confirms the two micro-deposits\n```\n\nInternal gRPC (payment-service → account-service):\n```protobuf\nrpc VerifyBankAccount(VerifyBankAccountRequest) returns (VerifyBankAccountResponse);\n```\n\n### Flow\n\n1. Merchant adds bank account → payment-service initiates two micro-deposits (< $0.50 each), stores hashed expected amounts + expiry in PostgreSQL with status `PENDING_VERIFICATION`\n2. Merchant sees the deposits in their bank (1-2 days), submits amounts back via the REST endpoint\n3. Payment-service validates → updates status to `VERIFIED`, publishes `bank_account.verified` Kafka event for downstream consumers\n\n### PostgreSQL table (via Flyway)\n```sql\nCREATE TABLE bank_account_verifications (\n    id UUID PRIMARY KEY,\n    account_id UUID NOT NULL REFERENCES bank_accounts(id),\n    amount_1_cents INT NOT NULL,\n    amount_2_cents INT NOT NULL,\n    attempts INT NOT NULL DEFAULT 0,\n    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',\n    expires_at TIMESTAMPTZ NOT NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n```\n\nCap attempts at 3, expire after 7 days — standard practice.\n\n### What to skip\n- No Plaid/Stripe for now — adds a dependency and cost, overkill if you control the payment rails\n- No async verification flow needed; the deposit initiation can be a Kafka event (`bank_account.verification_initiated`) so account-service can react without tight coupling\n\nThis fits naturally into the payment-service extraction Sofia is leading — the verification state lives in payment-service's schema, not account-service's.",
+  "timestamp": "2026-06-12T23:11:52Z",
+  "latency_ms": 23746,
+  "exit_code": 0,
+  "output_length_chars": 1952,
+  "output_length_tokens_approx": 488,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

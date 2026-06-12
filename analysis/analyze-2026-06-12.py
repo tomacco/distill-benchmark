@@ -28,7 +28,8 @@ s2, _ = load("2026-06-12-s2")
 s3, _ = load("2026-06-12-s3")
 
 categories = sorted(set(cats.values()))
-comps = ["no-memory", "claude-md-native", "distill", "sqlite-bm25"]
+comps = ["no-memory", "claude-md-native", "distill", "distill-slim", "sqlite-bm25"]
+comps = [c for c in comps if c in s1]  # tolerate runs without the slim arm
 
 print("=== SEED 1: full 4-way (mean of 1-5 criteria) ===")
 hdr = f"{'competitor':<18}" + "".join(f"{c[:12]:>14}" for c in categories) + f"{'OVERALL':>10}"
@@ -45,26 +46,37 @@ for comp in comps:
     row += f"{sum(allv)/len(allv):>10.2f}"
     print(row)
 
-print("\n=== CRITICAL PAIR across 3 seeds: distill minus claude-md-native ===")
-print(f"{'seed':<8}{'overall delta':>14}   per-category deltas")
-deltas = []
-for name, seed in [("seed1", s1), ("seed2", s2), ("seed3", s3)]:
-    d, n = seed["distill"], seed["claude-md-native"]
-    common = sorted(set(d) & set(n))
-    overall = sum(d[t] - n[t] for t in common) / len(common)
-    deltas.append(overall)
-    catstr = "  ".join(
-        f"{cat[:4]}:{sum(d[t]-n[t] for t in common if cats[t]==cat)/max(1,len([t for t in common if cats[t]==cat])):+.2f}"
-        for cat in categories)
-    print(f"{name:<8}{overall:>+14.3f}   {catstr}")
+def pair_deltas(a, b, title):
+    print(f"\n=== {title}: {a} minus {b}, across 3 seeds ===")
+    print(f"{'seed':<8}{'overall delta':>14}   per-category deltas")
+    deltas = []
+    for name, seed in [("seed1", s1), ("seed2", s2), ("seed3", s3)]:
+        if a not in seed or b not in seed:
+            print(f"{name:<8}{'(arm missing)':>14}")
+            continue
+        d, n = seed[a], seed[b]
+        common = sorted(set(d) & set(n))
+        overall = sum(d[t] - n[t] for t in common) / len(common)
+        deltas.append(overall)
+        catstr = "  ".join(
+            f"{cat[:4]}:{sum(d[t]-n[t] for t in common if cats[t]==cat)/max(1,len([t for t in common if cats[t]==cat])):+.2f}"
+            for cat in categories)
+        print(f"{name:<8}{overall:>+14.3f}   {catstr}")
+    if len(deltas) >= 2:
+        mean_d = sum(deltas) / len(deltas)
+        var = sum((x - mean_d) ** 2 for x in deltas) / (len(deltas) - 1)
+        print(f"cross-seed: mean {mean_d:+.3f}, sd {var**0.5:.3f} "
+              f"(noise floor ~2sd={2*var**0.5:.2f})")
 
-mean_d = sum(deltas) / len(deltas)
-var = sum((x - mean_d) ** 2 for x in deltas) / (len(deltas) - 1)
-print(f"\ncross-seed delta: mean {mean_d:+.3f}, sd {var**0.5:.3f}  "
-      f"(noise floor: differences smaller than ~2sd={2*var**0.5:.2f} are not resolvable)")
+pair_deltas("distill", "claude-md-native", "FULL vs NATIVE")
+if "distill-slim" in s1:
+    pair_deltas("distill-slim", "distill", "SLIM vs FULL")
+    pair_deltas("distill-slim", "claude-md-native", "SLIM vs NATIVE")
 
-print("\n=== Per-test seed-1 detail: distill vs native vs bm25 (flag big gaps) ===")
+print("\n=== Per-test seed-1 detail (flag: |slim-full| >= 1.0) ===")
+slim = s1.get("distill-slim", {})
 for t in sorted(s1["distill"]):
-    dv, nv, bv = s1["distill"][t], s1["claude-md-native"][t], s1["sqlite-bm25"].get(t, float("nan"))
-    flag = " <<<" if abs(dv - nv) >= 1.0 else ""
-    print(f"{t:<4} {cats[t][:14]:<15} distill {dv:.2f}  native {nv:.2f}  bm25 {bv:.2f}{flag}")
+    dv, nv = s1["distill"][t], s1["claude-md-native"][t]
+    sv, bv = slim.get(t, float("nan")), s1["sqlite-bm25"].get(t, float("nan"))
+    flag = " <<<" if slim and abs(sv - dv) >= 1.0 else ""
+    print(f"{t:<4} {cats[t][:14]:<15} slim {sv:.2f}  full {dv:.2f}  native {nv:.2f}  bm25 {bv:.2f}{flag}")

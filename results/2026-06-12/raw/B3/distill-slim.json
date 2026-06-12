@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "distill-slim",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "**Netlify** is the simplest option — drag-and-drop a folder and it's live in seconds, free tier is generous, and you get HTTPS + CDN automatically.\n\nOther solid choices:\n\n- **Vercel** — same ease as Netlify, slightly more dev-focused\n- **GitHub Pages** — free, push to a repo and it deploys; good if the code is already on GitHub\n- **Cloudflare Pages** — best CDN performance globally, also free\n\n**Recommendation:** Netlify if he wants the fastest path to done. GitHub Pages if the project is already in a GitHub repo and he wants zero new accounts.",
+  "timestamp": "2026-06-12T23:06:02Z",
+  "latency_ms": 6452,
+  "exit_code": 0,
+  "output_length_chars": 558,
+  "output_length_tokens_approx": 139,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill-slim",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's my recommendation for the scope and approach, given your stack:\n\n**Approach: polling REST endpoint + materialized view**\n\nTransaction data is still in the monolith, so:\n\n1. **PostgreSQL materialized view** refreshed every 30s via `pg_cron` (fits your preference for PG extensions over new infra):\n   ```sql\n   CREATE MATERIALIZED VIEW merchant_transaction_counts AS\n     SELECT merchant_id, COUNT(*) AS tx_count, MAX(created_at) AS last_updated\n     FROM transactions\n     GROUP BY merchant_id;\n\n   SELECT cron.schedule('refresh-merchant-counts', '*/1 * * * *',\n     'REFRESH MATERIALIZED VIEW CONCURRENTLY merchant_transaction_counts');\n   ```\n   (pg_cron minimum is 1 min; for true 30s you'd refresh in the app layer instead — see below.)\n\n2. **REST endpoint on the monolith** (external APIs are REST):\n   ```\n   GET /api/v1/dashboard/merchant-transaction-counts\n   ```\n   Returns `[{ merchantId, txCount, lastUpdated }]` — straight query on the mat view.\n\n3. **React frontend** polls every 30s with `setInterval` + `useEffect`. No WebSockets, no SSE, no new deps.\n\n**Trade-off to decide:** pg_cron floors at 1 minute. For a true 30s refresh, skip the mat view and let the endpoint run the live `GROUP BY` query directly — fine unless you have millions of transactions, in which case add an index on `merchant_id` and it'll be fast enough for a demo.\n\nFor the demo next week, I'd skip the mat view entirely: live query + an index is simpler and one less moving part.\n\nWant me to implement the endpoint (Kotlin/monolith) and the React polling component, or just one side?",
+  "timestamp": "2026-06-12T23:06:35Z",
+  "latency_ms": 31665,
+  "exit_code": 0,
+  "output_length_chars": 1585,
+  "output_length_tokens_approx": 396,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

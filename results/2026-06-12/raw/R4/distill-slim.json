@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill-slim",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For analytics on large datasets, two strong options given your AWS + PostgreSQL stack:\n\n**Recommended: Amazon Redshift**\n- Columnar OLAP, purpose-built for fast analytical reads\n- Native AWS integration (already on EKS/AWS)\n- Connects well to Kafka via Redshift Streaming Ingestion\n- Familiar SQL — your PostgreSQL team ramps up quickly\n\n**Alternative: ClickHouse**\n- Faster raw read performance than Redshift for many query patterns\n- Open-source, can self-host on EKS\n- More operational overhead than managed Redshift\n\nGiven your team's PostgreSQL expertise and existing AWS infrastructure, Redshift is the lower-friction path. If raw query speed becomes a constraint later, ClickHouse is worth revisiting.\n\nOne note: your analytics service is still in the monolith per your architecture plan — worth deciding whether to extract it first or build the new data store alongside the extraction.",
+  "timestamp": "2026-06-12T23:15:48Z",
+  "latency_ms": 24144,
+  "exit_code": 0,
+  "output_length_chars": 897,
+  "output_length_tokens_approx": 224,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}
