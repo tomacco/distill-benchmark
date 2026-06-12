@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "no-memory",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "For complex aggregations across multiple tables with strong consistency, **PostgreSQL** is the clear recommendation.\n\n**Why PostgreSQL fits your requirements:**\n- Full ACID compliance gives you strong consistency out of the box\n- Excellent support for complex JOINs, window functions, CTEs, and `GROUP BY` aggregations across multiple tables\n- Mature query planner handles analytical queries well with proper indexing\n- Partial indexes, materialized views, and table partitioning let you optimize hot reporting queries without a separate infrastructure layer\n\n**The main tradeoff:** PostgreSQL is OLTP-optimized at its core. If your reporting queries are very heavy (billions of rows, long-running analytical scans), you'll eventually feel that. The mitigation paths are:\n\n1. **Materialized views** — pre-aggregate on a schedule, query is instant\n2. **Read replica** — offload reporting queries so writes aren't contended\n3. **OLAP layer later** — if you outgrow Postgres, ClickHouse or Redshift can be added downstream; Postgres stays the source of truth\n\n**When to skip straight to OLAP (ClickHouse, Redshift, BigQuery):** If your report dataset is >100M rows today, queries scan the full table rather than indexed lookups, or you have sub-second SLAs on complex aggregations. These give up easy strong consistency across transactional writes in exchange for dramatically faster analytics.\n\n**Bottom line:** Start with PostgreSQL unless you already know you're in the OLAP-scale range. It handles most reporting needs well, and you won't be building two systems from day one.",
+  "timestamp": "2026-06-12T16:34:05Z",
+  "latency_ms": 18533,
+  "exit_code": 0,
+  "output_length_chars": 1583,
+  "output_length_tokens_approx": 395,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-md-native",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Based on your stack, here's how to set up Flyway migrations for a new service:\n\n**Directory structure**\n```\nsrc/\n  main/\n    resources/\n      db/migration/\n        V1__create_initial_schema.sql\n        V2__add_indexes.sql\n```\n\n**Flyway naming convention** (required):\n- `V{version}__{description}.sql` for versioned migrations\n- `R__{description}.sql` for repeatable migrations (views, functions)\n\n**Gradle dependency** (Kotlin service):\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"org.flywaydb:flyway-core:9.x.x\")\n}\n```\n\n**Spring Boot auto-config** — if you're using Spring Boot, Flyway runs automatically on startup. Just set in `application.yml`:\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false  # false for new services (no existing schema)\n```\n\n**For a new service specifically:**\n- Start at `V1__` — don't use `baseline-on-migrate` since there's no existing data to protect\n- Keep each migration focused and non-destructive (additive changes preferred)\n- Never edit a migration that's already been applied in any environment\n\n**CI/CD note** — your ArgoCD/EKS pipeline: migrations typically run as an init container or a pre-deploy job before the service pod starts, ensuring schema is ready before the app handles traffic. Check how `auth-service` or `account-service` handle this — consistency across services is worth it.",
+  "timestamp": "2026-06-12T17:07:57Z",
+  "latency_ms": 17397,
+  "exit_code": 0,
+  "output_length_chars": 1423,
+  "output_length_tokens_approx": 355,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

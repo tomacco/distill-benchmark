@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's what I'd recommend given your stack:\n\n**Backend**: Add a `GET /api/v1/merchants/transaction-counts` endpoint to the monolith (transactions are still there). Cache the result in Redis with a 30s TTL — one DB hit per 30s regardless of how many dashboard tabs are open.\n\n**Frontend**: A React component that polls every 30 seconds with `setInterval` + `fetch`. No new deps, no WebSockets — at 30s granularity, polling is the right bicycle.\n\n**Why not SSE/WebSockets?** Overkill for 30s updates. Polling is simpler to test, easier for Dev to own, and the Redis cache means the DB won't feel it.\n\n**Why not a Kafka consumer?** Transactions haven't been extracted yet, so there's no clean stream to consume. Once payment processing gets extracted (Sofia's next), you could migrate to an event-driven approach — but that's post-demo.\n\nThe query itself is straightforward:\n\n```sql\nSELECT merchant_id, COUNT(*) AS txn_count\nFROM transactions\nWHERE created_at >= NOW() - INTERVAL '24 hours'\nGROUP BY merchant_id\nORDER BY txn_count DESC;\n```\n\nWith a Redis key like `dashboard:txn_counts` and a 30s TTL, the monolith serves stale-by-at-most-30s data at near-zero DB cost.\n\nWant me to implement this? I'd need to know:\n1. Where the monolith's Kotlin routing/controller layer lives (or a representative controller to follow as a pattern)\n2. Whether the 30s window is \"last 24h totals\" or something else (Marcus's spec may have details)",
+  "timestamp": "2026-06-12T17:39:42Z",
+  "latency_ms": 33206,
+  "exit_code": 0,
+  "output_length_chars": 1434,
+  "output_length_tokens_approx": 358,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

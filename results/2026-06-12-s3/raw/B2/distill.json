@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Solid case for Go here. A few considerations:\n\n**For the rewrite:**\n- Kafka → SNS fan-out is a great fit for Go — the `confluent-kafka-go` or `segmentio/kafka-go` libraries are mature, and `aws-sdk-go-v2` for SNS is straightforward\n- Concurrency model maps well: one goroutine per partition consumer, channel-based dispatch\n- Binary deploys, low memory footprint, fast startup — noticeably better for a simple throughput-focused service\n\n**Tradeoff to watch:**\n- If the Kotlin version uses Spring's retry/backoff/dead-letter abstractions, you'll need to rebuild those explicitly — that's usually where \"simple\" services hide their complexity\n- Error handling in Go is more ceremonial for this pattern (consume → transform → dispatch with retries at each step)\n\n**The real question:** Is it over-engineered because of Kotlin/JVM overhead, or because of accumulated business logic (retry policies, filtering, batching)? If the latter, a rewrite just relocates the complexity.\n\nIf it's genuinely just consume → dispatch with minimal logic, Go is a clean win and the rewrite is low-risk. What does the retry/error handling look like on the Kotlin side?",
+  "timestamp": "2026-06-12T17:52:49Z",
+  "latency_ms": 13863,
+  "exit_code": 0,
+  "output_length_chars": 1162,
+  "output_length_tokens_approx": 290,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

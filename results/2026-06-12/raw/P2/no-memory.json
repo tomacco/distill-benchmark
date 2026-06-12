@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "no-memory",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "The workspace is empty — no auth-service exists yet. Could you either:\n1. Share the existing code (paste it or give a file path), or\n2. Let me know if you'd like me to scaffold a minimal auth-service with the health check included?",
+  "timestamp": "2026-06-12T16:37:16Z",
+  "latency_ms": 38098,
+  "exit_code": 0,
+  "output_length_chars": 233,
+  "output_length_tokens_approx": 58,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already adopted structured logging with correlation IDs across all services, so match that pattern. For Kotlin on EKS, the standard stack is:\n\n**`kotlin-logging` + Logback + Logstash JSON encoder**\n\n```kotlin\n// build.gradle.kts\nimplementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```xml\n<!-- logback.xml -->\n<configuration>\n  <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n  </appender>\n  <root level=\"INFO\"><appender-ref ref=\"STDOUT\"/></root>\n</configuration>\n```\n\n```kotlin\n// Usage — same pattern as auth-service/account-service\nprivate val log = KotlinLogging.logger {}\n\nclass PaymentService {\n    fun processPayment(req: PaymentRequest) {\n        log.info { \"Processing payment amount=${req.amount} currency=${req.currency}\" }\n    }\n}\n```\n\n**Correlation IDs** via MDC (so trace flows across Kafka and gRPC):\n\n```kotlin\n// Interceptor/filter sets this at request boundary\nMDC.put(\"correlationId\", req.correlationId ?: UUID.randomUUID().toString())\n// LogstashEncoder picks it up automatically in the JSON output\n```\n\n- `kotlin-logging` gives you a clean Kotlin API over SLF4J with lazy evaluation (no `if (log.isDebugEnabled)` noise)\n- JSON output is essential for CloudWatch/Datadog on EKS\n- MDC correlation ID matches what your other services already emit\n\nCheck what the existing services (`auth-service`, `account-service`) use exactly — it's worth a quick look to confirm the Logback config so the payment service outputs identically shaped logs.",
+  "timestamp": "2026-06-12T17:03:03Z",
+  "latency_ms": 24673,
+  "exit_code": 0,
+  "output_length_chars": 1701,
+  "output_length_tokens_approx": 425,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

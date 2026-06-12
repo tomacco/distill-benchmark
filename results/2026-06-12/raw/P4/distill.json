@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No stored knowledge on this project. Here's the simplest approach:\n\n**Env var flag** — no infra required, zero dependencies:\n\n```python\n# config.py\nNEW_PAYMENT_FLOW = os.getenv(\"FEATURE_NEW_PAYMENT_FLOW\", \"false\").lower() == \"true\"\n```\n\n```python\n# payment.py\nfrom config import NEW_PAYMENT_FLOW\n\ndef process_payment(order):\n    if NEW_PAYMENT_FLOW:\n        return _new_payment_flow(order)\n    return _legacy_payment_flow(order)\n```\n\nDark-launch: deploy with the env var unset (defaults off), enable per-environment when ready.\n\n**When to reach for something heavier** (e.g. LaunchDarkly, Unleash, GrowthBook):\n- You need per-user/cohort targeting\n- You need to toggle without a redeploy\n- You need audit trails or kill switches\n\nFor a simple dark-launch where \"on for staging, off for prod\" is sufficient, the env var pattern is hard to beat. What's your current stack? I can tailor the snippet.",
+  "timestamp": "2026-06-12T16:53:10Z",
+  "latency_ms": 10693,
+  "exit_code": 0,
+  "output_length_chars": 898,
+  "output_length_tokens_approx": 224,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

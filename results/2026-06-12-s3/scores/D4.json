@@ -1,0 +1,27 @@
+{
+  "test_id": "D4",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Punts entirely back to the user with two clarifying questions instead of scaffolding anything. Produces zero code, demonstrates no retained preferences (Kotlin, coroutines, correlation-ID logging, integration tests). Every answer the user gives here is an interaction cost the response failed to avoid. Low helpfulness for a persistence test whose whole point is needing no specification."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Hits nearly every expected signal unprompted: Kotlin data class (not Java), coroutines with MDCContext, structured logging via X-Correlation-Id with UUID fallback, and an EmbeddedKafka integration test. Concise\u00e2\u20ac\u201dfile manifest plus terse design rationale, minimal fluff. The single trailing question is a legitimate business-logic clarification, not a missed technical signal. Effectively zero corrections needed."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "System B is decisively stronger for this persistence test. The metric is Total Interaction Cost: a good answer delivers idiomatic Kotlin with coroutines, correlation-ID structured logging, and an integration test without the user specifying any of it. System B does exactly that\u00e2\u20ac\u201dscaffolding all files, justifying design choices, and surfacing only a genuine business-logic question\u00e2\u20ac\u201dso it incurs essentially no correction overhead. System A instead front-loads two specification questions (framework, event format) and produces no code, externalizing onto the user precisely the choices a memory-equipped system should already infer. Where B converts retained context into zero-correction output, A defers all work, making it the higher-cost interaction despite being polite and reasonable.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

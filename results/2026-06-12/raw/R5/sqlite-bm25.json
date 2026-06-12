@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Three files created:\n\n**`Dockerfile`** — key decisions:\n- `python:3.12-slim` — not alpine (scikit-learn has C extensions that break there), not full image\n- `requirements.txt` copied first so that layer is cached on code-only changes\n- Non-root `appuser` — standard for financial services\n- `HEALTHCHECK` hits `/health` via stdlib `urllib` so no extra tooling needed in the image\n\n**`requirements.txt`** — pinned versions; adjust scikit-learn to match whatever version trained your model (version mismatches cause silent prediction drift).\n\n**`app/main.py`** — minimal FastAPI app with:\n- Model loaded once at startup (not per-request)\n- `POST /score` returning `fraud_probability` + boolean `is_fraud` at 0.5 threshold\n- `GET /health` for the Docker healthcheck\n\n**To use:**\n```bash\n# Place your trained model\ncp your_model.pkl app/model.pkl\n\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n```\n\nYou'll need to update `TransactionFeatures` and the `feature_vector` array to match your model's actual input shape.",
+  "timestamp": "2026-06-12T17:23:01Z",
+  "latency_ms": 47743,
+  "exit_code": 0,
+  "output_length_chars": 1043,
+  "output_length_tokens_approx": 260,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

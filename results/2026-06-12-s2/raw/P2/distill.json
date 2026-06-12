@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Two files added:\n\n- `HealthController.kt` — `GET /health` returns `{\"status\": \"UP\"}` with HTTP 200\n- `SecurityConfig.kt` — permits `/health` without auth (critical for an auth-service that otherwise requires JWT)\n\n**Note:** If a `SecurityConfig` already exists in the real repo, merge the `.requestMatchers(\"/health\").permitAll()` line into it rather than using this standalone version — you don't want two `SecurityFilterChain` beans.",
+  "timestamp": "2026-06-12T17:33:44Z",
+  "latency_ms": 96892,
+  "exit_code": 0,
+  "output_length_chars": 441,
+  "output_length_tokens_approx": 110,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

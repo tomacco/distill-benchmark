@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**Files:**\n- `PaymentCompletedEvent.kt` — data class with `correlationId` field for MDC\n- `PaymentCompletedHandler.kt` — `suspend fun` interface (implement this for your business logic)\n- `PaymentCompletedConsumer.kt` — `@KafkaListener` with manual ACK, MDC correlation ID setup, re-throws on failure so Spring's error handler / dead-letter topic takes over\n- `KafkaConsumerConfig.kt` — manual-commit container factory with Jackson deserialization\n- `PaymentCompletedConsumerTest.kt` + `CapturingPaymentCompletedHandler.kt` — integration test using `@EmbeddedKafka`, no mocks\n- `application-kafka-snippet.yml` — config properties to merge into your real `application.yml`\n\n**Key decisions:**\n- `runBlocking` bridges the coroutine boundary at the listener level — the handler stays `suspend` throughout\n- `MANUAL_IMMEDIATE` ack so offset only commits after successful processing\n- Exception re-throw lets you wire a `DefaultErrorHandler` with DLT at the container factory level when ready\n- `correlationId` comes from the event payload into MDC — consistent with your existing logging setup\n\nNext step: implement `PaymentCompletedHandler` with your actual business logic (e.g. updating account balances via `account-service`).",
+  "timestamp": "2026-06-12T16:51:01Z",
+  "latency_ms": 109271,
+  "exit_code": 0,
+  "output_length_chars": 1267,
+  "output_length_tokens_approx": 316,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

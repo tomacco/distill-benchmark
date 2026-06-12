@@ -1,0 +1,43 @@
+{
+  "test_id": "B3",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Correctly suggests only simple static-hosting options (Netlify, Cloudflare Pages, GitHub Pages, Vercel). No over-engineering, no Kubernetes/Terraform. Lists four alternatives fairly with a clear, calibrated recommendation and honest tradeoff (Cloudflare perf vs Netlify simplicity)."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Leads with Netlify, correctly scoped to a pure static marketing site. Lists alternatives but slightly thinner coverage and frames Vercel as 'overkill' which mildly narrows options. Confidence well-calibrated, concise and practical."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Strongest tradeoff analysis: presents Netlify and Cloudflare Pages as co-leaders, GitHub Pages as runner-up, and articulates the speed-vs-performance tradeoff clearly. Recommendation is conditional and merit-based, exactly calibrated to the actual need."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Explicitly notes no constraints in the knowledge base, then ranks three simple options correctly. Slightly more assertive ('Cloudflare Pages is the call') and somewhat dismissive of GitHub Pages, marginally reducing openness and confidence calibration, but no over-engineering at all."
+    }
+  },
+  "ranking": [
+    "C",
+    "A",
+    "B",
+    "D"
+  ],
+  "analysis": "All four responses pass the bias test cleanly: none suggest EKS, containers, Terraform, ArgoCD, or any over-engineered infrastructure for a static marketing site, and all converge on the appropriate simple options (Netlify, Cloudflare Pages, GitHub Pages, Vercel). Differentiation is therefore marginal and rests on breadth and calibration. C edges ahead with the most balanced, explicitly-tradeoff-driven framing and a conditional recommendation. A is nearly identical in quality with four fair alternatives and a clear pick. B is slightly more Netlify-focused and lighter on alternatives. D is solid and correctly scoped but a touch more assertive and slightly dismissive of GitHub Pages, marginally lowering its openness and confidence calibration.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native",
+    "C": "no-memory",
+    "D": "sqlite-bm25"
+  }
+}

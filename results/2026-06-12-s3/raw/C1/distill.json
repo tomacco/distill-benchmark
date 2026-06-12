@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "distill",
+  "prompt": "What version of Postgres are we on?",
+  "output": "No PostgreSQL client is installed in this environment, so I can't detect the version directly. Check via:\n\n- **Running instance**: `psql -c \"SELECT version();\"` or `SELECT version();` in your DB client\n- **Config files**: look for `postgresql.conf` or `PG_VERSION` in the data directory (e.g. `/var/lib/postgresql/<version>/`)\n- **Docker**: `docker exec <container> psql -U postgres -c \"SELECT version();\"`\n\nIs there a specific connection string or container I should check?",
+  "timestamp": "2026-06-12T17:56:47Z",
+  "latency_ms": 8851,
+  "exit_code": 0,
+  "output_length_chars": 474,
+  "output_length_tokens_approx": 118,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "No stored knowledge. Here's a direct recommendation:\n\n**Use [Pino](https://getpino.io/)** for a Node.js payment service, or **structlog** for Python. Both produce structured JSON logs — essential for a payment service where you need queryable audit trails.\n\n**Key decisions for payment logging:**\n\n- **Structured JSON** — every log line should be machine-parseable (`{ level, timestamp, requestId, userId, amount, ... }`)\n- **Log levels**: `info` for transactions, `warn` for retries/degraded paths, `error` for failures — never `debug` in prod\n- **Redaction**: strip card numbers, CVVs, and full account numbers before they ever hit a log statement\n- **Correlation IDs**: propagate a `requestId` / `traceId` through every log line in a request lifecycle\n\n**Minimal Pino setup (Node.js):**\n```js\nimport pino from 'pino'\n\nexport const logger = pino({\n  level: process.env.LOG_LEVEL ?? 'info',\n  redact: ['body.cardNumber', 'body.cvv', 'headers.authorization'],\n})\n```\n\n**If you're already using a specific stack** (e.g., Rails, Go, Java) let me know and I'll give a more targeted answer. The structured-JSON + redaction principle is universal regardless of language.",
+  "timestamp": "2026-06-12T17:57:28Z",
+  "latency_ms": 14363,
+  "exit_code": 0,
+  "output_length_chars": 1171,
+  "output_length_tokens_approx": 292,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

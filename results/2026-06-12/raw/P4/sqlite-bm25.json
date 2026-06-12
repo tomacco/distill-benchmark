@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given that payment processing is still in the monolith (Kotlin), you have no existing flag tooling, and your team prefers PostgreSQL over new infrastructure, the simplest approach is a **database-backed feature flag table in Postgres**.\n\n```sql\n-- Flyway migration V{next}__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT FALSE,\n    rollout_pct SMALLINT NOT NULL DEFAULT 0  -- 0-100, for % rollout later\n);\n\nINSERT INTO feature_flags (name) VALUES ('new_payment_flow');\n```\n\nKotlin service side (minimal):\n\n```kotlin\n@Component\nclass FeatureFlags(private val jdbc: JdbcTemplate) {\n    fun isEnabled(flag: String, userId: Long? = null): Boolean {\n        val row = jdbc.queryForMap(\"SELECT enabled, rollout_pct FROM feature_flags WHERE name = ?\", flag)\n        if (row[\"enabled\"] == false) return false\n        val pct = (row[\"rollout_pct\"] as Number).toInt()\n        return if (pct == 100 || userId == null) true\n               else (userId % 100) < pct\n    }\n}\n```\n\nUsage at the call site:\n\n```kotlin\nif (featureFlags.isEnabled(\"new_payment_flow\", currentUserId)) {\n    newPaymentService.process(request)\n} else {\n    legacyPaymentService.process(request)\n}\n```\n\nToggle via SQL — no deploy needed:\n```sql\nUPDATE feature_flags SET rollout_pct = 10 WHERE name = 'new_payment_flow'; -- 10% dark launch\nUPDATE feature_flags SET enabled = true, rollout_pct = 100 WHERE name = 'new_payment_flow'; -- full rollout\n```\n\n**The tradeoff**: no real-time propagation (hits DB per check, or cache in Redis for hot paths) and no UI — but you gain zero new dependencies and it fits naturally into the Flyway migration flow you already use. If you later need targeting rules or a UI, GrowthBook can replace this with the same interface shape.\n\nWant me to wire this into the payment service, or add Redis caching for the flag reads?",
+  "timestamp": "2026-06-12T17:20:46Z",
+  "latency_ms": 26528,
+  "exit_code": 0,
+  "output_length_chars": 1898,
+  "output_length_tokens_approx": 474,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

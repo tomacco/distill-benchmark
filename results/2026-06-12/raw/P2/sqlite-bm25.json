@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "The workspace doesn't have the auth-service source files. I know from the knowledge base that auth-service is written in **Kotlin** (not Java). Do you have the source in a different directory, or should I write the health check based on the framework you're using (Ktor, Spring Boot, etc.)?\n\nIf you can point me to the source or confirm the HTTP framework, I can add the endpoint right away. The typical implementation would be:\n\n- **Endpoint**: `GET /health`\n- **Response**: `200 OK` with `{\"status\": \"ok\"}` when healthy\n- **Load balancer behavior**: expects `200` to route traffic, anything else to pull the instance\n\nCommon Kotlin choices:\n- **Ktor** — `get(\"/health\") { call.respond(mapOf(\"status\" to \"ok\")) }`\n- **Spring Boot** — Spring Actuator's `/actuator/health` with `management.endpoints.web.exposure.include=health`\n\nWhich framework is auth-service using?",
+  "timestamp": "2026-06-12T17:20:06Z",
+  "latency_ms": 17068,
+  "exit_code": 0,
+  "output_length_chars": 871,
+  "output_length_tokens_approx": 217,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Your team uses **Flyway** with **PostgreSQL 14** (chosen over Liquibase after team evaluation). Here's the standard setup for a new service:\n\n**1. Add Flyway dependency (Kotlin/Gradle)**\n```kotlin\n// build.gradle.kts\ndependencies {\n    implementation(\"org.flywaydb:flyway-core:10.x.x\")\n    implementation(\"org.flywaydb:flyway-database-postgresql:10.x.x\")\n}\n```\n\n**2. Migration file structure**\n```\nsrc/main/resources/db/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n  V3__add_audit_columns.sql\n```\n\nFlyway naming convention: `V{version}__{description}.sql` (double underscore).\n\n**3. Configure in `application.yml`**\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false   # only true if migrating an existing DB\n    validate-on-migrate: true\n  datasource:\n    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}\n    username: ${DB_USER}\n    password: ${DB_PASSWORD}\n```\n\n**4. First migration — minimal safe pattern for financial data**\n```sql\n-- V1__create_initial_schema.sql\nCREATE TABLE your_entity (\n    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n```\n\n**Key conventions to follow (matching your existing services):**\n- Always `TIMESTAMPTZ`, not `TIMESTAMP` — the monolith had timezone bugs\n- Use `gen_random_uuid()` for PKs, not serial integers\n- Never edit a migration that's been run in any environment — add a new one\n- Flyway's `flyway_schema_history` table tracks applied migrations automatically\n\nMigrations run automatically on service startup via Spring Boot's Flyway autoconfiguration.",
+  "timestamp": "2026-06-12T17:21:32Z",
+  "latency_ms": 17080,
+  "exit_code": 0,
+  "output_length_chars": 1699,
+  "output_length_tokens_approx": 424,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

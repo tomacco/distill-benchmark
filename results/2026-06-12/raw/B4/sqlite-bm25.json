@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's my read of the situation and a recommendation:\n\n**What we're building:**\n- React/TypeScript frontend polling every 30s for transaction counts grouped by merchant\n- Kotlin backend endpoint (REST, since this is an external-facing API) that queries PostgreSQL\n\n**Recommended approach:**\n\n**Backend** — new REST endpoint in the monolith (or a thin new `analytics-service` endpoint):\n```\nGET /api/v1/analytics/transactions/by-merchant\n```\nReturns `[{ merchantId, merchantName, count, windowStart }]` for a rolling window (e.g. last 24h). Backed by a PostgreSQL query with an index on `(merchant_id, created_at)`. Redis can cache the result for ~25s to avoid hammering the DB on every 30s poll from multiple demo viewers.\n\n**Frontend** — a simple React component with `setInterval` polling the endpoint, rendering a table or bar chart (Recharts is the typical React charting lib). Dev (junior frontend) can own this once the endpoint is ready.\n\n**Why not WebSockets/SSE?** For a 30-second refresh interval, polling is simpler, debuggable, and sufficient — WebSockets add infra complexity without meaningful benefit at that cadence.\n\n**Questions before I start:**\n1. Is the transaction table in the monolith's PostgreSQL — and do you have access to the schema so I can write the query correctly?\n2. Should the count be over a fixed window (last 24h, today) or all-time? Marcus will want to specify for the demo.\n3. Should I add the Redis caching layer, or is a direct DB query fine given the demo traffic will be low?",
+  "timestamp": "2026-06-12T17:13:09Z",
+  "latency_ms": 28179,
+  "exit_code": 0,
+  "output_length_chars": 1525,
+  "output_length_tokens_approx": 381,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

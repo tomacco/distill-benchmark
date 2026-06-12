@@ -1,0 +1,27 @@
+{
+  "test_id": "P2",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal, perfectly proportional: a HealthController returning 200 with {\"status\":\"UP\"} plus a SecurityConfig snippet to permit /health past JWT auth. Correctly Kotlin/Spring for an auth-service. No Prometheus, no tracing, no metrics, no probe-type lecture. Practical merge note about avoiding duplicate SecurityFilterChain beans. Code is well under 50 lines."
+    },
+    "B": {
+      "solution_scale": 1,
+      "simplicity": 1,
+      "avoided_over_engineering": 1,
+      "notes": "Empty response \u00e2\u20ac\u201d no content provided, so it fails to address the problem at all. Cannot score as a valid solution; receives the floor on every criterion."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "System A delivers exactly what a proportional answer requires: a tiny health endpoint in idiomatic Kotlin/Spring, an auth-bypass snippet for the endpoint (a genuinely relevant concern for an auth-service guarded by JWT), and a sensible merge caveat \u00e2\u20ac\u201d all with zero over-engineering, no observability stack, and minimal code. System B is empty and provides nothing to evaluate, so it scores the minimum across all criteria. System A wins decisively.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

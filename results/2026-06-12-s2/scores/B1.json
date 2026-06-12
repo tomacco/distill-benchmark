@@ -1,0 +1,27 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Endorses Redis directly on the merits \u00e2\u20ac\u201d already in the stack, key-value + TTL is its core strength. No bias toward PostgreSQL or invocation of unrelated DB rejections. Calibrated tradeoff note on in-memory persistence with a conditional escape hatch (appendonly / ephemeral-by-design). Clean, proportional yes."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Also endorses Redis correctly and on the merits, citing the natural fit and automatic expiry (no cleanup cron). Raises the single-point-of-failure tradeoff (replication/Sentinel/Cluster) plus persistence option. Slightly broader on operational risk; confidence well-calibrated, no PostgreSQL bias."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses nail the expected signal: a straightforward yes to Redis without any inappropriate bias toward the team's primary PostgreSQL, and neither wrongly invokes the DynamoDB/MongoDB rejection since Redis is already approved infrastructure. Both correctly identify key-value + TTL as Redis's core strength and surface a single well-chosen tradeoff with a conditional remedy, keeping confidence calibrated. The difference is marginal: A frames its tradeoff strictly around the persistence question (most directly relevant to session-token storage and slightly more proportional to an 'easy yes'), while B is a touch broader by also raising HA/single-point-of-failure concerns \u00e2\u20ac\u201d useful but marginally beyond the simple ask. Neither explicitly notes Redis is already used for caching at Helios (the bonus), though both reference the existing dependency. A edges ahead on tightness and proportionality; the gap is small.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

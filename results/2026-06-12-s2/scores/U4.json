@@ -1,0 +1,27 @@
+{
+  "test_id": "U4",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 2,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Provides bash and PowerShell variants with extra explanation of the -mtime flag and -type f advice. Ignores that the user uses fish shell \u00e2\u20ac\u201d no fish syntax, and the bash framing ('On Linux/macOS (Bash)') directly violates the user's shell preference. Verbose for a senior user who wants a one-liner."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Concise \u00e2\u20ac\u201d just the command plus a PowerShell variant, no explanatory padding. Better style match for a senior user. But still labels the command as bash and offers Windows/PowerShell, with no awareness of the user's fish shell preference. The find one-liner happens to work in fish, but nothing here reflects recalled preference."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Neither system demonstrates recall of the user's fish shell preference; both frame the answer around bash and add an unrequested Windows/PowerShell variant, so both score low on preference_recall and neither suggests fd as a modern alternative. The core `find . -name \"*.kt\" -mtime -7` command does happen to be fish-compatible, but that's incidental, not evidence of a user model. The differentiator is style: System B is a tight code-first answer with minimal prose, matching a senior user's preference for concise one-liners, while System A pads with flag explanations and best-practice asides that a senior user does not need. System B therefore edges ahead on calibration and style, but both fail the central test of this scenario \u00e2\u20ac\u201d applying the known fish shell preference.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

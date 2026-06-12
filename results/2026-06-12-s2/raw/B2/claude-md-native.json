@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Go is a fine choice for this pattern technically, but I'd push back on the rewrite given your setup.\n\n**The case against:**\n- Your whole backend is Kotlin. One Go service means engineers now need two languages for on-call, debugging, and code review — operational cost that compounds over time across an 80-engineer org.\n- \"Over-engineered\" is a code problem, not a Kotlin problem. You can write a dead-simple Kafka consumer in Kotlin (coroutines + `kafka-clients` + `aws-sdk`) in ~200 lines. Simplifying the existing service is faster and leaves the stack unified.\n- The rewrite cost (write, test, observe, maintain parity during cutover) is real for a service that's already in production.\n\n**When Go would actually justify the switch:**\n- JVM startup time is causing concrete pain (slow K8s pod scaling, cold-start latency on SQS-triggered deployments).\n- Memory pressure on the node is a real constraint and the JVM overhead is measurable.\n- You're planning to hire Go engineers anyway and want this as a forcing function.\n\n**My recommendation:** Strip down the Kotlin version first. If it still feels heavy after that, *then* you have evidence for the rewrite. A 3-day simplification pass is a much cheaper experiment than a language migration.\n\nWhat specifically feels over-engineered — is it abstractions in the code, or the runtime/deployment footprint?",
+  "timestamp": "2026-06-12T17:38:56Z",
+  "latency_ms": 33154,
+  "exit_code": 0,
+  "output_length_chars": 1365,
+  "output_length_tokens_approx": 341,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

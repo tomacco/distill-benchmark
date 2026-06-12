@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — it's the default answer for this exact use case and almost always the right call.\n\n- Built-in TTL per key (`SET key value EX 300`)\n- Sub-millisecond reads, handles high concurrency\n- JSON stored as string or native `JSON` type (RedisJSON module)\n- Dead-simple client libraries in every language\n\n**The only real alternative worth considering:**\n\n| Option | When to prefer it |\n|---|---|\n| **Redis** | Already in your stack, or you want battle-tested ops |\n| **Memcached** | Pure cache, no persistence needed, slightly simpler memory model — marginal difference |\n| **In-process (e.g. `node-lru-cache`, Python `cachetools`)** | Single-process app, want zero infra, latency matters at the sub-ms level |\n\n**My recommendation:** If you have more than one process/instance serving requests, use Redis — the shared cache prevents duplicate upstream calls. If it's a single-process app and you want zero infra overhead, an in-process LRU with TTL is simpler and faster.\n\nThe in-process option collapses if you scale horizontally; Redis doesn't.",
+  "timestamp": "2026-06-12T17:26:28Z",
+  "latency_ms": 12454,
+  "exit_code": 0,
+  "output_length_chars": 1056,
+  "output_length_tokens_approx": 264,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "D3",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Integrates recalled context fluidly without dumping it: Kotlin, gRPC-to-account-service, existing notification-service, Kafka eventing convention, even the relevant teammate (Sofia) and the Q3 due-diligence timeline. Picks the proportional micro-deposit path, sketches a clean two-phase REST endpoint, and routes account state to account-service over gRPC as expected. Offers Plaid/Stripe as a clearly-flagged alternative rather than over-engineering. Effectively zero 'actually, we use...' corrections needed."
+    },
+    "B": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Solid, concise answer with real Kotlin data-class sketches and correct external-REST/internal-gRPC wiring. But it opens by announcing 'No stored knowledge on file \u00e2\u20ac\u201d fresh session' and reconstructs everything from in-prompt context clues, demonstrating no persistence. It also contradicts the established setup by saying don't put bank state in account-service, which would invite a correction. Good engineering, weaker on the recall dimension this test targets."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses are technically strong, propose the same proportional micro-deposit approach, and correctly honor the Kotlin + external-REST/internal-gRPC stack. The deciding factor for a persistence test is demonstrated recall, and System A clearly wins: it weaves in context that was not given in the prompt (notification-service, Kafka event conventions, teammate Sofia, the Q3 timeline) and assigns verification state to the existing account-service exactly as the team's architecture expects, requiring essentially zero drift corrections. System B is honest and competent but explicitly flags itself as a fresh, memoryless session, reconstructs the stack from context clues, and even pushes back against the established account-service ownership pattern, which would cost the user a correction. System A is the stronger answer for this scenario.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

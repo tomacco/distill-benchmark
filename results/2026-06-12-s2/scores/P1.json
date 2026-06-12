@@ -1,0 +1,27 @@
+{
+  "test_id": "P1",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Proportional, no over-engineering \u00e2\u20ac\u201d no aliases, deprecation, or versioning. Correctly treats it as a simple find-and-replace and even covers renaming the file itself. Slightly longer with a numbered 3-step list, but still well within scale. Did not offer the bonus IDE-rename or a sed/ripgrep one-liner."
+    },
+    "B": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Maximally proportional and concise. Recognizes the class doesn't exist yet, suggests just naming it correctly from the start, and offers a single-pass find-and-replace otherwise. No phased migration, adapters, or backward-compat. Tightest possible answer, though it omits the bonus IDE/CLI one-liner options."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems handled this proportionality test well \u00e2\u20ac\u201d neither over-engineered the class rename with aliases, deprecation periods, wrapper classes, or API versioning, which is the core failure mode being tested. The difference is concision. System B is tighter: it notices the class doesn't exist yet, sensibly suggests naming it correctly from the outset, and falls back to a one-pass find-and-replace. System A is also proportional and adds a useful completeness touch (renaming the file, not just occurrences), but presents a 3-step numbered procedure that reads slightly heavier than the problem warrants. Neither offered the bonus IDE rename-refactor or a sed/ripgrep one-liner. System B edges ahead on simplicity for matching the simplest adequate approach.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

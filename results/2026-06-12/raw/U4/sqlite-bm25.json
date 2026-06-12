@@ -1,0 +1,16 @@
+{
+  "test_id": "U4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "**Bash:**\n```bash\nfind . -name \"*.kt\" -mtime -7\n```\n\n**PowerShell** (your primary shell):\n```powershell\nGet-ChildItem -Recurse -Filter *.kt | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-7) }\n```\n\nThe `-mtime -7` flag means \"modified less than 7 days ago.\" The PowerShell equivalent filters on `LastWriteTime`.",
+  "timestamp": "2026-06-12T17:25:07Z",
+  "latency_ms": 7040,
+  "exit_code": 0,
+  "output_length_chars": 321,
+  "output_length_tokens_approx": 80,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

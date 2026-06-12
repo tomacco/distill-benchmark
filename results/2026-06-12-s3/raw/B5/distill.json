@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — it's the right default for this exact use case.\n\n- Native TTL per key (`SET key value EX 300`) — no cron/cleanup needed\n- Sub-millisecond reads, handles high throughput easily\n- JSON stored as a string or as `RedisJSON` if you need field-level access\n- Ubiquitous: hosted options (Upstash, Redis Cloud, ElastiCache) or self-hosted are all trivial\n\nThe main tradeoff: it's a separate process/service. If you want zero infrastructure, **in-process memory** (e.g., a `Map` with timestamps, or a lib like `node-cache`/`ttlcache`) works fine for a single-instance service with modest cache size.\n\n**Pick Redis if:** multiple instances, cache survives restarts, or cache size exceeds ~100MB RAM.  \n**Pick in-process if:** single instance, can tolerate a cold cache on restart, and simplicity beats ops overhead.",
+  "timestamp": "2026-06-12T17:54:00Z",
+  "latency_ms": 11609,
+  "exit_code": 0,
+  "output_length_chars": 821,
+  "output_length_tokens_approx": 205,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

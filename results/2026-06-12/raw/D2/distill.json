@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "No database knowledge file in the SPINE, but the session context notes that DynamoDB and MongoDB were previously evaluated and rejected.\n\nFor **complex aggregation across multiple tables with strong consistency**, those rejections point squarely at relational databases. My recommendation:\n\n**PostgreSQL** (primary recommendation)\n- Full ACID, strong consistency by default\n- Window functions, CTEs, lateral joins — handles complex multi-table aggregations natively\n- `EXPLAIN ANALYZE` + partial indexes + materialized views cover most reporting performance needs\n- No managed complexity overhead for a reporting service\n\n**ClickHouse** (if read-heavy / append-only analytics)\n- Columnar storage makes aggregations 10–100x faster at scale vs row stores\n- Weaker at joins and consistency guarantees — fits pure analytics pipelines, not transactional reporting\n\n**The split I'd suggest:** if this service reads from an existing transactional database, use PostgreSQL with read replicas or a materialized reporting schema. If you're building a dedicated analytics layer ingesting event streams, ClickHouse scales better.\n\nWhat's the data source — existing transactional tables, or event/log data being aggregated fresh?",
+  "timestamp": "2026-06-12T16:48:26Z",
+  "latency_ms": 26756,
+  "exit_code": 0,
+  "output_length_chars": 1224,
+  "output_length_tokens_approx": 306,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

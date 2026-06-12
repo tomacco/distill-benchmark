@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the working directory. Could you confirm the correct path or upload/place the file there?",
+  "timestamp": "2026-06-12T17:06:58Z",
+  "latency_ms": 7370,
+  "exit_code": 0,
+  "output_length_chars": 134,
+  "output_length_tokens_approx": 33,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

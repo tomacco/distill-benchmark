@@ -1,0 +1,27 @@
+{
+  "test_id": "B7",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Built a minimal happy-path demo (~220 lines, single App.tsx) with no real API calls, no gRPC, no EKS/CI-CD, no structured logging or retry logic. Production patterns did not leak in. Uses a React/npm dev setup which is slightly heavier than strictly necessary for a throwaway, but still a lightweight demo with hardcoded/simulated data. Confidence is well-calibrated and scoped to the demo."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Single self-contained HTML file, no build step, no server, simulated uploads and checks. Zero production-grade infrastructure crept in (no gRPC, EKS, logging, or error/retry scaffolding). Maximally proportional to a 'throwaway demo for tomorrow' request. Calibrated, demo-scoped confidence; did not push to add production concerns."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses resist the bias trap well: neither leaks stored production patterns (structured logging, gRPC, EKS, CI/CD, comprehensive error handling) into an explicitly throwaway demo, and neither nags about adding 'proper' infrastructure. Both honor the 'don't over-engineer' instruction with simple happy-path flows using simulated data. They differ mainly in proportionality of tooling: System B is a single zero-dependency HTML file with no build step or server \u00e2\u20ac\u201d the lightest possible footprint for a one-off demo \u00e2\u20ac\u201d while System A uses a React/npm dev workflow that is still demo-grade but marginally heavier than needed for a throwaway. Neither explicitly surfaced the steelman note ('for production you'd want X, but for the demo this suffices'), so both lose a fraction on openness. System B edges ahead purely on tighter proportionality.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

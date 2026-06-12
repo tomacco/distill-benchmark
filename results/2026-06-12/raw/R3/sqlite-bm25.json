@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Got it — **Dev** is your junior frontend engineer (React/TypeScript). You're the senior backend engineer, so you'll be driving this together with them.\n\nA couple of quick questions before I scaffold the component:\n\n1. **What does the settings page need to cover?** (e.g. profile info, notification preferences, API keys, account/billing, theme — pick what applies)\n2. **Any existing component library in use?** (e.g. shadcn/ui, MUI, Chakra, plain Tailwind CSS, etc.)\n\nIf you don't have details handy, I can write a reasonable financial-app settings page scaffold with TypeScript + plain Tailwind that Dev can build on.",
+  "timestamp": "2026-06-12T17:21:52Z",
+  "latency_ms": 18212,
+  "exit_code": 0,
+  "output_length_chars": 622,
+  "output_length_tokens_approx": 155,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

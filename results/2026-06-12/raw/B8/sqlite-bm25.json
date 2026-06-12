@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "Given your existing comfort with PostgreSQL and preference for not adding new infrastructure, **PostgreSQL** is the right call here.\n\n**Why it fits well:**\n\n- **Varying schemas per content type** — use `JSONB` columns for the flexible parts. Query them with indexes, no separate document DB needed.\n- **Structured content** (blog posts, users) — standard relational tables with foreign keys.\n- **Media metadata** — mix of fixed fields + `JSONB` for codec/exif/custom attributes per type.\n\n**Rough schema sketch:**\n\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,          -- 'post', 'video', 'ugc', etc.\n  author_id   uuid REFERENCES users(id),\n  title       text,\n  body        text,\n  metadata    jsonb DEFAULT '{}',     -- type-specific fields\n  published_at timestamptz,\n  created_at  timestamptz DEFAULT now()\n);\n\nCREATE INDEX ON content USING GIN (metadata);  -- fast jsonb queries\nCREATE INDEX ON content (type, published_at);\n```\n\n**When you'd reconsider:**\n- Full-text search is a first-class feature → add `tsvector` column + `pg_trgm`, or layer Typesense/Meilisearch on top\n- Truly unpredictable nested schema evolution at scale → MongoDB becomes competitive, but that's rarely where side projects land\n\nSince you already have Postgres running and prefer using extensions over new infra, you'd get the flexibility of a document store without the operational overhead of another system.",
+  "timestamp": "2026-06-12T17:15:52Z",
+  "latency_ms": 17012,
+  "exit_code": 0,
+  "output_length_chars": 1475,
+  "output_length_tokens_approx": 368,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup, the cleanest approach is:\n\n**Delegate to `account-service`, expose via REST on the payment service.**\n\nThe `account-service` already owns bank account CRUD — verification belongs there too. The payment service just orchestrates.\n\n**Endpoint shape** (external REST, per your pattern):\n```\nPOST /v1/merchants/{merchantId}/bank-account/verify\n```\n\n**Flow:**\n1. Payment service receives REST request (external/partner-facing)\n2. Calls `account-service` via gRPC to initiate/check verification\n3. `account-service` handles micro-deposit logic or delegates to Stripe/Plaid\n\n**For the actual verification mechanism**, micro-deposits are the standard if you're doing it in-house:\n- `VerifyBankAccount` gRPC method on `account-service` — initiates two small ACH deposits\n- `ConfirmBankAccount` gRPC method — merchant provides the amounts to confirm\n\n**account-service proto additions:**\n```protobuf\nrpc VerifyBankAccount(VerifyBankAccountRequest) returns (VerifyBankAccountResponse);\nrpc ConfirmBankAccount(ConfirmBankAccountRequest) returns (ConfirmBankAccountResponse);\n```\n\n**Why not Plaid/Stripe instant verification?** It's simpler to ship but adds a third-party dependency. If the monolith already has micro-deposit logic, extract that pattern rather than introducing a new vendor mid-migration.\n\nSince Sofia is leading payment service design, worth aligning with her on whether verification lives in `account-service` or `payment-service` — my read is `account-service` since it owns the entity, and payment service just calls it.",
+  "timestamp": "2026-06-12T17:18:12Z",
+  "latency_ms": 31811,
+  "exit_code": 0,
+  "output_length_chars": 1554,
+  "output_length_tokens_approx": 388,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

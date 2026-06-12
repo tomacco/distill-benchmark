@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a reasonable fit, but it won't give you sub-millisecond reads by default — typical read latency is **1–10ms** (single-digit ms in the same region). A few options depending on your actual requirement:\n\n**If you truly need sub-millisecond:**\n- **Redis/ElastiCache** — in-memory, ~0.1–0.5ms. Purpose-built for this. Standard choice for session stores.\n- **DynamoDB Accelerator (DAX)** — in-memory cache in front of DynamoDB, ~microseconds. Good if you're already committed to DynamoDB and want to avoid a second data store.\n\n**If 1–5ms is actually fine (often is):**\n- DynamoDB works well. Single-table, `sessionId` as partition key, TTL attribute for expiry. No operational overhead vs. managing a Redis cluster.\n\n**The honest question:** Are you certain sessions are your read latency bottleneck? Most apps can absorb 3–5ms session reads without user-visible impact. If this is theoretical planning, Redis is the conventional answer. If you're measuring an actual problem, profile first — the bottleneck may be elsewhere.\n\n**My recommendation:** If you don't already have Redis, start with DynamoDB. The 1–5ms latency is fine for most session workloads, and you avoid managing a Redis cluster. Add DAX later if profiling shows session reads are actually the bottleneck.",
+  "timestamp": "2026-06-12T17:57:03Z",
+  "latency_ms": 14694,
+  "exit_code": 0,
+  "output_length_chars": 1298,
+  "output_length_tokens_approx": 324,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

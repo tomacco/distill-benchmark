@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "claude-md-native",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack and constraints, here are the top options:\n\n**ClickHouse** — strongest recommendation\n- Columnar storage built specifically for analytics; 10-100x faster than row-based DBs on aggregate queries\n- Works well as a read replica/sink from your Kafka events (native Kafka integration)\n- SQL interface — low learning curve for a team already on PostgreSQL\n- Managed on AWS via Altinity or self-hosted on EKS; fits your IaC/Terraform setup\n\n**Amazon Redshift**\n- Fully managed, deep AWS integration (you're already on EKS/AWS)\n- Strong for complex joins on financial data, good Kafka connectors\n- More expensive than self-hosted ClickHouse; slower for real-time queries\n\n**Apache Druid**\n- Excellent sub-second queries on time-series/event data\n- Heavier operationally — more moving parts than ClickHouse, steeper learning curve\n- Good fit if you need real-time ingestion from Kafka with guaranteed low latency\n\n**Tradeoff summary:**\n\n| | ClickHouse | Redshift | Druid |\n|---|---|---|---|\n| Query speed | Very fast | Fast | Very fast |\n| Ops complexity | Low | Very low (managed) | High |\n| Kafka integration | Native | Via connectors | Native |\n| Cost | Low | Higher | Medium |\n\n**Recommendation:** ClickHouse. It's the sweet spot for your use case — fast columnar reads, Kafka-native ingestion (fits your event streaming), SQL that your Postgres-experienced team knows, and it's deployable on your existing EKS infrastructure. The reporting/analytics service is already planned for extraction from the monolith, so this is a clean greenfield choice.",
+  "timestamp": "2026-06-12T17:08:57Z",
+  "latency_ms": 16919,
+  "exit_code": 0,
+  "output_length_chars": 1569,
+  "output_length_tokens_approx": 392,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

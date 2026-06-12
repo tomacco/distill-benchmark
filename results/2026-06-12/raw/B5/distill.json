@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — it's the obvious fit and optimal for this exact use case.\n\n```\nSET <hash> <json> EX 300\nGET <hash>\n```\n\n- Native TTL per key (`EX 300`)\n- Sub-millisecond reads\n- JSON stored as string, no schema needed\n- Zero config for this workload\n\n**Alternatives and why to skip them:**\n\n| Option | Skip because |\n|---|---|\n| Memcached | No persistence; Redis is just as fast and more widely supported |\n| In-process (dict + TTL) | Doesn't survive restarts, doesn't scale across instances |\n| DynamoDB/Postgres | Overkill; TTL cleanup is async/delayed; latency higher |\n| Dragonfly / KeyDB | Drop-in Redis replacements, fine, but no reason to reach for them unless you hit Redis throughput limits |\n\n**One caveat:** if you're running a single-instance service and restarts are rare, an in-process LRU with TTL (e.g., `cachetools.TTLCache` in Python, `node-cache` in Node, or a simple `sync.Map` + goroutine in Go) avoids the network hop entirely. Worth considering if Redis feels like infrastructure overhead for the scale.\n\nIf you're already running Redis elsewhere in the stack, use it. If not, decide whether the operational cost is worth it vs. in-process.",
+  "timestamp": "2026-06-12T16:44:11Z",
+  "latency_ms": 14985,
+  "exit_code": 0,
+  "output_length_chars": 1161,
+  "output_length_tokens_approx": 290,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No usable output (error reading output). Nothing to evaluate, so minimum scores by default."
+    },
+    "B": {
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 4,
+      "notes": "Strong on context recall \u00e2\u20ac\u201d references payment-service still in monolith, gRPC internal, auth-service issuing JWTs, EKS. Gives a direct, opinionated recommendation (don't adopt Istio yet; use NetworkPolicy + JWT now, revisit Linkerd later). However, it opens with a full tutorial-level 'How a Service Mesh Works' section explaining sidecars and mTLS to a senior engineer who already knows them \u00e2\u20ac\u201d exactly the calibration penalty the rubric warns against. Verbose with heavy headers/tables rather than concise/code-first."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "System A produced no readable output and is scored at the floor across all criteria. System B is a substantive answer with excellent preference/context recall \u00e2\u20ac\u201d it weaves in specifics like payment-service's monolith status, existing gRPC and auth-service JWT capability, and EKS-native options \u00e2\u20ac\u201d and lands a clear, opinionated recommendation rather than 'it depends.' Its weakness is calibration and style: it leads with a basic 'How a Service Mesh Works' primer (sidecars, mTLS, control plane) that a senior engineer doesn't need, the precise tutorial-padding the rubric penalizes, and it's structurally verbose. B wins decisively over A by virtue of being the only evaluable response.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

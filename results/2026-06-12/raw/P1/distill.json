@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the workspace contain `AccountService` yet. If you're about to create this class or are working in a different directory, the fastest approach is:\n\n**For an existing codebase**, use a targeted find-and-replace:\n\n```bash\n# Bash/PowerShell — safe, shows what will change first\ngrep -rl \"AccountService\" . | xargs sed -i 's/AccountService/BankAccountService/g'\n```\n\nOr with PowerShell:\n```powershell\nGet-ChildItem -Recurse -Include *.cs,*.ts,*.java | \n  Select-String \"AccountService\" -List | \n  ForEach-Object { (Get-Content $_.Path) -replace 'AccountService','BankAccountService' | Set-Content $_.Path }\n```\n\n**In an IDE**, the fastest is a project-wide rename refactor (F2 in VS Code/Rider/IntelliJ on the class definition) — it handles symbol references, not just text matches.\n\nIf you point me at the right directory or tell me the file type, I can run the rename directly.",
+  "timestamp": "2026-06-12T16:51:16Z",
+  "latency_ms": 13502,
+  "exit_code": 0,
+  "output_length_chars": 891,
+  "output_length_tokens_approx": 222,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

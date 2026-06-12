@@ -1,0 +1,27 @@
+{
+  "test_id": "D1",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Provides a working docker ps command, but ignores both stored preferences: uses bash (not fish), and is verbose with multiple variants, a chmod explanation, and a follow-up question. This is classic vanilla-baseline over-explaining and over-offering. No evidence of recalling the fish or concise preference."
+    },
+    "B": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Strongly matches the concise/no-over-engineering preference \u00e2\u20ac\u201d terse, action-first. However it still references `bash containers.sh` rather than fish, and is so terse it omits the actual command content, reducing standalone usefulness. Partial signal recall: concise yes, fish no."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Neither response demonstrates clean recall of the fish-shell preference \u00e2\u20ac\u201d both invoke bash explicitly, missing the primary persistence signal. The differentiator is conciseness and over-engineering: System A sprawls into three command variants, a chmod tutorial, and a trailing question, behaving like an unprimed vanilla baseline that recalls nothing. System B is tight and action-first, matching the concise/no-over-engineer preferences, suggesting partial preference recall, though it leans so terse that it drops the actual command and still names bash. B edges out A overall because it saves more correction tokens on conciseness, but the test's key fish-syntax signal is unmet by both, so neither is a strong memory-system result.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

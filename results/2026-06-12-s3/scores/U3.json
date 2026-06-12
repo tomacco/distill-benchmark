@@ -1,0 +1,27 @@
+{
+  "test_id": "U3",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 2,
+      "notes": "Senior-level, technically sharp, and opinionated (clearly recommends the Redis hot-account flag and says 'I'd go Redis'). Addresses the 2000 TPS numbers and Kafka lag headroom directly. But far too long for a user who prefers concise answers \u00e2\u20ac\u201d roughly the same length as the prompt, with a full options table and a separate fallback section. Does not match the 'do X, briefly' preference and never gets under 300 words."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Also senior-level and recommends a single primary approach (client-token consistency). Good proportional instinct (version/token-based, targets the read-your-writes window). But it opens by restating/relabeling the problem before answering ('worth naming precisely before picking a solution'), is the longest response here, and enumerates primary + fallback + version-fence + options table in near-equal depth \u00e2\u20ac\u201d the opposite of the concise, opinionated style the user wants."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses are strong technically and land on proportional, version/flag-based answers (A: Redis dirty-key fence; B: client-token versioning) that correctly target the read-your-writes window without over-engineering, and both rightly dismiss write-through and shorter-TTL. The differentiator is the user-model signal: this user prefers a concise, opinionated 'do X' answer under ~300 words, and both responses violate that by running as long as or longer than the prompt with full comparison tables and multiple fallback branches. A edges ahead because it commits more decisively ('Given merchants are complaining, I'd go Redis') and avoids a problem-restatement preamble, whereas B explicitly re-frames the problem before answering and is the longest of the two. Neither demonstrates strong preference recall or true concision, so both score low on style; A wins narrowly on directness.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

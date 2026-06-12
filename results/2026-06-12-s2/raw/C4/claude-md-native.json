@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already adopted **structured logging with correlation IDs** across all services — match that pattern. Given your Kotlin + EKS stack, here's what to use:\n\n**Logger: [Logback](https://logback.qos.ch/) + [logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)**\n\nThis is the standard for Kotlin/JVM on Kubernetes — outputs JSON natively, plays well with whatever log aggregation you're using (Datadog, CloudWatch, etc.).\n\n```kotlin\n// build.gradle.kts\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```xml\n<!-- logback.xml -->\n<appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\">\n  <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n</appender>\n```\n\n```kotlin\n// Usage — always pass correlation ID and payment context as structured fields\nprivate val log = LoggerFactory.getLogger(PaymentService::class.java)\n\nlog.info(\"payment_initiated\",\n    kv(\"correlation_id\", correlationId),\n    kv(\"payment_id\", paymentId),\n    kv(\"amount_cents\", amountCents),\n    kv(\"merchant_id\", merchantId)\n)\n```\n\n**Key points for a payment service specifically:**\n- Propagate `correlation_id` from the incoming gRPC metadata — thread it through every log call\n- Log `payment_id`, `merchant_id`, and `amount_cents` (not amount as float) as structured fields on every relevant log line\n- Use `WARN` for retryable failures, `ERROR` for non-retryable — keeps alerting clean\n- Never log card numbers, CVVs, or full account numbers — mask to last 4\n\nThis stays consistent with your other services and keeps dependencies minimal — no new infrastructure needed.",
+  "timestamp": "2026-06-12T17:43:36Z",
+  "latency_ms": 18649,
+  "exit_code": 0,
+  "output_length_chars": 1632,
+  "output_length_tokens_approx": 408,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

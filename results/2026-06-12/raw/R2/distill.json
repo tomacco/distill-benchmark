@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "No stored knowledge here. A few quick questions to give you a useful answer:\n\n1. **What stack?** (language/framework — e.g. Node+Prisma, Python+Alembic, Go+golang-migrate, Rails, etc.)\n2. **What DB?** (Postgres, MySQL, SQLite, etc.)\n3. **Existing migration setup?** (monorepo with shared tooling, or greenfield?)\n\nWith that context I can give you a concrete setup instead of a generic one.",
+  "timestamp": "2026-06-12T16:53:38Z",
+  "latency_ms": 9947,
+  "exit_code": 0,
+  "output_length_chars": 391,
+  "output_length_tokens_approx": 97,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

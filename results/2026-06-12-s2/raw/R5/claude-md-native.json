@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "claude-md-native",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "**Structure expected:**\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py\n└── models/\n    └── fraud_model.joblib   ← your trained sklearn model\n```\n\n**Build & run:**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n```\n\n**Key decisions in the Dockerfile:**\n\n| Choice | Reason |\n|---|---|\n| `python:3.11-slim` | Small image; no Conda/full build tools needed |\n| `libgomp1` system dep | scikit-learn's tree ensembles need OpenMP at runtime |\n| `requirements.txt` copied first | Layer is cached unless deps change, not on every code edit |\n| Non-root `appuser` | Limits blast radius if the service is compromised |\n| `HEALTHCHECK` via stdlib `urllib` | No extra tools (`curl`) needed in the slim image |\n| `--workers 2` | CPU-bound inference benefits from multiple workers; tune to `2 * cores` |\n\nDrop your serialized model into `models/fraud_model.joblib` (save with `joblib.dump(model, path)`) and the service is ready.",
+  "timestamp": "2026-06-12T17:50:21Z",
+  "latency_ms": 32428,
+  "exit_code": 0,
+  "output_length_chars": 1002,
+  "output_length_tokens_approx": 250,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

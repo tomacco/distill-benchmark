@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Good fit for Go. The main tradeoffs:\n\n**For the rewrite:**\n- Kafka → SNS is a great fit for Go's concurrency model — goroutines + channels map naturally to consumer groups and fan-out\n- The binary will be significantly smaller and start faster (matters for restarts/scaling)\n- `confluent-kafka-go` and the AWS SDK are mature enough for this use case\n- If Kotlin feels over-engineered, Go's stdlib-first culture will feel like relief\n\n**Against / watch out for:**\n- If the Kotlin service has complex retry/dead-letter logic, that's where \"simple\" services usually hide their complexity — audit that before assuming it's small\n- SNS error handling (partial failures, backoff) needs explicit implementation in Go; Spring or similar may have been doing invisible work\n- Schema registry / Avro/Protobuf deserialization is more ergonomic in the JVM ecosystem; if you're using one, budget extra effort\n\n**Recommendation:** Do it, but read the Kotlin dead-letter and error-handling paths carefully first. That's where rewrites typically underestimate scope. If it's truly just consume → deserialize → publish with minimal retry logic, Go will be cleaner and cheaper to operate.\n\nWhat's the current error handling look like — any DLQ / retry logic?",
+  "timestamp": "2026-06-12T16:41:50Z",
+  "latency_ms": 14922,
+  "exit_code": 0,
+  "output_length_chars": 1251,
+  "output_length_tokens_approx": 312,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

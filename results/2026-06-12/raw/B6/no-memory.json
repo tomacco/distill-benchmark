@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "no-memory",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — it's the best fit here. You write a few lines of SQL, it streams the CSV without loading it into memory, and it handles 50GB comfortably on a laptop. No boilerplate, no memory issues.\n\nThe main tradeoff vs. Python+Polars: DuckDB SQL is simpler for standard aggregations, but if your logic is complex/conditional, Polars gives you more programmatic control. For a straightforward group-by summary, DuckDB wins easily.\n\nQuick sketch:\n\n```python\nimport duckdb, json\n\nresult = duckdb.sql(\"\"\"\n    SELECT\n        merchant_id,\n        COUNT(*)           AS transaction_count,\n        SUM(amount)        AS total_amount,\n        AVG(amount)        AS avg_amount,\n        MIN(created_at)    AS first_seen,\n        MAX(created_at)    AS last_seen\n    FROM read_csv_auto('transactions.csv')\n    GROUP BY merchant_id\n\"\"\").fetchall()\n\n# write summary JSON\nsummary = [\n    {\"merchant_id\": r[0], \"transaction_count\": r[1], \"total_amount\": r[2],\n     \"avg_amount\": r[3], \"first_seen\": str(r[4]), \"last_seen\": str(r[5])}\n    for r in result\n]\nwith open(\"summary.json\", \"w\") as f:\n    json.dump(summary, f, indent=2)\n```\n\nInstall: `pip install duckdb`. Runtime on 50GB is typically a few minutes on a modern machine.\n\nWant me to write the full script against your actual CSV column names?",
+  "timestamp": "2026-06-12T16:31:09Z",
+  "latency_ms": 14772,
+  "exit_code": 0,
+  "output_length_chars": 1285,
+  "output_length_tokens_approx": 321,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

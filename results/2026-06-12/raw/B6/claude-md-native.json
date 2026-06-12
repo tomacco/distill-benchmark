@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**Python + DuckDB.** It handles out-of-core processing (larger than RAM), lets you write a SQL aggregation in ~10 lines, and exports JSON natively. No streaming boilerplate needed.\n\n```python\nimport duckdb, json\n\nresult = duckdb.sql(\"\"\"\n    SELECT\n        merchant_id,\n        COUNT(*)          AS transaction_count,\n        SUM(amount)       AS total_amount,\n        AVG(amount)       AS avg_amount,\n        MIN(created_at)   AS first_seen,\n        MAX(created_at)   AS last_seen\n    FROM read_csv_auto('data.csv')\n    GROUP BY merchant_id\n    ORDER BY total_amount DESC\n\"\"\").df()\n\nwith open(\"summary.json\", \"w\") as f:\n    json.dump(result.to_dict(orient=\"records\"), f, indent=2, default=str)\n```\n\nInstall: `pip install duckdb pandas`\n\nThe main trade-off vs alternatives:\n- **Python + Polars (streaming)** is comparable speed and also handles 50GB well, but requires more code for chunked streaming\n- **awk/shell** streams perfectly but outputting structured JSON per merchant gets messy fast\n- **Go/Rust** would be faster but overkill for one-time use\n\nDuckDB will parallelize automatically, stream the file without loading it into RAM, and finish a 50GB CSV in a few minutes on typical hardware.",
+  "timestamp": "2026-06-12T16:59:22Z",
+  "latency_ms": 17679,
+  "exit_code": 0,
+  "output_length_chars": 1198,
+  "output_length_tokens_approx": 299,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

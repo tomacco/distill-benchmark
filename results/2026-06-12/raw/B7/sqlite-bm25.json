@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification-poc.html` directly in a browser — no server needed.\n\n**What the demo covers (happy path):**\n\n1. **Business Info** — pre-filled with a mock merchant (Bright Goods LLC), read-only fields, info callout\n2. **Documents** — click-to-\"upload\" two docs (Articles of Formation, Business License); Continue button stays disabled until both are uploaded\n3. **Automated Identity Check** — 5 checks animate in sequence (OFAC, EIN, SoS lookup, address, fraud score) with a spinner on the active check\n4. **Review & Submit** — summary grid showing all data + \"5/5 Passed\" confirmation\n5. **Verified** — merchant ID issued, processing limits, risk tier, settlement speed; restart button loops the demo\n\nA \"Restart Demo\" button at the end lets you cycle through it cleanly for the meeting.",
+  "timestamp": "2026-06-12T17:15:33Z",
+  "latency_ms": 112569,
+  "exit_code": 0,
+  "output_length_chars": 818,
+  "output_length_tokens_approx": 204,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

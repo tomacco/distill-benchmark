@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Fish shell, so here's a fish script:\n\n```fish\n#!/usr/bin/env fish\ndocker ps --format \"table {{.Names}}\\t{{.Ports}}\\t{{.Status}}\"\n```\n\nOr a one-liner if you just want it in the terminal:\n\n```fish\ndocker ps --format \"table {{.Names}}\\t{{.Image}}\\t{{.Ports}}\\t{{.Status}}\"\n```\n\nIf you want more detail (host→container port mapping, pretty-printed):\n\n```fish\n#!/usr/bin/env fish\nfor id in (docker ps -q)\n    set name (docker inspect --format '{{.Name}}' $id | string trim -c '/')\n    set ports (docker port $id)\n    echo \"=== $name ===\"\n    if test -n \"$ports\"\n        echo $ports\n    else\n        echo \"(no ports exposed)\"\n    end\nend\n```\n\nThe `docker ps --format` one-liner is usually enough unless you need the full port mapping detail.",
+  "timestamp": "2026-06-12T17:17:16Z",
+  "latency_ms": 10712,
+  "exit_code": 0,
+  "output_length_chars": 737,
+  "output_length_tokens_approx": 184,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

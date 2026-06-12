@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "no-memory",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "For a payment processing service, the main areas to consider:\n\n**Security & Compliance**\n- PCI DSS compliance is mandatory if handling card data — consider tokenization to minimize scope\n- Never store raw card numbers; use a vault or delegate to Stripe/Braintree/Adyen\n- TLS everywhere, audit logging, secrets management\n\n**Architecture**\n- Idempotency keys on all payment endpoints to safely handle retries\n- Make operations idempotent and design for at-least-once delivery\n- Async processing with a queue (payments can be slow or fail) rather than synchronous HTTP\n\n**Reliability**\n- What happens if your DB write succeeds but the provider call fails (or vice versa)? Outbox pattern or saga pattern handles this\n- Reconciliation jobs to catch discrepancies between your records and the provider\n\n**Provider Strategy**\n- Building your own card processing is almost never worth it — integrate a provider (Stripe is the default choice for most)\n- Plan for provider failover if uptime is critical\n\n**Observability**\n- Alert on payment failure rate spikes, not just errors\n- Track each state transition (initiated → authorized → captured → refunded)\n\n**My recommendation:** Unless you have a strong reason to build custom infrastructure, use Stripe or a similar provider and build a thin service around it focused on your business logic, idempotency, and state management. The main tradeoff is cost vs. control — custom infrastructure is cheaper at scale but expensive to build and maintain correctly.\n\nWhat's the specific context — greenfield service, existing system integration, or replacing something? That shapes the architecture significantly.",
+  "timestamp": "2026-06-12T16:38:06Z",
+  "latency_ms": 12944,
+  "exit_code": 0,
+  "output_length_chars": 1660,
+  "output_length_tokens_approx": 415,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

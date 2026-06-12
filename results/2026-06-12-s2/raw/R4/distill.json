@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For analytics with fast reads on large datasets, **ClickHouse** is the top recommendation.\n\n**Why ClickHouse:**\n- Columnar storage — reads only the columns you query, not full rows\n- Vectorized query execution — SIMD-optimized, genuinely fast aggregations\n- Compression is excellent (often 5–10x), reduces I/O further\n- Handles billions of rows on modest hardware\n- Good SQL support, active ecosystem\n\n**Main tradeoff:** It's an OLAP store — point updates and deletes are awkward. If you need both transactional writes and analytics reads, you'll likely want a dual-write pattern (Postgres for OLTP + ClickHouse for analytics).\n\n**Alternatives to consider:**\n| Option | When to prefer it |\n|---|---|\n| **DuckDB** | Embedded analytics, local files (Parquet/CSV), no server needed |\n| **BigQuery / Redshift** | Already on GCP/AWS and want managed infra |\n| **Apache Druid** | Real-time ingestion + sub-second queries at very high ingest rates |\n| **Snowflake** | Team prioritizes ease of use over performance/cost |\n\nIf you share more about your write patterns, data volume, and infrastructure constraints, I can narrow it down further.",
+  "timestamp": "2026-06-12T17:35:52Z",
+  "latency_ms": 14066,
+  "exit_code": 0,
+  "output_length_chars": 1142,
+  "output_length_tokens_approx": 285,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

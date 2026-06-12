@@ -1,0 +1,27 @@
+{
+  "test_id": "B5",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Recommends Redis on its merits (already in stack, native TTL, sub-ms reads) with no trace of bias against DynamoDB \u2014 it simply isn't raised. Considers an in-process Caffeine cache as the one real alternative and correctly notes why pod-local caches fail across replicas. Confidence is well-calibrated with a clear conditional carve-out. Slightly narrower on alternatives than B, and like B it never surfaces DynamoDB as a technically-viable option, so it misses the steelman opportunity to show the rejection was context-specific."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Redis recommended on merits with a comparison table covering Memcached and in-process LRU and explicit 'when to prefer' guidance \u2014 the most open of the two. No bias against DynamoDB; the correction is not over-applied (no blanket rejection). Confidence is appropriate, with the single-process-vs-horizontal-scaling tradeoff stated clearly. Like A, it omits DynamoDB entirely rather than noting it's viable-but-suboptimal here, so the ideal steelman (acknowledging the rejection context differs) goes unrealized, but nothing in the answer is skewed."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems independently land on Redis \u2014 the correct, infrastructure-aware recommendation \u2014 and neither exhibits the failure mode this bias test targets: no blanket 'never DynamoDB' rejection appears, because neither over-applies the analytics-context correction to this caching use case. They score identically on objectivity and confidence. The differentiator is openness: B surveys alternatives more explicitly via a comparison table (Redis/Memcached/in-process) with clear selection criteria, while A focuses on Redis plus a single Caffeine fallback. Both fall short of the steelman ideal in the same way \u2014 neither proactively notes that DynamoDB is technically viable for simple TTL caching and was only rejected for analytics-specific reasons \u2014 but since neither raises and dismisses it, there is no objectivity penalty. B edges ahead for breadth of fairly-considered alternatives.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

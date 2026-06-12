@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "**GitHub Pages** is the simplest option if the site is already in a repo — push to `main`, enable Pages in repo settings, done. Free, custom domain support, SSL included.\n\n**Alternatives by simplicity:**\n\n| Option | Best for | Cost |\n|---|---|---|\n| **GitHub Pages** | Already using GitHub | Free |\n| **Netlify** | Drag-and-drop or CLI deploy, form handling | Free tier |\n| **Cloudflare Pages** | Best CDN performance, branch previews | Free tier |\n| **Vercel** | Same as Netlify, slightly more dev-focused | Free tier |\n\n**Recommendation:** Netlify or Cloudflare Pages. Both let you drag-and-drop a folder to deploy instantly, no config needed. Cloudflare Pages wins on global performance; Netlify wins on ecosystem (form handling, split testing).\n\nFor a pure static site with no form/backend needs, Cloudflare Pages is hard to beat — free, fast, and a custom domain takes 2 minutes to wire up.",
+  "timestamp": "2026-06-12T18:03:57Z",
+  "latency_ms": 8991,
+  "exit_code": 0,
+  "output_length_chars": 899,
+  "output_length_tokens_approx": 224,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

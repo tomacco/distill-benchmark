@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "No stored knowledge found. Fresh session, so going from first principles — and the system notes DynamoDB and MongoDB were previously evaluated and rejected for this context.\n\n**Recommendation: PostgreSQL** (or a dedicated OLAP engine if data volume is high)\n\nFor a reporting service needing complex multi-table aggregations with strong consistency:\n\n**PostgreSQL** — best default choice\n- Full ACID, strong consistency\n- Window functions, CTEs, lateral joins, and `GROUPING SETS`/`ROLLUP`/`CUBE` cover most reporting needs\n- Mature tooling, proven at significant scale\n\n**If you need OLAP at scale (100M+ rows, sub-second dashboards):**\n- **ClickHouse** — extremely fast columnar aggregations, but eventual consistency on replicas and no multi-table joins (denormalize first)\n- **DuckDB** — excellent for analytical queries on files/Parquet, embeds in-process; good for batch reporting pipelines\n- **Redshift / BigQuery / Snowflake** — managed cloud OLAP if operational overhead is a concern\n\n**Why not the alternatives:**\n- DynamoDB: no joins, limited aggregation — wrong tool for this\n- MongoDB: aggregation pipeline is awkward for multi-collection joins; consistency model adds complexity\n\n**My take:** Start with PostgreSQL unless you already have a clear volume problem. It handles reporting workloads well and you avoid the operational complexity of a separate OLAP system. If queries become slow at scale, add read replicas or move hot reporting queries to ClickHouse with a simple ETL.\n\nWhat's the expected data volume and query latency requirement? That's the deciding factor between Postgres and a dedicated OLAP store.",
+  "timestamp": "2026-06-12T17:57:57Z",
+  "latency_ms": 17874,
+  "exit_code": 0,
+  "output_length_chars": 1641,
+  "output_length_tokens_approx": 410,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "D1",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Working command, but uses bash syntax (shebang #!/usr/bin/env bash) with no fish awareness. Verbose: offers two variants, an explanation, and an offer to write a file. Over-explains for what should be a one-liner. Fails the concise preference and the fish preference."
+    },
+    "B": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Much more concise \u00e2\u20ac\u201d leads with the command, minimal chatter. Still shell-agnostic/bash-flavored (invokes via `bash`), not fish syntax. References a 'list-containers.sh' file as if already created, which assumes unseen context. Matches the concise signal but misses the fish signal."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Neither response recalls the fish shell preference \u00e2\u20ac\u201d both default to bash/sh syntax (System A even includes a bash shebang, System B invokes via `bash`), so neither captures the key 'use fish' correction-token savings. The differentiator is conciseness: System B leads directly with the command and stays terse, matching the brevity preference, while System A pads the answer with two script variants, an explanation, and an offer to save the file \u00e2\u20ac\u201d over-engineering a one-liner. System B edges ahead purely on concision, though it oddly presumes a 'list-containers.sh' file exists. The underlying command quality is comparable and correct for both. Overall a weak showing for memory recall from both systems, with B marginally better aligned to the stored preferences.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "No stored knowledge. Here's the recommendation:\n\n**PostgreSQL** is the best fit.\n\n- Blog posts and media metadata have stable, relational structure — foreign keys, joins, and constraints are useful there\n- `JSONB` columns handle the varying schemas per content type without a separate document store; you get indexing on JSON fields too\n- Full-text search via `tsvector` covers blog search without adding Elasticsearch\n- One database, one connection pool, one backup strategy\n\n**The main tradeoff:** if content schemas change constantly and you never do relational queries across them, a document DB like MongoDB removes the need for JSONB workarounds. But for a side project where you want simplicity and you're likely to add relational features (users, tags, permissions), Postgres handles both sides.\n\n**Avoid** splitting this across Postgres + MongoDB early — the operational overhead isn't worth it until you have a clear bottleneck.",
+  "timestamp": "2026-06-12T16:46:36Z",
+  "latency_ms": 13761,
+  "exit_code": 0,
+  "output_length_chars": 942,
+  "output_length_tokens_approx": 235,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

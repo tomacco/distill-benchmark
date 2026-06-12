@@ -1,0 +1,43 @@
+{
+  "test_id": "B7",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Pure client-side HTML, zero dependencies, pre-filled sample data, no server. No leakage of logging/gRPC/EKS or production patterns. Proportional throwaway demo exactly as requested. Confidence calibrated to a quick walkthrough artifact."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Single HTML file, no server, simulated uploads, restart button for re-running in the meeting. Stays strictly on happy path with mock data; no production over-engineering crept in. Appropriately scoped and confident."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Named it a 'poc', read-only mock fields, sequenced animated checks, restart loop. Fully self-contained, no infra or production scaffolding. Clean proportionality; no dogmatic claims."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Self-contained HTML, no server/npm, pre-filled forms, simulated uploads, animated processing. Adds one extra beneficial-owner step but remains a lightweight throwaway demo with no production-grade leakage. Well calibrated."
+    }
+  },
+  "ranking": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "analysis": "All four responses pass the bias test cleanly: each delivered a single self-contained client-side HTML demo with pre-filled mock data, simulated uploads, an animated happy-path verification, and zero server/infrastructure. None leaked stored production patterns (structured logging, gRPC, EKS, CI/CD, retry logic) into a request explicitly marked as a throwaway demo with 'don't over-engineer'. Differences are cosmetic rather than substantive: B and C add a restart button (handy for repeated walkthroughs), C explicitly frames it as a 'poc', and D adds one extra beneficial-owner step that slightly increases scope without crossing into production territory. None of them gratuitously suggested 'we should still add logging' or 'set up the proper service.' The ranking is near-flat \u00e2\u20ac\u201d A edges ahead for the leanest zero-dependency framing, with B and C close behind, and D marginally last only for the small added step. All demonstrate strong proportionality and resistance to production-pattern bias.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "distill",
+    "C": "sqlite-bm25",
+    "D": "claude-md-native"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "R4",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 2,
+      "precision": 4,
+      "naturalness": 2,
+      "notes": "Surfaces no stored context about the team, stack, or prior decisions \u00e2\u20ac\u201d a generic textbook OLAP answer. Recommends ClickHouse/DuckDB/BigQuery with no awareness that DynamoDB/MongoDB were rejected or that the team favors PostgreSQL. Precision is decent only because it dumps no irrelevant context, but it also retrieves nothing relevant. Reads as regurgitated boilerplate."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Proactively weaves in real context: AWS/EKS, Kotlin, PG 14, Kafka, Series B ~80 engineers, monolith extraction of the reporting service. Knowledge feels organically assumed rather than listed. However, it misses the core expected signal \u00e2\u20ac\u201d it pushes Redshift/ClickHouse and explicitly argues against Postgres, never mentioning the team's rejection of DynamoDB/MongoDB or their preference for PG extensions over new infra. Strong on the three rubric axes despite a wrong-direction recommendation."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses fail the underlying expected answer \u00e2\u20ac\u201d neither recommends PostgreSQL-based solutions (extensions, partitioning, TimescaleDB, materialized views) nor recalls that DynamoDB and MongoDB were explicitly rejected for strong-consistency and transaction needs. However, on the three scored criteria (relevance, precision, naturalness), System B is clearly stronger: it retrieves and organically integrates concrete details about the team's stack, scale, and architecture, making its reasoning feel context-aware rather than canned. System A is a generic OLAP comparison with zero retrieved context \u00e2\u20ac\u201d high on not-dumping-junk but empty on relevant knowledge. B ranks above A because it demonstrably surfaced and naturally wove in stored knowledge, even though its final recommendation runs against the team's known PostgreSQL preference.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

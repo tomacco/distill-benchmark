@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — no contest for your requirements.\n\nIt's already your primary database, which matters:\n\n- **Complex aggregations**: Window functions, CTEs, lateral joins, and `GROUPING SETS`/`ROLLUP`/`CUBE` cover virtually any reporting query pattern without reaching for a separate tool.\n- **Strong consistency**: MVCC with serializable isolation — exactly what financial data requires.\n- **Multi-table joins**: What it's built for.\n- **Operational familiarity**: Your team already runs Postgres 14 in production on EKS, so no new runbook, no new failure modes.\n\n**Practical considerations for the reporting service specifically:**\n\n- Use **read replicas** (RDS or Aurora Postgres) to route heavy report queries off the primary — zero schema changes required.\n- For pre-aggregated dashboards with slow-changing data, **materialized views** (refreshed on schedule or via Kafka events) let you hit sub-second latency without a separate OLAP layer.\n- If you eventually hit the wall (billions of rows, sub-second cross-service aggregations), **Redshift** or **ClickHouse** are the natural next step — but start with Postgres and measure first.\n\nThe two alternatives your team already formally ruled out (DynamoDB, MongoDB) were rejected for exactly the reasons that apply here: strong consistency requirements and relational model fit. Postgres is the right call.",
+  "timestamp": "2026-06-12T18:09:15Z",
+  "latency_ms": 17345,
+  "exit_code": 0,
+  "output_length_chars": 1368,
+  "output_length_tokens_approx": 342,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key considerations for a payment processing service:\n\n**Security (highest priority)**\n- PCI DSS compliance — never store raw card data; use a vault or tokenization\n- TLS everywhere; rotate secrets via a secrets manager (not env vars in code)\n- Idempotency keys on all charge endpoints to prevent double-billing\n- Fraud detection hooks (velocity checks, geo-anomalies)\n\n**Provider**\n- Use Stripe, Braintree, or Adyen rather than building your own card processing — the compliance burden alone makes DIY impractical\n- Evaluate based on: fee structure, supported payment methods, webhook reliability, SDK quality\n\n**Reliability**\n- Payments are side-effectful — design for \"at least once\" delivery with deduplication on your end\n- Webhook verification (signature checking) before processing events\n- Dead-letter queue for failed webhook processing; don't lose events silently\n- Retry logic with exponential backoff for provider API calls\n\n**Data model**\n- Separate `payment_intents` / `transactions` from `orders` — they have different lifecycles\n- Track provider IDs alongside your own IDs; you'll need both for reconciliation\n- Audit log every state transition (created → authorized → captured → refunded)\n\n**Observability**\n- Alert on payment failure rate spikes — a silent spike kills revenue\n- Reconciliation job: compare your DB state against provider records daily\n\n**The one decision that shapes everything else**: which provider? That determines your data model, webhook architecture, and compliance scope. Stripe is the lowest-friction starting point for most cases.\n\nWhat's your tech stack and expected transaction volume? That narrows the tradeoffs.",
+  "timestamp": "2026-06-12T18:00:04Z",
+  "latency_ms": 16750,
+  "exit_code": 0,
+  "output_length_chars": 1674,
+  "output_length_tokens_approx": 418,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

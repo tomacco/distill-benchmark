@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "No prior knowledge stored yet. Based on the system context (Kotlin, gRPC internal, REST external, microservices on EKS, payment service extraction in progress):\n\n**Simplest approach: micro-deposit verification via a REST endpoint, delegating to your payment provider.**\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/verify\n```\n\nFlow:\n1. **Initiate** — client posts routing + account number; endpoint calls your payment provider (Stripe, Plaid, etc.) to register the account and trigger two micro-deposits. Store the resulting `provider_account_id` + status `pending` in the DB.\n2. **Confirm** — client posts the two deposit amounts; endpoint validates against the provider, flips status to `verified`.\n\n```kotlin\n// Two endpoints, one resource lifecycle\nPOST /v1/merchants/{id}/bank-accounts          // initiate\nPOST /v1/merchants/{id}/bank-accounts/{acctId}/verify  // confirm amounts\n```\n\nInternally, this service talks to auth-service via gRPC for merchant identity validation before touching the bank account data.\n\n**Why this over alternatives:**\n- Instant verification (Plaid Auth) is faster UX but adds a third-party OAuth flow — more moving parts for an extraction in progress.\n- Self-implementing micro-deposit logic means ACH complexity you don't need.\n- Delegating to provider keeps your service thin and stateless except for the status field.\n\nWhat payment provider are you using? That'll determine whether the confirm step is a webhook or a synchronous call.",
+  "timestamp": "2026-06-12T17:58:18Z",
+  "latency_ms": 19881,
+  "exit_code": 0,
+  "output_length_chars": 1483,
+  "output_length_tokens_approx": 370,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

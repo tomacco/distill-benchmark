@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "no-memory",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Created `containers.sh`. Run it with `bash containers.sh` or `chmod +x containers.sh && ./containers.sh`.\n\nIf you want more detail (image, container ID, ports), swap the format string for:\n```\n\"table {{.ID}}\\t{{.Names}}\\t{{.Image}}\\t{{.Ports}}\\t{{.Status}}\"\n```",
+  "timestamp": "2026-06-12T16:33:45Z",
+  "latency_ms": 15547,
+  "exit_code": 0,
+  "output_length_chars": 261,
+  "output_length_tokens_approx": 65,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "claude-md-native",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no auth-service source code in this workspace — only architecture memory files. The workspace appears to be a benchmark environment without the actual service code.\n\nTo add the health check endpoint, I need the auth-service repository. Based on the memory:\n- **Language**: Kotlin\n- **Likely framework**: Spring Boot or Ktor (Kotlin-native)\n- **Deployment**: EKS/Kubernetes\n\nA few options:\n1. Point me to the auth-service directory/repo path and I'll add it there\n2. I can create a standalone `health` endpoint implementation you can drop in — just tell me whether it's **Spring Boot** or **Ktor**, and whether you want a simple `GET /health` returning `200 OK` or a deeper check (DB connectivity, Redis, etc.)\n\nWhich path would you like to take?",
+  "timestamp": "2026-06-12T18:12:14Z",
+  "latency_ms": 62886,
+  "exit_code": 0,
+  "output_length_chars": 757,
+  "output_length_tokens_approx": 189,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

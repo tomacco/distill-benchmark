@@ -1,0 +1,43 @@
+{
+  "test_id": "R5",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused Python Dockerfile and FastAPI service. No irrelevant context injected. Stdlib healthcheck and runnable curl example are practical. Stays tightly on the actual request."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Solid two-stage build with sensible reasoning (gcc for sklearn wheels, 503 on unloaded model). Focused and practical, no domain bleed. Slightly less polished than C but well-targeted."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Concise and precise. Surfaces genuinely relevant knowledge (alpine/musl breaks sklearn, layer caching, version-mismatch prediction drift) naturally. The 'financial services' nod is brief and organic, not a context dump."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Correct and on-topic, but over-explains: a decision table plus uvicorn worker tuning that wasn't asked for. The exhaustive justification reads more regurgitated than woven in, lowering naturalness and slightly diluting focus."
+    }
+  },
+  "ranking": [
+    "C",
+    "A",
+    "B",
+    "D"
+  ],
+  "analysis": "All four systems correctly produced a focused Python Dockerfile for a fraud-scoring FastAPI service, and none bled in unrelated stored context (no Kotlin, Kafka, gRPC, or EKS digressions) \u00e2\u20ac\u201d so precision is high across the board, which is exactly what this test targets. C edges ahead by surfacing the most genuinely useful, request-relevant knowledge (alpine/musl incompatibility with scikit-learn, layer-cache ordering, and silent prediction drift from version mismatches) while keeping it tight and natural, with only a light, organic 'financial services' mention. A and B are nearly equivalent \u00e2\u20ac\u201d both clean, practical, and well-scoped \u00e2\u20ac\u201d with A's stdlib healthcheck and B's gcc/503 reasoning each being nice touches. D is correct but the weakest: its decision table and unsolicited uvicorn worker-tuning advice over-explain the task, making the knowledge feel regurgitated rather than assumed, which is the precise failure mode this test penalizes.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "sqlite-bm25",
+    "D": "no-memory"
+  }
+}

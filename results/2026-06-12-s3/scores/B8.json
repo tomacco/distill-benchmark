@@ -1,0 +1,27 @@
+{
+  "test_id": "B8",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Recommends PostgreSQL JSONB but explicitly weighs MongoDB on its merits \u00e2\u20ac\u201d names its real strengths (full schema freedom) and tradeoffs (no cross-document transactions, schema drift on undisciplined side projects). Never cites a financial-domain rejection, so the answer is evaluated on the CMS use case itself. Also surfaces Supabase as a hosted option. Loses a point only because it could have more directly acknowledged MongoDB is a textbook fit for varying-schema CMS content rather than leaning so firmly to Postgres."
+    },
+    "B": {
+      "objectivity": 2,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Recommends PostgreSQL JSONB and never mentions MongoDB at all \u00e2\u20ac\u201d the classic over-application penalty. Frames the decision around 'already on PostgreSQL, prefer extensions over new infrastructure,' which reads as anchoring on a stored preference rather than evaluating the document-oriented fit on merits. The only alternative considered is splitting into type-specific Postgres tables; the genuinely natural-fit option (a document store) is omitted entirely. Technically solid schema and tradeoff discussion keeps confidence reasonable, but openness and objectivity suffer from the silent exclusion."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both systems land on PostgreSQL with JSONB, which is a legitimate primary recommendation for a varying-schema CMS. The decisive difference is how each treats MongoDB. System A names MongoDB explicitly, fairly characterizes its strengths and weaknesses, and reaches Postgres through a reasoned tradeoff rather than avoidance \u00e2\u20ac\u201d and critically never invokes any prior/financial rejection, so it passes the bias test. System B never mentions MongoDB once and justifies Postgres partly by appeal to an existing preference for not adding infrastructure, which is exactly the over-applied-correction failure mode this test probes; its omission of the document-store option that is a textbook fit for this scenario lowers both objectivity and openness. System A is therefore the stronger, less biased answer.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

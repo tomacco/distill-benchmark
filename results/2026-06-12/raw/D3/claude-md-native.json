@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "claude-md-native",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup (Kotlin, REST external / gRPC internal, `account-service` already holding bank account data), the simplest approach:\n\n**Use micro-deposit verification** — no external dependency, fits what you already have.\n\n### Flow\n\n1. **`POST /v1/merchants/{id}/bank-accounts/{accountId}/verify/initiate`** (REST, external)\n   - payment-service sends two small deposits (e.g. $0.01–$0.09) to the bank account\n   - Stores a hashed version of the amounts + expiry in PostgreSQL\n   - Publishes a `bank_verification.initiated` Kafka event (for `notification-service` to email the merchant)\n\n2. **`POST /v1/merchants/{id}/bank-accounts/{accountId}/verify/confirm`** (REST, external)\n   - Merchant submits the two amounts they saw\n   - payment-service validates against stored hash\n   - On success: gRPC call to `account-service` to mark account as `VERIFIED`\n\n### Why this fits your setup\n- **No new infra** — Kafka + Postgres + the existing `account-service` gRPC stub handle it\n- **`account-service`** already owns bank account state; payment-service calls it via gRPC to flip the verification flag rather than duplicating that data\n- **`notification-service`** handles the email via Kafka event — no direct coupling\n\n### Alternatives to consider only if you need instant verification\n- **Plaid Auth** — fast but adds a third-party dependency and cost; worth it if merchant onboarding speed is a constraint\n- **Stripe Financial Connections** — same tradeoff\n\nThe micro-deposit path keeps the service boundary clean and needs no new vendor contracts, which is the right call before Series C due diligence.",
+  "timestamp": "2026-06-12T17:03:50Z",
+  "latency_ms": 20439,
+  "exit_code": 0,
+  "output_length_chars": 1616,
+  "output_length_tokens_approx": 404,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

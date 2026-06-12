@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is a good fit here. The access pattern matches Redis's strengths exactly — O(1) key lookups and native TTL support mean you get automatic expiry without a cleanup job.\n\nThe main tradeoff to consider: Redis is an additional operational dependency for session validity, so a Redis outage means all sessions appear invalid (users get logged out). If that's unacceptable, a signed JWT with embedded expiry shifts the trust model client-side and removes the round-trip, at the cost of losing the ability to invalidate sessions before they expire.\n\nSince you already have Redis in the stack, the operational cost is already paid — I'd use it.",
+  "timestamp": "2026-06-12T16:29:45Z",
+  "latency_ms": 7204,
+  "exit_code": 0,
+  "output_length_chars": 651,
+  "output_length_tokens_approx": 162,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "claude-md-native",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification-demo.html` directly in any browser — no server or npm needed.\n\n**What the demo shows (happy path):**\n\n1. **Business Info** — pre-filled with \"Acme Corp LLC\" so you can just click through\n2. **Documents** — click each upload zone to simulate file selection (no actual upload)\n3. **Identity** — beneficial owner details, pre-filled\n4. **Review** — full summary before submit\n5. **Processing** — animated checklist ticking through: EIN validation, sanctions screening, document check, etc. (~5 seconds)\n6. **Approved** — merchant ID generated, all capabilities shown as Active\n\nThe forms are pre-populated so a stakeholder can click \"Continue\" through every step without typing. The processing animation makes the verification feel real without needing a backend.",
+  "timestamp": "2026-06-12T17:01:23Z",
+  "latency_ms": 118835,
+  "exit_code": 0,
+  "output_length_chars": 808,
+  "output_length_tokens_approx": 202,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**PostgreSQL with JSONB** is the sweet spot for this use case.\n\n**Why it fits:**\n- **Varying schemas** → store per-content-type fields in a `JSONB` column alongside fixed columns (`id`, `author`, `created_at`, `status`). GIN indexes keep JSONB queries fast.\n- **Blog posts/media** → regular relational tables for structured stuff (slugs, tags, relationships)\n- **Side project** → one DB to operate, no polyglot overhead\n\n**Rough schema shape:**\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,          -- 'post', 'video', 'ugc', etc.\n  slug        text UNIQUE,\n  author_id   uuid REFERENCES users,\n  status      text DEFAULT 'draft',\n  fields      jsonb NOT NULL DEFAULT '{}',  -- type-specific fields\n  created_at  timestamptz DEFAULT now()\n);\n\nCREATE INDEX ON content USING GIN (fields);\nCREATE INDEX ON content (type, status);\n```\n\n**Alternatives and when they'd be better:**\n- **MongoDB** — if your team is already JS-heavy and wants native document APIs; operationally heavier for a side project\n- **SQLite** (via Turso/Litestream) — if you want near-zero ops and traffic is low; less flexible for complex queries\n- **Separate tables per content type** — cleaner if types are few and schemas are stable; messy if they're numerous or change often\n\n**Recommendation:** Postgres + JSONB. You get schema flexibility where you need it, relational integrity where it matters, and a single system to run. Since you're already running Postgres at work (on Helios), there's zero ramp-up cost.",
+  "timestamp": "2026-06-12T17:28:47Z",
+  "latency_ms": 26152,
+  "exit_code": 0,
+  "output_length_chars": 1569,
+  "output_length_tokens_approx": 392,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

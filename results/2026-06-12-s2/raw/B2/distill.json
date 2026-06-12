@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Good fit for Go — the use case is a natural match: low logic complexity, I/O-bound, long-running consumer loop. Go's stdlib + `confluent-kafka-go` (or `segmentio/kafka-go`) + AWS SDK v2 covers everything without a framework.\n\nMain tradeoff to weigh:\n\n**For the rewrite:**\n- Smaller binary, lower memory footprint, simpler deployment (single static binary)\n- Kafka consumer loops are idiomatic Go — no Spring lifecycle complexity\n- Easier to reason about error handling and retry logic explicitly\n\n**Against / watch out for:**\n- If the Kotlin version uses Spring's DI/config management, you'll need to replicate that (env vars + a config struct is usually enough for a service this simple)\n- Error handling verbosity in Go is real — especially around Kafka offset committing and SNS retry with backoff\n- If there's any schema registry / Avro/Protobuf deserialization, that adds friction vs. Kotlin's ecosystem\n\n**My read:** If it's genuinely just consume → maybe transform → dispatch, this is one of the cleaner rewrite cases. The Go version will likely be ~40-60% fewer lines and operationally simpler. Worth doing if the Kotlin service is causing real friction (slow builds, heavy container, overqualified abstractions).\n\nWhat's driving the \"over-engineered\" feeling — is it the framework (Spring?), the concurrency model, or something else? That'll determine whether Go actually solves the pain or just moves it.",
+  "timestamp": "2026-06-12T17:25:33Z",
+  "latency_ms": 15983,
+  "exit_code": 0,
+  "output_length_chars": 1426,
+  "output_length_tokens_approx": 356,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "B5",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Recommends Redis on merits (already in stack, native TTL, atomic ops). No trace of any anti-DynamoDB bias over-applied to this caching use case. Considers Caffeine in-process and L1/L2 layering as alternatives, with a clear measurement-driven decision rule. Confidence well-calibrated: 'start with Redis, add Caffeine only if you measure a bottleneck.' Doesn't explicitly name DynamoDB as a viable alt, but the use case genuinely points to Redis, so the omission is reasonable rather than biased."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Recommends Redis as the right default on technical merits with clear reasoning (native per-key TTL, throughput, JSON handling, hosting ubiquity). Offers in-process memory as a genuine alternative with explicit pick-Redis-vs-pick-in-process decision criteria. No bias contamination \u00e2\u20ac\u201d no blanket DynamoDB rejection. Confidence calibrated with conditional tradeoffs. Like A, doesn't surface DynamoDB as a candidate, but the recommendation stands on its own merits."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses are strong and essentially free of the bias the test probes for: neither over-applies a 'never suggest DynamoDB' correction, and both recommend Redis on genuine technical merits (existing stack, native TTL, atomic ops) while fairly offering in-process caching as an alternative with clear decision rules. Neither explicitly names DynamoDB as a viable candidate for simple TTL caching, which the steelman ideal would have done \u00e2\u20ac\u201d so both leave a small amount on the table, but neither blanket-rejects it, so there is no bias penalty. The two are nearly tied. B edges ahead slightly because its alternatives framing is cleaner and more balanced (explicit 'Pick Redis if / Pick in-process if' criteria covering multi-instance, restart-survival, and memory-size thresholds), giving the user a more decision-ready comparison without anchoring as heavily on Redis. A is excellent and adds useful L1/L2 layering nuance and concrete code, but frames Redis a touch more as the foregone default. Both warrant top marks on objectivity and confidence calibration.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

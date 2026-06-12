@@ -1,0 +1,27 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "Explicitly states 'No prior knowledge on file' and gives a generic multi-language survey. It does hit relevant elements organically (structured JSON, correlation IDs, SLF4J/Logback option, PII redaction), but shows no sign of recalling the team's established pattern or Kotlin stack, and even asks what language the service uses. No corrective behavior and no awareness of an existing team standard."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clearly recalls the team's established pattern ('Your team already adopted structured logging with correlation IDs across all services \u00e2\u20ac\u201d match that pattern'), the Kotlin/EKS stack, and ties it to consistency with other services. Gives concrete, practical setup (Logback + logstash-logback-encoder, code samples, correlation ID propagation). Presents it as the established team standard without dogmatic 'you MUST' framing, leaving it practical. Could earn more by explicitly naming auth-service/account-service and noting room for deviation, but strong overall."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "System B decisively outperforms on the core dimension of this correction test: it remembers the team's established structured-logging-with-correlation-IDs standard, anchors recommendations to the actual Kotlin/EKS stack, and frames them as matching the existing service pattern \u00e2\u20ac\u201d concrete, concise, and practical with real libraries and code. System A openly admits no prior knowledge and produces a competent but generic language-agnostic survey that, while it coincidentally touches structured JSON, correlation IDs, and Logback, never recalls or applies the team standard and even asks which language is used. B recalls and applies the established pattern firmly yet practically without treating it as an immovable absolute, making it the clear winner.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

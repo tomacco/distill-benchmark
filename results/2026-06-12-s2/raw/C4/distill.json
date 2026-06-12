@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "No prior knowledge on file. For a payment service, here's what I'd recommend:\n\n**Use a structured logger** — not plain `console.log`. The non-negotiables for payment services:\n\n- **Structured JSON output** (machine-parseable for log aggregators)\n- **No PII/card data in logs** — scrub before logging at the logger level\n- **Correlation IDs** on every request for tracing across services\n- **Log levels** that can be changed at runtime (debug off in prod by default)\n\n**Stack recommendations by language:**\n\n| Language | Library |\n|---|---|\n| Node.js | `pino` (fast, low overhead) or `winston` |\n| Python | `structlog` or `loguru` |\n| Go | `zap` or `slog` (stdlib, Go 1.21+) |\n| Java | `SLF4J` + `Logback` with JSON encoder |\n\n**What to log in a payment service:**\n- Transaction IDs (not card numbers)\n- Request/response status codes\n- Latency on each external call (processor, fraud check)\n- Idempotency key on every operation\n- Error codes from payment processors (verbatim — helps debugging)\n\n**What to redact:**\n- Card numbers, CVVs, bank account numbers\n- Full SSN/tax IDs\n- Raw API keys or auth tokens\n\nWhat's the language/runtime for your service? I can give a concrete setup.",
+  "timestamp": "2026-06-12T17:29:52Z",
+  "latency_ms": 16403,
+  "exit_code": 0,
+  "output_length_chars": 1188,
+  "output_length_tokens_approx": 297,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

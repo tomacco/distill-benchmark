@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "claude-md-native",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your stack (AWS, Kafka for events, Kotlin backend, PostgreSQL expertise) and the fintech constraints, here are the top options:\n\n**Recommended: Amazon Redshift or ClickHouse**\n\n| | Redshift | ClickHouse |\n|---|---|---|\n| **Strengths** | Native AWS integration, familiar SQL, scales well | Extremely fast column reads, open source, lower cost |\n| **Fit for you** | Easy Kafka→Redshift pipeline via Firehose/Kafka Connect | Kafka connector exists, Kotlin client available |\n| **Tradeoff** | More expensive at scale; AWS lock-in | Requires operational ownership; self-hosted on EKS |\n\n**My pick: ClickHouse** — for analytics workloads it's typically 10–100x faster than Postgres at aggregation, it's column-oriented (ideal for large-dataset reads), and you can run it on your existing EKS/Terraform setup. Kafka Connect has a mature ClickHouse sink connector.\n\nRedshift makes sense if you want zero operational overhead and are already leaning into AWS managed services.\n\n**What to avoid for this use case:**\n- Don't try to stretch PostgreSQL 14 — it'll work at small scale but aggregation on hundreds of millions of rows will hurt\n- TimescaleDB (Postgres extension) is worth a look only if the data is time-series-heavy and you want to stay in the Postgres ecosystem\n\nOne clarifying question: is this primarily time-series data (transactions over time) or more general OLAP? That'd sharpen the recommendation.",
+  "timestamp": "2026-06-12T18:15:43Z",
+  "latency_ms": 18651,
+  "exit_code": 0,
+  "output_length_chars": 1421,
+  "output_length_tokens_approx": 355,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — it's the right tool for this exact scenario.\n\n- Reads 50GB CSV in streaming fashion (no memory blowup)\n- Native SQL aggregations, so the logic is trivial to write\n- Can output JSON directly\n- Zero boilerplate — one SQL query does the whole job\n\n```python\nimport duckdb, json\n\nconn = duckdb.connect()\nresult = conn.execute(\"\"\"\n    SELECT\n        merchant_id,\n        COUNT(*)            AS transaction_count,\n        SUM(amount)         AS total_amount,\n        AVG(amount)         AS avg_amount,\n        MIN(created_at)     AS first_seen,\n        MAX(created_at)     AS last_seen\n    FROM read_csv_auto('transactions.csv')\n    GROUP BY merchant_id\n\"\"\").fetchall()\n\ncols = [d[0] for d in conn.description]\nsummary = [dict(zip(cols, row)) for row in result]\n\nwith open('summary.json', 'w') as f:\n    json.dump(summary, f, indent=2, default=str)\n```\n\nInstall: `pip install duckdb`\n\n**Alternatives if you prefer:**\n- **Python + Polars** — if you need custom logic beyond SQL; lazy API handles 50GB fine\n- **awk** — if it's a simple count/sum and you want zero dependencies, but JSON output is painful\n\nDuckDB wins here because 50GB + groupby + JSON output is exactly its wheelhouse, and the script is 10 lines.",
+  "timestamp": "2026-06-12T17:40:19Z",
+  "latency_ms": 16723,
+  "exit_code": 0,
+  "output_length_chars": 1227,
+  "output_length_tokens_approx": 306,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

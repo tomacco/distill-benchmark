@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Good context. A few quick questions before we write anything, since you're pairing with Dev (junior React/TS):\n\n1. **What settings does this page need to manage?** (e.g. user profile, notifications, API keys, billing?)\n2. **Is there an existing component library in the frontend?** (e.g. shadcn/ui, MUI, Radix, or custom?)\n3. **What's the current routing setup?** (React Router, Next.js, TanStack Router?)\n\nDev will be working on this with you — knowing the scope will help us write something clean and learnable rather than over-engineered.",
+  "timestamp": "2026-06-12T17:49:28Z",
+  "latency_ms": 17291,
+  "exit_code": 0,
+  "output_length_chars": 543,
+  "output_length_tokens_approx": 135,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

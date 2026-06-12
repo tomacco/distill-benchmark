@@ -1,0 +1,27 @@
+{
+  "test_id": "C3",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Recalled the stored PostgreSQL 14 fact and flagged it as outdated against the conversation's MySQL migration. Acknowledged the discrepancy but resolved it unilaterally, stating the new state as settled fact without inviting confirmation or noting residual uncertainty."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalled the PostgreSQL 14 knowledge, explicitly named the contradiction, deferred to the most recent statement while attributing its source ('what you told me earlier'), raised the scope nuance about whether the file covers the broader stack, and asked before updating. Graceful, transparent conflict handling."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems correctly recalled the stored PostgreSQL 14 fact and deferred to the more recent MySQL migration stated in conversation, so recall and corrective strength are comparable. They diverge on contradiction handling: System A resolves the conflict unilaterally, declaring the migration complete and the memory outdated without seeking confirmation, which risks confidently propagating an unverified switch. System B handles the conflict more gracefully \u00e2\u20ac\u201d it attributes the new info to the user's earlier statement, explicitly flags the contradiction with stored knowledge, surfaces a useful scope caveat (the file may cover more than just the account service), and asks permission before overwriting. System B's transparency and confirmation-seeking better match the rubric's preference for acknowledging the conflict rather than silently overriding, so it ranks first.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

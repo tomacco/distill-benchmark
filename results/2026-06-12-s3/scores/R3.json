@@ -1,0 +1,27 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Recognized Dev by name, assumed TypeScript without asking, and explicitly tailored the component to be 'easy for Dev to follow and extend' \u00e2\u20ac\u201d directly reflecting that Dev is a junior frontend engineer. Surfaced exactly the relevant context (Dev, TS, accessibility) with no irrelevant dumps, and wove it in naturally while asking only genuinely needed scoping questions (sections, styling)."
+    },
+    "B": {
+      "relevance": 1,
+      "precision": 5,
+      "naturalness": 3,
+      "notes": "Explicitly states 'No prior knowledge to load' and asks whether Dev is a person/tool/AI and what the tech stack is \u00e2\u20ac\u201d failed to retrieve that Dev is a junior frontend engineer on a React/TypeScript stack. No irrelevant info injected (precision fine by default), but it surfaced none of the available context, so the questions feel cold rather than informed."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "System A clearly retrieved and applied the relevant user model: it referenced Dev by name, defaulted to TypeScript, and framed the component as something 'easy for Dev to follow and extend,' calibrating to Dev's junior level without over-engineering. Its two clarifying questions are scoped appropriately rather than basic identity questions. System B explicitly loaded no prior knowledge and had to ask whether 'Dev' is even a person and what the tech stack is \u00e2\u20ac\u201d demonstrating a complete retrieval failure on the same context A surfaced effortlessly. Both avoided dumping irrelevant context (so both score well on precision), but A wins decisively on relevance and naturalness because the stored knowledge was organically present in its answer while B's questions reveal its absence.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

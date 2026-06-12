@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "You already have **Redis** in your stack — use it. It's the obvious answer here given your existing infrastructure.\n\nFor your use case specifically:\n\n```kotlin\n// Spring Data Redis / Jedis / Lettuce (all standard on Kotlin/Spring)\nredisTemplate.opsForValue().set(requestHash, jsonBlob, 5, TimeUnit.MINUTES)\nval cached = redisTemplate.opsForValue().get(requestHash)\n```\n\n**Why Redis is the right call:**\n- Already deployed on EKS, no new infra to provision/maintain\n- Native TTL per key — exactly what you need\n- Sub-millisecond reads for simple GET/SET\n- Your ops team already knows it\n\n**The only reason to consider anything else** would be if you need truly zero external dependencies (in which case: in-process Caffeine cache in Kotlin). That's worth it only if the data is small, doesn't need to be shared across pod replicas, and you're fine with cache misses on restart.\n\nGiven you're on Kubernetes with multiple replicas per service, Redis wins — pod-local caches mean each replica builds its own cache independently, which defeats the purpose for shared API response caching.",
+  "timestamp": "2026-06-12T17:40:01Z",
+  "latency_ms": 17209,
+  "exit_code": 0,
+  "output_length_chars": 1089,
+  "output_length_tokens_approx": 272,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

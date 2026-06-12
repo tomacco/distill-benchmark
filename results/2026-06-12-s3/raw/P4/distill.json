@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No prior knowledge on file. Here's the simplest approach:\n\n**Env var flag** — cheapest, zero dependencies:\n\n```python\nUSE_NEW_PAYMENT_FLOW = os.getenv(\"USE_NEW_PAYMENT_FLOW\", \"false\") == \"true\"\n```\n\nCall site:\n```python\nif USE_NEW_PAYMENT_FLOW:\n    process_payment_v2(order)\nelse:\n    process_payment(order)\n```\n\nDark-launch in production by setting the env var for a single instance or a percentage of traffic via your load balancer.\n\n**Trade-off:** no per-user targeting. If you need that (e.g., internal users only, 5% rollout), a simple DB/config table row is the next step up — still no external dependency.\n\nWhat's your deploy setup? (containerized, bare metal, serverless?) That'll affect where the var lives.",
+  "timestamp": "2026-06-12T17:59:46Z",
+  "latency_ms": 11908,
+  "exit_code": 0,
+  "output_length_chars": 720,
+  "output_length_tokens_approx": 180,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

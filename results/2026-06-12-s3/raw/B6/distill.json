@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — best fit here. It streams the CSV without loading into memory, SQL aggregations are trivial to write, and it outputs JSON natively. Zero maintenance surface for a one-time task.\n\n```python\nimport duckdb\n\nduckdb.sql(\"\"\"\n    COPY (\n        SELECT\n            merchant_id,\n            COUNT(*)           AS transaction_count,\n            SUM(amount)        AS total_amount,\n            AVG(amount)        AS avg_amount,\n            MIN(created_at)    AS first_transaction,\n            MAX(created_at)    AS last_transaction\n        FROM read_csv_auto('transactions.csv')\n        GROUP BY merchant_id\n    )\n    TO 'summary.json' (FORMAT JSON, ARRAY true)\n\"\"\")\n```\n\nInstall: `pip install duckdb`. That's the whole script.\n\n**Why not the alternatives:**\n- Pandas: 50GB won't fit in RAM without chunking boilerplate\n- Polars: good lazy-mode alternative, but more code than SQL for this shape\n- Go/Rust: overkill — you'd write a CSV parser + hash map aggregator for a one-time task\n- `awk`: workable but JSON output gets ugly fast\n\nIf the CSV has a tricky schema (inconsistent quoting, mixed types), swap `read_csv_auto` for `read_csv('file.csv', columns={...})` to be explicit. DuckDB will tell you on the first run if auto-detection fails.",
+  "timestamp": "2026-06-12T17:54:28Z",
+  "latency_ms": 26603,
+  "exit_code": 0,
+  "output_length_chars": 1250,
+  "output_length_tokens_approx": 312,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

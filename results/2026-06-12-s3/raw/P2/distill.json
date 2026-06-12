@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "There's no auth-service code in this workspace. Based on the architecture knowledge, auth-service is a **Kotlin** microservice on EKS. To add a health check endpoint, I need the actual service code.\n\nA few questions to unblock:\n\n1. Where is the auth-service repo/directory? Is it a sibling directory, a separate repo, or should I scaffold it here?\n2. What framework does auth-service use? (Ktor, Spring Boot, Micronaut — the knowledge files don't specify)\n\nIf you can point me to the code or tell me the framework, I'll add the endpoint right away. Typical LB health checks are a simple `GET /health` returning `200 OK` with `{\"status\":\"UP\"}`.",
+  "timestamp": "2026-06-12T17:59:17Z",
+  "latency_ms": 17112,
+  "exit_code": 0,
+  "output_length_chars": 645,
+  "output_length_tokens_approx": 161,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

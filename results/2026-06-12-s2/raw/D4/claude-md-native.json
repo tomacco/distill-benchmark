@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Three files created:\n\n**`PaymentCompletedEvent.kt`** — plain data class with financial fields.\n\n**`PaymentCompletedConsumer.kt`** — key decisions:\n- `@KafkaListener` bridges to a `suspend fun handle()` via `runBlocking` (standard Spring Kafka + coroutines pattern)\n- Pulls `X-Correlation-ID` from Kafka headers into MDC; falls back to the record key\n- MDC is cleaned up in `finally` so it never leaks across threads\n- Group ID comes from `kafka.consumer.group-id` property — set it per-environment\n\n**`PaymentCompletedConsumerTest.kt`** — `@EmbeddedKafka` integration test, no mocks. It produces a real record with the correlation header and verifies the consumer receives it.\n\n**Dependencies you'll need** (if not already present):\n```kotlin\n// build.gradle.kts\nimplementation(\"org.springframework.kafka:spring-kafka\")\nimplementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-core\")\ntestImplementation(\"org.springframework.kafka:spring-kafka-test\")\n```\n\nThe `handle()` method is the extension point — wire in your service logic there. What does this consumer need to do when it receives the event (notify, update balance, etc.)?",
+  "timestamp": "2026-06-12T17:45:21Z",
+  "latency_ms": 56689,
+  "exit_code": 0,
+  "output_length_chars": 1139,
+  "output_length_tokens_approx": 284,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

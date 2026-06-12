@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin + PostgreSQL + Redis, payment still in the monolith), here's my recommendation:\n\n**A `feature_flags` table in Postgres, cached in Redis.** No new infrastructure, toggleable without a redeploy.\n\n**Why not alternatives:**\n- Env vars → requires redeploy to toggle, not practical for dark launch\n- LaunchDarkly/Split.io → cost + external dependency for something simple\n- AWS AppConfig → works, but more moving parts than needed for one flag\n\n**Minimal implementation:**\n\n```sql\n-- Flyway migration: V{n}__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    key     VARCHAR(100) PRIMARY KEY,\n    enabled BOOLEAN NOT NULL DEFAULT false,\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()\n);\nINSERT INTO feature_flags (key, enabled) VALUES ('new_payment_flow', false);\n```\n\n```kotlin\n// Kotlin — thin wrapper, reads DB, caches in Redis (5min TTL)\n@Component\nclass FeatureFlags(val jdbc: JdbcTemplate, val redis: RedisTemplate<String, String>) {\n    fun isEnabled(key: String): Boolean {\n        val cacheKey = \"ff:$key\"\n        redis.opsForValue().get(cacheKey)?.let { return it == \"true\" }\n        val enabled = jdbc.queryForObject(\n            \"SELECT enabled FROM feature_flags WHERE key = ?\", Boolean::class.java, key\n        ) ?: false\n        redis.opsForValue().set(cacheKey, enabled.toString(), Duration.ofMinutes(5))\n        return enabled\n    }\n}\n```\n\n```kotlin\n// Usage at the call site\nif (featureFlags.isEnabled(\"new_payment_flow\")) {\n    newPaymentFlowService.process(request)\n} else {\n    legacyPaymentService.process(request)\n}\n```\n\n**Toggling:** `UPDATE feature_flags SET enabled = true WHERE key = 'new_payment_flow';` — takes effect within 5 minutes as Redis TTLs expire.\n\nMain tradeoff: this is intentionally minimal — no per-user/per-tenant targeting, no audit log, no UI. If you need percentage rollouts or user segmentation later, that's when a proper SDK (Unleash self-hosted fits your stack well) becomes worth adding.\n\nWant me to implement this?",
+  "timestamp": "2026-06-12T17:48:26Z",
+  "latency_ms": 29041,
+  "exit_code": 0,
+  "output_length_chars": 2004,
+  "output_length_tokens_approx": 501,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

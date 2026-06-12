@@ -1,0 +1,43 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Pitched at senior level, skips basics, anchors on the actual decision (do they need Istio) with a direct 'don't add Istio yet' recommendation. Considers existing setup: monolith state, gRPC, EKS, existing auth-service JWTs, App Mesh alternative. Includes a 'How a Service Mesh Works' section with sidecar/Envoy diagram that is slightly more tutorial than a senior engineer needs, costing a point on style, but it stays technical (SPIFFE identity, X.509) rather than condescending. Opinionated and concrete with latency/RAM figures."
+    },
+    "B": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+    },
+    "C": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+    },
+    "D": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+    }
+  },
+  "ranking": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "analysis": "Only System A produced a usable response; B, C, and D all failed with read errors and are scored at the floor. System A is a strong answer: it correctly reads the user as a senior engineer, skips definitional fluff about K8s/sidecars/mTLS, and centers the response on the real decision \u00e2\u20ac\u201d whether Istio is warranted given the user's specific context (payment-service still in the monolith, gRPC, EKS, existing auth-service JWTs). It gives a clear, opinionated recommendation ('don't add Istio yet; use JWT service tokens through auth-service') and notes when the cost-benefit flips, plus the App Mesh alternative for EKS. Its only weakness is a 'How a Service Mesh Works' section that leans slightly tutorial for this audience, though it remains technically dense. A wins decisively by default and on merit.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "no-memory",
+    "C": "distill",
+    "D": "sqlite-bm25"
+  }
+}

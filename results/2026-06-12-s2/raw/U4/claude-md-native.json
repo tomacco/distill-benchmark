@@ -1,0 +1,16 @@
+{
+  "test_id": "U4",
+  "competitor_id": "claude-md-native",
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "**On Linux/macOS (Bash):**\n```bash\nfind . -name \"*.kt\" -mtime -7\n```\n\n**On Windows (PowerShell):**\n```powershell\nGet-ChildItem -Recurse -Filter \"*.kt\" | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-7) }\n```\n\nThe `-mtime -7` flag means \"modified less than 7 days ago\". Add `-type f` on the Bash version if you want to exclude directories (unlikely for `.kt` files, but good practice).",
+  "timestamp": "2026-06-12T17:52:26Z",
+  "latency_ms": 6160,
+  "exit_code": 0,
+  "output_length_chars": 394,
+  "output_length_tokens_approx": 98,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

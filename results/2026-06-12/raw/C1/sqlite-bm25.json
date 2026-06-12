@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL 14.",
+  "timestamp": "2026-06-12T17:16:05Z",
+  "latency_ms": 10968,
+  "exit_code": 0,
+  "output_length_chars": 14,
+  "output_length_tokens_approx": 3,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

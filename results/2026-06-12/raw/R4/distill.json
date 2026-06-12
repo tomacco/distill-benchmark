@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "No stored knowledge on this topic. Quick answer:\n\n**ClickHouse** for self-hosted, **BigQuery** or **Snowflake** for managed.\n\n**ClickHouse** is the strongest default for analytics read performance — columnar storage, vectorized execution, 10–100x faster than Postgres on aggregations over large datasets. Free, self-hosted, handles billions of rows well.\n\n**DuckDB** is worth considering if you're doing in-process analytics (Python/embedded), no server needed, surprisingly fast.\n\nTradeoff: ClickHouse requires ops overhead (schema design upfront, no easy schema changes); BigQuery/Snowflake trade cost for zero ops.\n\nWhat's the rough scale (GB/TB/PB) and do you need real-time ingestion or batch?",
+  "timestamp": "2026-06-12T16:54:45Z",
+  "latency_ms": 23894,
+  "exit_code": 0,
+  "output_length_chars": 702,
+  "output_length_tokens_approx": 175,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

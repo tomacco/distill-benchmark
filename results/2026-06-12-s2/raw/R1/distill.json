@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key considerations for your payment processing service, given your stack at Helios Financial:\n\n**Architecture**\n- Extract from the monolith as a standalone Kotlin microservice — consistent with your `auth-service`, `account-service` pattern\n- gRPC for internal communication (consistent with your recent migration), REST + OpenAPI for any external partner-facing APIs\n- Publish domain events to Kafka (e.g., `payment.initiated`, `payment.completed`, `payment.failed`) so `notification-service` and the future `transaction-history` service can consume them\n\n**Data / Consistency**\n- Stick with PostgreSQL — your team already rejected DynamoDB and MongoDB for exactly this use case (strong consistency, multi-table transactions, financial data)\n- Idempotency keys on every payment mutation endpoint — critical for retries and network failures\n- Use Flyway for schema migrations (already your standard)\n\n**Domain concerns**\n- Exactly-once processing: use a database-backed idempotency layer, not just Kafka's `at-least-once`\n- Dual-write risk: if you write to DB and publish to Kafka separately, use the **outbox pattern** — write an event to an `outbox` table in the same transaction, then relay to Kafka asynchronously\n- State machine for payment lifecycle (`PENDING → PROCESSING → COMPLETED/FAILED/REFUNDED`) — model this explicitly, not as ad-hoc status strings\n\n**Compliance / Security**\n- PCI DSS scope: minimize cardholder data in your service; tokenize with Stripe/Braintree/Adyen and never store raw card data\n- Audit log: every state transition with actor, timestamp, and correlation ID (you already have structured logging + correlation IDs)\n- Encryption at rest for any sensitive fields (PostgreSQL column-level or app-level)\n\n**Operational**\n- Dead-letter queue on Kafka for failed payment events\n- Circuit breaker around the external payment provider (Resilience4j works well with Kotlin coroutines)\n- Reconciliation job: periodic batch that compares your DB state against the payment provider's — financial systems drift\n\n**The one question to decide first**: are you building a thin orchestration layer over a third-party processor (Stripe/Adyen), or processing payments in-house? The former is dramatically simpler and the right default for Series B scale.",
+  "timestamp": "2026-06-12T17:34:36Z",
+  "latency_ms": 24991,
+  "exit_code": 0,
+  "output_length_chars": 2286,
+  "output_length_tokens_approx": 571,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "You already have Redis in the stack — use it. It's the obvious answer here and you don't need anything else.\n\n**Redis** with `SET key value EX 300 NX` (or `SETEX`).\n\n- TTL is a first-class primitive (`EX 300` = 5 min)\n- Sub-millisecond reads for hash-keyed lookups\n- JSON values are just strings — no schema needed\n- Already deployed, already operated, zero new infra\n- `NX` flag handles the thundering-herd case (only first writer wins)\n\nThe only alternative worth considering is **in-process cache** (e.g. Caffeine for JVM), which is faster but evaporates on pod restart and diverges across replicas. Fine for single-instance services, wrong once you have multiple pods on EKS.\n\nStick with Redis. The implementation is ~5 lines.",
+  "timestamp": "2026-06-12T16:59:03Z",
+  "latency_ms": 17374,
+  "exit_code": 0,
+  "output_length_chars": 734,
+  "output_length_tokens_approx": 183,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

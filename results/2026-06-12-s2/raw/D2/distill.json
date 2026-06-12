@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "No stored knowledge found, so I'll answer fresh.\n\nFor a reporting service with **complex aggregations across multiple tables and strong consistency**, the clear recommendation is a **relational database (PostgreSQL)**.\n\n**Why PostgreSQL:**\n- Native JOINs, CTEs, window functions, and `GROUPING SETS`/`ROLLUP`/`CUBE` for complex aggregations\n- ACID transactions give you strong consistency by default\n- Mature support for read replicas if query load grows\n- `MATERIALIZED VIEW`s let you pre-compute expensive aggregations and refresh on a schedule\n\n**Main tradeoff:** At very high scale (hundreds of millions of rows), query performance degrades without careful indexing and partitioning. But for a reporting service, that's a solvable problem — not a reason to reach for something else.\n\n**What I'd avoid and why:**\n- **MongoDB** — document model fights you on multi-collection joins; `$lookup` is costly and awkward\n- **DynamoDB** — designed for key-value/simple access patterns; complex aggregations require exporting to another system (Athena, etc.), which adds latency and operational overhead\n- **Columnar stores (Redshift, BigQuery, ClickHouse)** — excellent for analytics but eventual consistency tradeoffs and higher operational complexity; worth considering only if the data volume is very large (10B+ rows) or you're building a dedicated analytics warehouse\n\nIf you anticipate very high write volume alongside heavy reads, I'd layer a **read replica** or route reporting queries to a **ClickHouse** sidecar fed by CDC — but start with Postgres unless you have evidence you'll need it.\n\nWhat's the expected data volume and query frequency? That would sharpen the recommendation.",
+  "timestamp": "2026-06-12T17:30:24Z",
+  "latency_ms": 18701,
+  "exit_code": 0,
+  "output_length_chars": 1697,
+  "output_length_tokens_approx": 424,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

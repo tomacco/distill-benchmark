@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — it's the clear fit given your stack and constraints.\n\nYour team already evaluated and rejected DynamoDB and MongoDB for exactly this use case (strong consistency, multi-table joins, financial data). PostgreSQL is already your primary DB and the team has deep expertise with it.\n\nSpecifically for a reporting service:\n\n- **Complex aggregations**: Window functions, CTEs, `GROUPING SETS`/`ROLLUP`/`CUBE` cover virtually every reporting query pattern\n- **Strong consistency**: ACID transactions across all tables, no eventual-consistency caveats\n- **Multi-table joins**: First-class, optimized with the query planner\n- **Read performance at scale**: A few options depending on load:\n  - **Read replica** (simplest) — offload reporting queries from the OLTP primary\n  - **Materialized views** — pre-aggregate expensive queries, refresh on schedule or via trigger\n  - **TimescaleDB extension** — worth evaluating if the reports are time-series heavy (transactions over time, rolling balances)\n\nGiven that reporting/analytics is still in the monolith and planned for extraction, the read-replica approach lets you start quickly without a separate data store — just point the new `reporting-service` at the replica. If query latency becomes an issue later, materialized views are the next lever before reaching for a dedicated OLAP solution.",
+  "timestamp": "2026-06-12T17:44:03Z",
+  "latency_ms": 18207,
+  "exit_code": 0,
+  "output_length_chars": 1361,
+  "output_length_tokens_approx": 340,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

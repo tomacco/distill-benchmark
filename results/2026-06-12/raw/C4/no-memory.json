@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "no-memory",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "No existing code to go on. The right choice depends on your stack:\n\n**Node.js** — use **[Pino](https://github.com/pinojs/pino)**. It's the fastest JSON logger, has structured logging built in, and integrates well with log aggregators. Add `pino-pretty` for local dev.\n\n**Python** — use the built-in **`logging`** module with **`python-json-logger`** for structured JSON output. If you need more ergonomics, **[structlog](https://www.structlog.org/)** is excellent for structured/context-rich logs.\n\n**Go** — use **[slog](https://pkg.go.dev/log/slog)** (stdlib since Go 1.21) or **[zerolog](https://github.com/rs/zerolog)** for high-performance JSON logs.\n\n**Java/Kotlin** — **SLF4J + Logback** is the standard; use **Logstash Logback Encoder** for JSON output.\n\n**Key practices for a payment service specifically:**\n- Always log in **structured JSON** (not plain text) — your log aggregator will thank you.\n- Include a `trace_id` / `correlation_id` on every log line for request tracing.\n- **Never log card numbers, CVVs, or full PANs** — log masked values only (e.g. `****1234`). This is a PCI-DSS requirement.\n- Use **log levels deliberately**: `ERROR` for failed transactions/exceptions, `WARN` for retries/degraded state, `INFO` for transaction lifecycle events, `DEBUG` only in dev.\n- Ship logs to a centralized store (Datadog, Loki, CloudWatch, etc.) with alerting on error rate spikes.\n\nWhat language/framework is the service using? I can set up the logging config directly.",
+  "timestamp": "2026-06-12T16:33:28Z",
+  "latency_ms": 17510,
+  "exit_code": 0,
+  "output_length_chars": 1493,
+  "output_length_tokens_approx": 373,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

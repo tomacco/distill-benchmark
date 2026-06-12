@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created:\n\n**`Dockerfile`** — two-stage build:\n- `builder` stage compiles deps (needs `gcc` for some scikit-learn wheels) into `/install`\n- Final stage copies only the installed packages — no build tools in the image\n- Runs as a non-root `appuser` for security\n- Health check hits `/health` so orchestrators can detect a failed model load\n\n**`app/main.py`** — the FastAPI service:\n- Model loads once at startup via the `lifespan` context manager (not per-request)\n- `/predict` accepts a `Transaction` body, returns `fraud_probability`, `is_fraud`, and `risk_level`\n- `/health` returns 503 if the model isn't loaded\n\n**To build and run:**\n```bash\n# Place your trained model at models/fraud_model.pkl\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n\n# Test it\ncurl -X POST http://localhost:8000/predict \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"amount\": 450.0, \"merchant_category\": 5, \"hour_of_day\": 2, \"day_of_week\": 6, \"distance_from_home_km\": 120.0, \"prior_fraud_count\": 1}'\n```\n\n**To save your model:**\n```python\nimport joblib\njoblib.dump(trained_model, \"models/fraud_model.pkl\")\n```\n\nAdjust the feature list in `Transaction` and the `features` array to match your actual model's input schema.",
+  "timestamp": "2026-06-12T16:55:19Z",
+  "latency_ms": 32772,
+  "exit_code": 0,
+  "output_length_chars": 1244,
+  "output_length_tokens_approx": 311,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

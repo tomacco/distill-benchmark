@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin backend, Postgres, minimal dependencies preference), the simplest approach is a **env-var-backed flag in the payment service** — no new infrastructure, no external dependency.\n\n**Pattern:**\n\n```kotlin\n// config/FeatureFlags.kt\nobject FeatureFlags {\n    val newPaymentFlow: Boolean = System.getenv(\"FF_NEW_PAYMENT_FLOW\").toBoolean()\n}\n```\n\n```kotlin\n// In the payment handler\nif (FeatureFlags.newPaymentFlow) {\n    newPaymentProcessor.process(request)\n} else {\n    legacyPaymentProcessor.process(request)\n}\n```\n\n**Dark-launch deployment:**\n```yaml\n# Kubernetes deployment env\n- name: FF_NEW_PAYMENT_FLOW\n  value: \"false\"   # flip to \"true\" to enable\n```\n\nYou change the value in your ArgoCD/Terraform config and redeploy — no code change, rollback is another deploy.\n\n**Tradeoff vs. a flag service (LaunchDarkly, etc.):** You can't do percentage rollouts or per-user targeting without a redeploy. If you need those, a Postgres-backed table (flag name + enabled + `user_id_whitelist`) adds targeting without new infrastructure — still just your existing stack.\n\nFor a simple dark-launch (all-or-nothing, internal testing first), the env-var approach is sufficient. Want me to wire it up in the actual payment code?",
+  "timestamp": "2026-06-12T18:12:42Z",
+  "latency_ms": 17383,
+  "exit_code": 0,
+  "output_length_chars": 1243,
+  "output_length_tokens_approx": 310,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

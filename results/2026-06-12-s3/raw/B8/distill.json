@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**PostgreSQL with JSONB** is the strongest fit here.\n\n- Blog posts and media metadata map naturally to typed columns with full relational integrity\n- The `jsonb` column type handles the varying-schema UGC cleanly — you can still index into specific JSON fields when query patterns emerge\n- One database, one connection pool, no sync complexity between stores\n\nThe main tradeoff vs. MongoDB: Postgres requires you to decide upfront which fields get real columns (and enjoy type safety + indexing) vs. which go into `jsonb` (flexible but less structured). MongoDB gives you full schema freedom everywhere, but you lose transactions across documents and tend to accumulate schema chaos on side projects where discipline is lower.\n\nPractical shape:\n\n```sql\n-- structured content\nCREATE TABLE posts (id uuid, title text, body text, published_at timestamptz, ...);\n\n-- flexible UGC per content type\nCREATE TABLE content_items (\n  id      uuid,\n  type    text,           -- 'review', 'listing', 'comment', etc.\n  data    jsonb,          -- varies per type\n  created_at timestamptz\n);\nCREATE INDEX ON content_items USING gin(data);  -- enables fast jsonb queries\n```\n\nIf you want a hosted option with a nice DX for a side project, **Supabase** (managed Postgres) adds auth, storage for media, and a REST API for free, which pairs well with CMS use cases.",
+  "timestamp": "2026-06-12T17:56:37Z",
+  "latency_ms": 16457,
+  "exit_code": 0,
+  "output_length_chars": 1348,
+  "output_length_tokens_approx": 337,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

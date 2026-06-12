@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files contain `AccountService` in the workspace — the codebase appears to be empty or the class doesn't exist here yet.\n\nIf you're about to add it, just name it `BankAccountService` from the start. If the files are elsewhere, point me to the directory and I'll do the rename with a targeted find-and-replace across all affected files.",
+  "timestamp": "2026-06-12T17:58:58Z",
+  "latency_ms": 8579,
+  "exit_code": 0,
+  "output_length_chars": 339,
+  "output_length_tokens_approx": 84,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

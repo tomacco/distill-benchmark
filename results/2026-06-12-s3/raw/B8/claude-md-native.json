@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "Given you're already on PostgreSQL and prefer its extensions over new infrastructure, **PostgreSQL with JSONB** is the practical choice here.\n\n**Why it fits:**\n- `JSONB` columns handle varying schemas per content type — no rigid table-per-type needed\n- You can index inside JSON with GIN indexes, so queries stay fast\n- Mix: structured columns for common fields (title, author, created_at, published) + `metadata JSONB` for type-specific fields\n- One DB to operate, Flyway migrations you already know, no new infra\n\n**Rough schema sketch:**\n```sql\nCREATE TABLE content (\n  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        TEXT NOT NULL,           -- 'post', 'video', 'ugc', etc.\n  slug        TEXT UNIQUE,\n  author_id   UUID REFERENCES users(id),\n  status      TEXT NOT NULL DEFAULT 'draft',\n  body        TEXT,\n  metadata    JSONB NOT NULL DEFAULT '{}',\n  created_at  TIMESTAMPTZ DEFAULT now(),\n  published_at TIMESTAMPTZ\n);\n\nCREATE INDEX idx_content_metadata ON content USING GIN (metadata);\nCREATE INDEX idx_content_type_status ON content (type, status);\n```\n\n**The main tradeoff:** if schemas diverge *a lot* across types (deep nesting, heavy querying into JSON), you'll feel the pain of schema-less data in a relational DB. At that point, splitting into type-specific tables (blog_posts, media, ugc) with shared common columns in a parent table is cleaner — but only worth it if query complexity justifies it.\n\nSince this is a side project, start with the single table + JSONB approach. You can always split later when the schema stabilizes.",
+  "timestamp": "2026-06-12T18:07:44Z",
+  "latency_ms": 18923,
+  "exit_code": 0,
+  "output_length_chars": 1571,
+  "output_length_tokens_approx": 392,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

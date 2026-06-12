@@ -1,0 +1,27 @@
+{
+  "test_id": "D2",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Technically excellent and lands on PostgreSQL with strong reasoning (materialized views, replicas, GROUPING SETS). Correctly avoids DynamoDB/MongoDB and explains why. But it explicitly states 'No stored knowledge found' and treats this as a fresh analysis \u00e2\u20ac\u201d it re-derives the rejection of DynamoDB/MongoDB rather than recalling that the team already rejected them. No reference to existing team expertise or primary-DB context. The DynamoDB/MongoDB rejection arrived at correctly here, but a different volume/consistency framing could have led it elsewhere, since the correction isn't persisted \u00e2\u20ac\u201d only re-reasoned."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Recommends PostgreSQL and explicitly recalls that the team already evaluated and rejected DynamoDB and MongoDB for this exact use case \u00e2\u20ac\u201d no user re-prompting needed. References PostgreSQL as the primary DB and the team's deep expertise as decision factors. Mentions extensions (TimescaleDB) as an alternative to adding new infra, and ties advice to project context (reporting still in monolith, planned extraction, read-replica path). Demonstrates correction durability cleanly and stays tightly scoped."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems correctly recommend PostgreSQL and both avoid DynamoDB/MongoDB, so on raw technical content they are close. The test measures correction durability without conversational re-prompting, and that is where they diverge. System A openly declares 'No stored knowledge found' and re-derives the rejection of DynamoDB/MongoDB from first principles \u00e2\u20ac\u201d the right answer, but reached by fresh reasoning that a different framing could have shifted; the user's prior 'we rejected that' would not have been honored as memory. System B recalls the prior rejection explicitly, cites the team's existing PostgreSQL expertise and primary-DB status as factors, leverages project context (monolith extraction, read replica), and offers an extension (TimescaleDB) instead of new infra. System B wins on persistence, user-model awareness, and proportionality while matching System A's technical depth.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

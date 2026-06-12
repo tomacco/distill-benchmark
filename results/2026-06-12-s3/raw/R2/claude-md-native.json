@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-md-native",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** with PostgreSQL. Here's the standard setup for a new service:\n\n**Directory structure**\n```\nsrc/\n  main/\n    resources/\n      db/\n        migration/\n          V1__create_initial_schema.sql\n          V2__add_indexes.sql\n```\n\n**Flyway config** (`application.yml`)\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false   # only set true when migrating existing DB\n    validate-on-migrate: true\n```\n\n**Gradle dependency** (`build.gradle.kts`)\n```kotlin\nimplementation(\"org.flywaydb:flyway-core\")\n```\n\n**Naming convention** — follow the same pattern your other services use:\n- `V{version}__{description}.sql` for versioned migrations\n- `R__{description}.sql` for repeatable migrations (views, functions)\n- Keep descriptions snake_case\n\n**Key practices for financial data:**\n- Never edit a committed migration — always add a new one\n- Each migration should be a single logical change\n- Test rollback scenarios (Flyway OSS doesn't auto-rollback; write undo scripts manually)\n- Run migrations in the same transaction as your app startup to catch failures early\n\nCheck how `account-service` is configured — it's the closest analogue for account/balance data and your team will have already sorted any Flyway-on-EKS edge cases there.",
+  "timestamp": "2026-06-12T18:13:22Z",
+  "latency_ms": 15550,
+  "exit_code": 0,
+  "output_length_chars": 1311,
+  "output_length_tokens_approx": 327,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

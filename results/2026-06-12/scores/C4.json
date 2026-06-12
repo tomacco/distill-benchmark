@@ -1,0 +1,43 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Strong recall of team's structured-logging-with-correlation-IDs standard and Kotlin/EKS stack. Practical: kotlin-logging + Logback + Logstash encoder with concrete versions, MDC correlation IDs, gRPC/Kafka tracing. Frames as 'match that pattern' not an absolute rule, and advises confirming against auth-service/account-service. Concise and well-targeted."
+    },
+    "B": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No memory of the team standard or the Kotlin/EKS context \u00e2\u20ac\u201d explicitly says 'no existing code to go on' and gives a generic multi-language survey, then asks what language. Good general practices (JSON, correlation IDs, PCI masking) but fails the core recall/correction objective entirely."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Recalls Kotlin microservices on EKS and the team's structured-logging/correlation-ID decision. Solid Logback/SLF4J setup, MDC, coroutine-aware MDC caveat is a nice touch. References auth/account services and Sofia. Presents as the adopted pattern, not immovable. Slightly longer; introduces specific named details that may be unverified."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Recalls the team standardization (cites decisions.md) and Kotlin/EKS/gRPC stack. Match-the-pattern framing, clean Logback + Logstash setup, MDC helper, gRPC propagation, and a practical payment-field/PCI checklist. Strong and actionable; leans on a specific source citation."
+    }
+  },
+  "ranking": [
+    "A",
+    "D",
+    "C",
+    "B"
+  ],
+  "analysis": "A, C, and D all clearly recalled the team's established standard (structured logging with correlation IDs) and tailored to the Kotlin-on-EKS stack with the correct Logback + logstash-encoder library choice, MDC-based correlation IDs, and references to existing services \u00e2\u20ac\u201d all framing it as the adopted convention rather than an immovable 'you MUST' rule, leaving room for deviation. A edges ahead for being the most concise and practical while still hitting recall, MDC tracing across Kafka/gRPC, and the 'confirm against auth/account-service' note. D is nearly equal with a strong PCI/payment-field checklist and gRPC propagation. C is comprehensive (coroutine MDC caveat is valuable) but slightly more verbose. B is the clear outlier: it shows no recall of the team standard or stack, defaults to a generic multi-language survey and asks what language \u00e2\u20ac\u201d failing the correction objective despite offering sound generic logging hygiene.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "no-memory",
+    "C": "sqlite-bm25",
+    "D": "distill"
+  }
+}

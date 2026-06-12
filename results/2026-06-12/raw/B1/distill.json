@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. You already have it, the access pattern is a perfect fit (string key → token value, native TTL), and it avoids adding a DB round-trip on every authenticated request.\n\nThe main tradeoff to be aware of: Redis is in-memory, so tokens survive restarts only if you have persistence configured (RDB/AOF). If you don't need that (tokens can be re-issued on restart), that's fine — just make sure your TTLs are set correctly so you're not leaking memory on logout or expiry.",
+  "timestamp": "2026-06-12T16:41:34Z",
+  "latency_ms": 6255,
+  "exit_code": 0,
+  "output_length_chars": 505,
+  "output_length_tokens_approx": 126,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

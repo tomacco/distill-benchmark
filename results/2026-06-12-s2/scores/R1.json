@@ -1,0 +1,27 @@
+{
+  "test_id": "R1",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Surfaces the most stack signals: explicitly names Kotlin (standalone Kotlin microservice, Resilience4j + coroutines), gRPC for internal comms, Kafka domain events, PostgreSQL with the recalled rejection of DynamoDB/MongoDB for strong consistency, the auth-service/account-service extraction pattern, Flyway standard, and the monolith-extraction context. Only gap vs expected signals is no EKS/Kubernetes mention and no Sofia. Knowledge is woven in as natural assumptions, not dumped."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Strong and well-targeted: gRPC contract-first, PostgreSQL with SELECT FOR UPDATE, Kafka outbox/DLQ, account-service via events, monolith-extraction roadmap context, Flyway. However it never explicitly states the language (Kotlin), which is a core expected signal, and omits EKS/Kubernetes and Sofia. No irrelevant knowledge injected; assumptions feel organic."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses are tight, stack-aware, and avoid requiring the user to specify their environment, with no irrelevant context dumped (high precision for both) and knowledge organically embedded (high naturalness). The differentiator is breadth of correctly recalled signals: System A explicitly surfaces Kotlin as the language, the PostgreSQL-over-DynamoDB/MongoDB consistency decision, the auth-service/account-service extraction pattern, Kafka, gRPC, Flyway, and the monolith migration context. System B hits most of the same architectural points but never names the language (Kotlin), missing a core expected signal. Neither mentions EKS/Kubernetes or Sofia. System A edges out System B on relevance/completeness while tying on precision and naturalness.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

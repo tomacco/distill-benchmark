@@ -1,0 +1,27 @@
+{
+  "test_id": "P2",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Did not deliver code (no source in workspace), but correctly framed the solution as a simple GET /health returning 200 OK with an optional deeper DB check. Resisted any observability-stack overreach. Offered a clean drop-in path pending framework confirmation. Proportional intent is clear, but no actual minimal Kotlin code was produced."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Nearly identical to A: no code in workspace, asks for repo location and framework, and characterizes the target as a simple GET /health returning 200 OK with {\"status\":\"UP\"}. No over-engineering, no metrics/dashboards/tracing suggested. Concrete example response body is a small plus, but still stops short of providing minimal Kotlin code."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems are functionally equivalent: neither found auth-service code in the workspace, both correctly inferred a minimal GET /health returning 200 OK is the proportional answer, and crucially both resisted proposing Prometheus, Grafana, OpenTelemetry, or probe-taxonomy discussions \u00e2\u20ac\u201d exactly the over-engineering this test penalizes. Neither delivered actual Kotlin code, so both fall short of the ideal ~10-20 line implementation, and both reasonably blocked on framework ambiguity (Ktor vs Spring Boot vs Micronaut). The distinction is marginal: System B is slightly tighter and gives a concrete proportional example (status:UP body), while System A offers two explicit paths including an optional deeper check. B edges ahead for being marginally more concise and concrete, but they are essentially tied on all three proportionality dimensions.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Good context. Here's my read on this:\n\n**The ask is feasible but has two paths worth choosing between:**\n\n**Option A — Quick: Polling from frontend (React + REST endpoint)**\n- Add a `/reporting/transactions/count-by-merchant` endpoint to the monolith (payment processing is still in there)\n- React dashboard polls every 30s with `setInterval`\n- Dev can own the frontend; you own the endpoint\n- Ships in 1–2 days, zero new infra\n\n**Option B — Proper: Kafka → aggregation service → WebSocket/SSE**\n- Kafka already streams transaction events\n- A new `reporting-service` consumes events, materializes counts in Redis\n- Frontend subscribes via SSE or WebSocket — true real-time\n- Cleaner architecture story for the Series C narrative Marcus wants\n- But: 1–2 weeks, touches the Kafka pipeline, and reporting/analytics is still in the monolith queue\n\n**My recommendation: Option A now, designed to swap to Option B later.**\n\nFor an investor demo next week, Option A is the right call — it's a dashboard, not a production SLA. The endpoint shape can stay stable when you extract reporting into a proper service during the Series C window. The main risk is that the monolith's transaction table query gets slow at scale, but for a demo that's fine.\n\nConcretely:\n1. Add a read-only `GET /internal/reporting/merchant-transaction-counts` Kotlin endpoint hitting the transactions table with a `GROUP BY merchant_id` + optional `?since=` param\n2. Dev builds a simple React table/chart polling every 30s\n3. Redis cache with a 25s TTL so the DB isn't hammered if Marcus leaves it open on screen\n\nWant me to sketch out the Kotlin endpoint and the React polling component?",
+  "timestamp": "2026-06-12T17:26:14Z",
+  "latency_ms": 25797,
+  "exit_code": 0,
+  "output_length_chars": 1670,
+  "output_length_tokens_approx": 417,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin backend, Redis already in use, PostgreSQL), the simplest approach is an **env-var / config-based flag** — no external service needed for a dark launch:\n\n**Option A: Env var (simplest, zero infra)**\n```kotlin\nval newPaymentFlowEnabled: Boolean = System.getenv(\"FEATURE_NEW_PAYMENT_FLOW\") == \"true\"\n```\nFlip it per-environment via your Kubernetes ConfigMap/Secret. Works immediately, but requires a pod restart to change.\n\n**Option B: Redis flag (no restart, toggle at runtime)**\n```kotlin\nval newPaymentFlowEnabled: Boolean = redisTemplate.opsForValue()\n    .get(\"feature:new_payment_flow\") == \"true\"\n```\nSet with `redis-cli SET feature:new_payment_flow true`. You already have Redis; this adds no new infrastructure and toggles in seconds.\n\n**Option C: Dedicated feature flag service (LaunchDarkly, Unleash)**  \nFull targeting (per-user, percentage rollout, kill switch) — but overkill for a dark launch.\n\n**Recommendation: Option B (Redis).** You already have Redis, it doesn't require a restart, and it's simple enough to replace with a proper flag service later if you need targeting. The only tradeoff is you'll want a sensible default (off) if the key is missing, and cache the value with a short TTL to avoid hammering Redis on every request.\n\nWant me to implement the Redis flag in the payment code?",
+  "timestamp": "2026-06-12T17:07:17Z",
+  "latency_ms": 17191,
+  "exit_code": 0,
+  "output_length_chars": 1335,
+  "output_length_tokens_approx": 333,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

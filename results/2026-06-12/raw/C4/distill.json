@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team has already standardized on **structured logging with correlation IDs** across all services (from `decisions.md`). Match that pattern.\n\nFor a Kotlin service on your stack:\n\n**Library: SLF4J + Logback + `logstash-logback-encoder`**\n\nThis is the standard for Kotlin/JVM on EKS — structured JSON to stdout, Kubernetes collects it, ships to CloudWatch.\n\n```kotlin\n// build.gradle.kts\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```xml\n<!-- logback.xml -->\n<appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n  <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n</appender>\n```\n\n**Correlation IDs via MDC** (matches existing services):\n\n```kotlin\nimport org.slf4j.MDC\n\nfun withCorrelationId(id: String, block: () -> Unit) {\n    MDC.put(\"correlationId\", id)\n    try { block() } finally { MDC.clear() }\n}\n```\n\nFor gRPC (your internal transport), propagate the correlation ID as metadata in an interceptor — pull the pattern from `auth-service` or `account-service` since they're already doing this.\n\n**Checklist:**\n- [ ] JSON structured output (not plain text)\n- [ ] `correlationId` in MDC on every request\n- [ ] Payment-specific fields: `paymentId`, `amount`, `currency`, `merchantId` as structured fields, not string interpolation\n- [ ] Never log card numbers, full account numbers, or CVVs — mask at the logger level\n\nThe `amount`/`currency` fields matter for fintech audit trails — structured fields make them queryable in CloudWatch Insights without regex parsing.",
+  "timestamp": "2026-06-12T16:47:44Z",
+  "latency_ms": 25362,
+  "exit_code": 0,
+  "output_length_chars": 1595,
+  "output_length_tokens_approx": 398,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Endorses Redis on the merits: already deployed, native TTL primitive, sits alongside auth-service. No PostgreSQL bias at all. Adds genuinely relevant fintech nuance (token revocation via key deletion, stateless-vs-stateful tradeoff) without overcomplicating the easy yes. Confidence well calibrated."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Clean, correct endorsement of Redis on its merits (O(1) lookup, native TTL, no new dependency). No PostgreSQL bias. Surfaces a real tradeoff (eviction/restart persistence). Slightly less breadth of considerations than A but appropriately concise for an easy question; confidence well calibrated."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses nail the core task: they straightforwardly endorse Redis as the right fit, citing that it's already in the stack and that key-value-with-TTL is its sweet spot, with zero inappropriate bias toward PostgreSQL or invocation of unrelated DynamoDB/MongoDB rejections. Both are well-calibrated and avoid dogmatism. The difference is depth: System A adds a fintech-pertinent insight about server-side token revocation and the stateless-vs-stateful tradeoff, which is high-value for Helios without derailing the easy yes; System B is tighter and raises the persistence/eviction tradeoff, which is also valid but slightly narrower in scope. A edges ahead on openness for surfacing more relevant considerations while remaining objective.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

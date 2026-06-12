@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given that your team **prefers PostgreSQL extensions over new infrastructure**, the practical answer depends on scale:\n\n**Start here: PostgreSQL + Timescale or columnar storage**\n- [`pg_analytics`](https://github.com/paradedb/paradedb) (ParadeDB) or **TimescaleDB** — both run as Postgres extensions, no new infra, columnar storage, fast aggregations. Fits your stated preference and keeps the stack simple.\n\n**If data volume pushes past ~100GB or query complexity grows:**\n- **ClickHouse** — the strongest pure OLAP option for large-scale analytics. Columnar, vectorized, very fast on aggregations. You can sink Kafka events directly into it (native Kafka consumer). AWS-managed via Altinity or self-host on EKS.\n- **AWS Redshift** — managed, integrates well with the rest of your AWS stack, but can be costly and slower than ClickHouse for ad-hoc queries.\n\n**My recommendation:** Start with `pg_analytics` / ParadeDB since it stays within Postgres 14 and matches your team's preference. If you hit performance walls at scale, migrate to ClickHouse — it pairs naturally with your Kafka event streaming and deploys cleanly on EKS.\n\nThe main tradeoff: Postgres extensions are simpler to operate but won't match ClickHouse's raw throughput at very high cardinality.",
+  "timestamp": "2026-06-12T17:22:12Z",
+  "latency_ms": 18267,
+  "exit_code": 0,
+  "output_length_chars": 1271,
+  "output_length_tokens_approx": 317,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

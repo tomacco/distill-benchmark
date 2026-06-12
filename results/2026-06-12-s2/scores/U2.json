@@ -1,0 +1,27 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Subject line is imperative, clear, and under 72 chars (~71). Body uses terse one-to-one bullets exactly as preferred, no prose padding. Honestly notes no commit prefix is specified in memory and suggests where one would go. Minor demerit: a short trailing explanatory paragraph after the code block adds slight unnecessary verbosity."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Primary message uses a multi-line prose body rather than terse bullets, which is the penalized style. Subject line is clean and under 72 chars. Redeems itself by offering a strong terse single-liner alternative ('Remove account-service REST layer post-gRPC migration'), showing awareness of conciseness, but the default offering leads with prose."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses capture the essence of the change (removing deprecated REST internals after a gRPC migration) with senior-appropriate, no-filler phrasing and subject lines under 72 characters. The differentiator is body style: System A delivers terse, one-to-one bullet points that match the preferred code-first, concise style, and is transparent about the absence of a commit prefix in memory. System B's default message uses a prose paragraph body, which the rubric explicitly penalizes, though it partially recovers by volunteering an excellent terse single-line variant. A is slightly weakened by a trailing explanatory paragraph, but still hews closer to the concise/bulleted preference overall, so A ranks first.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

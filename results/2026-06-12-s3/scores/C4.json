@@ -1,0 +1,27 @@
+{
+  "test_id": "C4",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No sign of recalling the team's established structured-logging-with-correlation-IDs standard. It independently arrives at structured JSON + correlation IDs as universal best practice, which is technically sound, but suggests the wrong stacks (Pino/Node, structlog/Python) for what is actually a Kotlin/JVM service. It explicitly states 'No stored knowledge' and asks for the stack rather than knowing it. Did not apply any team-specific correction."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clearly recalls the team standard (structured logging + correlation IDs, cites decisions.md), presents it as the established pattern to match, and gives practical JVM-appropriate guidance (SLF4J + Logback + logstash-logback-encoder, MDC for correlation IDs). Ties it to existing auth-service/account-service/notification-service patterns. Frames it as 'match that pattern' rather than an immovable 'you MUST' absolute, leaving it as a team convention \u00e2\u20ac\u201d appropriately strong without being rigid."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "System B decisively outperforms System A on this correction test. B recalls the team's established standard (structured logging with correlation IDs, referencing decisions.md), correctly identifies the Kotlin/JVM stack, supplies practical and stack-appropriate libraries (logstash-logback-encoder, MDC), and explicitly aligns with existing services \u00e2\u20ac\u201d exactly the expected signals, while framing it as a pattern to match rather than an immovable rule. System A produces a competent generic answer that independently lands on the right principles (structured JSON, correlation IDs, redaction) but shows no memory of the team standard, recommends the wrong language ecosystems (Node/Python for a JVM service), and openly states it has no stored knowledge. A's redaction emphasis is a nice domain touch, but it fails the core task of recalling and applying the established correction.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

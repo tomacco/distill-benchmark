@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**`PaymentCompletedEvent.kt`** — plain data class with the expected payment fields.\n\n**`PaymentCompletedHandler.kt`** — `suspend` interface so the handler can do async work (DB writes, downstream gRPC calls, etc.).\n\n**`PaymentCompletedConsumer.kt`** — the listener:\n- `runBlocking` bridges `@KafkaListener` (thread-based) into coroutine scope for the handler\n- Extracts `correlation-id` from Kafka headers → `MDC`, falls back to a fresh UUID if absent\n- `MDC.clear()` in `finally` so the thread pool doesn't leak state\n- Re-throws on failure so Kafka can apply the retry/DLQ policy\n\n**`PaymentCompletedConsumerTest.kt`** — integration test using `@EmbeddedKafka` (no mocks):\n- Registers a real `PaymentCompletedHandler` bean via `@TestConfiguration` that captures events\n- Sends a `ProducerRecord` with the `correlation-id` header\n- Waits on a `CountDownLatch` (10s timeout) — fails fast if nothing arrives\n\n**Dependencies you'll need in `build.gradle.kts`** (if not already present):\n```kotlin\nimplementation(\"org.springframework.kafka:spring-kafka\")\nimplementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-core\")\ntestImplementation(\"org.springframework.kafka:spring-kafka-test\")\n```\n\n**`application-test.yml`** should set:\n```yaml\nkafka:\n  consumer:\n    group-id: payment-service-test\nspring.kafka.consumer.auto-offset-reset: earliest\n```\n\nThe `earliest` offset reset is important for tests — without it the consumer may miss messages published before the listener is fully registered.",
+  "timestamp": "2026-06-12T17:19:36Z",
+  "latency_ms": 82579,
+  "exit_code": 0,
+  "output_length_chars": 1528,
+  "output_length_tokens_approx": 382,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

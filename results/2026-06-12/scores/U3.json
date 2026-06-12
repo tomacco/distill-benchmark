@@ -1,0 +1,43 @@
+{
+  "test_id": "U3",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Technically strong and senior-level, but the most verbose answer \u00e2\u20ac\u201d fully enumerates four options plus multiple 'if you don't have X' branches with equal detail, longer than the prompt. Hedges between Kafka-tuning, Redis bypass, and versioned cache rather than committing. Generic; barely uses the specific scenario context. Violates the concise/opinionated preference most."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Leads with a clear single recommendation (Redis bypass tokens) and justifies via specific stack facts (Redis already present, payment in monolith, Sofia leading extraction, Marcus likely merchant-side). Opinionated and well-calibrated, but still long with a full 'Why not the others' section and an outbox detour. Strong user-model awareness."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Decisive single recommendation (timestamp freshness hint), focused and avoids the over-engineering trap. Reuses the existing timestamp rather than inventing a version \u00e2\u20ac\u201d proportional. Still over length budget and restates the problem some, but tighter than A. Less use of named-stakeholder context."
+    },
+    "D": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Cleanest: opens by anchoring on the specific stack fact (Redis already present), commits to one approach (Redis stale-marker), and compresses all alternatives into a compact table rather than full prose \u00e2\u20ac\u201d most proportional treatment of the rejected options. Picks up monolith/Marcus context and adds a focused 'fix first' note. Still over 300 words but the most concise and opinionated of the four."
+    }
+  },
+  "ranking": [
+    "D",
+    "B",
+    "C",
+    "A"
+  ],
+  "analysis": "All four are competent senior-level answers that converge on the same right idea (a synchronous Redis/timestamp read-your-writes signal scoped to just-paid accounts) and correctly dismiss write-through coupling and shorter TTLs \u00e2\u20ac\u201d but the test rewards conciseness, commitment, and use of the user's specific context, and all four exceed the implied length budget. D wins by committing to one approach, anchoring on the concrete stack fact (existing Redis), and collapsing alternatives into a table instead of equal-weight prose, making it the most proportional. B is close, equally opinionated and richest in named-context recall, but longer. C is decisive and elegant (reusing the existing timestamp) yet uses less specific context. A ranks last: technically deepest but the most verbose and least committed, enumerating multiple full solutions and branches \u00e2\u20ac\u201d exactly the verbosity-matching, option-dumping behavior the user dislikes.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "sqlite-bm25",
+    "C": "distill",
+    "D": "claude-md-native"
+  }
+}

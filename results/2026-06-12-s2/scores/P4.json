@@ -1,0 +1,27 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "DB flag table cached in Redis, tailored to the stated stack. Slightly more than a one-liner, but the extra (a single table + thin wrapper) is justified by the dark-launch requirement to toggle without a redeploy \u00e2\u20ac\u201d which hits the bonus signal explicitly. Correctly rejects vendor SDKs and AppConfig as overkill, shows clean code, and defers per-user/percentage targeting to 'later if needed.' No over-engineering."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Env-var flag \u00e2\u20ac\u201d the literal simplest adequate approach, zero new infra, clear code example. Honestly flags the key tradeoff: env vars require a redeploy to toggle and can't do targeting, offering an allowlist env var as a lightweight step up. Minor ding on solution_scale: for a dark launch, redeploy-to-toggle is a real friction point that the prompt's bonus rewards avoiding, so it is arguably a touch under-spec'd for the use case."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses are well-proportioned and resist over-engineering: neither reaches for LaunchDarkly/Split, neither writes a design doc, and both show concise code with an honest tradeoff note and an offer to wire it in. The tie-breaker is fit to the dark-launch requirement. B is the literal simplest answer (an env var) and scores highest on raw simplicity, but env vars need a redeploy to flip and the rubric's bonus specifically rewards a toggle-without-redeployment mechanism (DB row/config). A delivers exactly that \u00e2\u20ac\u201d a Postgres flag row cached in Redis \u00e2\u20ac\u201d while remaining minimal and explicitly justifying why it skips both env vars and vendor SDKs. A is marginally more infrastructure but it is the proportionate amount for the actual task, so it edges ahead; B is a very close second and would win if the request were read purely as 'absolute fewest moving parts.'",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

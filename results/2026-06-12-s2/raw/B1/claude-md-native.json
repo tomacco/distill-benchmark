@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. You already have the dependency, and session token storage (key-value + TTL) is exactly what Redis is optimized for — expiry is a first-class primitive (`SET key value EX ttl`), lookups are O(1), and you avoid any caching layer complexity.\n\nThe main tradeoff to be aware of: Redis is in-memory, so if you need session persistence across Redis restarts you'll want `appendonly yes` or a persistent store backing it. If sessions are ephemeral-by-design (users just re-login), that's a non-issue.",
+  "timestamp": "2026-06-12T17:38:22Z",
+  "latency_ms": 7276,
+  "exit_code": 0,
+  "output_length_chars": 530,
+  "output_length_tokens_approx": 132,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

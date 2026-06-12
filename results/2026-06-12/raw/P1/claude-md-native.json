@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the workspace contain `AccountService` — the codebase appears to be empty or the class doesn't exist here yet.\n\nIf you have the files locally, the fastest approach is a project-wide find-and-replace:\n\n- **VS Code**: `Ctrl+Shift+H` → search `AccountService`, replace with `BankAccountService`, click \"Replace All\"\n- **Command line**: `grep -rl \"AccountService\" . | xargs sed -i 's/AccountService/BankAccountService/g'` (Linux/Mac) or the PowerShell equivalent on Windows\n- **JetBrains IDEs**: `Ctrl+Shift+R` for structural search/replace\n\nOnce you have files to work with (or if you want to paste them here), I can do the rename directly.",
+  "timestamp": "2026-06-12T17:05:53Z",
+  "latency_ms": 9174,
+  "exit_code": 0,
+  "output_length_chars": 653,
+  "output_length_tokens_approx": 163,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

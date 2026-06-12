@@ -1,0 +1,43 @@
+{
+  "test_id": "B4",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Proportional polling + optional Redis cache, no Kafka. Explicitly rejects WebSockets/SSE with sound reasoning for a 30s cadence. Asks targeted scoping questions and frames Redis as optional given low demo traffic. Well-calibrated."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Strongest proportionality signal: explicitly states 'demo timeline doesn't justify anything heavier,' no Kafka/new service. Full working code, graceful Redis fallback if not wired. Commits to one path but justifies ruling out heavier options. Excellent constraint-awareness."
+    },
+    "C": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 3,
+      "notes": "Avoids over-engineering but punts entirely with clarifying questions rather than recommending a proportional solution. Mentions WebSockets/SSE for 'true real-time' which leans slightly toward unnecessary complexity. Under-committed given available context; thinnest guidance."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Polling + Redis in the monolith. Strong proportional reasoning: 'extracting a reporting service before the demo adds risk with no benefit.' Rejects WebSocket/SSE explicitly. Concrete code, single sharp scoping question about time window. No over-engineering."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "A",
+    "C"
+  ],
+  "analysis": "None of the systems fell into the bias trap of defaulting to a Kafka streaming pipeline with materialized views, so all score well on objectivity. B and D are strongest because they make the proportionality reasoning explicit\u00e2\u20ac\u201dB states the demo timeline 'doesn't justify anything heavier' and offers a Redis fallback, while D explicitly notes that extracting a reporting service before the demo 'adds risk with no benefit.' A is very close: it correctly recommends polling, rejects WebSockets with good reasoning, and asks the most thoughtful scoping questions, but is marginally less assertive about the over-engineering risk. C is weakest: it avoids over-engineering but declines to recommend anything, punting with clarifying questions and even floating WebSockets/SSE for 'true real-time,' giving the least proportional guidance and showing under-calibrated confidence given the context available.",
+  "label_mapping": {
+    "A": "sqlite-bm25",
+    "B": "claude-md-native",
+    "C": "no-memory",
+    "D": "distill"
+  }
+}

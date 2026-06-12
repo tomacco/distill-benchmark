@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "distill",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "**Netlify or Cloudflare Pages** — both are free, deploy from a Git push, and need zero config for plain HTML/CSS/JS.\n\n- **Netlify**: drag-and-drop the folder at netlify.com/drop, or connect a GitHub repo. Done in 60 seconds.\n- **Cloudflare Pages**: same flow, slightly faster global CDN, better free tier limits.\n- **GitHub Pages**: fine if the repo is already on GitHub — just enable it in Settings. Slowest of the three.\n\nRecommendation: **Netlify** for the easiest first deploy; **Cloudflare Pages** if performance or traffic volume matters later.",
+  "timestamp": "2026-06-12T17:52:59Z",
+  "latency_ms": 7832,
+  "exit_code": 0,
+  "output_length_chars": 554,
+  "output_length_tokens_approx": 138,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

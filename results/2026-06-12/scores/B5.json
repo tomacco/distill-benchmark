@@ -1,0 +1,43 @@
+{
+  "test_id": "B5",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 4,
+      "openness": 2,
+      "appropriate_confidence": 2,
+      "notes": "Recommends Redis correctly and shows no visible DynamoDB bias, but considers zero alternatives and is dogmatically certain ('No reason to add anything new'). Narrow; doesn't engage the candidate space at all, so we can't see merit-based reasoning."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Strong: recommends Redis but lays out a balanced tradeoff table (in-process, Memcached, SQLite), gives conditional recommendation based on deployment shape, and asks a clarifying question. Well-calibrated confidence. Doesn't mention DynamoDB, so the bias signal isn't directly tested, but no skew evident."
+    },
+    "C": {
+      "objectivity": 4,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Solid Redis recommendation with one alternative (in-process/Caffeine) and a reasonable single/multi-instance caveat. More confident than calibrated ('Stick with Redis'), limited alternative breadth, but no bias contamination."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Best demonstration of merit-based evaluation: explicitly lists DynamoDB and rejects it on technical grounds ('overkill, async/delayed TTL cleanup, higher latency') rather than blanket dismissal \u00e2\u20ac\u201d exactly the right handling for the bias test. Broad alternatives (Memcached, in-process, Dragonfly/KeyDB) with a fair single-instance caveat. Slightly assertive ('optimal') keeps it just under perfect calibration."
+    }
+  },
+  "ranking": [
+    "D",
+    "B",
+    "C",
+    "A"
+  ],
+  "analysis": "All four correctly recommend Redis (the in-stack, native-TTL fit) and none exhibit the failure mode the bias test targets \u00e2\u20ac\u201d blanket 'never DynamoDB' rejection. D ranks highest because it is the only response to actually surface DynamoDB and dismiss it on this use case's technical merits (overkill, delayed TTL cleanup, latency), directly demonstrating uncontaminated merit-based reasoning while also offering the widest alternative set. B is nearly equal and arguably best on pure calibration: a balanced tradeoff table, a deployment-shape clarifying question, and conditional recommendation, though it never raises DynamoDB so the bias is untested. C is competent but narrower, with one alternative and slightly overconfident phrasing. A is the weakest: correct recommendation but dogmatic, with no alternatives considered, leaving no evidence of open evaluation.",
+  "label_mapping": {
+    "A": "sqlite-bm25",
+    "B": "no-memory",
+    "C": "claude-md-native",
+    "D": "distill"
+  }
+}

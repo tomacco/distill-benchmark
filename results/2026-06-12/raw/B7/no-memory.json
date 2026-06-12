@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "no-memory",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification-demo.html` directly in any browser — no server needed.\n\n**Happy path flow:**\n1. **Business Info** — pre-filled with sample data so you can click straight through\n2. **Documents** — click each doc to \"check\" it; Submit unlocks when all four are checked\n3. **Verification** — animated progress through 5 checks (business reg → EIN → sanctions → bank → risk), then the approval screen with a generated merchant ID, account details, and tier badge\n\nEverything runs client-side with zero dependencies. The sample data (Acme Retail Inc., EIN, etc.) is already filled in so the demo flows in about 10 seconds for the stakeholder walkthrough.",
+  "timestamp": "2026-06-12T16:32:26Z",
+  "latency_ms": 75716,
+  "exit_code": 0,
+  "output_length_chars": 684,
+  "output_length_tokens_approx": 171,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

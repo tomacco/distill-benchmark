@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — you already have it in your stack.\n\nFor this use case it's a perfect fit:\n\n```kotlin\n// Spring Data Redis / Lettuce example\n@Service\nclass ApiResponseCache(private val redis: StringRedisTemplate) {\n    private val ttl = Duration.ofMinutes(5)\n\n    fun get(key: String): String? = redis.opsForValue().get(key)\n\n    fun set(key: String, value: String) {\n        redis.opsForValue().set(key, value, ttl)\n    }\n}\n```\n\n`SET key value EX 300` is a single atomic op — TTL is a first-class Redis feature, no background cleanup needed. You get sub-millisecond reads, and there's zero new infrastructure to operate.\n\nThe only reason to look elsewhere would be if your Redis instance is already under heavy load from other caching. In that case, an in-process cache (Caffeine with `expireAfterWrite(5, MINUTES)`) is the right move — faster, no network hop, no ops burden. You could even layer them (L1 Caffeine → L2 Redis) if you have multiple service instances and want cross-pod cache sharing.\n\n**Recommendation**: Start with Redis. Add Caffeine as L1 only if you measure Redis latency as a bottleneck.",
+  "timestamp": "2026-06-12T18:05:13Z",
+  "latency_ms": 17361,
+  "exit_code": 0,
+  "output_length_chars": 1112,
+  "output_length_tokens_approx": 278,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

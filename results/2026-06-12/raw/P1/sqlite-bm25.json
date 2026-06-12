@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No matches found in the workspace — `AccountService` doesn't exist in any files here. The fastest way to do this rename in general is:\n\n```bash\n# Dry-run to see what would change\ngrep -rl \"AccountService\" . | xargs sed -i 's/AccountService/BankAccountService/g'\n```\n\nOr with an IDE: **Rename Symbol** (F2 in VS Code / Shift+F6 in JetBrains) on the class definition — it handles imports, references, and sometimes filenames in one step.\n\nIf you want me to do it here, point me to the right directory or file and I'll apply it.",
+  "timestamp": "2026-06-12T17:19:47Z",
+  "latency_ms": 9323,
+  "exit_code": 0,
+  "output_length_chars": 529,
+  "output_length_tokens_approx": 132,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Go would work technically, but I'd push back on this for a few reasons given your context:\n\n**Against the rewrite:**\n- Your entire backend is Kotlin. Introducing Go means a second runtime, second set of dependencies, second set of deployment/debugging patterns — ongoing tax on an 80-engineer team, not a one-time cost.\n- Sofia owns the backend architecture and drove the gRPC migration. A language change without her buy-in could create friction, and she'll be the one maintaining it.\n- \"Over-engineered\" is fixable without a rewrite — you could just delete the over-engineering.\n\n**When it would make sense:**\n- If the team already has Go expertise and wants to expand its footprint.\n- If Kotlin startup time / memory overhead is actually causing a measurable ops problem (unlikely for a Kafka consumer).\n\n**Recommendation:** Simplify the Kotlin service rather than rewrite it. A Kafka-to-SNS forwarder is ~100 lines of idiomatic Kotlin with coroutines — if it's ballooned beyond that, that's a pruning task, not a rewrite. If you genuinely want to introduce Go, that's a team-level architecture decision worth a conversation with Sofia first.",
+  "timestamp": "2026-06-12T18:03:46Z",
+  "latency_ms": 19097,
+  "exit_code": 0,
+  "output_length_chars": 1151,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

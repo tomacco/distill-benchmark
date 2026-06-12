@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**PostgreSQL with JSONB** — matches your existing expertise and avoids new infrastructure.\n\nThe schema-flexibility problem for varying content types is well-solved with a hybrid approach:\n\n```sql\n-- Structured core fields on a shared table\nCREATE TABLE content_items (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,          -- 'post', 'media', 'ugc'\n  slug        text UNIQUE,\n  author_id   uuid REFERENCES users,\n  status      text DEFAULT 'draft',\n  published_at timestamptz,\n  created_at  timestamptz DEFAULT now(),\n\n  -- Varying schema per type lives here\n  metadata    jsonb NOT NULL DEFAULT '{}'\n);\n\nCREATE INDEX ON content_items USING GIN (metadata);\nCREATE INDEX ON content_items (type, status, published_at DESC);\n```\n\n```sql\n-- Blog post: metadata = { \"title\": \"...\", \"body\": \"...\", \"tags\": [...] }\n-- Media:     metadata = { \"url\": \"...\", \"mime_type\": \"...\", \"width\": 1920, \"height\": 1080 }\n-- UGC:       metadata = { \"rating\": 4, \"fields\": { \"custom_key\": \"value\" } }\n```\n\nYou get full-text search via `tsvector`, can query into JSONB with operators (`metadata->>'title'`, `metadata @> '{\"tags\": [\"tech\"]}'`), and enforce per-type validation at the app layer or with check constraints.\n\n**Tradeoff:** if content types diverge heavily and you need strong per-type querying, you'd eventually want per-type tables. But for a side project, the single-table JSONB approach handles it until you actually hit that pain — and you won't need to operate a second database.",
+  "timestamp": "2026-06-12T17:42:34Z",
+  "latency_ms": 26307,
+  "exit_code": 0,
+  "output_length_chars": 1519,
+  "output_length_tokens_approx": 379,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

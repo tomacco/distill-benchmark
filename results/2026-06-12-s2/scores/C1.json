@@ -1,0 +1,27 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correctly answers PostgreSQL 14 and explicitly attributes it to the Helios Financial architecture knowledge base, giving strong evidence of recall and a confident, sourced assertion. Slightly less concise than ideal due to the second line, but still tight."
+    },
+    "B": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Correct, maximally concise one-line answer matching the user's brevity preference. However it gives no evidence of where the fact came from, so recall and corrective strength are implied rather than demonstrated; no signal of handling any conflict."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both systems give the correct answer (PostgreSQL 14) without hedging or unsolicited upgrade advice, satisfying the core expected signal. System B is the more concise of the two \u00e2\u20ac\u201d a clean one-line answer that best matches the stated brevity preference \u00e2\u20ac\u201d but it offers no indication that the fact was actively recalled from stored knowledge versus guessed, which weakens its demonstrated recall and corrective strength. System A is marginally longer but explicitly grounds the answer in the architecture knowledge base, signaling genuine retrieval and a confident, sourced correction. Because the rubric weights recall, corrective strength, and contradiction handling over raw brevity, System A's sourced confidence edges out System B's terseness, ranking A first.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

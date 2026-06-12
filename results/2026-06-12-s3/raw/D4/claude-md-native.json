@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Files created:\n\n```\nsrc/main/kotlin/com/heliosfinancial/payments/kafka/\n  PaymentCompletedEvent.kt       — data class\n  PaymentCompletedHandler.kt     — suspend interface (implement with your business logic)\n  PaymentCompletedConsumer.kt    — @KafkaListener + coroutines + MDC correlation ID\n\nsrc/test/kotlin/com/heliosfinancial/payments/kafka/\n  PaymentCompletedConsumerIntegrationTest.kt — EmbeddedKafka integration test\n```\n\n**Dependencies you'll need in `build.gradle.kts`** if not already present:\n```kotlin\nimplementation(\"org.springframework.kafka:spring-kafka\")\nimplementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.1\")\ntestImplementation(\"org.springframework.kafka:spring-kafka-test\")\n```\n\n**Key design choices:**\n- `PaymentCompletedHandler` is an interface so you inject the real implementation without touching the consumer. The test swaps in `CaptureHandler` via `@TestComponent`.\n- Correlation ID is read from the `X-Correlation-Id` Kafka header; falls back to a new UUID so logs are always traceable.\n- `withContext(MDCContext())` propagates MDC across coroutine suspension points (that's what the `kotlinx-coroutines-slf4j` dep is for).\n- `MDC.remove` runs after `withContext` so the thread is clean before Kafka reuses it.\n\nWhat should `PaymentCompletedHandler.handle()` do — update account balance, trigger a notification, or something else?",
+  "timestamp": "2026-06-12T18:11:00Z",
+  "latency_ms": 83652,
+  "exit_code": 0,
+  "output_length_chars": 1381,
+  "output_length_tokens_approx": 345,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

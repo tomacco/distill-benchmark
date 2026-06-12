@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "no-memory",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** is the standard choice here — native TTL per key, sub-millisecond reads, and zero schema overhead. One `SET key value EX 300` call covers everything you need.\n\nIf Redis feels like operational overkill for this use case, the tradeoffs:\n\n| Option | Pro | Con |\n|---|---|---|\n| **Redis** | Battle-tested, native TTL, language SDKs everywhere | Separate process to run/manage |\n| **In-process (node-cache, TTLCache, etc.)** | Zero infrastructure, simplest possible code | Lost on restart, not shared across instances |\n| **Memcached** | Slightly leaner than Redis for pure cache | Fewer features, smaller ecosystem, no persistence if you ever want it |\n| **SQLite + expiry column** | No extra process, survives restarts | Need a sweep job to purge stale rows; overkill |\n\n**My recommendation:** Redis if you have multiple service instances or need the cache to survive restarts. In-process cache if it's a single-instance service and a cold cache on restart is acceptable — it's dramatically simpler and your 5-minute TTL means it warms back up quickly.\n\nWhat's the deployment shape — single instance or multiple?",
+  "timestamp": "2026-06-12T16:30:53Z",
+  "latency_ms": 11579,
+  "exit_code": 0,
+  "output_length_chars": 1125,
+  "output_length_tokens_approx": 281,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — it's the clear winner for this exact use case.\n\n- Reads CSVs directly (streaming, doesn't load into RAM), handles files far larger than memory\n- SQL aggregations are natural for per-merchant grouping\n- Outputs JSON natively with `COPY ... TO 'out.json' (FORMAT JSON)`\n- Zero dependencies beyond `pip install duckdb`\n- Typically 2-5x faster than Polars for this shape of work\n\nQuick example:\n\n```python\nimport duckdb\n\nduckdb.sql(\"\"\"\n    COPY (\n        SELECT\n            merchant_id,\n            COUNT(*)            AS transaction_count,\n            SUM(amount)         AS total_amount,\n            AVG(amount)         AS avg_amount,\n            MIN(created_at)     AS first_seen,\n            MAX(created_at)     AS last_seen\n        FROM read_csv_auto('transactions.csv')\n        GROUP BY merchant_id\n    )\n    TO 'merchant_summary.json' (FORMAT JSON, ARRAY true)\n\"\"\")\n```\n\n**Runner-up: Python + Polars** — if you're more comfortable iterating in Python and want a DataFrame API, Polars' lazy mode (`scan_csv` → `group_by` → `collect`) will also stream the file without loading it all into RAM.\n\n**Skip:** pandas (no streaming by default, 50GB will OOM), Go/Rust (overkill for one-off), awk (aggregation logic gets painful fast).",
+  "timestamp": "2026-06-12T18:05:31Z",
+  "latency_ms": 16657,
+  "exit_code": 0,
+  "output_length_chars": 1250,
+  "output_length_tokens_approx": 312,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

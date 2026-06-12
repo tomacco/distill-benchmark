@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — it queries the CSV directly with SQL, handles larger-than-memory data natively, and outputs JSON in one command. For a one-off task this beats writing streaming code.\n\n```bash\npip install duckdb\n```\n\n```python\nimport duckdb, json\n\nresult = duckdb.sql(\"\"\"\n    SELECT\n        merchant_id,\n        COUNT(*)           AS txn_count,\n        SUM(amount)        AS total_amount,\n        AVG(amount)        AS avg_amount,\n        MIN(created_at)    AS first_txn,\n        MAX(created_at)    AS last_txn\n    FROM read_csv_auto('data.csv')\n    GROUP BY merchant_id\n    ORDER BY total_amount DESC\n\"\"\").fetchall()\n\ncols = [\"merchant_id\", \"txn_count\", \"total_amount\", \"avg_amount\", \"first_txn\", \"last_txn\"]\nsummary = [dict(zip(cols, row)) for row in result]\n\nwith open(\"summary.json\", \"w\") as f:\n    json.dump(summary, f, indent=2, default=str)\n```\n\nOr skip Python entirely — DuckDB has a CLI:\n\n```bash\nduckdb -c \"COPY (SELECT merchant_id, COUNT(*), SUM(amount) FROM read_csv_auto('data.csv') GROUP BY 1) TO 'summary.json' (FORMAT JSON)\"\n```\n\n**Tradeoff vs Python+Polars:** DuckDB is simpler for ad-hoc SQL aggregations and handles the schema inference automatically. Polars gives you more control if the CSV is malformed or needs non-SQL transformations.",
+  "timestamp": "2026-06-12T17:26:44Z",
+  "latency_ms": 14998,
+  "exit_code": 0,
+  "output_length_chars": 1258,
+  "output_length_tokens_approx": 314,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

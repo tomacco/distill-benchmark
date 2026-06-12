@@ -1,0 +1,43 @@
+{
+  "test_id": "D4",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 1,
+      "relevance": 1,
+      "helpfulness": 1,
+      "notes": "Empty response. No code, no answer, nothing to evaluate. Fails every expected signal by default."
+    },
+    "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Kotlin throughout, suspend handler with runBlocking bridge, correlation-id pulled from Kafka headers into MDC with UUID fallback and finally-block clear, re-throws for retry/DLQ, @EmbeddedKafka integration test with no mocks. Includes deps and test config with a real gotcha (earliest offset reset). Most complete; header-sourced correlation ID is the strongest logging choice. Concise but information-dense."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Kotlin, suspend interface, MANUAL_IMMEDIATE ack so offset commits only on success, MDC correlation ID, re-throw for DLT, @EmbeddedKafka integration test no mocks. Excellent ack/commit reasoning. Correlation ID from payload rather than headers is slightly weaker, and no explicit logging deps listed, but very solid and concise."
+    },
+    "D": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Kotlin, native suspend @KafkaListener (Spring Kafka 3.x), MDC set/cleared in finally, JsonDeserializer handling java.time + data classes, manual commit + earliest offset, @EmbeddedKafka real-broker test no mocks. Hits the core signals but lighter on correlation-ID source and structured-logging detail than B/C, and uses a test-only `internal` field for assertions."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "D",
+    "A"
+  ],
+  "analysis": "All three substantive responses (B, C, D) correctly inferred the unstated requirements \u00e2\u20ac\u201d Kotlin not Java, coroutines/suspend, MDC correlation-ID logging, and @EmbeddedKafka integration testing with no mocks \u00e2\u20ac\u201d and stayed concise, exactly the persistence behavior being tested. B edges ahead by sourcing the correlation ID from Kafka headers (best practice for distributed tracing), explicitly handling MDC lifecycle and DLQ re-throw, and supplying both dependencies and a test-config gotcha. C is nearly as strong with the cleanest commit-semantics reasoning (MANUAL_IMMEDIATE) but takes correlation ID from the payload. D covers the same ground competently but is lighter on logging/correlation detail and leans on a test-only internal field. System A is empty and fails everything by default.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "sqlite-bm25",
+    "C": "distill",
+    "D": "claude-md-native"
+  }
+}

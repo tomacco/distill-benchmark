@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-md-native",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** with PostgreSQL. Here's the standard setup for a new service:\n\n**Directory structure:**\n```\nsrc/main/resources/db/migration/\n  V1__create_schema.sql\n  V2__add_indexes.sql\n```\n\n**Flyway naming convention** (strictly enforced):\n- `V{version}__{description}.sql` — versioned migration (runs once)\n- `R__{description}.sql` — repeatable migration (re-runs on checksum change, for views/functions)\n\n**Gradle dependency (`build.gradle.kts`):**\n```kotlin\nimplementation(\"org.flywaydb:flyway-core:9.x.x\")\n```\n\n**Spring Boot auto-configuration** handles the rest — Flyway runs on startup before the app accepts traffic. Verify your `application.yml`:\n```yaml\nspring:\n  flyway:\n    locations: classpath:db/migration\n    baseline-on-migrate: false  # false for new services (no legacy schema)\n    validate-on-migrate: true\n```\n\n**Key rules for financial data:**\n- Each migration is **immutable** — never edit a committed migration file (Flyway will fail checksum validation)\n- Keep migrations **small and focused** — one concern per file\n- Always include `NOT NULL` constraints and default values in DDL; don't leave that to the app layer\n- For `ALTER TABLE` on existing data, do it in two migrations: add nullable column → backfill data → add constraint\n\n**Testing:** add `@FlywayTest` (or use Testcontainers with a real Postgres) to verify migrations in CI before deploying — avoids checksum mismatches in prod.\n\nThe pattern is consistent with `auth-service` and `account-service` — look at either for a working reference.",
+  "timestamp": "2026-06-12T17:49:09Z",
+  "latency_ms": 16347,
+  "exit_code": 0,
+  "output_length_chars": 1554,
+  "output_length_tokens_approx": 388,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

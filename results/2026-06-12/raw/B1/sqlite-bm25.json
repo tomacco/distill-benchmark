@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. You already have it, the use case is textbook Redis — O(1) get/set with atomic TTL expiry — and it keeps session lookups off PostgreSQL entirely.\n\nA few things worth getting right for a financial service:\n\n- **Key namespace**: prefix keys (e.g. `session:{token}`) to avoid collisions as you add other Redis uses\n- **TTL discipline**: set TTL on write, not as a separate call — `SET key value EX ttl` is atomic; two separate calls have a race window\n- **Eviction policy**: set `maxmemory-policy noeviction` (not `allkeys-lru`) so Redis refuses writes rather than silently evicting live session tokens under memory pressure\n- **Revocation**: if you need to invalidate tokens before TTL (logout, compromise), Redis DELETE works. If you're using JWTs and relying on Redis only for revocation, a deny-list pattern (store only revoked tokens, not all tokens) is cheaper at scale\n\nThe main tradeoff is that Redis is a separate failure domain — if it goes down, sessions become unverifiable. Since auth-service is already in production, confirm you have Redis Sentinel or Cluster configured for HA on EKS, or a fallback path if the connection drops.\n\nShort answer: use Redis, it's the correct tool for this.",
+  "timestamp": "2026-06-12T17:11:58Z",
+  "latency_ms": 20532,
+  "exit_code": 0,
+  "output_length_chars": 1242,
+  "output_length_tokens_approx": 310,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

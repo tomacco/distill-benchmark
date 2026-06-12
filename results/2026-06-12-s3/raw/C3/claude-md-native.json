@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "claude-md-native",
+  "prompt": "What database do we use for the account service?",
+  "output": "Based on your earlier statement this week that the migration from PostgreSQL is complete, the account service now uses **MySQL**. The stored architecture doc still shows PostgreSQL 14 as the primary database — I should update that to reflect the change.\n\nWant me to update `memory/architecture.md` to record the account service's migration to MySQL?",
+  "timestamp": "2026-06-12T18:08:21Z",
+  "latency_ms": 8386,
+  "exit_code": 0,
+  "output_length_chars": 351,
+  "output_length_tokens_approx": 87,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

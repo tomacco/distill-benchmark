@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Created `src/components/SettingsPage.tsx`. Here's what Dev needs to know to pick this up:\n\n**Structure**\n- `SettingsPage` — top-level form with save/feedback state\n- `Section` / `Field` — simple layout helpers (easy to style or replace with your UI library)\n\n**Where to wire up API calls** (marked with `TODO` comments):\n- Profile save → `account-service`\n- Notifications save → `notification-service`\n- Security buttons → `auth-service` (password change, 2FA)\n\n**Good first tasks for Dev:**\n1. Pre-populate the form by fetching the user's current settings on mount (`useEffect` + API call)\n2. Add loading/error states around the save action\n3. Style it — the `className` hooks are all in place\n\nThe component is intentionally thin on business logic so Dev has clear seams to extend without needing to understand the full backend.",
+  "timestamp": "2026-06-12T17:08:38Z",
+  "latency_ms": 39648,
+  "exit_code": 0,
+  "output_length_chars": 842,
+  "output_length_tokens_approx": 210,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

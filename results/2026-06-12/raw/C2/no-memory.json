@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a good fit for session stores in general, but not for sub-millisecond reads — its typical latency is **single-digit milliseconds** (1–5ms), not sub-millisecond.\n\nIf sub-millisecond is a hard requirement, **Redis (ElastiCache)** is the standard choice — it's an in-memory store that routinely delivers <1ms p99 on simple key lookups. DynamoDB with DAX can approach microsecond latency but adds significant operational complexity and cost.\n\nThe tradeoff: Redis is faster but requires you to manage cache invalidation and persistence separately; DynamoDB is more operationally simple, durable by default, and has built-in TTL, but won't hit that latency target. If the sub-millisecond requirement is real and load-tested rather than speculative, go Redis.",
+  "timestamp": "2026-06-12T16:33:03Z",
+  "latency_ms": 10653,
+  "exit_code": 0,
+  "output_length_chars": 770,
+  "output_length_tokens_approx": 192,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

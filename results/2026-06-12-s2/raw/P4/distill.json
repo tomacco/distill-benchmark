@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No prior knowledge on file. Here's the simplest approach:\n\n**Environment variable flag** — zero dependencies, works everywhere:\n\n```python\n# config.py\nimport os\nNEW_PAYMENT_FLOW = os.getenv(\"NEW_PAYMENT_FLOW\", \"false\").lower() == \"true\"\n```\n\n```python\n# at the call site\nfrom config import NEW_PAYMENT_FLOW\n\nif NEW_PAYMENT_FLOW:\n    result = new_payment_flow(...)\nelse:\n    result = legacy_payment_flow(...)\n```\n\nDark-launch: set the env var for a subset of traffic (canary deployment, per-user rollout, or internal-only). No database, no SDK, no infra changes.\n\n**The main tradeoff:** env vars are binary (on/off per deployment) — you can't do percentage rollouts or per-user targeting without adding logic. If you need that, a lightweight in-process solution like a `PAYMENT_FLOW_ALLOWLIST` env var (comma-separated user IDs) buys you targeting without a full feature-flag service.\n\nWant me to look at the existing codebase to wire this in specifically?",
+  "timestamp": "2026-06-12T17:34:09Z",
+  "latency_ms": 13849,
+  "exit_code": 0,
+  "output_length_chars": 959,
+  "output_length_tokens_approx": 239,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

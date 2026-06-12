@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Three files created. Key design choices:\n\n**Dockerfile**\n- **Multi-stage build** — builder installs deps into `/install`, runtime stage copies only the installed packages. Keeps final image ~200 MB instead of ~800 MB.\n- **Non-root user** — `appuser` runs the process; required for most container security policies.\n- **`PYTHONDONTWRITEBYTECODE` + `PYTHONUNBUFFERED`** — avoids `.pyc` clutter and ensures logs stream immediately.\n- **`--workers 2`** — safe default for CPU-bound sklearn inference; tune to `2 * CPU + 1` for your instance.\n\n**Model artifact**\nPlace your serialized model at `model/fraud_model.pkl` (relative to the Dockerfile). Override the path via `MODEL_PATH` env var at runtime:\n```\ndocker run -e MODEL_PATH=/app/model/v2.pkl ...\n```\n\n**Build & run**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 -v $(pwd)/model:/app/model fraud-scorer\n```\n\nThen `POST /score` with a transaction JSON body; the response includes `fraud_probability` and a boolean `is_fraud` flag.",
+  "timestamp": "2026-06-12T18:01:35Z",
+  "latency_ms": 29115,
+  "exit_code": 0,
+  "output_length_chars": 1007,
+  "output_length_tokens_approx": 251,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

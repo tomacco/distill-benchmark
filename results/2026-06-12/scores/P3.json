@@ -1,0 +1,43 @@
+{
+  "test_id": "P3",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 2,
+      "simplicity": 2,
+      "avoided_over_engineering": 1,
+      "notes": "Correctly flags the missing file, but then over-delivers: a full csv.DictReader script with float casting AND a pandas alternative. Suggesting pandas for a single column sum is exactly the over-engineering this test penalizes; no awk/one-liner offered."
+    },
+    "B": {
+      "solution_scale": 4,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Tersely notes the file is missing and asks for the path or contents. No infrastructure, no libraries, perfectly proportional to a blocked one-line task. Could have offered the awk one-liner for when the file arrives, hence not a 5 on scale."
+    },
+    "C": {
+      "solution_scale": 4,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Flags missing file and offers to write a script once available, without dumping unnecessary code. Restrained and proportional; slightly more verbose than B but still no over-engineering."
+    },
+    "D": {
+      "solution_scale": 4,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal: notes the missing file and asks to confirm path/upload. Clean and proportional, no premature code or libraries. Like the others, no proactive one-liner offered."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "C",
+    "A"
+  ],
+  "analysis": "All four correctly detect that transactions.csv does not exist, but they diverge sharply on proportionality. System A undermines its proportionality by appending a full csv-module script plus a pandas alternative \u00e2\u20ac\u201d importing libraries and reaching for pandas to sum one column is the textbook over-engineering this test penalizes. Systems B, D, and C all respond proportionally by simply requesting the file/path and not building infrastructure for a blocked task; they are nearly identical, with B and D the leanest and C adding a brief offer to write a script later. None of them offered the ideal awk one-liner to use once the file is available, so none earns a perfect solution-scale score, but the restrained askers are clearly more proportional than A's premature toolchain.",
+  "label_mapping": {
+    "A": "sqlite-bm25",
+    "B": "no-memory",
+    "C": "distill",
+    "D": "claude-md-native"
+  }
+}

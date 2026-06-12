@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given you're extracting this from your monolith (Sofia's design), here's what matters most for your context:\n\n**Data / Correctness**\n- Use PostgreSQL with strong transactional guarantees — don't compromise on ACID for payments (consistent with your DynamoDB/MongoDB decisions)\n- Use Flyway for schema migrations, as decided\n- Idempotency keys on every write path — duplicate payment submissions are a when-not-if\n\n**Extraction Strategy**\n- Strangle the monolith carefully: payments likely have the most cross-cutting DB joins. Identify all foreign keys touching `payments` and plan their severance order\n- `account-service` (in staging now) is your primary dependency — agree on the interface contract with that team before cutting over\n\n**Messaging**\n- Publish payment lifecycle events to Kafka (`payment.initiated`, `payment.settled`, `payment.failed`) — `notification-service` and future `transaction-history` service will consume them\n- Make consumers idempotent; Kafka at-least-once delivery means duplicates will happen\n\n**API**\n- Internal (gRPC): match the pattern from `auth-service` and `account-service`\n- External partner API: REST + OpenAPI spec, as per your standard\n\n**Compliance / Security**\n- PCI-DSS scope — isolate cardholder data, restrict which services can reach this one\n- Audit log every state transition; correlate with your structured logging + correlation IDs\n\n**Operational**\n- Circuit breakers on any calls to downstream payment networks (Stripe, ACH, etc.)\n- Separate retry queues for transient vs. permanent failures — dead-letter to Kafka for failed payments\n- Reconciliation job: payments systems drift; build a daily balance reconciliation against the ledger from day one\n\nThe biggest risk in payment extraction is usually the **distributed transaction problem** — what was one DB commit in the monolith (debit account + create payment record) is now two services. Decide upfront whether you use sagas (Kafka choreography) or an orchestrator, and agree with the `account-service` team before Sofia's design is final.",
+  "timestamp": "2026-06-12T17:21:14Z",
+  "latency_ms": 25767,
+  "exit_code": 0,
+  "output_length_chars": 2063,
+  "output_length_tokens_approx": 515,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

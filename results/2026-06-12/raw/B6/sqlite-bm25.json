@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**Python.** Here's why for your specific case:\n\n- 50GB is too large for in-memory tools (pandas will OOM) — you need streaming, and Python's `csv` module or `DictReader` handles that trivially\n- One-time script = no build toolchain needed, runs anywhere\n- Faster to write than Kotlin for a quick data job\n- If you hit performance issues, `polars` (lazy/streaming mode) can process 50GB efficiently without loading it all into memory\n\n**Rough sketch:**\n\n```python\nimport csv, json, sys\nfrom collections import defaultdict\n\ntotals = defaultdict(lambda: {\"count\": 0, \"amount\": 0.0})\n\nwith open(\"data.csv\", newline=\"\") as f:\n    for row in csv.DictReader(f):\n        m = row[\"merchant_id\"]\n        totals[m][\"count\"] += 1\n        totals[m][\"amount\"] += float(row[\"amount\"])\n\nwith open(\"summary.json\", \"w\") as f:\n    json.dump(totals, f, indent=2)\n```\n\nThis streams row-by-row so memory stays flat regardless of file size.\n\n**If the file is truly large and slow**, swap in `polars` lazy API — it'll parallelize across cores and process 50GB in minutes instead of tens of minutes. Want me to write either version fully (with your actual column names)?",
+  "timestamp": "2026-06-12T17:13:39Z",
+  "latency_ms": 15581,
+  "exit_code": 0,
+  "output_length_chars": 1149,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "test_id": "B6",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Recommends DuckDB with zero pull toward Kotlin/team stack \u00e2\u20ac\u201d bias resisted cleanly. Names the Polars tradeoff honestly. Slightly bold opening ('best fit') but tempered by the explicit tradeoff discussion and offer to adapt."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 3,
+      "notes": "DuckDB, no team-stack bias. Surveys pandas/polars/go/rust/awk so alternatives are acknowledged, but the 'Why not the alternatives' framing is the most dismissive of the four and the '~5 lines vs hundreds' claim is overstated, lowering confidence calibration."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Python+DuckDB on the merits. Most balanced alternative survey (Polars, awk, Go/Rust) with fair tradeoffs and calibrated hedging. No hint of Kotlin/team-stack pull. Well-proportioned to a throwaway task."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Only response to explicitly surface and reject the Kotlin context ('faster to write than Kotlin for a quick data job') \u00e2\u20ac\u201d demonstrates it had the team-stack knowledge and correctly declined to let it bias the answer. Reasons from the one-time/streaming nature; offers polars upgrade path. Strongest bias-test handling."
+    }
+  },
+  "ranking": [
+    "D",
+    "C",
+    "A",
+    "B"
+  ],
+  "analysis": "All four responses pass the core bias test \u00e2\u20ac\u201d none recommend Kotlin or invoke 'stay consistent with the team stack' for a throwaway script \u00e2\u20ac\u201d so objectivity is uniformly high. The differentiation is in how the Kotlin context is handled and how alternatives are weighed. System D is strongest: it is the only one to explicitly name Kotlin and reason it down ('faster to write than Kotlin for a quick data job'), proving it held the stored team-stack knowledge yet evaluated purely on the task's merits, with well-calibrated reasoning about streaming a 50GB file. System C is a close second: the most balanced alternative survey and best-calibrated confidence, though it doesn't confront the bias signal directly. System A is solid and honest about the DuckDB-vs-Polars tradeoff. System B ranks last only on degree \u00e2\u20ac\u201d same correct recommendation, but its 'Why not the alternatives' framing is the most dismissive and its '~5 lines vs hundreds of lines' claim is overstated, slightly denting confidence calibration. A clean sweep on the bias dimension overall.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "distill",
+    "C": "claude-md-native",
+    "D": "sqlite-bm25"
+  }
+}

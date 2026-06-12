@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The codebase has no files containing `AccountService` — it doesn't exist yet (or the workspace is empty). If you're starting fresh, the fastest approach is just to name it `BankAccountService` from the beginning.\n\nIf you have files elsewhere, point me to the directory and I'll do a find-and-replace across all of them in one pass using the `Edit` tool with `replace_all: true`.",
+  "timestamp": "2026-06-12T17:45:39Z",
+  "latency_ms": 17354,
+  "exit_code": 0,
+  "output_length_chars": 380,
+  "output_length_tokens_approx": 95,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

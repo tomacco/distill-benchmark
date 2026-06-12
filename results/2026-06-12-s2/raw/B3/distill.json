@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "distill",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "**Netlify** — drag-and-drop a folder and you're live in 30 seconds. Free tier is generous, CDN is global, HTTPS is automatic.\n\nAlternatives if there's a reason to prefer something else:\n\n- **Cloudflare Pages** — slightly better performance/edge network, also free\n- **GitHub Pages** — good if the code is already on GitHub and you want zero extra accounts\n- **Vercel** — fine, but overkill for pure static (built for Next.js)\n\n**Recommendation:** Netlify for the fastest path with the least friction. Drop the folder on [netlify.com](https://netlify.com), done. Add a custom domain later in their UI — it's a 2-minute config.",
+  "timestamp": "2026-06-12T17:25:46Z",
+  "latency_ms": 11359,
+  "exit_code": 0,
+  "output_length_chars": 635,
+  "output_length_tokens_approx": 158,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

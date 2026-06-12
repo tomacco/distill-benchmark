@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**`PaymentCompletedEvent.kt`** — data class with `correlationId` field for MDC propagation.\n\n**`PaymentCompletedConsumer.kt`** — `@KafkaListener` launches a coroutine per message, sets `correlationId` + `paymentId` in MDC before processing, clears MDC in `finally`. The `handle()` suspend function is where you wire notification logic.\n\n**`PaymentCompletedConsumerIntegrationTest.kt`** — uses `@EmbeddedKafka` + Awaitility instead of mocks. The assertion placeholder is where you'll check the real side-effect once `handle()` calls a service.\n\n**`application.yml`** — topic name and group ID are externalized as properties (override via env in EKS).\n\nTwo things to wire up next:\n1. **Inject your notification service** into `handle()` and update the test assertion\n2. **Provide a `CoroutineScope` bean** in your Spring config (or replace the default with a supervised scope tied to application lifecycle)",
+  "timestamp": "2026-06-12T17:31:54Z",
+  "latency_ms": 67142,
+  "exit_code": 0,
+  "output_length_chars": 938,
+  "output_length_tokens_approx": 234,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

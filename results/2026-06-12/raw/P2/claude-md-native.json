@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "claude-md-native",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "The auth-service source code isn't in this workspace — only the memory/documentation files are here. I can see from context it's Kotlin with REST external APIs, but I need the actual codebase to add the endpoint.\n\nWhere is the auth-service code? (local path or repo URL)",
+  "timestamp": "2026-06-12T17:06:49Z",
+  "latency_ms": 54670,
+  "exit_code": 0,
+  "output_length_chars": 272,
+  "output_length_tokens_approx": 68,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

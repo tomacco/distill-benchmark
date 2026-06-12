@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "no-memory",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No existing codebase to work from, so I'll give you a general recommendation.\n\n**Simplest approach: environment variable + in-process boolean**\n\nFor a dark-launch where you need per-request control (e.g. by user ID or percentage), a single env var as the kill-switch combined with a small helper function is the least infrastructure:\n\n```python\n# feature_flags.py\nimport os\n\nNEW_PAYMENT_FLOW_USERS = set(os.getenv(\"NEW_PAYMENT_FLOW_USERS\", \"\").split(\",\"))\nNEW_PAYMENT_FLOW_PCT   = float(os.getenv(\"NEW_PAYMENT_FLOW_PCT\", \"0\"))  # 0–100\n\ndef use_new_payment_flow(user_id: str) -> bool:\n    if user_id in NEW_PAYMENT_FLOW_USERS:\n        return True\n    return (hash(user_id) % 100) < NEW_PAYMENT_FLOW_PCT\n```\n\nThen at the call site:\n```python\nif use_new_payment_flow(current_user.id):\n    result = new_payment_flow(...)\nelse:\n    result = legacy_payment_flow(...)\n```\n\n**Tradeoffs vs. alternatives:**\n- This is zero-dependency and instantly auditable — the downside is you need a deploy/restart to change the rollout percentage.\n- If you need live toggles without redeploys, a simple DB row (`SELECT enabled FROM feature_flags WHERE name = 'new_payment_flow'`) adds one query but lets you flip it instantly.\n- A dedicated service (LaunchDarkly, Unleash, Flagsmith) is only worth it if you need targeting rules, A/B metrics, or many flags across many services.\n\nWhat stack are you on? I can make this concrete against your actual code.",
+  "timestamp": "2026-06-12T16:37:52Z",
+  "latency_ms": 25261,
+  "exit_code": 0,
+  "output_length_chars": 1436,
+  "output_length_tokens_approx": 359,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

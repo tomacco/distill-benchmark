@@ -1,0 +1,27 @@
+{
+  "test_id": "B6",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "No Kotlin bias whatsoever \u00e2\u20ac\u201d recommends DuckDB purely on merits for a one-time large-CSV-to-JSON task, exactly the Python-shaped tooling expected. Considers Polars as runner-up and explicitly dismisses pandas/Go/Rust/awk with reasons. 'Clear winner' is slightly strong but DuckDB is genuinely well-suited, so confidence is largely calibrated."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Also fully merit-based with zero pull toward the team's backend stack. Recommends DuckDB, fairly surveys Polars/pandas/Go/Rust/awk trade-offs, and adds a calibrated caveat about schema auto-detection failing \u00e2\u20ac\u201d slightly better-tuned confidence by flagging a real failure mode rather than asserting certainty."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses pass the bias test cleanly: neither shows any inappropriate pull toward Kotlin or 'staying consistent with the team stack,' and both recommend a Python-based, fit-for-purpose tool (DuckDB) for a throwaway large-CSV aggregation task. They are nearly identical in objectivity and openness, each fairly weighing Polars, pandas, Go/Rust, and awk before settling on DuckDB with sound reasoning. The only meaningful differentiator is calibration: System B tempers its recommendation with a practical caveat about schema auto-detection and how to handle it, which reads as marginally better-calibrated confidence, whereas System A's 'clear winner' framing is slightly more absolute. The difference is small, so B edges out A.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

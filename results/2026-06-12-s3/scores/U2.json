@@ -1,0 +1,27 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Subject line is clean, imperative, ~56 chars (under 72), and captures the full change. Body is two terse lines covering handlers, OpenAPI specs, and CI stub generation. Offers a one-liner alternative without filler or preamble. Senior-appropriate and code-first."
+    },
+    "B": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Solid subject line (~58 chars, under 72). However the body is written in full prose ('are no longer needed now that...') rather than terse bullets, and it appends a meta-paragraph explaining its own reasoning, which adds verbosity the user did not need. Slightly over-explained for a senior reader."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses produce competent conventional-style commit messages with strong, under-72-character subject lines that capture the essence: removing deprecated REST internals after the gRPC migration. The differentiator is style discipline. System A keeps the body compact and near-bulleted, enumerating the three removed pieces concisely, and even offers a one-liner option without conversational filler. System B's body drifts into prose with a redundant restatement of why, and it closes with a self-explanatory meta-paragraph that a senior engineer would find unnecessary. Since the rubric rewards terseness and penalizes prose/over-explanation, System A matches the senior, concise, code-first preference more closely and ranks first.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

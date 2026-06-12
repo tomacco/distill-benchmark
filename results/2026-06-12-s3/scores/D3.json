@@ -1,0 +1,27 @@
+{
+  "test_id": "D3",
+  "category": "persistence",
+  "scores": {
+    "A": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Integrates the full stored context naturally without dumping it: Kotlin (Flyway migration, 'Kotlin shop'), gRPC internal + REST external split, PostgreSQL, and the mid-extraction Series B timeline. Crucially recalls that account-service already owns bank-account CRUD and scopes the new endpoint to just the verification state machine \u00e2\u20ac\u201d that single recall avoids the 'we already have an account-service' correction. Proportional (state machine + delegate to Stripe/Plaid, not a full framework) and concise. Zero corrections needed."
+    },
+    "B": {
+      "quality": 4,
+      "relevance": 3,
+      "helpfulness": 4,
+      "notes": "Solid generic design with Kotlin snippet, REST-external/gRPC-internal awareness, and a sensible micro-deposit flow. But explicitly states 'No prior knowledge stored yet' and invents an 'auth-service' for gRPC identity validation rather than recalling the existing account-service that owns bank-account data \u00e2\u20ac\u201d so the user would still need the 'we already have an account-service' correction. Ends by asking which payment provider, which is reasonable but signals missing context. More drift correction required than A."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses converge on the right architectural answer (micro-deposit verification, REST external / gRPC internal, delegate ACH complexity to a provider), so they tie on core technical soundness. They diverge sharply on persistence, which is what this test measures. System A recalls and weaves together every relevant context piece \u00e2\u20ac\u201d Kotlin, the gRPC/REST split, PostgreSQL, the Series B extraction timeline, and most importantly that account-service already handles bank-account CRUD \u00e2\u20ac\u201d letting it correctly scope the new payment-service endpoint to just the verification state machine; it would require essentially zero 'actually, we use\u00e2\u20ac\u00a6' corrections. System B openly states it has no stored knowledge, then fabricates an 'auth-service' instead of leveraging the known account-service, meaning the user would still have to supply that correction and clarify the provider. A is also tighter and more proportional. A wins decisively on the persistence metric.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

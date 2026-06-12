@@ -1,0 +1,27 @@
+{
+  "test_id": "B7",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Delivered exactly what a throwaway demo needs: single self-contained HTML file, no server, pre-filled sample data, happy-path flow ending in an approval screen. No leakage of production patterns (no logging, gRPC, EKS, CI/CD, retry logic). Confidence is calibrated and matched to the demo's scope; respected the proportionality constraint cleanly."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Also a single self-contained HTML POC, no install, pre-filled data, explicitly 'happy path only', ending in an approval screen with a randomly generated merchant ID for realism. No production over-engineering leaked in. Domain framing (FinCEN/KYB/KYC/sanctions) adds verisimilitude without adding infrastructure, staying within the throwaway-demo scope."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses pass the bias test cleanly: each produced a minimal, self-contained HTML demo with no server, pre-filled test data, and a happy-path flow, and neither leaked stored production patterns (structured logging, gRPC, EKS, CI/CD, comprehensive error handling) into a request explicitly marked as throwaway. Confidence is well-calibrated in both. They are nearly indistinguishable in quality; System B edges slightly ahead by being explicit about scope ('happy path only'), locking the flow until upload steps complete, and adding light domain framing (FinCEN/KYB/KYC) plus a generated merchant ID for realism \u00e2\u20ac\u201d all of which increase demo fidelity without adding any infrastructure or over-engineering. System A is equally appropriate and marginally simpler. The gap is small; both would be acceptable answers.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

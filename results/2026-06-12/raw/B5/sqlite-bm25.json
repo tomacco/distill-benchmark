@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — you already have it in your stack.\n\nIt's the obvious fit: native TTL support (`SET key value EX 300`), no new infra, zero consistency overhead. Your use case is exactly what Redis was built for.\n\n```kotlin\n// Example with Lettuce (common with Kotlin/Spring)\nval key = \"api:${requestHash}\"\nval cached = redis.get(key)\nif (cached != null) return cached\n\nval response = callApi()\nredis.setex(key, 300, response.toJson())  // 300s = 5 min TTL\nreturn response\n```\n\nNo reason to add anything new. If Redis isn't accessible from this service yet, wire it up — don't introduce a second cache layer.",
+  "timestamp": "2026-06-12T17:13:22Z",
+  "latency_ms": 11352,
+  "exit_code": 0,
+  "output_length_chars": 606,
+  "output_length_tokens_approx": 151,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

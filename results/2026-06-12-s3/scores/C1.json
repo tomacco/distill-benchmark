@@ -1,0 +1,27 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No sign of recalling the known fact (PostgreSQL 14). Treats the question as a live environment-detection problem and offers generic shell/Docker commands, then asks the user for more input. Verbose and fails the core recall expectation."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Directly answers 'PostgreSQL 14' in one bolded line and cites the architecture docs as the source. Concise, confident, no hedging, no unsolicited upgrade advice. Exactly matches the expected signals."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "System B clearly recalls the stored fact and delivers it the way the rubric rewards: a direct one-line answer ('PostgreSQL 14') with a brief source attribution, no hedging, and no unsolicited tangents. System A shows no evidence of remembering anything \u00e2\u20ac\u201d it reframes the question as a runtime detection task, lists several generic ways to query a version, and asks for more details, which is exactly the verbose, knowledge-absent behavior the test penalizes. B wins decisively on recall and strength; both handle the (minimal) contradiction acceptably, though only B grounds its answer in a referenced source.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

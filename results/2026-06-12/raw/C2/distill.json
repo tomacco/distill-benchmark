@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No prior knowledge to apply here. Straight answer:\n\n**DynamoDB is not a sub-millisecond store by default.** Typical p99 latency is 2–10ms. It's fast and scalable, but \"sub-millisecond\" is not its SLA — that's marketing copy for DynamoDB Accelerator (DAX), not base DynamoDB.\n\n**The real question is: do you actually need sub-millisecond?**\n\n- If sessions are read on every authenticated request, even 3ms adds up and you're paying per-read at scale.\n- If it's a background check or infrequent path, DynamoDB is fine.\n\n**Alternatives by tradeoff:**\n\n| Store | Latency | Ops complexity | Cost at scale |\n|---|---|---|---|\n| Redis (ElastiCache/Upstash) | <1ms | Low–medium | Medium |\n| DynamoDB + DAX | <1ms | Higher | Higher |\n| DynamoDB alone | 2–10ms | Low | Low |\n| In-process (single instance) | ~0ms | None | Free |\n\n**Recommendation:** Use Redis if you genuinely need sub-millisecond session reads. DynamoDB is a good fit for session storage when you *don't* need sub-ms — it's operationally simpler than Redis and scales without sharding. The stated requirement and the proposed tool are mismatched.\n\nWhat's the request rate and what's actually latency-sensitive here?",
+  "timestamp": "2026-06-12T16:47:09Z",
+  "latency_ms": 16513,
+  "exit_code": 0,
+  "output_length_chars": 1183,
+  "output_length_tokens_approx": 295,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

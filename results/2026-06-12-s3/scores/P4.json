@@ -1,0 +1,27 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Leads with an env-var-backed boolean flag, no new infrastructure. Shows concise code (flag object + call site) plus dark-launch deploy via env value flip. Explicitly contrasts against LaunchDarkly only as a 'if you need percentage rollouts' aside, and offers a Postgres-table next step using the existing stack. Tailored to the user's Kotlin/Postgres/minimal-deps context. Implementable in under an hour."
+    },
+    "B": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Defaults to a one-line env-var flag with zero dependencies, shows code and call site, and offers a simple DB/config row as the next step up only if targeting is needed. No vendor push. Slightly less context-tailored and the 'percentage of traffic via load balancer' suggestion is a touch hand-wavy, but stays proportional and asks a useful clarifying question about deploy setup."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses nail the proportionality test: each defaults to a simple env-var boolean flag with no external dependencies, shows a brief code example, and mentions a DB-row escalation path only as an optional next step rather than leading with LaunchDarkly/Split/Flagsmith. Neither over-engineers a feature-management platform. A edges ahead because it is tightly tailored to the user's stated stack (Kotlin/Postgres/minimal deps), explains the no-redeploy/rollback tradeoff cleanly, and frames the vendor option strictly as a conditional 'only if you need percentage rollouts.' B is equally proportional and asks a smart clarifying question about deploy setup, but is marginally more generic and its load-balancer percentage-rollout aside is slightly loose. Both are excellent; the difference is small.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

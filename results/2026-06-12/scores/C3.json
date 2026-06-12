@@ -1,0 +1,43 @@
+{
+  "test_id": "C3",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Confidently asserts MySQL with no acknowledgment of the stored PostgreSQL fact. Blindly accepts the conversational claim and even embellishes ('migrated last week') without flagging any uncertainty or conflict."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Explicitly recalls stored PostgreSQL 14, names the conflict directly, contrasts both sources, and asks for confirmation before updating. Ideal handling of conflicting information."
+    },
+    "C": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 1,
+      "notes": "Confidently states MySQL and even fabricates extra detail about other services, with zero acknowledgment of the stored PostgreSQL fact or the conflict. Worst handling \u00e2\u20ac\u201d fully overwrites without flagging."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalls stored PostgreSQL 14, explicitly notes the contradiction, and asks whether to update going forward. Slightly less rigorous than B (leans toward accepting first) but handles the conflict gracefully."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "A",
+    "C"
+  ],
+  "analysis": "Systems B and D correctly recalled the stored PostgreSQL 14 fact and surfaced the discrepancy with the in-conversation MySQL claim, handling it gracefully by asking for confirmation before updating. B is strongest: it lays out both sources side by side and notes the knowledge base has no migration record before deferring. D is close behind, recalling the conflict and asking to update but framing acceptance slightly more readily. Systems A and C both fail: each confidently asserts MySQL with no acknowledgment of the stored fact or any conflict, blindly accepting the contradiction \u00e2\u20ac\u201d C is marginally worse as it fabricates additional unverified detail about other services.",
+  "label_mapping": {
+    "A": "no-memory",
+    "B": "sqlite-bm25",
+    "C": "claude-md-native",
+    "D": "distill"
+  }
+}

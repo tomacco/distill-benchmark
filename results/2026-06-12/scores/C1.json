@@ -1,0 +1,43 @@
+{
+  "test_id": "C1",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No sign of recalling the PostgreSQL 14 fact. Treated the question as a live system probe, found nothing, and asked for more context. Verbose and unhelpful relative to the expected one-line answer."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Direct, concise 'PostgreSQL 14.' \u00e2\u20ac\u201d exactly matches the expected fact and the conciseness preference. No hedging, no unsolicited upgrade advice."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 3,
+      "notes": "Identical ideal answer: 'PostgreSQL 14.' Clear recall, no hedging, perfectly concise."
+    },
+    "D": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "Failed to recall the fact. Probed for psql/pg_config, found nothing, and suggested installing client tools. Verbose and off-target versus the expected direct answer."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "A",
+    "D"
+  ],
+  "analysis": "Systems B and C both deliver the ideal response \u00e2\u20ac\u201d a direct 'PostgreSQL 14.' that recalls the stored fact, applies it with full confidence, no hedging, and matches the user's conciseness preference; they are effectively tied. Systems A and D both fail on recall: neither retrieved the PostgreSQL 14 fact, instead treating the prompt as a request to inspect the live machine, finding no installation, and producing verbose follow-up requests. D ranks last because it goes a step further into unsolicited territory (suggesting the user install client tools), while A at least keeps its offer scoped to providing context. Contradiction handling is largely neutral across all four since no explicit conflict was surfaced; B and C edge slightly by confidently committing to the answer rather than getting confused by the absence of an installation.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "sqlite-bm25",
+    "C": "claude-md-native",
+    "D": "no-memory"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already decided on **structured logging with correlation IDs** across all services (see `decisions.md`). Match that pattern — use the standard JVM stack for Kotlin:\n\n**SLF4J + Logback + `logstash-logback-encoder`** (JSON structured output for EKS/CloudWatch)\n\n`build.gradle.kts`:\n```kotlin\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n// SLF4J + Logback come transitively via spring-boot-starter-logging\n```\n\n`logback-spring.xml`:\n```xml\n<configuration>\n  <appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n  </appender>\n  <root level=\"INFO\">\n    <appender-ref ref=\"JSON\"/>\n  </root>\n</configuration>\n```\n\nCorrelation ID via MDC (consistent with other services):\n```kotlin\n// In a gRPC interceptor or HTTP filter\nMDC.put(\"correlationId\", request.header(\"X-Correlation-ID\") ?: UUID.randomUUID().toString())\n\n// In service code\nprivate val log = LoggerFactory.getLogger(PaymentService::class.java)\nlog.info(\"Processing payment\", kv(\"paymentId\", id), kv(\"amount\", amount))\n```\n\nThe `kv()` helper comes from `logstash-logback-encoder` and emits proper JSON fields (not string concatenation).\n\nThis matches what `auth-service`, `account-service`, and `notification-service` already do — no new infra, no new patterns.",
+  "timestamp": "2026-06-12T18:08:46Z",
+  "latency_ms": 23756,
+  "exit_code": 0,
+  "output_length_chars": 1333,
+  "output_length_tokens_approx": 333,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

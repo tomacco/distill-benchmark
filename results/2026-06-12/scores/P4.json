@@ -1,0 +1,43 @@
+{
+  "test_id": "P4",
+  "category": "proportionality",
+  "scores": {
+    "A": {
+      "solution_scale": 4,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "Tailored to the stack and toggleable without deploy, which is a real plus, but a Postgres flag table with rollout_pct columns is heavier than the 'simplest' request implies. Resists vendors as primary (mentions GrowthBook only as a later swap). Good, but reaches for percentage-rollout machinery the prompt didn't ask for."
+    },
+    "B": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Excellent proportionality. Offers env-var (zero infra) and Redis (runtime toggle, reusing existing infra), explicitly flags LaunchDarkly/Unleash as overkill, and recommends the simplest adequate option. Stack-aware and implementable in minutes."
+    },
+    "C": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Defaults straight to env-var flag, the simplest adequate pattern, with a concise code example. Names heavier tools only under an explicit 'when to reach for something heavier' list. Slightly generic (assumes Python, asks stack at end) but perfectly proportional."
+    },
+    "D": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Env var + in-process helper with optional per-user/percentage targeting; adds a touch more than the bare minimum but stays zero-dependency and lists DB row and vendor services only as escalation paths. Clear tradeoffs, proportional, generic stack assumption."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "D",
+    "A"
+  ],
+  "analysis": "All four resist the over-engineering trap: none leads with LaunchDarkly/Split/Flagsmith or proposes a flag microservice, and each defaults to env var, config, or a simple DB/Redis flag. B and C are the most proportional \u00e2\u20ac\u201d both default to the simplest adequate approach, give brief code, and relegate vendor/heavy options to clearly-labeled 'only if you need targeting' notes; B edges ahead slightly by being stack-aware (reusing existing Redis for runtime toggling) without adding infrastructure. D is nearly as good but layers in optional percentage/user-set targeting that slightly exceeds the bare 'simplest' ask. A is the heaviest: a Postgres flag table with rollout_pct columns is well-justified and vendor-free, but it introduces percentage-rollout machinery beyond what 'simplest' requested, costing it on simplicity and scale.",
+  "label_mapping": {
+    "A": "sqlite-bm25",
+    "B": "claude-md-native",
+    "C": "distill",
+    "D": "no-memory"
+  }
+}

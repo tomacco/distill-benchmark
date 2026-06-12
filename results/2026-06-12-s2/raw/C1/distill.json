@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "distill",
+  "prompt": "What version of Postgres are we on?",
+  "output": "**PostgreSQL 14.**\n\nThat's what's recorded in the architecture knowledge base for Helios Financial.",
+  "timestamp": "2026-06-12T17:29:04Z",
+  "latency_ms": 16154,
+  "exit_code": 0,
+  "output_length_chars": 99,
+  "output_length_tokens_approx": 24,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

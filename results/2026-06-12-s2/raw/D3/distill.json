@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "No stored knowledge on file — fresh session. I'll answer from your context clues (Kotlin, gRPC internal / REST external, microservices).\n\n---\n\n**Simplest approach: micro-deposit verification via a thin REST endpoint, delegating to a provider.**\n\nDon't build bank verification in-house. Use **Stripe** (or Plaid for more detail). The endpoint just proxies the provider flow:\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/verify\n```\n\nTwo-phase flow:\n1. **Initiate** — call provider API to attach the bank account, return a `verificationId` (or Stripe's `bank_account` token). Store status as `PENDING`.\n2. **Confirm** — accept the two micro-deposit amounts the user submits, forward to provider, flip status to `VERIFIED`.\n\n**Endpoint sketch (Kotlin + Ktor or Spring):**\n\n```kotlin\n// Initiate\ndata class BankAccountRequest(val routingNumber: String, val accountNumber: String)\ndata class BankAccountResponse(val verificationId: String, val status: String)\n\n// Confirm\ndata class VerifyDepositsRequest(val amounts: List<Int>) // cents\ndata class VerifyDepositsResponse(val status: String)\n```\n\n**Internal wiring:**\n- Payment service exposes REST externally (matches your external-REST convention)\n- Calls account-service over gRPC to update merchant record once verified\n- Stores `verificationId` + `status` in payment service DB — don't put bank state in account-service\n\n**What to skip:**\n- Don't roll your own micro-deposit logic\n- Don't build instant verification UI until you know merchants need it (Plaid upcharge)\n- No retry/webhook complexity until the happy path is live\n\nStripe's micro-deposit flow is the lowest-effort start; swap to Plaid if you need instant ACH verification later.",
+  "timestamp": "2026-06-12T17:30:45Z",
+  "latency_ms": 19466,
+  "exit_code": 0,
+  "output_length_chars": 1705,
+  "output_length_tokens_approx": 426,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "claude-md-native",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup (Kotlin, REST external API, gRPC internal, `account-service` already handling bank account data), the simplest approach:\n\n**Use micro-deposit verification** — industry standard, no third-party dependency required initially.\n\n## Endpoint design\n\nExternal REST endpoint (partners/merchants hit this):\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\n```\n\n## Flow\n\n1. **Initiate** (`POST .../verify`) — payment-service calls `account-service` via gRPC to fetch account details, then initiates two small deposits (e.g. $0.01–$0.99) via your payment rails. Stores a hashed expected pair + expiry in Postgres.\n2. **Confirm** (`POST .../verify/confirm`, body: `{ \"amounts\": [12, 34] }`) — validates submitted amounts against stored hash, marks account verified in `account-service` via gRPC.\n\n## Why this fits your stack\n\n- `account-service` already owns bank account state — have it store a `verification_status` field, updated via a gRPC call from payment-service\n- Publish a `bank_account.verified` Kafka event so downstream services (notifications, reporting) react without coupling\n- `notification-service` already exists — fire an email when deposits land\n\n## Alternative to consider\n\nIf you want instant verification (no 1–2 day wait), **Plaid or Stripe Financial Connections** can replace step 1 with a hosted OAuth flow. Same endpoint shape, just the backend implementation differs. Worth discussing with Sofia since it affects the payment rails design.\n\nThe micro-deposit path has zero new vendor dependencies and fits the timeline pressure for Q3 due diligence.",
+  "timestamp": "2026-06-12T17:44:22Z",
+  "latency_ms": 17802,
+  "exit_code": 0,
+  "output_length_chars": 1616,
+  "output_length_tokens_approx": 404,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

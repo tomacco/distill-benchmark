@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — it's the right call, and you're already running it.\n\nYour requirements map directly to what PostgreSQL does best:\n\n- **Complex aggregations across tables** — window functions, CTEs, materialized views, and the full SQL feature set. No ORM gymnastics needed.\n- **Strong consistency** — full ACID, SERIALIZABLE isolation, and multi-table transactions. Non-negotiable for financial data.\n- **Team expertise** — your team already operates Postgres 14 in production; lower operational risk than introducing a new engine.\n\nA few reporting-specific patterns worth considering:\n\n- **Materialized views** — pre-aggregate expensive queries, refresh on a schedule (or triggered via Kafka events).\n- **Read replica** — route reporting queries to a replica so you don't compete with OLTP workloads on the primary.\n- **Partitioning** — if the reporting tables will grow large (transaction history is the obvious candidate), range-partition by date up front.\n- **`pg_stat_statements`** — enable it early; invaluable for identifying slow aggregation queries before they become incidents.\n\nIf query volume eventually outgrows a single Postgres instance, the natural next step would be a dedicated OLAP layer (e.g., Redshift or ClickHouse fed from Kafka), but that's a future problem — start with Postgres and a read replica.",
+  "timestamp": "2026-06-12T17:03:28Z",
+  "latency_ms": 14025,
+  "exit_code": 0,
+  "output_length_chars": 1342,
+  "output_length_tokens_approx": 335,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

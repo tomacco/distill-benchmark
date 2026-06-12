@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** (already chosen over Liquibase). Here's the standard setup for a new service:\n\n**Directory structure**\n```\nsrc/main/resources/db/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n```\n\nFlyway's naming convention: `V{version}__{description}.sql` (double underscore).\n\n**build.gradle.kts**\n```kotlin\ndependencies {\n    implementation(\"org.flywaydb:flyway-core\")\n    implementation(\"org.postgresql:postgresql\")\n}\n```\n\n**application.yml**\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false   # set true only if migrating an existing DB\n  datasource:\n    url: jdbc:postgresql://localhost:5432/your_service_db\n```\n\n**Key practices already established across your services:**\n- Each service owns its own schema/database — don't share tables across services\n- Use `IF NOT EXISTS` in DDL to make scripts idempotent where possible\n- Flyway locks the table during migration, so it's safe in multi-pod EKS deployments (init containers or Spring auto-run both work)\n\n**Recommended: run migrations as a Kubernetes init container** so the pod doesn't start until migrations succeed — this is the safer pattern at your scale.\n\nAny specific tables or constraints you're designing, or questions about the init container setup?",
+  "timestamp": "2026-06-12T17:35:02Z",
+  "latency_ms": 24138,
+  "exit_code": 0,
+  "output_length_chars": 1312,
+  "output_length_tokens_approx": 328,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Based on your stack (Kotlin microservices on EKS, with the team's existing decision to use structured logging with correlation IDs), here's what to use:\n\n**Library: Logback + SLF4J** (via `logstash-logback-encoder` for JSON output)\n\nThis is the standard for Kotlin/JVM services and pairs with the structured logging approach already adopted.\n\n```kotlin\n// build.gradle.kts\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```xml\n<!-- logback.xml -->\n<appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\">\n  <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n</appender>\n```\n\n```kotlin\n// Usage — MDC for correlation IDs (matches other services)\nimport org.slf4j.LoggerFactory\nimport org.slf4j.MDC\n\nval log = LoggerFactory.getLogger(PaymentService::class.java)\n\nfun processPayment(req: PaymentRequest, correlationId: String) {\n    MDC.put(\"correlationId\", correlationId)\n    MDC.put(\"paymentId\", req.id)\n    log.info(\"Processing payment\", StructuredArguments.kv(\"amount\", req.amount))\n    // MDC is included automatically in every log line\n}\n```\n\n**Key things to include in every log line for payments:**\n- `correlationId` — already required by team convention\n- `paymentId`, `accountId` — for tracing financial flows\n- `amount` + `currency` — avoid logging card numbers or full PAN\n\n**Aggregation:** Since you're on EKS, the JSON stdout goes to CloudWatch Logs (or wherever your log shipper sends it). Check with Sofia on whether auth/account services use a specific shipper (Fluent Bit is common on EKS) — use the same one.\n\nThe main tradeoff: if you want coroutine-aware MDC propagation (so correlation IDs don't get lost across `suspend` boundaries), you'll need to copy MDC into the coroutine context manually or use a library like `kotlin-logging` with a custom coroutine dispatcher. Worth discussing with Sofia since she owns the coroutines pattern.",
+  "timestamp": "2026-06-12T17:17:03Z",
+  "latency_ms": 23186,
+  "exit_code": 0,
+  "output_length_chars": 1914,
+  "output_length_tokens_approx": 478,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

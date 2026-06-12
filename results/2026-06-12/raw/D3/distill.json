@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "I don't have a payment service or the stack you're referring to recorded in my knowledge base — the SPINE doesn't include a matching project. I can see your actual projects (InceptionAI, NAST, SnapDiscuss, etc.) but nothing about a payment service, Kotlin/gRPC microservices, or the auth/account services mentioned.\n\nWithout knowing \"our setup,\" I'd be guessing. Can you share:\n- The tech stack (language, frameworks)\n- How internal services communicate\n- Which verification method you're targeting (micro-deposit, Plaid/Stripe, manual routing+account check)?",
+  "timestamp": "2026-06-12T16:49:10Z",
+  "latency_ms": 41845,
+  "exit_code": 0,
+  "output_length_chars": 561,
+  "output_length_tokens_approx": 140,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

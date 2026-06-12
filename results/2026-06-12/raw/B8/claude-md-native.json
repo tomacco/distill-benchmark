@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "Given your existing PostgreSQL expertise and preference for not adding new infrastructure, **PostgreSQL with JSONB** is the right call here.\n\n**Why it fits the CMS use case:**\n- **Varying schemas per content type** — store the structured envelope (author, slug, timestamps, status) as columns, and content-type-specific fields in a `metadata JSONB` column with GIN indexes\n- **Blog posts** — fully relational, nothing special needed\n- **Media metadata** — JSONB for flexible exif/codec/dimension fields that differ by file type\n- **User-generated content** — JSONB handles arbitrary shape, you can still query/filter with `@>` operators\n\n**Rough schema pattern:**\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,           -- 'post', 'media', 'ugc'\n  slug        text UNIQUE,\n  author_id   uuid REFERENCES users,\n  status      text DEFAULT 'draft',\n  published_at timestamptz,\n  metadata    jsonb NOT NULL DEFAULT '{}'\n);\n\nCREATE INDEX ON content USING GIN (metadata);\nCREATE INDEX ON content (type, status, published_at DESC);\n```\n\n**Tradeoff to know:** If content-type schemas diverge heavily and you want per-type validation, you'll either enforce it in the app layer or use Postgres `CHECK` constraints with `jsonb_matches_schema` (requires pg_jsonschema extension). That's manageable but adds friction compared to a native document store.\n\n**Alternative if this stays tiny:** SQLite + Litestream for a zero-ops setup. Fine for a side project with low write volume, but you lose horizontal scale later.\n\nI'd start with PostgreSQL since you already operate it — no new infra, no new oncall burden, and the JSONB story is genuinely solid for this use case.",
+  "timestamp": "2026-06-12T17:01:55Z",
+  "latency_ms": 30442,
+  "exit_code": 0,
+  "output_length_chars": 1736,
+  "output_length_tokens_approx": 434,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

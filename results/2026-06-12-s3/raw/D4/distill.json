@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Two quick questions before I scaffold this:\n\n1. **Framework** — Spring Boot, Ktor, or standalone Kotlin?\n2. **Event format** — JSON (data class), Avro, or Protobuf?",
+  "timestamp": "2026-06-12T17:58:48Z",
+  "latency_ms": 27903,
+  "exit_code": 0,
+  "output_length_chars": 168,
+  "output_length_tokens_approx": 42,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

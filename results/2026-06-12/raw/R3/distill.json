@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "No existing React files in the workspace. A few quick questions before writing:\n\n1. What settings does this page manage? (User profile, notifications, account preferences — something specific to Helios?)\n2. Any existing component patterns/design system Dev is already using, or greenfield?\n\nOnce you give me that, I'll draft a TypeScript React component you and Dev can iterate on together.",
+  "timestamp": "2026-06-12T16:54:19Z",
+  "latency_ms": 39512,
+  "exit_code": 0,
+  "output_length_chars": 392,
+  "output_length_tokens_approx": 98,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

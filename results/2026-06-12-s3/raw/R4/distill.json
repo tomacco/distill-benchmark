@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For analytics with fast reads on large datasets, **columnar databases** are the standard choice:\n\n**Top picks:**\n\n- **ClickHouse** — best raw query performance for analytics, excellent compression, self-hosted or cloud. Strong choice if you control the infra.\n- **DuckDB** — embedded OLAP, zero-infra, surprisingly fast. Good if you're querying files (Parquet, CSV) or want analytics inside an app process.\n- **BigQuery / Snowflake / Redshift** — managed cloud DWs. Pay-per-query model, minimal ops burden, scale to petabytes.\n\n**Key tradeoff:** self-hosted (ClickHouse) vs managed (BigQuery/Snowflake).\n\n- Self-hosted = lower cost at scale, more control, more ops work\n- Managed = faster to start, easy scaling, higher cost at high volume\n\n**My recommendation:** ClickHouse if you have ops capacity and expect high query volume; BigQuery if you want to move fast and minimize infra.\n\nA few questions that would sharpen this:\n- What scale are we talking (GB, TB, PB)?\n- Batch-only reads, or real-time ingestion too?\n- Existing cloud provider (AWS/GCP/Azure)?",
+  "timestamp": "2026-06-12T18:01:04Z",
+  "latency_ms": 14113,
+  "exit_code": 0,
+  "output_length_chars": 1064,
+  "output_length_tokens_approx": 266,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

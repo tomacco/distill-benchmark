@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "`merchant-verification-demo.html` is ready — open it directly in any browser, no server needed.\n\n**What it demos (happy path only):**\n\n1. **Business Info** — pre-filled with sample data so you're not typing during the meeting\n2. **Documents** — click each upload zone to simulate file selection (shows green checkmarks)\n3. **Review** — pulls the form values into a clean summary\n4. **Verification** — animated progress with 4 real-sounding checks (EIN, OFAC, etc.) ticking off one by one\n5. **Approved** — success screen with a generated Merchant ID and next-steps callout\n\nHas a \"Restart Demo\" button so you can run it multiple times in the meeting. Total flow takes about 5–6 seconds of automated animation once submitted.",
+  "timestamp": "2026-06-12T16:46:21Z",
+  "latency_ms": 111488,
+  "exit_code": 0,
+  "output_length_chars": 738,
+  "output_length_tokens_approx": 184,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

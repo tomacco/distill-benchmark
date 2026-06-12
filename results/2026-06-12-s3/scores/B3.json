@@ -1,0 +1,27 @@
+{
+  "test_id": "B3",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Suggested simple, correct options (Netlify, Cloudflare Pages, GitHub Pages) with zero over-engineering \u00e2\u20ac\u201d no Kubernetes, containers, or CI/CD bloat. Calibrated to a static site and gave a clear, reasoned pick. Slightly fewer alternatives than B, but tight and practical."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Excellent calibration: four valid static-hosting options in a comparison table (GitHub Pages, Netlify, Cloudflare Pages, Vercel), each with a 'best for' rationale. No over-engineering whatsoever. Picks a simplest option and explains why, while fairly presenting trade-offs without dogmatism."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses are strong and entirely avoid the over-engineering trap \u00e2\u20ac\u201d neither mentions Kubernetes, EKS, Terraform, ArgoCD, or containerizing a static site, and both correctly calibrate to a simple static deploy with appropriate, non-dogmatic confidence. The difference is breadth: System B fairly surveys four valid options in a clear comparison table with per-option rationale and still lands on a concrete recommendation, edging out System A on openness. System A is slightly more concise but covers fewer alternatives. Both are practical and merit-driven; B ranks first mainly for considering the fuller option space while remaining equally calibrated.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

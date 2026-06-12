@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "claude-md-native",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "No specific commit message format in preferences. Here's a clean message:\n\n```\nRemove REST endpoint handlers from account-service post-gRPC migration\n\n- Delete all REST route handlers and middleware in account-service\n- Remove OpenAPI spec files (internal use only, no longer needed)\n- Update CI pipeline to skip REST client stub generation\n```\n\nThe subject line follows conventional commit style (imperative mood, under 72 chars). The bullets map one-to-one to your three changes without padding. If your team uses a prefix like `chore:` or `refactor:`, prepend it — nothing in your memory files specifies one.",
+  "timestamp": "2026-06-12T17:51:02Z",
+  "latency_ms": 11535,
+  "exit_code": 0,
+  "output_length_chars": 613,
+  "output_length_tokens_approx": 153,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

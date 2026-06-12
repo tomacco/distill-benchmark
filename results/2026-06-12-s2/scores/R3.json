@@ -1,0 +1,27 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Surfaces that Dev is a junior React/TS engineer and explicitly frames the work to avoid over-engineering ('clean and learnable rather than over-engineered'), which directly aligns with the user's bias. Good scoping questions including routing. Slightly less explicit in naming Dev's full role, and adds a third question that's marginally more than needed. No component example, but deferring to clarify scope first is reasonable."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Cleanly states 'I know Dev is your junior frontend engineer (React/TypeScript)' \u00e2\u20ac\u201d the most explicit, natural recall of the user model. Two tight, well-chosen questions; avoids over-engineering by not assuming scope. Knowledge woven in organically. Misses the growth-ownership bonus and gives no component example, but the clarify-first approach is appropriate and proportional."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both responses correctly recall that Dev is a junior frontend engineer on React/TypeScript and both wisely choose to ask scoping questions rather than over-engineer a premature solution \u00e2\u20ac\u201d well-calibrated to the user's stated dislike of over-engineering. Neither provided a concrete component example or surfaced the bonus growth/ownership angle. System A edges ahead on explicitly invoking the over-engineering avoidance and offering a more complete scoping set (including routing), but names Dev's role a bit less crisply. System B states the stored user-model fact most explicitly and naturally, stays tighter and more proportional, and reads slightly more organic. The differences are small; System B wins narrowly on naturalness and conciseness while matching A on relevance and precision.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

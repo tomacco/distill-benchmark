@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** (already chosen over Liquibase). Here's the standard setup for a new service:\n\n**Directory structure:**\n```\nsrc/main/resources/db/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n```\n\n**Gradle dependency (Kotlin):**\n```kotlin\nimplementation(\"org.flywaydb:flyway-core:9.x.x\")\n```\n\n**Spring Boot auto-configuration** handles Flyway automatically if it's on the classpath — it runs migrations on startup against your configured `spring.datasource`.\n\n**Key conventions to follow (match existing services):**\n- Version prefix: `V{n}__description.sql` (double underscore)\n- Never modify an already-applied migration — add a new one\n- One concern per migration file\n- Include rollback scripts as separate `R__` files only if the team does (check `account-service` for the pattern)\n\n**For a new service, also verify:**\n- Flyway's schema table (`flyway_schema_history`) is in the service's own schema/DB — don't share it across services\n- CI runs migrations in a test DB before deploying (your GitHub Actions → ArgoCD pipeline should gate on this)\n\nCheck how `account-service` wires it up since it's the most recently extracted service — that's your reference implementation.",
+  "timestamp": "2026-06-12T18:00:37Z",
+  "latency_ms": 30888,
+  "exit_code": 0,
+  "output_length_chars": 1216,
+  "output_length_tokens_approx": 304,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

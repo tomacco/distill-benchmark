@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "claude-md-native",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "No — DynamoDB is a non-starter here. The team evaluated and rejected it (see `memory/decisions.md`): strong consistency requirements for financial data, need for multi-table transactions, and lower operational risk by staying in the PostgreSQL/Redis ecosystem the team already operates.\n\n**For sub-millisecond session reads, Redis is the right answer.** You already have it in the stack for caching — it's purpose-built for key-value lookups at that latency tier, supports TTL natively for session expiry, and adds zero new operational overhead.",
+  "timestamp": "2026-06-12T17:43:05Z",
+  "latency_ms": 16195,
+  "exit_code": 0,
+  "output_length_chars": 549,
+  "output_length_tokens_approx": 137,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

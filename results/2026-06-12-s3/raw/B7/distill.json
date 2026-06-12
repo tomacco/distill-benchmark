@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification-demo.html` directly in any browser — no build step, no server needed.\n\n**What the demo covers (happy path):**\n\n1. **Business Info** — legal name, type, EIN, address, industry\n2. **Documents** — click/drag upload zone (simulated, shows file as \"uploaded\")\n3. **Owner KYC** — name, DOB, last-4 SSN, ownership %\n4. **Processing** — animated spinner + 5 live check-steps ticking off (OFAC screening, IRS EIN check, etc.) over ~4 seconds\n5. **Approved** — success screen with generated merchant ID, summary card, and risk level\n\nIt's styled to match a professional fintech product (Helios-branded, clean card layout, progress bar) so it reads well on a projector. The \"View Dashboard →\" button refreshes to replay the flow.",
+  "timestamp": "2026-06-12T17:56:19Z",
+  "latency_ms": 109240,
+  "exit_code": 0,
+  "output_length_chars": 766,
+  "output_length_tokens_approx": 191,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

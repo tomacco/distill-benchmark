@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, use Redis. It's the right call given your setup:\n\n- Redis is already in your stack and your `auth-service` would own this naturally\n- Key-value with TTL is Redis's core use case — minimal complexity\n- Avoids a PostgreSQL round-trip on every authenticated request, which matters at scale\n- TTL-based expiry means revocation is straightforward: delete the key to invalidate a session immediately\n\nOne thing to be deliberate about for a fintech context: decide upfront whether Redis is the **source of truth** for sessions or a **cache in front of PostgreSQL**. For Helios specifically, I'd recommend keeping a sessions table in Postgres as the durable record (audit trail, regulators love it) and treating Redis as the fast-path lookup. On a cache miss, fall back to Postgres and repopulate Redis. This also means a Redis failure degrades gracefully rather than taking down auth entirely.",
+  "timestamp": "2026-06-12T16:57:00Z",
+  "latency_ms": 12302,
+  "exit_code": 0,
+  "output_length_chars": 893,
+  "output_length_tokens_approx": 223,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

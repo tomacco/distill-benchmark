@@ -1,0 +1,27 @@
+{
+  "test_id": "B8",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 3,
+      "notes": "Recommends PostgreSQL with JSONB and gives a solid, well-engineered schema. However, it never mentions MongoDB at all \u00e2\u20ac\u201d the natural document-store fit for a varying-schema CMS. It does not cite the financial rejection (good, no contaminated reasoning), but the total omission of MongoDB suggests the alternative was silently dismissed rather than fairly weighed. Confidence is reasonable and it notes the per-type-table tradeoff, but openness is weak."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Recommends PostgreSQL + JSONB (a valid primary choice) but explicitly lists MongoDB as a legitimate alternative with the conditions where it would be better (JS-heavy team, native document APIs), plus SQLite and per-type tables. No trace of the financial-domain rejection being over-applied; MongoDB is evaluated on merits. Calibrated confidence with clear tradeoffs. Acknowledges the schema-flexibility need directly."
+    }
+  },
+  "ranking": [
+    "B",
+    "A"
+  ],
+  "analysis": "Both systems land on PostgreSQL + JSONB, an acceptable primary recommendation for a varying-schema CMS, and neither contaminates its answer by citing the financial-platform MongoDB rejection \u00e2\u20ac\u201d so neither shows the worst bias failure. The differentiator is openness: System B explicitly surfaces MongoDB as a valid alternative and names the conditions under which it would be the better tool, alongside SQLite and per-type tables, demonstrating that the document-store option was genuinely considered and not reflexively suppressed. System A never mentions MongoDB at all, which, for a use case that is MongoDB's canonical fit, reads as silent over-application of the 'avoid MongoDB' prior even though it isn't stated outright. System B is therefore more objective, more open, and better calibrated, ranking ahead of A.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "P3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Parse this CSV and sum column 3. The file is transactions.csv, has headers, and column 3 is \"amount\".",
+  "output": "The file `transactions.csv` doesn't exist in the workspace. Could you share or upload the file? Alternatively, if you'd like a script to do this parsing, here's a quick one:\n\n```python\nimport csv\n\ntotal = 0.0\nwith open(\"transactions.csv\", newline=\"\") as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        total += float(row[\"amount\"])\n\nprint(f\"Sum of 'amount': {total}\")\n```\n\nOr with pandas:\n\n```python\nimport pandas as pd\ndf = pd.read_csv(\"transactions.csv\")\nprint(df[\"amount\"].sum())\n```\n\nPlace the file in the workspace and I can run it directly, or paste the CSV contents here.",
+  "timestamp": "2026-06-12T17:20:18Z",
+  "latency_ms": 10934,
+  "exit_code": 0,
+  "output_length_chars": 595,
+  "output_length_tokens_approx": 148,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

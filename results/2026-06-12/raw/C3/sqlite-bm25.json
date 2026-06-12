@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What database do we use for the account service?",
+  "output": "There's a conflict between the knowledge base and something stated earlier in this conversation.\n\n- **Knowledge base**: The account service uses **PostgreSQL 14** (the team's primary database).\n- **Earlier in this conversation**: It was stated that the account service was migrated to **MySQL** last week.\n\nThe knowledge base has no record of a MySQL migration, and the stored architecture explicitly lists PostgreSQL 14 as the primary database. Before I update my understanding, can you confirm: was the MySQL migration actually completed and intentional? If so, the knowledge base should be updated to reflect it.",
+  "timestamp": "2026-06-12T17:16:39Z",
+  "latency_ms": 12111,
+  "exit_code": 0,
+  "output_length_chars": 615,
+  "output_length_tokens_approx": 153,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

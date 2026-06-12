@@ -1,0 +1,43 @@
+{
+  "test_id": "R3",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Strongest retrieval: built the component and framed everything around Dev as a junior who needs clear seams. 'Good first tasks for Dev' nails the growth-opportunity bonus, keeps logic intentionally thin/accessible, and avoids over-engineering. Knowledge of Dev's role is applied, not recited."
+    },
+    "B": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 1,
+      "notes": "Total retrieval failure \u00e2\u20ac\u201d asks whether Dev is a human, an AI sub-agent, or an iterative style. No awareness Dev is the junior frontend engineer. Didn't inject irrelevant context (so precision isn't dragged to 1), but surfaced nothing useful."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Explicitly recalls Dev as junior frontend (React/TS) and user as senior backend \u00e2\u20ac\u201d excellent retrieval. Slightly regurgitated ('Got it \u00e2\u20ac\u201d Dev is your...') and stops to ask questions rather than delivering, but the fallback offer is sensible and junior-appropriate."
+    },
+    "D": {
+      "relevance": 3,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Knows Dev is a collaborator to iterate with and references Helios, and assumes React/TypeScript \u00e2\u20ac\u201d but never surfaces the junior level or calibrates complexity for it. Natural tone, no irrelevant dumping, but thinner retrieval than A or C."
+    }
+  },
+  "ranking": [
+    "A",
+    "C",
+    "D",
+    "B"
+  ],
+  "analysis": "System A wins decisively by acting on retrieved knowledge rather than reciting it: it ships a deliberately thin component, lays out 'good first tasks for Dev,' and frames clear extension seams \u00e2\u20ac\u201d hitting the junior-calibration, anti-over-engineering, and growth-ownership signals organically. System C has equally strong explicit recall (junior frontend, React/TS, senior backend) but stalls into clarifying questions and feels slightly regurgitated. System D knows Dev is a collaborator and assumes the right stack but misses the junior-level calibration entirely, so its knowledge is partial. System B fails the test outright, asking who or what 'Dev' even is, demonstrating no retrieval at all.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "no-memory",
+    "C": "sqlite-bm25",
+    "D": "distill"
+  }
+}

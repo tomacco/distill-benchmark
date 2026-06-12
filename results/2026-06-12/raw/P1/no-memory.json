@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "no-memory",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The codebase has no files containing `AccountService` — so either the project is empty or the class doesn't exist yet.\n\nThe fastest way to do a rename like this in an existing codebase would be:\n\n1. **IDE refactor** (safest) — right-click the class name → Rename in VS Code or JetBrains. Updates all references, imports, and file names atomically.\n\n2. **Find & replace in editor** — VS Code: `Ctrl+Shift+H`, search `AccountService`, replace with `BankAccountService`, scope to the workspace. Quick but won't catch edge cases like split strings.\n\n3. **Command line** — a one-liner with `sed` (Linux/Mac) or PowerShell that replaces across all files, then rename the file itself:\n   ```powershell\n   Get-ChildItem -Recurse -Include *.ts,*.js,*.cs | ForEach-Object {\n     (Get-Content $_.FullName) -replace 'AccountService', 'BankAccountService' | Set-Content $_.FullName\n   }\n   ```\n   Then rename the file: `Rename-Item AccountService.ts BankAccountService.ts`.\n\n4. **I can do it** — if you'd like, I can run the rename across the codebase right now. Just confirm the file extensions involved (e.g., `.ts`, `.cs`, `.py`) and whether you also want the source file(s) renamed.\n\nSince the workspace appears empty, do you want to create the file first, or are you working in a different directory?",
+  "timestamp": "2026-06-12T16:36:37Z",
+  "latency_ms": 14361,
+  "exit_code": 0,
+  "output_length_chars": 1304,
+  "output_length_tokens_approx": 326,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

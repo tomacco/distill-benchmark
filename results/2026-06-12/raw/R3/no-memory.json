@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "no-memory",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "I have two quick questions before diving in:\n\n1. **\"Pair with Dev\"** — do you mean collaborating with a human colleague named Dev, using an AI sub-agent called \"Dev,\" or working in an iterative review-as-you-go style with me?\n\n2. **Settings page scope** — what sections should it include? For example: user profile, notifications, theme/appearance, account security, etc.\n\nAlso, since the workspace is empty, should I scaffold a new React project (e.g. with Vite), or will you drop this component into an existing codebase?",
+  "timestamp": "2026-06-12T16:38:55Z",
+  "latency_ms": 26184,
+  "exit_code": 0,
+  "output_length_chars": 527,
+  "output_length_tokens_approx": 131,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — either via its CLI or a tiny Python wrapper.\n\nIt reads CSVs lazily (never loads the full 50GB), has built-in `GROUP BY` aggregation, and exports JSON natively. ~5 lines of SQL vs. hundreds of lines in any other approach.\n\n```python\nimport duckdb\n\nduckdb.sql(\"\"\"\n    COPY (\n        SELECT\n            merchant_id,\n            COUNT(*)           AS txn_count,\n            SUM(amount)        AS total_amount,\n            AVG(amount)        AS avg_amount,\n            MIN(created_at)    AS first_txn,\n            MAX(created_at)    AS last_txn\n        FROM read_csv_auto('data.csv')\n        GROUP BY merchant_id\n    )\n    TO 'summary.json' (FORMAT JSON, ARRAY true)\n\"\"\")\n```\n\n**Why not the alternatives:**\n- **Pandas** — loads chunks into memory, lots of boilerplate to get right at 50GB\n- **Polars** — great, but DuckDB is even simpler for pure aggregation\n- **Go/Rust** — fast but 100+ lines of parsing code for a one-off\n- **awk** — awkward JSON output\n\nInstall: `pip install duckdb`. DuckDB will scan the file in parallel using multiple cores without ever materializing the full dataset in RAM. Adjust the column names to match your actual schema.",
+  "timestamp": "2026-06-12T16:44:28Z",
+  "latency_ms": 15465,
+  "exit_code": 0,
+  "output_length_chars": 1170,
+  "output_length_tokens_approx": 292,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

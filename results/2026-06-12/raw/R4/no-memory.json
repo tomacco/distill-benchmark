@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "no-memory",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For analytics workloads with fast reads on large datasets, **ClickHouse** is the strongest default choice — it's a columnar OLAP database built specifically for this use case, with exceptional query performance on aggregations over billions of rows.\n\nThe main tradeoff: ClickHouse is optimized for reads/aggregations, not frequent row-level updates or transactional writes.\n\n**Quick comparison of the top contenders:**\n\n| Database | Best for | Tradeoff |\n|---|---|---|\n| **ClickHouse** | High-throughput analytics, aggregations | Not for OLTP or frequent updates |\n| **DuckDB** | In-process analytics, smaller scale or dev | Single-node; not a distributed server |\n| **BigQuery / Redshift** | Managed cloud, massive scale | Cost and vendor lock-in |\n| **TimescaleDB** | Time-series data specifically | Postgres-based, not as fast at pure OLAP |\n| **Parquet + Spark/Trino** | Huge data lakes, batch queries | Operational complexity |\n\n**My recommendation:** Start with ClickHouse if you're self-hosting and expect high query concurrency or sub-second latency requirements. If you want zero ops overhead and are already in a cloud ecosystem, BigQuery (GCP) or Redshift (AWS) are solid managed alternatives.\n\nA few follow-up questions that would sharpen the recommendation:\n- Is the data time-series (events/logs) or more relational?\n- What's the expected data volume (GB, TB, PB)?\n- Self-hosted or managed cloud?",
+  "timestamp": "2026-06-12T16:39:09Z",
+  "latency_ms": 12163,
+  "exit_code": 0,
+  "output_length_chars": 1412,
+  "output_length_tokens_approx": 353,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

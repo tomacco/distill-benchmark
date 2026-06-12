@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Good context — payment processing is already on your roadmap as a monolith extraction. Key things to consider, specific to your stack:\n\n**Correctness & Consistency**\n- Idempotency keys on all payment mutations — critical for retries over gRPC without double-charges\n- Use PostgreSQL transactions with `SELECT FOR UPDATE` to prevent double-spend on the same account balance\n- Outbox pattern (write payment event to DB in same transaction, then publish to Kafka) — avoids lost events on crash between DB write and Kafka publish\n\n**Service Design**\n- Define the gRPC API contract first (`.proto` files) — partner-facing REST can be a thin gateway on top\n- Keep `payment-service` as the single writer to payment state; `account-service` should get balance updates via Kafka events, not direct DB writes\n- Consider a state machine for payment lifecycle (PENDING → PROCESSING → SETTLED/FAILED/REVERSED) with Flyway migrations to enforce valid transitions\n\n**Compliance & Security**\n- PCI DSS scope: avoid storing raw card data; use a vault (Stripe, Braintree) or tokenization so your service only handles tokens\n- Audit log every state transition with correlation IDs (already established practice)\n- Separate encryption keys per tenant if you serve multiple SMB customers\n\n**Operational**\n- Dead-letter queue on Kafka for failed payment events — you'll want replay and alerting\n- Saga pattern for multi-step flows (e.g., charge + ledger entry + notification) — compensating transactions instead of distributed locks\n- Separate read replicas for reporting queries so the payment write path is never contended\n\n**Main tradeoff to decide first**: are you wrapping an external payment processor (Stripe/Adyen) or building direct bank integrations (ACH, wire)? The first is much faster but the second gives you more margin and control — and given you're Series B fintech for SMBs, the processor-first approach is likely the right call to start.",
+  "timestamp": "2026-06-12T17:48:51Z",
+  "latency_ms": 24139,
+  "exit_code": 0,
+  "output_length_chars": 1952,
+  "output_length_tokens_approx": 488,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

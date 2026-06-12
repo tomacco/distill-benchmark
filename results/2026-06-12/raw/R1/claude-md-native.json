@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Given that payment processing is already on your monolith extraction roadmap, here's what to consider:\n\n**Consistency & Data Integrity**\n- Use PostgreSQL with `SERIALIZABLE` isolation or `SELECT FOR UPDATE` for balance mutations — financial correctness over throughput\n- Design for idempotency from the start: idempotency keys on every payment mutation to survive retries/network failures\n- Outbox pattern for Kafka events so DB writes and event publishes are atomic\n\n**Service Boundaries**\n- Separate payment processing (orchestration, state machine) from ledger/transaction history — the latter is planned as its own extraction anyway\n- Expose gRPC internally (aligned with your current stack), REST externally for partner-facing APIs\n\n**State Machine**\n- Model payments as explicit states: `PENDING → PROCESSING → SETTLED / FAILED / REVERSED` — avoids status drift bugs\n- Store every state transition as an immutable event row, not just the current state\n\n**Security & Compliance**\n- PCI DSS scope: if you're handling raw card data, isolate this service hard — network policies, separate secrets, minimal team access\n- Encrypt sensitive fields at rest (Vault or AWS KMS), not just the DB at the volume level\n- Audit log every mutation with actor, timestamp, and before/after state\n\n**Reliability**\n- Circuit breakers around external payment provider calls (card networks, ACH, etc.)\n- Dead-letter queue for Kafka messages that fail processing — payments cannot silently drop\n- Reconciliation job: periodically compare your ledger against provider settlement files\n\n**Operational**\n- Correlation IDs already in place — wire them through to external provider calls for tracing\n- Rate limiting and backpressure on intake — payment spikes shouldn't cascade into account-service\n\nThe biggest risk is the idempotency + outbox combination. Get those two right and the rest is recoverable. Want to dig into any of these areas or start on the service structure?",
+  "timestamp": "2026-06-12T17:07:38Z",
+  "latency_ms": 19877,
+  "exit_code": 0,
+  "output_length_chars": 1973,
+  "output_length_tokens_approx": 493,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

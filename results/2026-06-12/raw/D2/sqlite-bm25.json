@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "Given your stack and prior evaluations, here's my recommendation:\n\n**Stick with PostgreSQL — potentially with a dedicated read replica for the reporting service.**\n\nYour team already evaluated and rejected DynamoDB and MongoDB for exactly this use case (strong consistency, multi-table transactions, financial data). PostgreSQL is already your primary DB and your team has deep operational expertise with it.\n\n**Concrete options, ranked:**\n\n1. **PostgreSQL read replica (recommended starting point)** — Offload heavy aggregation queries to a replica. No new operational surface area, Flyway migrations work as-is, full SQL window functions/CTEs for complex aggregations. Ships fastest.\n\n2. **PostgreSQL + materialized views** — Pre-aggregate heavy reports on a schedule. Good if queries are predictable and latency tolerance allows staleness (e.g. daily/hourly reports).\n\n3. **Dedicated PostgreSQL instance for the reporting service** — If the reporting service needs schema independence during the monolith extraction, provision it separately and replicate data via Kafka (which you already have). Keeps the reporting DB write-free from the main transactional DB, so you can add indexes liberally without hurting OLTP performance.\n\n4. **Amazon Redshift / Snowflake** — Only worth it if you're running warehouse-scale analytics (billions of rows, complex OLAP). Almost certainly premature for a reporting service extracted from a monolith.\n\n**My recommendation:** Start with a read replica + materialized views. If query complexity or data volume outgrows it, Redshift is the natural next step since you're already on AWS EKS.",
+  "timestamp": "2026-06-12T17:17:39Z",
+  "latency_ms": 21196,
+  "exit_code": 0,
+  "output_length_chars": 1636,
+  "output_length_tokens_approx": 409,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

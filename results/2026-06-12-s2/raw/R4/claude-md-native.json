@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "claude-md-native",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your AWS/Kotlin stack and that this is the Reporting/Analytics service being extracted from the monolith, here's my take:\n\n**Recommendation: Amazon Redshift (or ClickHouse if self-managed)**\n\n**Redshift** fits best given your AWS EKS deployment:\n- Columnar storage — fast aggregations on large datasets\n- Integrates natively with your AWS infra (S3, Glue, IAM)\n- MPP architecture scales well for financial reporting workloads\n- Redshift Serverless removes most ops overhead\n\n**ClickHouse** is the strongest self-managed alternative:\n- Extremely fast OLAP queries (often 10–100× Postgres for analytics)\n- Good Kafka integration (you're already on Kafka for event streaming)\n- More operational work, but your team has that control\n\n**Why not just Postgres?**\nYour existing PG 14 will struggle at analytics scale — full table scans on transaction history with no columnar storage is slow. Fine for OLTP, wrong for OLAP.\n\n**Trade-off to decide:**\n- Redshift = less ops, AWS lock-in, costs more at idle\n- ClickHouse = more control, better raw performance, needs someone to operate it\n\nGiven you're Series B with ~80 engineers and already deep on AWS, Redshift is lower-risk. If the analytics team wants raw performance and is comfortable with ops, ClickHouse is worth it.",
+  "timestamp": "2026-06-12T17:49:47Z",
+  "latency_ms": 17528,
+  "exit_code": 0,
+  "output_length_chars": 1279,
+  "output_length_tokens_approx": 319,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

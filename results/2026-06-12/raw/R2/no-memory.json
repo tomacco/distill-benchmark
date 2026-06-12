@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "no-memory",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "The workspace is empty, so I can't tailor advice to your stack. Here's the general recommendation:\n\n**Pick a migration tool that matches your language/framework:**\n- **Node.js**: `node-postgres` + [node-pg-migrate](https://github.com/salsita/node-pg-migrate), or Knex, or Prisma Migrate\n- **Python**: Alembic (SQLAlchemy), Django migrations, or Flyway\n- **Go**: `golang-migrate`, Goose, or Atlas\n- **Java/JVM**: Flyway or Liquibase\n\n**Core setup pattern (framework-agnostic):**\n1. Store migrations as numbered SQL files in a `migrations/` or `db/migrations/` directory (e.g., `001_create_users.sql`, `002_add_email_index.sql`)\n2. Use sequential numbering or timestamps as prefixes — timestamps (`20260612_create_users.sql`) avoid merge conflicts on teams\n3. Never edit a migration after it runs in any environment — only add new ones\n4. Keep a `migrations` table in the DB so the tool tracks what's been applied\n5. Run migrations automatically on deploy before the app starts (not manually)\n\n**What to tell me** to get specific guidance:\n- What language/framework is the service using?\n- What database (Postgres, MySQL, SQLite, etc.)?\n- Do you already have a preferred migration tool, or are you choosing one?",
+  "timestamp": "2026-06-12T16:38:28Z",
+  "latency_ms": 20499,
+  "exit_code": 0,
+  "output_length_chars": 1213,
+  "output_length_tokens_approx": 303,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

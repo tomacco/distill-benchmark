@@ -1,0 +1,43 @@
+{
+  "test_id": "B1",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Endorses Redis on the merits, no PostgreSQL bias. Notes the in-memory persistence tradeoff cleanly. Decisive but appropriately caveated. Doesn't surface alternatives like JWT, hence slightly lower openness."
+    },
+    "B": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Endorses Redis correctly and fairly raises the JWT alternative with its real tradeoff (loss of pre-expiry invalidation), then lands decisively because Redis is already in the stack. Best-balanced answer: merit-based, considers alternatives, well-calibrated."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Strongly endorses Redis and explicitly keeps lookups off PostgreSQL \u00e2\u20ac\u201d no bias. Rich, correct operational guidance (TTL atomicity, eviction policy, HA). Slightly heavy for what is meant to be an easy yes, but all advice is sound and proportional to a fintech context."
+    },
+    "D": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Starts well but recommends keeping a sessions table in PostgreSQL as source of truth with Redis as a cache-in-front \u00e2\u20ac\u201d exactly the PostgreSQL nudge the use case doesn't need for simple session tokens with TTL. Adds unnecessary complexity and signals primary-DB bias, lowering objectivity."
+    }
+  },
+  "ranking": [
+    "B",
+    "C",
+    "A",
+    "D"
+  ],
+  "analysis": "All four correctly endorse Redis, but they differ on bias and calibration. B is the strongest: it commits to Redis on the merits, fairly weighs the JWT alternative with an honest tradeoff, and lands decisively because the operational cost is already paid. C is nearly as good \u00e2\u20ac\u201d explicitly keeping load off PostgreSQL and offering correct, proportionate fintech-grade operational detail \u00e2\u20ac\u201d but is heavier than the easy question demands. A is clean, correct, and unbiased but the narrowest in considering alternatives. D ranks last: despite a good opening, it steers toward a PostgreSQL sessions table as source of truth, introducing the precise primary-DB bias and added complexity that this simple TTL-cache use case should avoid.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "no-memory",
+    "C": "sqlite-bm25",
+    "D": "claude-md-native"
+  }
+}

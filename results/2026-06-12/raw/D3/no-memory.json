@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "no-memory",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your stack (Kotlin, gRPC internal, REST external), the simplest approach is **micro-deposit verification**:\n\n1. **REST endpoint** on the payment service: `POST /v1/merchants/{id}/bank-accounts` — accepts routing + account number, initiates two small deposits via your payment processor (Stripe, Plaid, etc.).\n2. **Second endpoint**: `POST /v1/merchants/{id}/bank-accounts/{id}/verify` — accepts the two amounts the merchant confirms.\n3. Store pending/verified state in the payment service's own DB; no need to involve account-service unless you need to surface bank account status there.\n\nThe main tradeoff: if you're already using **Plaid**, their instant auth (OAuth bank linking) skips the 1–3 day micro-deposit wait and is worth wiring up instead — slightly more integration work but far better UX. Micro-deposits are the right default if you want zero third-party dependency or your processor already handles it.\n\ngRPC internally for account-service to query merchant context; REST externally for the merchant-facing endpoints — consistent with your existing pattern.\n\nWant me to scaffold the Kotlin endpoint stubs and data model?",
+  "timestamp": "2026-06-12T16:34:20Z",
+  "latency_ms": 13221,
+  "exit_code": 0,
+  "output_length_chars": 1151,
+  "output_length_tokens_approx": 287,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

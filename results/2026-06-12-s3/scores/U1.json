@@ -1,0 +1,27 @@
+{
+  "test_id": "U1",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Pitches at senior level overall and engages the real decision (do they need Istio now? recommends not yet), with strong use of their existing context: payment-service still in the monolith, existing auth-service/JWT pattern, gRPC interceptors, EKS scale. Gives a direct, opinionated recommendation rather than 'it depends'. However, it leads with a full 'How a Service Mesh Works' tutorial section explaining sidecars, mTLS, and control plane basics \u00e2\u20ac\u201d exactly the kind of foundational padding a senior engineer doesn't need, which dents calibration and style. The pragmatic-path code and 'when to revisit' triggers are exactly right and recover much of the value."
+    },
+    "B": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No usable output ('(error reading output)'). Nothing to evaluate, so scores floor on every criterion."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "System A is the only system that produced a real response. It correctly targets the actual decision \u00e2\u20ac\u201d recommending against adopting Istio yet \u00e2\u20ac\u201d and grounds that in the user's specific situation (payment-service unextracted, existing auth-service JWT pattern, gRPC, small service count), ending with a clear pragmatic path and concrete revisit triggers. Its main weakness is the opening 'How a Service Mesh Works' section, which explains sidecars/mTLS/control-plane fundamentals a senior engineer already knows, slightly missing the no-tutorial calibration and concise-style expectations. System B returned an error with no content and cannot be scored above the floor, so System A ranks first by default and on merit.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}

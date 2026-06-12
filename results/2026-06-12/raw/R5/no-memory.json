@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "no-memory",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "Here's what was created and why each decision was made:\n\n**Dockerfile design choices:**\n\n| Choice | Reason |\n|---|---|\n| Multi-stage build | Builder installs deps; runtime copies only the venv — no compilers or pip cache in the final image |\n| `python:3.11-slim` | ~50 MB vs ~1 GB for the full image; avoids Alpine's musl libc issues with scikit-learn's native extensions |\n| Non-root user (`appuser`) | Standard security hardening — running as root inside a container is a liability |\n| `HEALTHCHECK` | Docker/k8s can detect a stuck worker before sending it traffic |\n| 2 uvicorn workers | Safe default for CPU-bound inference; tune to `2 * nCPUs + 1` for your machine |\n\n**Project layout expected:**\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py          # FastAPI app\n└── models/\n    └── fraud_model.joblib   # your trained sklearn model\n```\n\n**To build and run:**\n```bash\n# Place your serialized model at models/fraud_model.joblib\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n\n# Score a transaction\ncurl -X POST http://localhost:8000/predict \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"amount\": 450.0, \"hour_of_day\": 2, \"day_of_week\": 6, \"merchant_category\": 5, \"distance_from_home_km\": 120}'\n```\n\nUpdate the `TransactionFeatures` schema in `app/main.py` to match your model's actual feature set.",
+  "timestamp": "2026-06-12T16:39:56Z",
+  "latency_ms": 45829,
+  "exit_code": 0,
+  "output_length_chars": 1392,
+  "output_length_tokens_approx": 348,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

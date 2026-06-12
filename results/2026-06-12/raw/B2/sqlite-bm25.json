@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "The Go rewrite is tempting for this use case — but I'd push back for your specific context:\n\n**The case for staying in Kotlin:**\n- Your entire backend stack is Kotlin. Introducing Go creates a second language for your 2-person backend team (you + Sofia) to maintain, review, and onboard with.\n- Sofia is your Kotlin expert — a Go service adds cognitive overhead that doesn't show up until someone is on-call at 2am.\n- You're mid-monolith migration with payment processing next up. A language experiment now competes with that priority.\n\n**The \"over-engineered\" problem is real but solvable differently:**\n- Kotlin with coroutines (which you already chose over RxJava for exactly this reason) can be as lightweight as Go for a Kafka→SNS forwarder.\n- The JVM startup time concern (if that's it) is addressable with GraalVM native image or just accepting cold starts if it's EKS-managed.\n\n**When Go *would* be the right call:** if you had Go expertise on the team, a standalone ops person owning this service, or if notification-service were genuinely isolated with no cross-cutting concerns with other services.\n\nMy recommendation: identify *what specifically* feels over-engineered in the Kotlin version and fix that. If it's boilerplate, it's a structure problem. If it's startup/memory, there are Kotlin-native answers. The rewrite risk + polyglot maintenance cost probably isn't worth it while you're mid-migration.",
+  "timestamp": "2026-06-12T17:12:19Z",
+  "latency_ms": 19738,
+  "exit_code": 0,
+  "output_length_chars": 1423,
+  "output_length_tokens_approx": 355,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

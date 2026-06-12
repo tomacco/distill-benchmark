@@ -1,0 +1,43 @@
+{
+  "test_id": "U2",
+  "category": "user-model",
+  "scores": {
+    "A": {
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Solid imperative subject under 72 chars with terse bullet body. But opens with filler ('No specific commit message conventions found') and closes with an explanatory paragraph justifying the format, which a senior dev didn't ask for."
+    },
+    "B": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 3,
+      "notes": "Cleanest answer: code-first, no preamble, no over-explaining. Captures the gRPC-migration rationale and offers a one-liner alternative without lecturing. Body is short prose rather than bullets, but stays terse."
+    },
+    "C": {
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Good multi-line message with bullets plus a one-line alt, but wraps it in 'Here's a concise...' filler and a full explanatory paragraph about why multi-line is better and the framing \u00e2\u20ac\u201d exactly the over-explanation a senior user doesn't want."
+    },
+    "D": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 3,
+      "notes": "Clean subject + tight prose body grouping the three changes under one rationale. Slight trailing explanation and tone offer, but minimal and non-intrusive. Strong, concise senior-level output."
+    }
+  },
+  "ranking": [
+    "B",
+    "D",
+    "A",
+    "C"
+  ],
+  "analysis": "All four produce technically sound commit messages with imperative subjects under 72 chars that correctly capture removing deprecated REST internals post-gRPC migration; they differ mainly in surrounding noise. B is the strongest \u00e2\u20ac\u201d code-first, zero filler, captures the 'why' and offers a one-liner alternative without justifying itself. D is nearly as clean with only a brief tone offer. A regresses with an opening preamble and a trailing paragraph explaining its own formatting choices. C is weakest on style: despite a good message it adds 'Here's a concise...' filler and a full paragraph explaining why multi-line is better and what the framing means \u00e2\u20ac\u201d the over-explanation explicitly penalized for a senior user. Preference recall is flat across all four since none surfaced specific stored user preferences, but none violated any either.",
+  "label_mapping": {
+    "A": "sqlite-bm25",
+    "B": "distill",
+    "C": "no-memory",
+    "D": "claude-md-native"
+  }
+}

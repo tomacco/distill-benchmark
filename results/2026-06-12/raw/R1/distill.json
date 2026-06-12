@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key things to consider for a payment processing service:\n\n**Compliance & Security**\n- PCI DSS compliance (required if handling card data) — consider offloading to Stripe/Braintree to reduce scope\n- Encryption at rest and in transit; never store raw card numbers\n- Fraud detection and rate limiting\n\n**Architecture**\n- Idempotency keys on all payment operations — network retries cause double charges without them\n- Async processing with webhooks for slow payment methods (ACH, bank transfers)\n- Clear separation: payment initiation vs. settlement vs. reconciliation\n- Retry logic with exponential backoff, but carefully (don't retry on declined cards)\n\n**Money handling**\n- Store amounts as integers (cents), never floats\n- Use ISO 4217 currency codes; handle multi-currency from day one if there's any chance you'll need it\n- Reconciliation and audit log — every state transition recorded immutably\n\n**Reliability**\n- Exactly-once semantics are hard; design for at-least-once + idempotency\n- Circuit breakers around third-party payment provider calls\n- Separate read/write paths if high volume\n\n**Provider choice**\n- Stripe: best DX, strong fraud tooling, higher fees\n- Adyen: enterprise-grade, better rates at scale, more complex\n- Braintree: good if you need PayPal integration\n\n**My recommendation:** Unless you have a strong reason to build your own card vault, use a provider that handles tokenization (Stripe/Braintree) and focus your service on orchestration, routing, and reconciliation. That cuts PCI scope dramatically.\n\nWhat's the context — new from scratch, or wrapping an existing provider?",
+  "timestamp": "2026-06-12T16:53:26Z",
+  "latency_ms": 14842,
+  "exit_code": 0,
+  "output_length_chars": 1612,
+  "output_length_tokens_approx": 403,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

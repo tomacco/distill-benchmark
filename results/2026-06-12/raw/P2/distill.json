@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Created `src/main/kotlin/com/helios/auth/controller/HealthController.kt`.\n\n`GET /health` returns `200 {\"status\": \"UP\"}`. Configure your load balancer health check to hit that path — no auth required, no dependencies beyond `spring-web` which auth-service already uses.\n\nIf you later want deeper health checks (DB connectivity, Redis ping), Spring Boot Actuator's `HealthIndicator` interface is the right extension point — but for the load balancer this is sufficient.",
+  "timestamp": "2026-06-12T16:52:46Z",
+  "latency_ms": 88803,
+  "exit_code": 0,
+  "output_length_chars": 471,
+  "output_length_tokens_approx": 117,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

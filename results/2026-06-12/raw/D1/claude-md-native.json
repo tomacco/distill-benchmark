@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Wrote `containers.sh`. Run with `bash containers.sh` or `chmod +x containers.sh && ./containers.sh`.\n\nIf you want more detail (image, container ID):\n\n```bash\ndocker ps --format \"table {{.ID}}\\t{{.Names}}\\t{{.Image}}\\t{{.Ports}}\"\n```",
+  "timestamp": "2026-06-12T17:03:13Z",
+  "latency_ms": 8194,
+  "exit_code": 0,
+  "output_length_chars": 232,
+  "output_length_tokens_approx": 58,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

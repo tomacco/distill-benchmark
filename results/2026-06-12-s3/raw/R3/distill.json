@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "No prior knowledge to load. A few quick questions to get started:\n\n1. **What does \"pair with Dev\" mean here?** Is \"Dev\" a person, a tool, an AI model, or something else?\n2. **What should the settings page contain?** (e.g., user profile, notifications, theme, API keys — what sections/fields?)\n3. **What's the tech stack?** Plain React + CSS, Tailwind, a component library (MUI, shadcn, etc.)?",
+  "timestamp": "2026-06-12T18:00:48Z",
+  "latency_ms": 9982,
+  "exit_code": 0,
+  "output_length_chars": 394,
+  "output_length_tokens_approx": 98,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "claude-md-native",
+  "prompt": "What database do we use for the account service?",
+  "output": "**Account service: MySQL** (migrated from PostgreSQL last week). All other services still use PostgreSQL 14.",
+  "timestamp": "2026-06-12T17:02:37Z",
+  "latency_ms": 13520,
+  "exit_code": 0,
+  "output_length_chars": 108,
+  "output_length_tokens_approx": 27,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

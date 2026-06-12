@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "no-memory",
+  "prompt": "What version of Postgres are we on?",
+  "output": "PostgreSQL doesn't appear to be installed or in the PATH on this machine. There's no `psql` or `pg_config` command available.\n\nIf you have a connection string or know where Postgres is installed, I can look further. Otherwise, you may need to install the PostgreSQL client tools or check if it's running in a Docker container or remote host.",
+  "timestamp": "2026-06-12T16:32:51Z",
+  "latency_ms": 13179,
+  "exit_code": 0,
+  "output_length_chars": 341,
+  "output_length_tokens_approx": 85,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

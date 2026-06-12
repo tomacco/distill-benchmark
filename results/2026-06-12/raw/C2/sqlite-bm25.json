@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a non-starter here — your team explicitly rejected it during the analytics service evaluation and it's a standing constraint. ⛔\n\nThe good news: **Redis is already in your stack** for caching, and it's actually a better fit for session storage than DynamoDB anyway:\n\n- **True sub-millisecond reads** — Redis is in-memory by default; DynamoDB's \"single-digit millisecond\" SLA is not the same thing\n- **Native TTL** per key — sessions expire automatically, no cleanup jobs needed\n- **Zero new infrastructure** — you're already running Redis on EKS\n\nThe main tradeoff vs. DynamoDB: Redis is ephemeral (sessions lost on restart unless you use persistence or a managed cluster like ElastiCache). For a session store that's usually acceptable, but worth calling out if sessions must survive pod restarts.\n\n**Recommendation:** Use Redis with a dedicated keyspace prefix (e.g. `session:<id>`) and set TTLs. If you need persistence, ElastiCache Redis with a replica covers it and fits your AWS/EKS setup.",
+  "timestamp": "2026-06-12T17:16:25Z",
+  "latency_ms": 18901,
+  "exit_code": 0,
+  "output_length_chars": 1016,
+  "output_length_tokens_approx": 254,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

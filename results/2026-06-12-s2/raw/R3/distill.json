@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Good context — I know Dev is your junior frontend engineer (React/TypeScript). A couple quick questions before writing anything:\n\n1. **What sections does the settings page need?** (e.g. profile, notifications, team members, billing, API keys...)\n2. **Any existing component patterns to follow?** (e.g. a UI library like shadcn, MUI, or custom components already in the codebase)\n\nOtherwise I'll make assumptions and we might build the wrong thing.",
+  "timestamp": "2026-06-12T17:35:36Z",
+  "latency_ms": 32838,
+  "exit_code": 0,
+  "output_length_chars": 449,
+  "output_length_tokens_approx": 112,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

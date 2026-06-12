@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "no-memory",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "For a CMS with varying schemas per content type, **PostgreSQL with JSONB** is the pragmatic choice. You get relational integrity for structured data (users, posts, tags) plus a flexible JSONB column for content-type-specific fields — and you can index into the JSON when needed. It's well-supported, battle-tested, and avoids the operational complexity of a second database.\n\nThe main alternative worth considering is **MongoDB** if your team is already comfortable with it or if schema variation is extreme enough that every document is structurally different. The tradeoff: you gain schema flexibility but lose easy joins, transactions are weaker, and you give up the ability to mix structured and semi-structured data in one coherent model.\n\nMy recommendation: start with Postgres + JSONB. A `content_type` column plus a `metadata JSONB` column covers your varying schemas cleanly, and you won't hit a wall later when you need relational queries across content.",
+  "timestamp": "2026-06-12T16:32:37Z",
+  "latency_ms": 9396,
+  "exit_code": 0,
+  "output_length_chars": 966,
+  "output_length_tokens_approx": 241,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

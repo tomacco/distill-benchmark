@@ -1,0 +1,27 @@
+{
+  "test_id": "R2",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Recommends Flyway and explicitly surfaces that it was 'already chosen over Liquibase' \u00e2\u20ac\u201d the key stored decision signal. Contextualizes for Kotlin/Gradle, gives concrete directory layout, dependency, Spring Boot auto-config, and conventions. Points to account-service as reference. Concise and actionable. Doesn't name PostgreSQL 14 explicitly (minor miss on bonus)."
+    },
+    "B": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Recommends Flyway and names PostgreSQL (bonus). Strong practical setup: application.yml config, Gradle dep, naming conventions, financial-data practices, account-service reference. However it never mentions that Flyway was chosen over Liquibase \u00e2\u20ac\u201d misses the team-evaluation/vote signal that demonstrates retrieval of the actual decision."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "Both responses correctly recommend Flyway, contextualize for a Kotlin/Gradle service, and provide genuinely practical setup guidance woven in naturally \u00e2\u20ac\u201d neither dumps irrelevant context, so precision and naturalness are high for both. The differentiator is retrieval of the specific stored decision: System A explicitly recalls that Flyway was 'already chosen over Liquibase,' directly hitting the team-evaluation signal, while System B omits this and instead surfaces the PostgreSQL bonus. System B's config detail (application.yml, baseline/validate flags) is slightly richer operationally, but System A demonstrates stronger knowledge retrieval by recalling the actual decision rationale, which is the core of this retrieval test. System A ranks first.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "claude-md-native"
+  }
+}

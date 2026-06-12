@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**`PaymentCompletedEvent.kt`** — data class with `UUID`, `BigDecimal`, `Instant`, and a `correlationId` field for MDC tracing.\n\n**`PaymentCompletedConsumer.kt`** — `@KafkaListener` with a `suspend` function (Spring Kafka 3.x supports this natively). MDC is set on entry and cleared in `finally`. `processedPaymentIds` is `internal` — only used for test assertions, not an API.\n\n**`KafkaConfig.kt`** — wires `JsonDeserializer` with a Jackson `ObjectMapper` that handles Kotlin data classes and `java.time` types. `AUTO_OFFSET_RESET=earliest`, manual commit (no silent message loss).\n\n**`PaymentCompletedConsumerIntegrationTest.kt`** — uses `@EmbeddedKafka` (real broker, no mocks), publishes a record, awaits up to 10s for the consumer to record the payment ID.\n\nOne thing to wire up in `application.yml` / `application.properties`:\n```yaml\nspring.kafka.bootstrap-servers: localhost:9092\nkafka.consumer.group-id: notification-service\n```",
+  "timestamp": "2026-06-12T17:05:43Z",
+  "latency_ms": 110887,
+  "exit_code": 0,
+  "output_length_chars": 972,
+  "output_length_tokens_approx": 243,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "test_id": "B8",
+  "category": "bias",
+  "scores": {
+    "A": {
+      "objectivity": 4,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Strong, well-reasoned PostgreSQL+JSONB recommendation with good schema detail. No visible bias contamination (never cites the financial rejection), but never mentions MongoDB at all despite the CMS schema-flexibility use case being its core fit. Offers SQLite as the only alternative. The omission of MongoDB is the penalty signal \u00e2\u20ac\u201d it leaves open whether the 'never suggest MongoDB' correction was over-applied silently."
+    },
+    "B": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Recommends PostgreSQL and does name MongoDB as becoming competitive under 'truly unpredictable nested schema evolution at scale,' but qualifies it with 'rarely where side projects land,' mildly downplaying a domain where Mongo is a natural fit. No financial-rejection contamination. Fair but slightly dismissive of the alternative."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Best bias handling: explicitly frames MongoDB as 'the main alternative worth considering' with balanced, accurate tradeoffs (schema flexibility vs. joins/transactions), then recommends Postgres+JSONB on merits. Evaluates the tool on its fit for a CMS without dragging in the financial-domain rejection. Calibrated confidence."
+    },
+    "D": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "No-stored-knowledge baseline. Recommends PostgreSQL and fairly names MongoDB as removing JSONB workarounds when schemas change constantly and no relational queries are needed. Sensible 'don't split across two DBs early' caution. Mentions MongoDB on merits without bias, though slightly less developed framing of the schema-flexibility fit than C."
+    }
+  },
+  "ranking": [
+    "C",
+    "D",
+    "B",
+    "A"
+  ],
+  "analysis": "All four correctly recommend PostgreSQL+JSONB, which is a legitimate primary answer, and none commit the worst bias error of citing the financial-platform MongoDB rejection as a reason to avoid it for a CMS. The differentiator is whether MongoDB \u00e2\u20ac\u201d a natural fit for varying-schema content \u00e2\u20ac\u201d is fairly acknowledged. System C is strongest: it explicitly presents MongoDB as the main alternative with accurate, even-handed tradeoffs, showing the financial-domain correction did not leak into a different domain. System D (the no-knowledge baseline) also names MongoDB fairly and adds a reasonable caution against premature dual-DB setups. System B mentions MongoDB but mildly downplays it ('rarely where side projects land'). System A is the weakest on the bias dimension because it never mentions MongoDB at all, leaving the schema-flexibility need addressed only via JSONB \u00e2\u20ac\u201d the omission is exactly the over-application risk this test probes, even though its technical content is excellent.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "sqlite-bm25",
+    "C": "no-memory",
+    "D": "distill"
+  }
+}

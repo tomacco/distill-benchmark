@@ -1,0 +1,43 @@
+{
+  "test_id": "R2",
+  "category": "retrieval",
+  "scores": {
+    "A": {
+      "relevance": 1,
+      "precision": 5,
+      "naturalness": 3,
+      "notes": "Surfaced no stored knowledge; asked clarifying questions instead of recommending Flyway. Precise in that it injected nothing irrelevant, but failed the core retrieval task entirely."
+    },
+    "B": {
+      "relevance": 1,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "No retrieval of the team's Flyway/Liquibase decision. Dumped a generic multi-language migration survey including Alembic and Liquibase as options \u00e2\u20ac\u201d exactly the alternatives a good answer should avoid. Verbose and off-target."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Recommended Flyway, noted it was chosen over Liquibase via team evaluation, cited PostgreSQL 14, and contextualized for Kotlin/Gradle with concrete setup. Wove in additional team conventions naturally. Hits every expected signal including bonuses."
+    },
+    "D": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Correctly recommended Flyway with strong Kotlin/Gradle/Spring Boot setup guidance and CI/CD context. Missing the Liquibase-evaluation provenance and PostgreSQL 14 mention, so slightly less complete on retrieval signals, but no irrelevant alternatives suggested and feels organic."
+    }
+  },
+  "ranking": [
+    "C",
+    "D",
+    "A",
+    "B"
+  ],
+  "analysis": "C and D both correctly retrieved the team's Flyway decision and provided actionable, stack-appropriate setup, with C the clear winner for additionally surfacing the Liquibase evaluation provenance, PostgreSQL 14 target, and broader team conventions while remaining natural; D is strong and practical but omits the Liquibase choice and PostgreSQL 14 details. A and B failed the retrieval task: A injected nothing and asked questions (precise but unhelpful), while B was worse, dumping a generic cross-language survey that explicitly floated Liquibase and Alembic \u00e2\u20ac\u201d the very alternatives a good answer should avoid. A edges out B because it at least avoided polluting the response with wrong-tool recommendations.",
+  "label_mapping": {
+    "A": "distill",
+    "B": "no-memory",
+    "C": "sqlite-bm25",
+    "D": "claude-md-native"
+  }
+}

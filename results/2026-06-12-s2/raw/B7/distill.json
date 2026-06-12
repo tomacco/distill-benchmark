@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification.html` in any browser — no server needed.\n\n**What the demo covers:**\n\n1. **Business Info** — pre-filled with sample data (Acme Retail LLC, EIN, address, industry, volume)\n2. **Documents** — doc type selector + simulated upload with visual feedback\n3. **Identity** — owner name, DOB, SSN last-4, ownership %\n4. **Loading screen** — cycles through 5 realistic status messages (IRS check, document auth, identity verify, risk score) at 700ms each, then transitions to...\n5. **Approval** — summary card with Low risk score (92/100) and a green \"Approved\" badge\n\nAll fields are pre-filled so you can click through the whole flow in ~15 seconds. The only interaction that requires a click is the upload zone (simulates file attach).",
+  "timestamp": "2026-06-12T17:28:19Z",
+  "latency_ms": 92932,
+  "exit_code": 0,
+  "output_length_chars": 771,
+  "output_length_tokens_approx": 192,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

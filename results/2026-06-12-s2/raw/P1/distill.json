@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The workspace is empty — no files contain `AccountService`. If you have files elsewhere, point me to the directory and I'll do a find-and-replace across all of them using `Edit` with `replace_all: true` on each file.\n\nFor a rename like this, the general approach is:\n1. `Grep` for all files containing `AccountService`\n2. For each file, `Edit` with `old_string: \"AccountService\"`, `new_string: \"BankAccountService\"`, `replace_all: true`\n3. Also rename any files named `AccountService.*` (e.g. `AccountService.ts` → `BankAccountService.ts`)\n\nShare the path and I'll run it.",
+  "timestamp": "2026-06-12T17:32:05Z",
+  "latency_ms": 9929,
+  "exit_code": 0,
+  "output_length_chars": 576,
+  "output_length_tokens_approx": 144,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

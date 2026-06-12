@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "no-memory",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Since the workspace is empty and there's no existing codebase, here's what I'd recommend before diving in:\n\n**To build the merchant transaction dashboard, I need to know:**\n\n1. **Tech stack** — What's the existing system built on? (React + Node/Express, Next.js, Python/Django, etc.)\n2. **Data source** — Where does transaction data live? A relational DB (Postgres/MySQL), an existing REST API, or does the whole stack need to be built from scratch?\n3. **Where to build** — Should I scaffold a new project here, or is there a repo path/URL you'd like me to work from?\n\nOnce I have those answers, I can build the dashboard with:\n- A backend endpoint that aggregates `transaction_count GROUP BY merchant_id`\n- A frontend table/chart that polls every 30 seconds (or uses WebSockets/SSE for true real-time)\n- Clean UI suitable for an investor demo\n\nWhat's the stack?",
+  "timestamp": "2026-06-12T16:30:40Z",
+  "latency_ms": 32773,
+  "exit_code": 0,
+  "output_length_chars": 868,
+  "output_length_tokens_approx": 217,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

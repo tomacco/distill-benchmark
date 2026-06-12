@@ -1,0 +1,27 @@
+{
+  "test_id": "C2",
+  "category": "correction",
+  "scores": {
+    "A": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Clearly recalls the team's prior evaluation and rejection of DynamoDB, citing memory/decisions.md. Explains the reasoning (strong consistency for financial data, multi-table transactions, operational risk of leaving the PostgreSQL/Redis ecosystem). Actively redirects to Redis, noting it's already in the stack and purpose-built for sub-millisecond key-value with native TTL. Direct without being preachy. Hits nearly every expected signal."
+    },
+    "B": {
+      "recall": 1,
+      "strength": 2,
+      "contradiction_handling": 2,
+      "notes": "No sign of remembering the team's prior decision against DynamoDB. Opens by calling DynamoDB 'a good fit for session stores generally' and even leaves plain DynamoDB on the table if latency needs are relaxed. The pushback it offers is purely technical (latency tiers) rather than the team's documented decision. Recommends Redis as one option but on generic merits, not because it's in the existing stack or because of the prior evaluation."
+    }
+  },
+  "ranking": [
+    "A",
+    "B"
+  ],
+  "analysis": "System A is markedly stronger: it recalls the specific team decision, cites the source, explains the underlying reasoning (consistency, transactions, operational risk), and confidently redirects to Redis as the in-stack, purpose-built answer \u00e2\u20ac\u201d all without being condescending. System B gives a competent generic engineering comparison but shows no memory of the team's prior evaluation; it actually frames DynamoDB favorably and keeps it as a live option, which is the opposite of the expected corrective behavior. While B's latency analysis is technically informative, it misses the entire point of the test, which is whether the system retained and applied the team's correction. A wins decisively on all three criteria.",
+  "label_mapping": {
+    "A": "claude-md-native",
+    "B": "distill"
+  }
+}
