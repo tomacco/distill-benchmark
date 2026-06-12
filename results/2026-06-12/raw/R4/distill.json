@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "No matching domain in the SPINE, so answering from first principles.\n\n**Recommendation: ClickHouse** — columnar, open-source, built specifically for analytics. Handles billions of rows, sub-second aggregation queries, horizontal scaling.\n\n**Main tradeoffs by option:**\n\n| DB | Best for | Tradeoff |\n|----|----------|----------|\n| **ClickHouse** | Self-hosted OLAP, high ingest rate | Ops overhead; point lookups are awkward |\n| **DuckDB** | In-process / file-based analytics | Single-node only; not a server |\n| **BigQuery** | Serverless, massive scale | Cost at high query volume; vendor lock-in |\n| **Snowflake** | Managed, multi-cloud, complex queries | Expensive at scale |\n| **Apache Druid** | Real-time streaming + historical queries | Significant operational complexity |\n\n**One clarifying question before you commit:** is this real-time/low-latency (sub-second dashboards, event streams) or batch/BI (hourly/daily reports)? That's the fork — Druid/Pinot for the former, ClickHouse/BigQuery for the latter. ClickHouse spans both reasonably well, which is why it's the default pick.",
+  "timestamp": "2026-06-12T06:27:41Z",
+  "latency_ms": 21584,
+  "exit_code": 0,
+  "output_length_chars": 1092,
+  "output_length_tokens_approx": 273,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

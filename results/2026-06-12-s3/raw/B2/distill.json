@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "No relevant domain in the SPINE for this one.\n\nGo is the right fit architecturally — single binary, no JVM overhead, `confluent-kafka-go` + `aws-sdk-go-v2` are both solid. For a pure consume→dispatch pipe, Go's explicitness is a feature not a bug.\n\nBut \"feels over-engineered\" is a vibe, not a reason to rewrite. A few questions worth answering before committing:\n\n- **What's the actual cost?** JVM memory on a small instance? Cold start time? Build pipeline complexity? Deploy weight? Name the concrete pain — if you can't, the rewrite won't feel worth it in 3 months.\n- **Does the Kotlin version have solved edge cases you'll re-discover?** Kafka consumer semantics (offset commit timing, rebalance handling, at-least-once guarantees) look simple until they aren't. The over-engineering might be load-bearing.\n- **What's the failure surface?** If SNS dispatch fails mid-batch, what happens? Dead-letter? Retry with backoff? The \"simple\" Go version needs to answer this too.\n\nMy take: if the pain is operational (JVM memory, fat image, slow CI), rewrite — it'll be materially better in Go. If the pain is reading the Kotlin code, that's a different problem (simplify the Kotlin, or just leave it). Rewrites surface latent complexity; they don't eliminate it.\n\nWhat's the actual thing that's hurting you?",
+  "timestamp": "2026-06-12T07:14:39Z",
+  "latency_ms": 29352,
+  "exit_code": 0,
+  "output_length_chars": 1312,
+  "output_length_tokens_approx": 328,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "No database evaluation knowledge in my distill store — I won't fabricate prior decisions.\n\nBased on your stated requirements (complex aggregation across multiple tables + strong consistency):\n\n**PostgreSQL** — clear fit.\n\n- Multi-table aggregations are its native strength (CTEs, window functions, lateral joins)\n- ACID with serializable isolation\n- Mature read replicas for reporting load separation\n- `EXPLAIN ANALYZE` + partial indexes give you real performance levers\n\nAlternatives worth considering:\n\n| Option | Fit | Caveat |\n|---|---|---|\n| **PostgreSQL** | Best overall | — |\n| **ClickHouse** | If query volume is very high and data is append-only | Eventual consistency trade-offs, weaker joins |\n| **Redshift / BigQuery** | If data is already in a cloud data warehouse | Latency not suitable for real-time |\n\n**Steer clear of** document stores (MongoDB) and key-value stores (DynamoDB) for this workload — they lack native join semantics and make complex aggregations either painful or impossible without application-side joins.\n\nWhat's the data volume and query latency target? That's the deciding factor between Postgres and ClickHouse.",
+  "timestamp": "2026-06-12T07:18:46Z",
+  "latency_ms": 28177,
+  "exit_code": 0,
+  "output_length_chars": 1156,
+  "output_length_tokens_approx": 289,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

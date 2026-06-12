@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "Relevant context: payment-service is still in the monolith (planned extraction), account-service is already extracted. You're on gRPC + EKS. That shapes this answer.\n\n---\n\n## How a service mesh works\n\nA service mesh injects a sidecar proxy (Envoy, in Istio's case) into every pod. Traffic between services goes **pod → sidecar → network → sidecar → pod**, never directly. The control plane (istiod) pushes config to all sidecars — mTLS certs, routing rules, telemetry.\n\nWhat you get:\n- **mTLS** — automatic cert rotation, mutual auth without app-level code\n- **AuthorizationPolicy** — declare \"payment-service may call account-service on these gRPC methods, nothing else\"\n- **Observability** — request-level traces, latency histograms, error rates, all without instrumentation\n- **Traffic control** — retries, circuit breaking, canary routing at the proxy layer\n\n---\n\n## Do you need Istio for payment ↔ account auth specifically?\n\n**Probably not yet.** Here's the honest tradeoff:\n\n| Approach | What it gives you | Cost |\n|---|---|---|\n| **App-level JWT (auth-service issues service tokens)** | Inter-service auth, works now, no new infra | Code in each service, manual cert/key rotation |\n| **Kubernetes NetworkPolicy** | Layer-4 allow/deny by namespace/label | No identity proof, just IP filtering |\n| **Istio mTLS + AuthorizationPolicy** | Cryptographic identity per service, zero-trust, policy-as-config | ~20-30% overhead per pod, 2-4 weeks to roll out safely, ops complexity |\n\n**The real question:** is your threat model \"malicious external traffic reaching internal services\" or \"lateral movement inside the cluster from a compromised pod\"? \n\n- If the former: NetworkPolicy + JWT validation at the app layer is sufficient and you already have auth-service issuing JWTs.\n- If the latter (zero-trust, regulated fintech): Istio mTLS is the right answer — SPIFFE/SPIRE identity per workload, no shared secrets.\n\n**My read for Helios:** You're mid-monolith-extraction. Istio at this stage will slow the extraction — you're adding mesh onboarding overhead per service extraction. The pragmatic path is:\n1. Use **JWT service tokens** (auth-service already issues them) for payment↔account auth now\n2. Add **NetworkPolicy** to restrict which pods can talk to account-service\n3. Revisit Istio when the monolith is fully split and you have 8+ services — the cross-cutting benefits (observability, mTLS everywhere) justify the ops cost at scale\n\nThe one forcing function that would change this: PCI-DSS audit requiring cryptographic workload identity. If that's on the horizon, add Istio now rather than retrofitting.",
+  "timestamp": "2026-06-12T06:38:29Z",
+  "latency_ms": 25653,
+  "exit_code": 0,
+  "output_length_chars": 2642,
+  "output_length_tokens_approx": 660,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

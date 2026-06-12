@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-06-12T15:26:41Z",
+  "timestamp": "2026-06-12T15:27:06Z",
   "total_runs": 1,
   "passed": 0,
   "failed": 1,
   "competitors": [
-    "sqlite-bm25"
+    "claude-md-native"
   ],
   "tests": [
     "C1"

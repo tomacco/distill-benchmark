@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Empty workspace — no existing code to pattern-match against. Per convention, I won't assume structure.\n\nBefore starting, a few quick confirmations:\n\n1. **Which repo?** (path or name — e.g. `repos\\payments-service`)\n2. **Event schema** — is `PaymentCompleted` already defined (Avro/Protobuf/JSON)? If yes, where?\n3. **Consumer group ID** — existing convention or should I propose one?\n4. **Error handling** — dead-letter topic, retry with backoff, or fail-fast?\n\nIf you want to just paste an existing consumer as reference, I'll mirror the pattern exactly.",
+  "timestamp": "2026-06-12T07:19:36Z",
+  "latency_ms": 18652,
+  "exit_code": 0,
+  "output_length_chars": 565,
+  "output_length_tokens_approx": 141,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

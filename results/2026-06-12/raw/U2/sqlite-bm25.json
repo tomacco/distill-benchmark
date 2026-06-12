@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "```\nRemove account-service REST layer after gRPC migration\n\nDrop all REST endpoint handlers, delete internal OpenAPI specs, and\nremove REST client stub generation from CI. gRPC migration is complete\nand no external consumers remain on the old endpoints.\n```\n\nIf you want a one-liner instead:\n\n```\nDrop account-service REST layer now that gRPC migration is complete\n```",
+  "timestamp": "2026-06-12T06:50:01Z",
+  "latency_ms": 5853,
+  "exit_code": 0,
+  "output_length_chars": 368,
+  "output_length_tokens_approx": 92,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

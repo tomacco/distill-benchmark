@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "You're already on **structured logging with correlation IDs** across all services — the payment service should match that pattern. For Kotlin on EKS:\n\n**Use: [SLF4J](https://www.slf4j.org/) + [Logback](https://logback.qos.ch/) + [logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)**\n\n```kotlin\n// build.gradle.kts\nimplementation(\"ch.qos.logback:logback-classic:1.5.6\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\nThis gives you JSON-structured output out of the box, which integrates cleanly with EKS log aggregation (CloudWatch / Fluentd).\n\n**Key setup for the payment service:**\n\n1. **Correlation IDs** — propagate `X-Request-ID` / `X-Correlation-ID` through MDC:\n   ```kotlin\n   MDC.put(\"correlationId\", requestId)\n   ```\n\n2. **Kafka context** — also propagate correlation IDs in Kafka message headers and inject into MDC in consumers.\n\n3. **logback.xml** — use `LogstashEncoder` for JSON, not the pattern encoder:\n   ```xml\n   <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n   ```\n\n4. **Sensitive fields** — payment service handles PII/card data. Add a masking `StructuredArgument` wrapper or a custom `JsonProvider` to redact PANs, account numbers before they hit the log.\n\n**The PII masking is the non-obvious piece** — worth doing upfront. Payment logs are an audit risk if card numbers or account balances land in plaintext in CloudWatch.\n\nWant me to scaffold the masking setup?",
+  "timestamp": "2026-06-12T06:34:00Z",
+  "latency_ms": 16191,
+  "exit_code": 0,
+  "output_length_chars": 1474,
+  "output_length_tokens_approx": 368,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

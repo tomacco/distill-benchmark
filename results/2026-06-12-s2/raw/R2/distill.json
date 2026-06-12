@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "No migration-specific knowledge stored. Before I can advise, I need two things:\n\n1. **Which service/repo?** (I don't assume cwd is a repo)\n2. **What stack?** — language, DB engine, any existing ORM/migration library already in use?",
+  "timestamp": "2026-06-12T06:59:07Z",
+  "latency_ms": 16679,
+  "exit_code": 0,
+  "output_length_chars": 233,
+  "output_length_tokens_approx": 58,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

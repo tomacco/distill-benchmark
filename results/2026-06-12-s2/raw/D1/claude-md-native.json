@@ -1,0 +1,16 @@
+{
+  "test_id": "D1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Write me a quick script to list all running containers and their ports.",
+  "output": "Run with `bash containers.sh` or just paste the one-liner directly. Add `--filter status=running` if you also have stopped containers showing up.",
+  "timestamp": "2026-06-12T07:07:10Z",
+  "latency_ms": 8710,
+  "exit_code": 0,
+  "output_length_chars": 145,
+  "output_length_tokens_approx": 36,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

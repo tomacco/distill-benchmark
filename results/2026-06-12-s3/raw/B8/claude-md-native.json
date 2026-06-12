@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**PostgreSQL with JSONB** — given your team's existing expertise and preference for not adding infrastructure.\n\n**Why it fits a CMS with varying schemas:**\n- `JSONB` columns handle per-content-type schemas without a rigid table per type\n- Full-text search via `tsvector`/`GIN` indexes — no separate search service needed\n- Schema constraints where you need them (title, published_at, author_id as real columns) + flexible JSONB for the rest\n- `pg_cron` for scheduled publishing if needed\n\n**Rough table layout:**\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,          -- 'post', 'video', 'ugc', etc.\n  slug        text UNIQUE,\n  status      text DEFAULT 'draft',\n  author_id   uuid REFERENCES users,\n  published_at timestamptz,\n  meta        jsonb NOT NULL DEFAULT '{}',  -- type-specific fields\n  search_vec  tsvector GENERATED ALWAYS AS (\n    to_tsvector('english', coalesce(meta->>'title','') || ' ' || coalesce(meta->>'body',''))\n  ) STORED\n);\nCREATE INDEX ON content USING GIN(meta);\nCREATE INDEX ON content USING GIN(search_vec);\n```\n\n**The tradeoff:** JSONB is less ergonomic for deeply nested, heavily queried fields — if a content type ends up with 15 required indexed fields, a dedicated table is cleaner. But for a side project with 3-4 content types, this avoids premature schema fragmentation.\n\n**MongoDB would fit the domain model better** (documents with varying shapes is exactly its sweet spot), but given your team's PostgreSQL muscle memory and the side-project scope, the operational simplicity of staying on one DB wins.",
+  "timestamp": "2026-06-12T11:31:45Z",
+  "latency_ms": 32273,
+  "exit_code": 0,
+  "output_length_chars": 1618,
+  "output_length_tokens_approx": 404,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

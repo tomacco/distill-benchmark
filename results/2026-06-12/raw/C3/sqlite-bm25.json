@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What database do we use for the account service?",
+  "output": "The knowledge base says PostgreSQL 14, but you stated last week that the account service migrated from PostgreSQL to **MySQL**. Those contradict each other — which context applies? Was the MySQL migration specific to the account service while the rest of the stack stays on PostgreSQL?\n\nI'll update the stored knowledge once you confirm.",
+  "timestamp": "2026-06-12T06:43:51Z",
+  "latency_ms": 10876,
+  "exit_code": 0,
+  "output_length_chars": 339,
+  "output_length_tokens_approx": 84,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

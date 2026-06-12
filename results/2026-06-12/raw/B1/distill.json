@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes — Redis is the right call here. The access pattern (key-value + TTL) is Redis's canonical use case, and reusing an existing dependency beats adding a new one.\n\nTwo things to nail down:\n\n- **Persistence config**: If Redis restarts without AOF/RDB, all sessions evict. Decide whether \"everyone gets logged out on Redis restart\" is acceptable. For most apps it's fine; for critical flows it may not be.\n- **Key namespacing**: Prefix session keys (e.g., `sess:<token>`) to avoid collision with other Redis consumers. Especially important as the stack grows.\n\nOne pushback worth considering: if sessions are JWTs you're blacklisting (revocation list), Redis is perfect. If they're opaque tokens you're looking up on every request, also perfect. If you're storing full session state per token, make sure the value size stays bounded — Redis is not a document store.\n\nShort answer: ship it.",
+  "timestamp": "2026-06-12T06:18:31Z",
+  "latency_ms": 21926,
+  "exit_code": 0,
+  "output_length_chars": 891,
+  "output_length_tokens_approx": 222,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "distill",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "No relevant domain entries for Kubernetes/service-mesh. Here's a direct technical answer:\n\n---\n\n## Service mesh in 60 seconds\n\nA service mesh intercepts all inter-pod traffic via **sidecar proxies** (Envoy in Istio's case) injected into every pod. The control plane pushes config to sidecars; your app code talks to `localhost`, the sidecar handles the rest.\n\n```\npayment-service → [envoy sidecar] ──mTLS──→ [envoy sidecar] → account-service\n                        ↕                          ↕\n                   Istiod (control plane)     Istiod (control plane)\n```\n\nFor **inter-service auth** specifically, the mechanism is **mTLS with SPIFFE/SVID identity**:\n- Each pod gets a short-lived X.509 cert with identity `spiffe://cluster.local/ns/<ns>/sa/<serviceaccount>`\n- Istiod acts as the CA; cert rotation is automatic\n- `AuthorizationPolicy` rules say \"only `payment-service`'s SVID may call `account-service`\"\n\n---\n\n## Do you actually need Istio?\n\n**You probably don't, yet.** The question to ask: what specific gap are you filling?\n\n| Requirement | Lighter option | When Istio wins |\n|---|---|---|\n| mTLS between 2 services | [cert-manager](https://cert-manager.io/) + manual Envoy sidecar or `SPIRE` | You want zero-touch, mesh-wide rotation |\n| Service-to-service authz | K8s `NetworkPolicy` (layer 3/4 only) | You need L7 identity (`/payments` endpoint only) |\n| JWT validation at the mesh | App-level middleware | You want to centralize policy outside app code |\n| Observability | Prometheus scraping + manual tracing | You want automatic distributed traces |\n\n**The real cost of Istio** for a 2-service case:\n- ~1 GiB memory overhead (Istiod + 2× Envoy sidecars)\n- Latency added per hop (~1–5ms, usually irrelevant)\n- Operational complexity: `VirtualService`, `DestinationRule`, `PeerAuthentication`, `AuthorizationPolicy` — 4 CRD families to understand before anything works\n- `istioctl` debugging is non-trivial; sidecar injection failures are silent by default\n\n**Recommendation:** If the requirement is strictly \"payment-service must not be callable by anything except account-service,\" start with:\n\n1. **`NetworkPolicy`** — K8s-native, zero overhead, handles pod-selector-based ingress restriction\n2. **`PeerAuthentication` (strict mTLS) + `AuthorizationPolicy`** if you need cryptographic identity rather than just network topology\n\nIf you have 10+ services, want centralized policy-as-code, or need L7 attributes in auth decisions, then Istio earns its weight.\n\n**Linkerd** is worth knowing as an alternative — smaller footprint, simpler ops model, supports mTLS + SPIFFE, but less feature surface than Istio. Good middle ground if you grow past 2 services but don't want the full Istio tax.",
+  "timestamp": "2026-06-12T07:22:30Z",
+  "latency_ms": 27779,
+  "exit_code": 0,
+  "output_length_chars": 2737,
+  "output_length_tokens_approx": 684,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

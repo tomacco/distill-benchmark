@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "claude-md-native",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup (payment service still in monolith, Kotlin, gRPC internal / REST external, account-service owns bank accounts):\n\n**Simplest approach: micro-deposit verification**\n\n1. **REST endpoint** (external-facing, OpenAPI spec) on the payment service:\n   ```\n   POST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\n   Body: { \"deposits\": [0.14, 0.23] }\n   ```\n\n2. **Flow:**\n   - Payment service receives the deposit amounts\n   - Calls `account-service` via gRPC to confirm the account belongs to the merchant and fetch account state\n   - Validates amounts match what was previously sent (stored in PostgreSQL with a `bank_account_verifications` table)\n   - Updates verification status; fires a Kafka event (`bank_account.verified`) for downstream consumers\n\n3. **DB table** (Flyway migration):\n   ```sql\n   CREATE TABLE bank_account_verifications (\n     id UUID PRIMARY KEY,\n     account_id UUID NOT NULL,\n     merchant_id UUID NOT NULL,\n     deposit_amounts NUMERIC(10,2)[] NOT NULL,\n     status VARCHAR(20) NOT NULL DEFAULT 'pending', -- pending|verified|failed\n     attempts INT NOT NULL DEFAULT 0,\n     expires_at TIMESTAMPTZ NOT NULL,\n     created_at TIMESTAMPTZ NOT NULL DEFAULT now()\n   );\n   ```\n\n**Key decisions to confirm before building:**\n- Who initiates the micro-deposits? Payment service or a third-party (Plaid, Stripe)? If third-party, the flow changes significantly — you'd be verifying *their* callback, not amounts you sent.\n- Should `account-service` own verification state since it owns accounts, or does payment service own it since it owns the transaction? Either is defensible; pick one owner.\n\nIf you're integrating a third-party (Plaid/Stripe instant verification), the simplest path is just a webhook receiver + status update — no micro-deposit logic at all.",
+  "timestamp": "2026-06-12T07:07:47Z",
+  "latency_ms": 16876,
+  "exit_code": 0,
+  "output_length_chars": 1808,
+  "output_length_tokens_approx": 452,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

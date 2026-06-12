@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "```dockerfile\nFROM python:3.12-slim\n\nWORKDIR /app\n\nRUN apt-get update && apt-get install -y --no-install-recommends \\\n    libgomp1 \\\n    && rm -rf /var/lib/apt/lists/*\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY app/ ./app/\nCOPY models/ ./models/\n\nENV MODEL_PATH=/app/models/fraud_model.pkl \\\n    PORT=8000 \\\n    PYTHONUNBUFFERED=1 \\\n    PYTHONDONTWRITEBYTECODE=1\n\nEXPOSE 8000\n\nRUN useradd -m -u 1001 appuser && chown -R appuser /app\nUSER appuser\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\", \"--workers\", \"2\"]\n```\n\nMinimal `requirements.txt`:\n```\nfastapi>=0.111.0\nuvicorn[standard]>=0.29.0\nscikit-learn>=1.4.0\nnumpy>=1.26.0\njoblib>=1.4.0\npydantic>=2.0.0\n```\n\nMinimal `app/main.py` to pair with it:\n```python\nimport os\nimport joblib\nimport numpy as np\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\nmodel = joblib.load(os.environ[\"MODEL_PATH\"])\n\nclass FraudFeatures(BaseModel):\n    amount: float\n    hour: int\n    merchant_risk: float\n    # extend with your actual features\n\nclass FraudScore(BaseModel):\n    fraud_probability: float\n    is_fraud: bool\n\n@app.post(\"/score\", response_model=FraudScore)\ndef score(features: FraudFeatures):\n    X = np.array([[features.amount, features.hour, features.merchant_risk]])\n    prob = model.predict_proba(X)[0][1]\n    return FraudScore(fraud_probability=round(prob, 4), is_fraud=prob >= 0.5)\n\n@app.get(\"/health\")\ndef health():\n    return {\"status\": \"ok\"}\n```\n\nBuild and run:\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 -v ./models:/app/models fraud-scorer\n```\n\nKey decisions:\n- `python:3.12-slim` — avoids bloat; `libgomp1` is required by scikit-learn's OpenMP-linked estimators (RandomForest, GBM, etc.)\n- Non-root user for security\n- `MODEL_PATH` as env var so you can swap models without rebuilding\n- `--workers 2` — safe default; tune to `2 * CPU + 1` for CPU-bound inference",
+  "timestamp": "2026-06-12T07:00:07Z",
+  "latency_ms": 13265,
+  "exit_code": 0,
+  "output_length_chars": 1949,
+  "output_length_tokens_approx": 487,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

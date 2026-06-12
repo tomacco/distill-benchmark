@@ -1,0 +1,16 @@
+{
+  "test_id": "U4",
+  "competitor_id": "no-memory",
+  "prompt": "What shell command do I need to find all Kotlin files modified in the last week?",
+  "output": "**PowerShell:**\n```powershell\nGet-ChildItem -Recurse -Filter *.kt | Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-7) }\n```\n\n**Bash/Git Bash:**\n```bash\nfind . -name \"*.kt\" -mtime -7\n```",
+  "timestamp": "2026-06-12T06:18:07Z",
+  "latency_ms": 6339,
+  "exit_code": 0,
+  "output_length_chars": 194,
+  "output_length_tokens_approx": 48,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

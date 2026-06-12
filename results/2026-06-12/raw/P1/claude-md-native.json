@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No source files here — this workspace is empty aside from memory files. Do you have a repo path to point me at, or should you `cd` into the actual project directory first?\n\nIf you share the path (or run this from the right directory), the rename is a two-step:\n1. `grep -r \"AccountService\"` to find all occurrences\n2. Sed/Find-replace across those files",
+  "timestamp": "2026-06-12T06:35:35Z",
+  "latency_ms": 9950,
+  "exit_code": 0,
+  "output_length_chars": 355,
+  "output_length_tokens_approx": 88,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

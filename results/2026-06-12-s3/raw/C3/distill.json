@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "distill",
+  "prompt": "What database do we use for the account service?",
+  "output": "MySQL — you mentioned the migration from PostgreSQL completed last week. I have stored knowledge indicating PostgreSQL 14 was in use; updating that context accordingly.",
+  "timestamp": "2026-06-12T07:17:41Z",
+  "latency_ms": 11236,
+  "exit_code": 0,
+  "output_length_chars": 170,
+  "output_length_tokens_approx": 42,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "The stack is standardized on Kotlin for all backend services. Here's the steelman against the rewrite:\n\n**Against Go rewrite:**\n- Your backend is a Kotlin shop — two languages means two toolchains, two hire profiles, two sets of shared libraries, two CI/CD conventions. That cost compounds across every future service.\n- \"Over-engineered\" is fixable without a rewrite. The Kotlin version can be stripped down.\n- The other services being extracted from the monolith (payments, transactions) will likely also be Kotlin — you want consistency there.\n- At ~80 engineers, cognitive overhead from a polyglot backend is real and often underestimated.\n\n**Where the Go argument has merit:**\n- A Kafka consumer + SNS dispatcher is genuinely simple — Go's lower memory footprint and faster startup are real wins for a thin event-processing service.\n- If this service is isolated (no shared libs, no gRPC to other services currently), the integration cost is lower.\n\n**My read:** The operational cost of introducing Go likely exceeds the benefit here, unless there's a concrete perf/resource problem with the current service. Simplifying the Kotlin code is almost certainly the right move — what's making it feel over-engineered? That's probably the more targeted fix.",
+  "timestamp": "2026-06-12T07:24:10Z",
+  "latency_ms": 14108,
+  "exit_code": 0,
+  "output_length_chars": 1264,
+  "output_length_tokens_approx": 316,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

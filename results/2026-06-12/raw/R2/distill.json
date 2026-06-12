@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "No migrations knowledge in the SPINE. I need two things to give you a useful answer:\n\n1. **Which service?** (Not seeing a \"new service\" in my project knowledge — is this a new project or one of the existing ones?)\n2. **Tech stack?** (Database engine + language/framework — e.g., Postgres + Bun, SQLite + FastAPI, etc.)",
+  "timestamp": "2026-06-12T11:24:32Z",
+  "latency_ms": 16033,
+  "exit_code": 0,
+  "output_length_chars": 322,
+  "output_length_tokens_approx": 80,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

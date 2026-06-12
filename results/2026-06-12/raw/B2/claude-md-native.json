@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Strong pushback here.\n\n**The case for Go is real but narrow:**\n- Lower JVM overhead, faster startup, simpler concurrency for a pure consumer/dispatcher\n- The service really is a good fit for Go's model\n\n**But the costs hit hard for your org:**\n\n- **Language heterogeneity.** Everything else is Kotlin. Sofia owns the backend and is the Kotlin expert — who owns Go going forward? One service in a different language means split hiring criteria, split tooling, and cognitive context-switching on every oncall incident.\n- **\"Over-engineered\" is a code smell, not a language problem.** If the Kotlin version has unnecessary abstraction layers, the fix is a cleanup PR — not a rewrite. Rewriting in Go doesn't guarantee a simpler result; it just resets the complexity clock.\n- **Bandwidth.** You're mid-extraction from a monolith. Payments, transactions, and reporting still need to come out. A rewrite here competes with that. Unless the notification service is actively causing pain (latency, resource cost, incidents), the ROI is questionable.\n- **You just completed the gRPC migration.** Two weeks of fresh disruption. Adding a second language right now multiplies the surface area that needs to stabilize.\n\n**What I'd actually ask:** What's the concrete grievance with the current Kotlin version? If it's boilerplate/framework overhead (Spring, most likely), that's a legitimate target — but the fix might be as simple as stripping it down to a lightweight Ktor service or even a plain coroutine consumer with no framework. Same language, same team, fraction of the effort.\n\nThe Go rewrite is the right idea applied to the wrong layer of the problem.",
+  "timestamp": "2026-06-12T06:30:49Z",
+  "latency_ms": 32529,
+  "exit_code": 0,
+  "output_length_chars": 1656,
+  "output_length_tokens_approx": 414,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

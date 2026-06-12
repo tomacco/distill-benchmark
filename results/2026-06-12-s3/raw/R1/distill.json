@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "No payment-specific knowledge in the SPINE. Here's what to consider:\n\n**Compliance & Legal**\n- PCI DSS scope — are you storing card data or delegating to a vault (Stripe/Adyen)? Delegate if possible, it's brutal to self-certify.\n- Jurisdiction: GDPR (EU), PSD2 (EU SCA), local AML/KYC requirements\n- Money transmitter licenses — if you're holding funds, not just routing them\n\n**Architecture decisions**\n- Synchronous vs async — payments are inherently async (bank delays, reversals); design for eventual consistency from day one\n- Idempotency keys on every mutation — retries will happen\n- Reconciliation: double-entry bookkeeping model, not simple balance fields\n- Outbox pattern for payment events (DB write + event publish must be atomic)\n\n**Reliability**\n- Exactly-once semantics are hard; design for at-least-once + idempotent consumers\n- Webhook reliability — PSPs will retry; your handlers must be idempotent\n- Circuit breakers around PSP calls; fallback PSP if budget allows\n\n**Security**\n- No PAN/CVV in logs, ever — automated log scrubbing\n- Fraud signals: velocity checks, device fingerprinting, 3DS2 for card-not-present\n- Privilege separation: payment initiation vs approval vs reconciliation roles\n\n**Operational**\n- Chargebacks/disputes handling — needs human workflow, not just code\n- Refund model: partial refunds, multi-capture, auth expiry windows vary by PSP\n- Observability: alert on decline rate spikes, not just errors\n\n**Key question before proceeding:** Are you building a payment gateway (you move money), or integrating one (PSP does it)? That single decision changes your compliance exposure by an order of magnitude. Strong recommendation: integrate a licensed PSP unless moving money is your core product.\n\nWhat's the use case — marketplace, SaaS subscriptions, e-commerce, something else?",
+  "timestamp": "2026-06-12T07:20:47Z",
+  "latency_ms": 19917,
+  "exit_code": 0,
+  "output_length_chars": 1836,
+  "output_length_tokens_approx": 459,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

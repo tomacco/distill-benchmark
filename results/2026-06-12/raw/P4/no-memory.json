@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "no-memory",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No relevant domain in the SPINE for payment flows — answering from scratch.\n\n**Simplest viable approach: a server-side config flag with percentage rollout.**\n\nThree tiers, pick the one that matches your ops maturity:\n\n| Tier | Mechanism | Redeploy to toggle? | User targeting? |\n|---|---|---|---|\n| 1 — env var | `NEW_PAYMENT_FLOW=true` in env | Yes | No |\n| 2 — DB/config table | `feature_flags` row, checked at runtime | No | Basic (user ID modulo) |\n| 3 — Feature flag service | LaunchDarkly / GrowthBook / Unleash | No | Full segmentation |\n\nFor a payment dark-launch, **tier 2 is the sweet spot** — you want hot-toggle without a deploy (critical for rollback), but a full flag service adds infra complexity you don't need yet.\n\nMinimal schema:\n```sql\nfeature_flags(name text PK, enabled bool, rollout_pct int, updated_at)\n```\n\nEvaluation logic:\n```ts\nfunction useNewPaymentFlow(userId: string): boolean {\n  const flag = await getFlag('new_payment_flow')\n  if (!flag.enabled) return false\n  return stableHash(userId) % 100 < flag.rollout_pct\n}\n```\n\n`stableHash` (e.g. xxhash mod 100) ensures a given user stays in the same cohort on every request — critical for payment flows where mid-session switching would break state.\n\n**Main tradeoff:** Tier 2 means you're building (and owning) a mini flag service. If you already have GrowthBook or similar in the stack, use it — don't reinvent. What's the current tech stack?",
+  "timestamp": "2026-06-12T06:14:01Z",
+  "latency_ms": 23797,
+  "exit_code": 0,
+  "output_length_chars": 1435,
+  "output_length_tokens_approx": 358,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

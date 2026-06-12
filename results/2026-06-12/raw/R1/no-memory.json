@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "no-memory",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "No payment domain in SPINE. Here's the punch list:\n\n**Non-negotiables**\n- PCI DSS scope reduction — never store raw card data; use a tokenization vault (Stripe, Braintree, Adyen) so you're out-of-scope for the hard bits\n- Idempotency keys on every charge endpoint — network retries must not double-charge\n- Integer arithmetic for money — minor units (cents), never floats\n\n**Architecture**\n- Payments are async — model state as a ledger/event log, not a mutable row; webhooks are truth, polling is a fallback\n- Double-entry bookkeeping from day one — makes reconciliation trivially auditable\n- Immutable audit trail — regulatory requirement in most jurisdictions\n\n**Failure modes to design for upfront**\n- Charge succeeded, callback lost → idempotency + reconciliation job\n- Partial refunds, chargebacks, disputes → these are state machine transitions, not edge cases\n- Provider outage → fallback provider or graceful degradation (decline with retry vs silent fail)\n\n**Ops**\n- Sandbox/test environment with realistic failure injection before going live\n- Decline rate and fraud rate as first-class metrics, not afterthoughts\n- 3DS2 and SCA if you touch EU customers — not optional post-PSD2\n\n**The real question first:** Are you building the processing layer yourself, or wrapping a provider (Stripe/Adyen)? If you're not a payments company, wrapping a provider is almost always the right call — the compliance surface alone isn't worth owning.\n\nWhat's the context — B2C, B2B, marketplace, international?",
+  "timestamp": "2026-06-12T06:14:24Z",
+  "latency_ms": 22096,
+  "exit_code": 0,
+  "output_length_chars": 1528,
+  "output_length_tokens_approx": 382,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

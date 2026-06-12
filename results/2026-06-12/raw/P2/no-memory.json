@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "no-memory",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "The workspace is empty — just a neutral benchmark placeholder. No `auth-service` here.\n\nWhich repo has the auth-service? Is it under `C:\\Users\\Ivan\\repos\\`?",
+  "timestamp": "2026-06-12T06:13:26Z",
+  "latency_ms": 19042,
+  "exit_code": 0,
+  "output_length_chars": 158,
+  "output_length_tokens_approx": 39,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

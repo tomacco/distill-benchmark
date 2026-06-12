@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "A few things to flag before diving in:\n\n**Transaction data is still in the monolith** — no extracted service to query yet. That shapes the approach.\n\n**Two realistic options for a 1-week demo:**\n\n**Option A — Monolith REST endpoint + polling (fastest)**\n- Add `GET /internal/merchants/{id}/transaction-counts` to the monolith querying PostgreSQL\n- React dashboard polls every 30s with `setInterval`\n- Redis cache in front if query is slow (doubt it'll matter at demo scale)\n- Honest about the architecture: \"data still consolidating, extraction planned\"\n\n**Option B — Kafka consumer → Redis counters (better demo narrative)**\n- New lightweight service consumes transaction events from Kafka, maintains per-merchant counts in Redis\n- React polls a thin REST wrapper\n- Looks cleaner for investors (\"event-driven, decoupled\")\n- Risk: a week is tight if transaction events aren't already on Kafka\n\n**Recommendation: Option A, but style it as a stepping stone.** One week with a demo on the line isn't the time to introduce a new service. A reliable live number beats a sophisticated architecture that breaks mid-demo. The investor pitch can frame it as \"dashboard today, event-sourced analytics service next quarter\" — that's consistent with the Series C story.\n\n**One question before starting:** Are transaction events already published to Kafka, or is that still in the monolith's internal flow? That determines whether Option B is even feasible in the timeline.",
+  "timestamp": "2026-06-12T06:31:33Z",
+  "latency_ms": 28442,
+  "exit_code": 0,
+  "output_length_chars": 1470,
+  "output_length_tokens_approx": 367,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

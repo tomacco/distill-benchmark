@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup (Kotlin, gRPC internal / REST external, account-service in staging that already owns bank account CRUD):\n\n**Bank account verification sits in `account-service`, not the payment service.**\n\nThe account-service already owns bank account data — verification is lifecycle management of that entity, not a payment concern. Having payment-service own it would create a coupling you'll regret when extracting payment processing.\n\n**Simplest approach:**\n\n1. **REST endpoint** (external-facing, OpenAPI) on `account-service`:\n   ```\n   POST /accounts/{id}/verify\n   Body: { \"routingNumber\": \"...\", \"accountNumber\": \"...\" }\n   ```\n\n2. **Verification strategy** — micro-deposit (two small deposits + merchant confirms amounts) is the standard, compliant path. Instant verification via Plaid is faster but adds a vendor dependency.\n\n3. **Payment service calls account-service over gRPC** when it needs to confirm an account is verified before processing — a single `IsVerified(accountId)` RPC. Don't duplicate the verification logic.\n\n**One pushback to consider:** if this endpoint will be called by merchants directly (external partners), it needs to go through your REST/OpenAPI surface. If it's only internal flows triggered by your own frontend, a gRPC method on account-service is enough and you skip the REST layer entirely.\n\nWhich is the caller — external partner or your own frontend?",
+  "timestamp": "2026-06-12T06:45:06Z",
+  "latency_ms": 19128,
+  "exit_code": 0,
+  "output_length_chars": 1405,
+  "output_length_tokens_approx": 351,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

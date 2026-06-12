@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "no-memory",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "No relevant prior knowledge on migrations. Per standing convention: which repo/project is this for, and what's the stack (database + any existing migration tooling in the codebase)?",
+  "timestamp": "2026-06-12T06:14:44Z",
+  "latency_ms": 18275,
+  "exit_code": 0,
+  "output_length_chars": 181,
+  "output_length_tokens_approx": 45,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

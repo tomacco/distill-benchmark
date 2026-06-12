@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "No existing context on this flow in the knowledge base. Before I build anything — a few quick questions since you've said confirm conventions up front:\n\n1. **What does the happy path look like?** (e.g. submit business details → KYB check → approve → activate account, or something different?)\n2. **What format does the demo need?** Web UI, API mock with a test harness, CLI walkthrough?\n3. **Stack preference?** (Your usual lean is Bun + TS — should I follow that, or is there a specific framework stakeholders expect to see?)",
+  "timestamp": "2026-06-12T06:42:52Z",
+  "latency_ms": 28716,
+  "exit_code": 0,
+  "output_length_chars": 536,
+  "output_length_tokens_approx": 134,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

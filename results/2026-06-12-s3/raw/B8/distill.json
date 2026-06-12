@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**Recommendation: PostgreSQL with JSONB columns.**\n\nCore content fields (id, type, slug, author, created_at, status) live in a typed table; per-content-type metadata goes in a `data JSONB` column. GIN index on that column keeps queries fast.\n\n**Why not MongoDB?** Flexible schema is MongoDB's pitch, but you end up enforcing structure at the app layer anyway — and you lose transactions, foreign keys, and the query planner.\n\n**Why not a document DB?** Your content types share 80%+ of their structure (ownership, status, timestamps). That shared structure belongs in real columns, not repeated in every document.\n\n**Concrete setup for a side project:**\n- [Neon](https://neon.tech) or [Supabase](https://supabase.com) — free-tier Postgres, no ops\n- Table per content category (posts, media, ugc) or a single `content` table with a `type` discriminator + `data jsonb`\n- `CREATE INDEX ON content USING GIN (data)` for schema-flexible queries\n\n**Alternative worth knowing:** [PocketBase](https://pocketbase.io) — single binary, built-in admin UI, dynamic collections, file storage, auth. Zero infra, covers exactly your use case. Trades SQL power for zero-config convenience. Good for a side project if you don't need custom query complexity.\n\nMain tradeoff: Postgres/JSONB gives you full query power and scales; PocketBase gives you a working admin UI for free and is faster to ship.",
+  "timestamp": "2026-06-12T07:17:06Z",
+  "latency_ms": 24549,
+  "exit_code": 0,
+  "output_length_chars": 1387,
+  "output_length_tokens_approx": 346,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

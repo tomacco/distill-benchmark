@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Migration is done (not a blocker).\n\nA few things to confirm before we write code — you've said conventions upfront is how you work:\n\n1. **What sections** does the settings page need? (e.g. profile, notifications, security/password, preferences)\n2. **Any existing component library or design system** in the frontend? (e.g. shadcn/ui, MUI, custom)\n3. **Where does this live** in the repo — do you have a path or want a standalone file for now?\n\nAlso worth flagging: Dev is junior (6 months in), so I'll structure this to be easy for them to extend — clear prop types, no magic. Let me know if you want a different pairing approach (e.g. you scaffold, Dev fills sections).",
+  "timestamp": "2026-06-12T06:48:30Z",
+  "latency_ms": 32485,
+  "exit_code": 0,
+  "output_length_chars": 676,
+  "output_length_tokens_approx": 169,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

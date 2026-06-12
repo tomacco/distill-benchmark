@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — either the CLI or via Python.\n\nIt queries 50GB CSVs directly with SQL (no load into memory), handles aggregations natively, and outputs JSON in one command. Minimal code for a one-off.\n\n```sql\n-- duckdb one-liner (CLI)\nduckdb -c \"\n  COPY (\n    SELECT merchant_id,\n           COUNT(*)           AS txn_count,\n           SUM(amount)        AS total_amount,\n           AVG(amount)        AS avg_amount\n    FROM read_csv_auto('data.csv')\n    GROUP BY merchant_id\n  ) TO 'summary.json' (FORMAT JSON, ARRAY true);\n\"\n```\n\nOr as a Python script if you need pre/post processing:\n\n```python\nimport duckdb\n\ncon = duckdb.connect()\ncon.execute(\"\"\"\n    COPY (\n        SELECT merchant_id,\n               COUNT(*)  AS txn_count,\n               SUM(amount) AS total_amount\n        FROM read_csv_auto('data.csv')\n        GROUP BY merchant_id\n    ) TO 'summary.json' (FORMAT JSON, ARRAY true)\n\"\"\")\n```\n\n**Why not Python+pandas:** 50GB won't fit in RAM without chunking, which adds complexity. **Why not Polars:** also good, but DuckDB is less code for pure aggregation. **Why not awk:** JSON output is painful.\n\nTradeoff: DuckDB's `read_csv_auto` infers types — if your schema is messy, you may need to pass explicit column types.",
+  "timestamp": "2026-06-12T07:16:13Z",
+  "latency_ms": 15697,
+  "exit_code": 0,
+  "output_length_chars": 1228,
+  "output_length_tokens_approx": 307,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

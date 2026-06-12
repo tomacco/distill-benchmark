@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "No payment-service knowledge in SPINE. I'll answer from stack context.\n\nGiven REST-external + gRPC-internal + Kotlin/EKS:\n\n**Use a third-party provider (Plaid or Stripe Financial Connections)** — don't build micro-deposit logic yourself.\n\nConcretely:\n\n- **REST endpoint** on payment-service: `POST /v1/merchants/{merchantId}/bank-accounts/verify`\n- Payment service calls Plaid/Stripe, stores `verification_status` locally\n- Fire a gRPC event to account-service when status changes (verified/failed)\n\nSketch:\n```\nClient → REST → payment-service → Plaid (instant auth or micro-deposit)\n                      ↓ (on result)\n               gRPC → account-service (update merchant record)\n```\n\nTwo sub-questions before you start:\n1. **Do you already have a Plaid or Stripe account?** Plaid is richer for bank verification; if you're already on Stripe for payments, Stripe Financial Connections is less friction.\n2. **Instant or async?** Instant bank auth (Plaid OAuth flow) is UX-better but requires redirect handling. Micro-deposits are simpler server-side but 1–2 day lag.\n\nThe endpoint itself is one handler + one DB column (`verification_status: ENUM`) + one outbound HTTP call. Complexity is almost entirely in which provider you pick.",
+  "timestamp": "2026-06-12T06:24:20Z",
+  "latency_ms": 32237,
+  "exit_code": 0,
+  "output_length_chars": 1248,
+  "output_length_tokens_approx": 312,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "What version of Postgres are we on?",
+  "output": "Failed to authenticate. API Error: 401 Invalid authentication credentials",
+  "timestamp": "2026-06-12T15:26:41Z",
+  "latency_ms": 3625,
+  "exit_code": 1,
+  "output_length_chars": 73,
+  "output_length_tokens_approx": 18,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

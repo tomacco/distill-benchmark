@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "A few questions before we start, since you set conventions up front:\n\n1. **What settings does this page cover?** (User profile? Account/billing? Notification preferences? All of the above?)\n2. **Is there an existing component library** in the frontend, or are you rolling your own styled components?\n3. **Where does the data come from?** Fetching from a backend service, or is this local-only state for now?\n\nAlso worth flagging: you're a senior backend engineer pairing with Dev (junior frontend, 6 months in). Do you want the component structured in a way that's educational for Dev to own going forward, or are you just trying to ship it quickly?",
+  "timestamp": "2026-06-12T07:11:26Z",
+  "latency_ms": 11788,
+  "exit_code": 0,
+  "output_length_chars": 649,
+  "output_length_tokens_approx": 162,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

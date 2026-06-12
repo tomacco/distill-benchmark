@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "no-memory",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "No project in the SPINE matches \"transactions\" or \"Marcus\" — this looks like context I'm missing. Which repo is this for, and what's the current stack (frontend framework, backend/DB)?\n\nAlso noting the deadline: investor demo ~2026-06-19 (one week). Want me to save that as a project memory?",
+  "timestamp": "2026-06-12T06:08:09Z",
+  "latency_ms": 25445,
+  "exit_code": 0,
+  "output_length_chars": 293,
+  "output_length_tokens_approx": 73,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

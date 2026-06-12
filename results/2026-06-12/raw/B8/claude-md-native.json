@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "Quick note: the MongoDB/DynamoDB rejections in memory are scoped to Helios's financial data requirements (strong consistency, transactions). A CMS side project has different constraints — so MongoDB is back on the table.\n\n**Recommendation: PostgreSQL with JSONB**\n\nYou already operate it at Helios, so zero new ops overhead. JSONB handles the \"varying schemas per content type\" cleanly — put structured columns on the invariant fields (title, slug, author, timestamps), JSONB on the type-specific payload.\n\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,           -- 'post' | 'media' | 'ugc'\n  slug        text UNIQUE,\n  author_id   uuid,\n  published_at timestamptz,\n  meta        jsonb NOT NULL DEFAULT '{}'  -- type-specific fields\n);\n\nCREATE INDEX idx_content_meta ON content USING gin(meta);\n```\n\nGIN index on `meta` gives you fast `@>` containment queries across all content types without schema migrations when you add new fields.\n\n**The real alternative: MongoDB**\n\nIf the varying-schema part grows complex (deeply nested media metadata, polymorphic UGC), MongoDB's document model is genuinely a better fit. The Helios rejection doesn't apply here — that was about financial consistency, not document databases being bad. The tradeoff: unfamiliar ops, and you lose ACID transactions if you ever need cross-document writes.\n\n**Skip:** anything serverless-first (PlanetScale, DynamoDB) — you don't need the scaling ceiling, and the query model is worse for content.\n\n**My call:** start with PostgreSQL + JSONB. You get 90% of the flexibility with zero new tooling. Move to MongoDB only if the schema variation becomes genuinely painful in practice.",
+  "timestamp": "2026-06-12T06:33:05Z",
+  "latency_ms": 29807,
+  "exit_code": 0,
+  "output_length_chars": 1731,
+  "output_length_tokens_approx": 432,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

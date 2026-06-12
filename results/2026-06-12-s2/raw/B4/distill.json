@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "No matching project context in the SPINE for a merchant transaction system. Before designing anything:\n\n1. **Which repo is this?** Nothing in my knowledge maps to a merchant/transaction dashboard — is this a new project or one I haven't seen?\n2. **What's the existing data source?** Is there already a backend exposing transaction data, or does that need building too?\n3. **What's the frontend stack?** (React, plain HTML, something else?)\n\nThe 30-second polling + investor demo deadline is a clear enough spec to start on once I know the stack and data shape.",
+  "timestamp": "2026-06-12T06:53:05Z",
+  "latency_ms": 16038,
+  "exit_code": 0,
+  "output_length_chars": 562,
+  "output_length_tokens_approx": 140,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

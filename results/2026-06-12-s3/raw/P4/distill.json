@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "No domain match in SPINE — general answer:\n\n**Three options, ordered by simplicity:**\n\n1. **Env var / config flag** — `PAYMENT_V2_ENABLED=true`. Zero deps, flip per-environment. Works for server-side dark launch. Can't target specific users without deploys.\n\n2. **Request header / cookie** — `X-Feature: payment-v2` or a cookie. Dev/QA can toggle without a deploy. Still zero infra.\n\n3. **Percentage rollout in code** — hash `user_id % 100 < rollout_pct` against a config value. Deterministic per-user, no external service needed.\n\n**Recommendation:** start with option 2 (header/cookie) if you want manual dark-launch for testing, or option 3 if you want gradual ramp. Both are a 10-line change; no feature flag service needed.\n\nThe only case to reach for LaunchDarkly/Unleash/Flagsmith up front is if you need: real-time toggle without deploy, targeting by user segment, or audit trail. Absent those, the infra cost isn't justified.\n\nWhich context? Server-side only, or does the flag need to be visible client-side too?",
+  "timestamp": "2026-06-12T07:20:26Z",
+  "latency_ms": 18398,
+  "exit_code": 0,
+  "output_length_chars": 1029,
+  "output_length_tokens_approx": 257,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

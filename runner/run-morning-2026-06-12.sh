@@ -5,6 +5,13 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# Copied-credential profiles rot when the source profile rotates its OAuth token
+# (post-mortem 2026-06-12: two separate 401 incidents). Refresh at every launch.
+for p in /c/Users/Ivan/.claude-tester /c/Users/Ivan/.claude-personal; do
+    cp /c/Users/Ivan/.claude/.credentials.json "$p/.credentials.json"
+done
+echo "[creds] profiles refreshed from main"
+
 echo "===== SWEEP 1/3: full 4-way, seed 1 ====="
 RESULTS_DIR="results/2026-06-12" ./runner/resume-collection.sh
 

@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "claude-md-native",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your AWS/Kafka stack and the financial domain, two strong options:\n\n**ClickHouse** — top pick for this use case\n- Columnar storage, vectorized execution — extremely fast aggregation on large datasets\n- Integrates well with Kafka (native Kafka engine for streaming ingest)\n- Runs on AWS (self-hosted on EKS or ClickHouse Cloud)\n- SQL interface, low learning curve given your PostgreSQL background\n\n**Amazon Redshift** — if you want managed and AWS-native\n- Fully managed, no ops burden\n- Scales well, Redshift Spectrum can query S3 directly\n- Tradeoff: more expensive, slower iteration cycles, less flexible schema changes\n\n**Recommendation: ClickHouse.** It's the performance leader for analytics workloads, fits your Kafka pipeline naturally, and runs on your existing EKS infra. Redshift makes sense if the ops overhead of managing ClickHouse on EKS is a concern.\n\nWorth noting: Reporting/analytics is still in the monolith (per your architecture). If this service is the extraction of that, make sure you also plan the data migration path from PostgreSQL.",
+  "timestamp": "2026-06-12T06:37:46Z",
+  "latency_ms": 13089,
+  "exit_code": 0,
+  "output_length_chars": 1070,
+  "output_length_tokens_approx": 267,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

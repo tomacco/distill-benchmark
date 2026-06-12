@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Good. Here's the consumer for `payment-completed`, aligned with your stack:\n\n**Kotlin + Kafka + Coroutines + structured logging with correlation IDs, integration tests over mocks.**\n\nBefore I write it — two conventions to confirm:\n\n1. **Deserialization**: JSON (via Jackson) or Avro/Protobuf? (Kafka-native Avro with Schema Registry is common for payment events.)\n2. **Consumer group ID convention**: Do you have a naming pattern (e.g., `<service>-<topic>-consumer`) or should I infer from existing services?\n\nAlso: which service is this landing in — the monolith (for now) or the payment extraction that Sofia is designing?\n\n---\n\nOnce confirmed, I'll produce:\n\n- `PaymentCompletedConsumer.kt` — coroutine-based listener with manual offset commit on success, dead-letter on poison pill\n- `PaymentCompletedEvent.kt` — data class for the event payload\n- Correlation ID propagation from Kafka headers into the MDC\n- `PaymentCompletedConsumerIntegrationTest.kt` — uses an embedded Kafka broker, no mocks",
+  "timestamp": "2026-06-12T06:45:38Z",
+  "latency_ms": 30933,
+  "exit_code": 0,
+  "output_length_chars": 1009,
+  "output_length_tokens_approx": 252,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

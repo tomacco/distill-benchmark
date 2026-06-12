@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Stack context: **Flyway** (team decision), Kotlin, PostgreSQL 14, EKS + ArgoCD.\n\n**Standard setup for a new service:**\n\n**1. Dependency (Gradle)**\n```kotlin\nimplementation(\"org.flywaydb:flyway-core\")\nimplementation(\"org.flywaydb:flyway-database-postgresql\")\n```\n\n**2. Migration files**\n```\nsrc/main/resources/db/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n```\nNaming: `V{version}__{description}.sql` — double underscore, past tense, snake_case description.\n\n**3. Application config**\n```yaml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false  # new service, no legacy data\n```\n\n**4. Kubernetes / ArgoCD**\nRun migrations as an **init container** or a **pre-upgrade Job**, not at app startup in production — so a bad migration doesn't take the pod into a crash loop.\n\n```yaml\ninitContainers:\n  - name: migrate\n    image: your-service:${VERSION}\n    command: [\"java\", \"-jar\", \"app.jar\", \"--spring.flyway.enabled=true\", \"--server.port=0\"]\n```\nOr use a dedicated Flyway CLI Job if you want strict separation.\n\n**5. CI (GitHub Actions)**\nAdd a step that spins up a Postgres container and runs migrations before building the image — catches SQL errors before ArgoCD touches staging.\n\n---\n\nOne thing to confirm up front: does this service get its **own schema/database**, or does it share the monolith's PostgreSQL instance (with a schema prefix)? That changes baseline-on-migrate and the `flyway.schemas` config. The auth and account services — did they each get isolated databases or are they on the same instance?",
+  "timestamp": "2026-06-12T06:47:56Z",
+  "latency_ms": 26835,
+  "exit_code": 0,
+  "output_length_chars": 1592,
+  "output_length_tokens_approx": 398,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

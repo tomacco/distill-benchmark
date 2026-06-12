@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "claude-md-native",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "Given your PostgreSQL background and preference for not adding new infrastructure, here's the honest take:\n\n**PostgreSQL with JSONB** is the pragmatic choice for a side project CMS.\n\n- Blog posts, media metadata, user content — all fit cleanly in `jsonb` columns alongside typed columns for the fixed schema parts\n- You get schema flexibility per content type without adding a new system to operate\n- Full-text search via `tsvector`, GIN indexes on JSONB for querying nested fields\n- You already know it; operational overhead is zero\n\nRough schema pattern:\n```sql\nCREATE TABLE content_items (\n  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),\n  type        text NOT NULL,           -- 'post', 'media', 'ugc'\n  status      text NOT NULL,\n  author_id   uuid,\n  created_at  timestamptz DEFAULT now(),\n  meta        jsonb                    -- type-specific fields live here\n);\n\nCREATE INDEX ON content_items USING GIN (meta);\nCREATE INDEX ON content_items (type, status);\n```\n\n**The steelman for MongoDB**: if content schemas are truly wild and you need rich nested document queries at scale, Mongo's native document model is more natural and its Atlas Search is excellent. Worth it if this side project goes production-serious and content structure diverges heavily from any relational shape.\n\n**My recommendation**: start with Postgres + JSONB. You'll ship faster, avoid operational overhead, and can query/migrate data without learning a new query model. If you hit a real document-store pain point, migrate then — but most CMSes never do.",
+  "timestamp": "2026-06-12T07:05:59Z",
+  "latency_ms": 14736,
+  "exit_code": 0,
+  "output_length_chars": 1551,
+  "output_length_tokens_approx": 387,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

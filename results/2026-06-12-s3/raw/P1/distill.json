@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files contain `AccountService` in the working directory (`C:\\Users\\Ivan\\AppData\\Local\\Temp\\benchmark-workspace-nha40PWD`). Which repo should I be working in?",
+  "timestamp": "2026-06-12T07:19:44Z",
+  "latency_ms": 6438,
+  "exit_code": 0,
+  "output_length_chars": 160,
+  "output_length_tokens_approx": 40,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

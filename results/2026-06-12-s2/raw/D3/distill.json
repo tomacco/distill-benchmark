@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "No relevant knowledge file for payment services — answering from context (Kotlin, gRPC internal, REST external, microservices on EKS).\n\n**Simplest: micro-deposits via a hosted provider (Stripe Financial Connections or Plaid Auth)**\n\n- External REST endpoint on the payment service: `POST /merchants/{id}/bank-accounts/verify`\n- Payment service calls Stripe/Plaid REST API → returns a hosted link or initiates micro-deposits\n- Webhook back to payment service sets verification status\n- Other internal services call payment service via gRPC: `VerifyBankAccount(merchant_id)` → returns `PENDING | VERIFIED | FAILED`\n\n**Trade-off to weigh:** micro-deposits (no new vendor, ~2 day delay) vs. instant verification (Stripe/Plaid, adds dependency + cost, ~seconds). If you already have Stripe for payments, Financial Connections is a single API call and no new vendor relationship.\n\n**What I'd push back on:** if account-service already holds merchant identity/KYC, make sure the verification *result* lives in payment-service (it's a payment concern, not an identity concern), with account-service calling in via gRPC to query it — not the other way around.\n\nDo you already have a Stripe or Plaid integration elsewhere in the stack?",
+  "timestamp": "2026-06-12T06:56:58Z",
+  "latency_ms": 28049,
+  "exit_code": 0,
+  "output_length_chars": 1233,
+  "output_length_tokens_approx": 308,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

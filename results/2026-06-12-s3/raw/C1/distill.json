@@ -1,0 +1,16 @@
+{
+  "test_id": "C1",
+  "competitor_id": "distill",
+  "prompt": "What version of Postgres are we on?",
+  "output": "The workspace is empty — no config files found. I can't determine the Postgres version from here.\n\nAre you asking about a running instance, or a version pinned in a specific repo/project? If you point me to it, I can check.",
+  "timestamp": "2026-06-12T07:17:16Z",
+  "latency_ms": 8602,
+  "exit_code": 0,
+  "output_length_chars": 225,
+  "output_length_tokens_approx": 56,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

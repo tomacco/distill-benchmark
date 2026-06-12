@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** — hands down for this use case.\n\n- Streams CSV without loading into memory (50GB is fine)\n- SQL aggregations are trivial to write\n- JSON output built-in (`TO JSON` / `json_object`)\n- Zero-infrastructure: one Python package or standalone CLI\n\nQuick sketch:\n\n```python\nimport duckdb, json\n\nresult = duckdb.sql(\"\"\"\n    SELECT\n        merchant_id,\n        COUNT(*) AS txn_count,\n        SUM(amount) AS total_amount,\n        AVG(amount) AS avg_amount\n    FROM read_csv_auto('data.csv', buffer_size=1000000)\n    GROUP BY merchant_id\n\"\"\").df()\n\nresult.to_json('summary.json', orient='records', indent=2)\n```\n\nOr skip Python entirely with the CLI:\n\n```sh\nduckdb -c \"\n  COPY (\n    SELECT merchant_id, COUNT(*) txn_count, SUM(amount) total\n    FROM read_csv_auto('data.csv')\n    GROUP BY merchant_id\n  ) TO 'summary.json' (FORMAT JSON, ARRAY true);\n\"\n```\n\n**Alternatives if you already have the environment set up:**\n- **Polars (Python)** — good if you need custom Python logic; lazy eval handles 50GB, but more verbose than SQL for aggregations\n- **pandas** — only viable with `chunksize=` iteration; more boilerplate, slower\n\nDuckDB wins on effort-to-result ratio for a one-off analytical job.",
+  "timestamp": "2026-06-12T06:20:06Z",
+  "latency_ms": 19287,
+  "exit_code": 0,
+  "output_length_chars": 1202,
+  "output_length_tokens_approx": 300,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

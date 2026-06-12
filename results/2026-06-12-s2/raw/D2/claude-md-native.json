@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "claude-md-native",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — it's the right answer, and you're already running it.\n\nFor the reporting service specifically:\n\n- **Strong consistency + multi-table joins**: PostgreSQL's ACID guarantees and window functions handle complex aggregations well\n- **No new operational overhead**: your team already has expertise and tooling (Flyway migrations, existing infra on EKS)\n- **Reporting-specific patterns to layer on**:\n  - **Read replica** for isolating heavy query load from transactional tables\n  - **Materialized views** (refreshed on schedule or via trigger) for expensive aggregates that get queried repeatedly\n  - **Partitioning** on date columns if you expect large transaction history tables\n\nIf query volume eventually outgrows PostgreSQL, the natural next step is a dedicated OLAP layer (e.g. ClickHouse or Redshift) that mirrors data from Postgres via Kafka — you already have the streaming infrastructure for that. But that's a scale problem you likely don't have yet.\n\nStart with Postgres + read replica. Add materialized views early — they're the highest-leverage tool for reporting queries.",
+  "timestamp": "2026-06-12T07:07:29Z",
+  "latency_ms": 17475,
+  "exit_code": 0,
+  "output_length_chars": 1103,
+  "output_length_tokens_approx": 275,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

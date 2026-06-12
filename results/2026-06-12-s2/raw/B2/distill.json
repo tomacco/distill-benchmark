@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "Go fits well here — single binary, low idle memory, franz-go or Sarama for Kafka are solid, AWS SDK v2 is mature for SNS. For a consume→dispatch loop with no business logic, Go is genuinely the right shape.\n\nPushback before you commit:\n\n**What's actually \"over-engineered\"?** If it's DI frameworks, layering, or Spring ceremony — those are deletable without a rewrite. If it's accidental complexity around retry/backoff, DLQ routing, or schema handling — a Go rewrite will rediscover those requirements and re-solve them (worse the first time). Name the specific pain; rewrite is only justified if the pain is structural, not stylistic.\n\n**The real risk:** \"simple service\" often means \"simple happy path.\" Kafka offset management, at-least-once vs exactly-once semantics, SNS throttling + exponential backoff, dead-letter queues, graceful shutdown on rebalance — these exist in the Kotlin version even if buried. Go makes you explicit about all of it.\n\n**Recommendation:** Before rewriting, spend 30 minutes listing every non-happy-path behavior the Kotlin version handles. If most of it is accidental (framework magic you don't need), rewrite is justified. If most of it is real requirements, you're translating complexity, not removing it.\n\nGo is the right language for this. Whether a rewrite is the right move depends on what \"over-engineered\" actually means.",
+  "timestamp": "2026-06-12T06:52:39Z",
+  "latency_ms": 24905,
+  "exit_code": 0,
+  "output_length_chars": 1374,
+  "output_length_tokens_approx": 343,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

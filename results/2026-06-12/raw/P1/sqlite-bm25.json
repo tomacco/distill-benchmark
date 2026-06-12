@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the workspace contain `AccountService` — the codebase appears empty or it doesn't exist here yet.\n\nIf you have a specific repo path, share it and I'll run the rename across it. The approach would be:\n1. `Grep` for all files containing `AccountService`\n2. `Edit` each file with `replace_all: true` to swap the name",
+  "timestamp": "2026-06-12T06:45:48Z",
+  "latency_ms": 8550,
+  "exit_code": 0,
+  "output_length_chars": 327,
+  "output_length_tokens_approx": 81,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

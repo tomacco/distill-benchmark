@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "claude-md-native",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Payment service is still in the monolith, so I'm assuming this endpoint goes into the new `payment-service` being extracted. Given the setup:\n\n**Recommended: delegate verification to a third-party (Plaid IAV or Modern Treasury)**\n\nRationale: building micro-deposit logic yourself means async flows, retry handling, expiry, reconciliation — not worth it when a provider wraps that.\n\n**Endpoint shape** (external, so REST per your convention):\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\n```\n\n**Flow:**\n1. REST handler receives request → validates via JWT (call `auth-service` over gRPC)\n2. Calls Plaid/Modern Treasury to initiate or confirm verification\n3. On success → calls `account-service` (gRPC) to update verification status on the account\n4. Publishes `BankAccountVerified` event to Kafka for downstream consumers\n5. Returns `200` with verification status, or `202` if async (micro-deposit path)\n\n**gRPC call to account-service** (add this RPC there):\n```protobuf\nrpc UpdateAccountVerificationStatus(UpdateVerificationRequest) returns (AccountResponse);\n```\n\n**Key decisions to confirm before starting:**\n- Which provider — Plaid (instant OAuth) or Modern Treasury (API-based validation)? Plaid is simpler UX; MT is more payment-operator-native.\n- Is this instant-only or do you also need micro-deposit fallback?\n- Does `account-service` own the `verified` flag, or does `payment-service` own it?\n\nThe last one matters most — since `account-service` already handles bank account CRUD, it should own the verification state. Payment service just triggers it.",
+  "timestamp": "2026-06-12T06:34:58Z",
+  "latency_ms": 32780,
+  "exit_code": 0,
+  "output_length_chars": 1597,
+  "output_length_tokens_approx": 399,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

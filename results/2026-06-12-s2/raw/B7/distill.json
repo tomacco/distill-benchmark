@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Two quick questions before I build:\n\n1. **Stack** — HTML/JS single file (open in browser, zero setup) or something else like Node/Python?\n2. **Flow steps** — which of these should the demo cover?\n   - Business info form (name, address, EIN)\n   - Document upload\n   - Identity verification (owner name/DOB/ID)\n   - Approval/rejection outcome screen",
+  "timestamp": "2026-06-12T06:54:08Z",
+  "latency_ms": 30964,
+  "exit_code": 0,
+  "output_length_chars": 351,
+  "output_length_tokens_approx": 87,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

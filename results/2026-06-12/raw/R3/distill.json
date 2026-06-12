@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "This workspace is a benchmark sandbox with no existing React project. A few things to confirm before we start:\n\n1. **Which repo?** NAST, InceptionAI, or something else? (Per convention, I don't assume the cwd is the target repo.)\n2. **Who is \"Dev\"?** A teammate, or shorthand for something else?\n3. **What settings?** User preferences, API keys, app config — what's the scope?",
+  "timestamp": "2026-06-12T06:27:18Z",
+  "latency_ms": 18888,
+  "exit_code": 0,
+  "output_length_chars": 378,
+  "output_length_tokens_approx": 94,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

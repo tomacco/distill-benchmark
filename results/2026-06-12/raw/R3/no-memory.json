@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "no-memory",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Two things before we start:\n\n1. **Which repo?** The current directory is a temp workspace, not a project repo. Which project is this settings page for — NAST, InceptionAI, or something else?\n\n2. **Who is \"Dev\"?** Is that a person (co-developer), or did you mean something else (e.g., a specific agent setup)?",
+  "timestamp": "2026-06-12T06:15:00Z",
+  "latency_ms": 15188,
+  "exit_code": 0,
+  "output_length_chars": 310,
+  "output_length_tokens_approx": 77,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

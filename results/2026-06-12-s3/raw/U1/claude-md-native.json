@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "Key context: payment-service is still in the monolith (not yet extracted), and internal comms are gRPC on AWS EKS. Here's the honest answer:\n\n---\n\n## How a service mesh works\n\nA service mesh injects a sidecar proxy (e.g., Envoy) into every pod. All traffic flows through the sidecar — the app never sees raw network I/O. The control plane (Istiod) distributes config to all sidecars.\n\nThat gives you three layers:\n- **mTLS** — mutual cert-based auth between services, zero app changes\n- **Policy/AuthorizationPolicy** — \"payment-service may call account-service; nothing else may\"\n- **Observability** — traces, metrics, retries, circuit breaking — all from the proxy layer\n\n---\n\n## Do you need Istio for payment↔account auth specifically?\n\n**Short answer: probably not yet, and possibly not ever.**\n\nReasons to wait:\n\n| Factor | Your situation |\n|---|---|\n| payment-service is still in the monolith | You'd be building mesh infra for a service that doesn't exist as a K8s workload yet |\n| gRPC already supports TLS + metadata auth | You can enforce service identity via JWT bearer tokens in gRPC metadata without a mesh |\n| Istio operational cost is real | ~1 sidecar per pod, control plane infra, certificate rotation, version upgrades — non-trivial for an 80-engineer team mid-monolith-extraction |\n\n**Lighter alternatives that solve inter-service auth on gRPC:**\n\n1. **SPIFFE/SPIRE** — workload identity without a full mesh. Issues SVIDs (certs) to pods, your gRPC interceptors validate them. No sidecars.\n2. **Service account JWTs (Kubernetes-native)** — each service gets a K8s SA token, validates via `TokenReview` API. Zero infra added.\n3. **AWS IAM for pod-to-pod via IRSA** — you're already on EKS. Services get IAM roles, sign requests with SigV4. Native to your stack.\n4. **Network policy + namespace isolation** — blunt but effective: only payment-service's namespace can reach account-service's port at the network layer.\n\n**When Istio would make sense:** You have 8+ extracted services, you need uniform policy enforcement across all of them, and you have an engineer willing to own the mesh operationally.\n\n---\n\n**Recommendation:** Extract payment-service first, wire gRPC mTLS between the two services using K8s-native SA tokens or SPIFFE, and revisit Istio when you have enough services that per-service wiring becomes the actual pain. Right now Istio solves a problem you'll have in 6 months, not today.",
+  "timestamp": "2026-06-12T11:37:23Z",
+  "latency_ms": 25290,
+  "exit_code": 0,
+  "output_length_chars": 2443,
+  "output_length_tokens_approx": 610,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

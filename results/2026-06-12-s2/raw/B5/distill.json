@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis.** It's the default right answer here — native TTL (`SET key value EX 300`), sub-millisecond reads, zero schema overhead, and every language has a mature client.\n\n**Tradeoff:** requires a running process. If that's too heavy for your deployment context (embedded app, single binary, no infra):\n\n- **In-process map + TTL eviction** (e.g. `node-cache`, `ttlcache` in Go, `cachetools` in Python) — zero deps, fine for single-instance, lost on restart\n- **SQLite with an expiry column** — if you already have SQLite and want durability without a separate process\n\nFor anything networked/multi-instance: Redis. For single-process, in-memory is sufficient and simpler.\n\nWhat's the deployment context?",
+  "timestamp": "2026-06-12T06:53:16Z",
+  "latency_ms": 8738,
+  "exit_code": 0,
+  "output_length_chars": 708,
+  "output_length_tokens_approx": 177,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

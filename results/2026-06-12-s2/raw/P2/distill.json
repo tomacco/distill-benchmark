@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "This is a blank benchmark workspace — no auth-service code here. Per working conventions, I never assume the cwd is a repo.\n\nWhich repo is the auth-service in, and what's the tech stack (Express, Fastify, FastAPI, etc.)?",
+  "timestamp": "2026-06-12T06:57:58Z",
+  "latency_ms": 16782,
+  "exit_code": 0,
+  "output_length_chars": 222,
+  "output_length_tokens_approx": 55,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

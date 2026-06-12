@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "claude-md-native",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The workspace is empty — no source files yet. If you already have a codebase elsewhere, point me to the path and I'll run the rename. Otherwise, the fastest approach for an existing codebase is:\n\n```powershell\n# Dry-run first\ngrep -r \"AccountService\" /path/to/project --include=\"*.ts\" -l\n\n# Then rename (sed or your editor's find-replace)\n# Or with ripgrep + sed:\nrg -l \"AccountService\" | xargs sed -i 's/AccountService/BankAccountService/g'\n```\n\nIf you're in an IDE: **Shift+F6** (JetBrains) or **F2** (VS Code with cursor on the class name) does a safe rename-refactor that handles imports automatically — preferred over raw text replacement.\n\nWhat's the repo path?",
+  "timestamp": "2026-06-12T07:09:13Z",
+  "latency_ms": 12400,
+  "exit_code": 0,
+  "output_length_chars": 671,
+  "output_length_tokens_approx": 167,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

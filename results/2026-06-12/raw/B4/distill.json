@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "No existing codebase here — this is a blank benchmark workspace. Before I can scope this properly:\n\n1. **Which repo** is this dashboard for? (path under `C:\\Users\\Ivan\\repos\\`?)\n2. **What's the data source?** Database type + how transaction data is stored (table schema sketch)?\n3. **What's the frontend stack?** (React/Vue/plain HTML? Any existing dashboard framework?)\n\nThe 30-second polling requirement is simple — no need for WebSockets unless Marcus wants sub-second latency during the demo. What's the tolerance?",
+  "timestamp": "2026-06-12T06:19:32Z",
+  "latency_ms": 21049,
+  "exit_code": 0,
+  "output_length_chars": 522,
+  "output_length_tokens_approx": 130,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

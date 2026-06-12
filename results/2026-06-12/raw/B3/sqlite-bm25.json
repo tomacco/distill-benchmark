@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "No strong constraints in the KB. Here's the answer:\n\n**Netlify** — drag-and-drop a folder or `git push` and it's live. Free tier covers most marketing sites.\n\nAlternatives by trade-off:\n- **Cloudflare Pages** — better performance (edge CDN), also free, similarly simple\n- **GitHub Pages** — fine if code is already on GitHub; less flexible on custom domains\n- **Vercel** — overkill for pure static, but works\n\n**Recommendation:** Netlify or Cloudflare Pages. Both support custom domains + HTTPS out of the box, zero config, no backend needed. If the team already uses Cloudflare for DNS, Pages is the natural pick — avoids adding another vendor.",
+  "timestamp": "2026-06-12T06:41:07Z",
+  "latency_ms": 15777,
+  "exit_code": 0,
+  "output_length_chars": 655,
+  "output_length_tokens_approx": 163,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

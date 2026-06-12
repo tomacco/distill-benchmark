@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "no-memory",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Before I build, a few things I need from you (per working conventions — I can't assume the cwd is your repo):\n\n1. **Which repo/directory?** Where should this land?\n2. **What does the flow cover?** What steps does the happy path include? (e.g. submit business details → verify identity → approve?)\n3. **Stack?** Web UI (Bun + HTML?), CLI, or doesn't matter for a stakeholder demo?",
+  "timestamp": "2026-06-12T06:09:04Z",
+  "latency_ms": 20913,
+  "exit_code": 0,
+  "output_length_chars": 385,
+  "output_length_tokens_approx": 96,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

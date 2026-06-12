@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "claude-md-native",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, straightforward call: use Redis for this.\n\nYour situation ticks every box for Redis session token storage:\n\n- **Already in the stack** — no new infra, no ops overhead\n- **Native TTL** — `SET key value EX <seconds>` handles expiry atomically, no cleanup jobs\n- **O(1) access** — simple key-value, no query complexity\n- **Revocation** — you can actively `DEL` a token on logout/force-signout, which JWTs alone can't do\n\nOne thing to be deliberate about given it's fintech: **key namespace** — prefix with something like `session:<user_id>:<token_id>` so you can enumerate and revoke all sessions for a user (e.g. on password reset or compromise). `session:*:*` is too broad for `KEYS` in prod — use a secondary set like `user_sessions:<user_id>` to track active token keys per user.\n\nGiven `auth-service` already owns JWT issuance, this fits naturally there. Redis as the backing store for revocation/session state is the canonical pattern.",
+  "timestamp": "2026-06-12T06:30:15Z",
+  "latency_ms": 16645,
+  "exit_code": 0,
+  "output_length_chars": 955,
+  "output_length_tokens_approx": 238,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

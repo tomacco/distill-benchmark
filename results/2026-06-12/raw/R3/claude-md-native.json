@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "claude-md-native",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "Got it — Dev is your junior frontend engineer (React/TypeScript). You're the backend lead pairing on frontend work.\n\nA couple of things I can't infer before writing the component:\n\n1. **What settings** should the page expose? (e.g. profile, notifications, billing, API keys?)\n2. **Is there an existing component structure** in the repo I should match, or are we starting fresh?",
+  "timestamp": "2026-06-12T06:37:31Z",
+  "latency_ms": 22143,
+  "exit_code": 0,
+  "output_length_chars": 379,
+  "output_length_tokens_approx": 94,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

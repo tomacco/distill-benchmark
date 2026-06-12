@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Two questions before writing code:\n\n1. **Which service** is consuming this — `account-service`, `notification-service`, or a new one?\n2. **What's the handler logic** — update balance, trigger a notification, audit log, or something else?\n\nAlso: do you have an existing `PaymentCompleted` event schema/data class, or should I define one?",
+  "timestamp": "2026-06-12T06:25:00Z",
+  "latency_ms": 38488,
+  "exit_code": 0,
+  "output_length_chars": 340,
+  "output_length_tokens_approx": 85,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

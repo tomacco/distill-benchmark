@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "claude-md-native",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "No existing Kotlin code in this workspace. Before building, two things I can't infer:\n\n1. **Which service** does this consumer live in? (notification-service to trigger alerts, account-service to update balances, or a new payment-service being extracted?)\n2. **What should the handler do** on `payment-completed`? (e.g., update ledger, send notification, emit another event?)\n\nThat said, here's what I'll wire up based on confirmed stack (Kotlin + coroutines + structured logging + Kafka):\n\n```kotlin\n// PaymentCompletedConsumer.kt\n@Component\nclass PaymentCompletedConsumer(\n    private val paymentCompletedHandler: PaymentCompletedHandler,\n) {\n    private val logger = LoggerFactory.getLogger(javaClass)\n\n    @KafkaListener(topics = [\"payment-completed\"], groupId = \"\\${kafka.consumer.group-id}\")\n    suspend fun consume(\n        @Payload event: PaymentCompletedEvent,\n        @Header(KafkaHeaders.RECEIVED_KEY) key: String,\n        @Header(\"correlation-id\", required = false) correlationId: String?,\n    ) {\n        val cid = correlationId ?: UUID.randomUUID().toString()\n        MDC.put(\"correlationId\", cid)\n        try {\n            logger.info(\"Received payment-completed event paymentId={}\", event.paymentId)\n            paymentCompletedHandler.handle(event)\n        } finally {\n            MDC.clear()\n        }\n    }\n}\n```\n\n```kotlin\n// PaymentCompletedEvent.kt\ndata class PaymentCompletedEvent(\n    val paymentId: String,\n    val accountId: String,\n    val amount: BigDecimal,\n    val currency: String,\n    val completedAt: Instant,\n)\n```\n\n```kotlin\n// application.yml additions\nkafka:\n  consumer:\n    group-id: <service-name>-payment-consumer\n  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}\n```\n\nFor integration tests (over mocks), I'd use an embedded Kafka via `@EmbeddedKafka` + `KafkaTemplate` to publish a real event and assert on the handler.\n\n**Answer the two questions above and I'll build the full implementation** — handler skeleton, Kafka config bean, and the integration test.",
+  "timestamp": "2026-06-12T11:34:33Z",
+  "latency_ms": 41549,
+  "exit_code": 0,
+  "output_length_chars": 2000,
+  "output_length_tokens_approx": 500,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

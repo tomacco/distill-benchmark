@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "The KB context matters here: your team's entire backend is Kotlin, and Sofia is a Kotlin expert who owns the architecture. That context changes my read significantly.\n\n**The case for Go is real but narrow:**\n- `Kafka consumer → SNS dispatch` is the ideal Go service shape — no JVM overhead, fast startup, small footprint on EKS\n- Go's standard library handles this pattern with less ceremony than a typical Kotlin/Spring setup\n\n**But here's my pushback:**\n\nThe \"over-engineered\" feeling is more likely an *implementation* problem than a *language* problem. Before rewriting, I'd want to know: is the complexity in the Kotlin itself (unnecessary abstractions, framework overhead you're not using), or is it genuinely the JVM/Spring/Quarkus scaffolding you can't strip away?\n\nIf it's the former, a Kotlin rewrite with minimal dependencies (just kafka-clients + aws-sdk, no Spring) gets you most of the simplicity benefit without the cost of:\n\n- **Language split** — two toolchains, two sets of libraries to audit, two languages to hire/onboard for\n- **Sofia** — she designed the gRPC migration; a Go service she didn't own is a future maintenance hazard\n- **Precedent** — mid-migration is a bad time to establish \"we use Go for simple services\" because every subsequent simple service becomes a debate\n\nThe honest case for Go only holds if the JVM startup latency is actually a problem in your EKS setup (init containers, HPA scale-up time), or if memory limits are constrained. Is either actually biting you?\n\nMy recommendation: strip the Kotlin service back to bare dependencies first. If it's still painful, then Go is justified — but make it a team decision with Sofia, not a unilateral rewrite.",
+  "timestamp": "2026-06-12T06:40:50Z",
+  "latency_ms": 30706,
+  "exit_code": 0,
+  "output_length_chars": 1709,
+  "output_length_tokens_approx": 427,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

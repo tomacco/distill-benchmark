@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "Failed to authenticate. API Error: 401 Invalid authentication credentials",
+  "timestamp": "2026-06-12T15:26:55Z",
+  "latency_ms": 3571,
+  "exit_code": 1,
+  "output_length_chars": 73,
+  "output_length_tokens_approx": 18,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

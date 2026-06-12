@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "Done. Open `merchant-verification-poc.html` in any browser — no server needed.\n\n**What it demos (happy path):**\n1. **Business Info** — pre-filled form (legal name, type, reg number, address, contact)\n2. **Documents** — drag-and-drop upload areas for Certificate of Incorporation + ID\n3. **Verification** — animated check sequence: Companies House → KYC → Sanctions/PEP → Bank validation → Risk score, each ticking through Pending → Running → Pass\n4. **Decision** — Approved screen with generated Merchant ID\n\nAll checks pass in ~4 seconds with a staggered animation — looks live without needing a backend.",
+  "timestamp": "2026-06-12T06:21:48Z",
+  "latency_ms": 100654,
+  "exit_code": 0,
+  "output_length_chars": 629,
+  "output_length_tokens_approx": 157,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

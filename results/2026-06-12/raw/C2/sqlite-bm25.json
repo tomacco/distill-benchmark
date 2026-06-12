@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "sqlite-bm25",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "Hard stop: DynamoDB was already evaluated and explicitly rejected at Helios Financial. The concern was strong consistency requirements for financial data and the team's PostgreSQL expertise reducing operational risk.\n\nMore directly relevant to your use case: **Redis is already in your stack** (used for caching). It's a strictly better fit for session storage than DynamoDB for sub-millisecond reads:\n\n- True sub-millisecond P99 latency (DynamoDB's single-digit-ms SLA is P99.9, not P50)\n- In-process TTL for session expiry — no need to manage it yourself\n- No cold-start, no capacity planning (DynamoDB provisioned mode) or throttling surprises (on-demand)\n- Zero new infrastructure — it's already there\n\nThe only reason to pick DynamoDB over Redis for sessions is if you need durability across Redis restarts without a replica, or want to avoid managing Redis at all. Given you're already running Redis, neither applies.\n\nRecommendation: use Redis with a dedicated key prefix (e.g. `sess:{id}`) and `SETEX` for TTL-backed sessions. If you want a library layer, `kstack`-style session middleware or Spring Session (if you're on Spring Boot with Kotlin) handles it natively.",
+  "timestamp": "2026-06-12T06:43:39Z",
+  "latency_ms": 16161,
+  "exit_code": 0,
+  "output_length_chars": 1179,
+  "output_length_tokens_approx": 294,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype, no upstream release)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

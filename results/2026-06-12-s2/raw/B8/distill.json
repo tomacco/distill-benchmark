@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "**PostgreSQL with JSONB.** Structure for the stable columns (author, published_at, status), JSONB for the per-content-type payload. You get real joins and full-text search alongside the schema flexibility you need.\n\nThe main tradeoff vs. a document DB (MongoDB/Firestore): JSONB querying is less ergonomic but fully capable — `->>`/`@>` operators cover most CMS access patterns. You avoid running two databases.\n\nFor a side project, **Supabase** (hosted Postgres) gets you auth, storage for media, and a REST/realtime layer with zero infra. Neon is the leaner option if you just want serverless Postgres.\n\nRough schema sketch:\n```sql\ncontent (\n  id, type, slug, author_id, published_at, status,\n  title text,\n  payload jsonb  -- type-specific fields\n)\n\nCREATE INDEX ON content USING gin(payload);\n```\n\nIf you anticipate truly wild schema divergence across content types and lots of cross-type queries, a hybrid works too: one `content` table + separate `blog_posts`, `media` tables joined by ID. But JSONB alone handles most CMS use cases without that complexity.",
+  "timestamp": "2026-06-12T06:54:32Z",
+  "latency_ms": 23410,
+  "exit_code": 0,
+  "output_length_chars": 1065,
+  "output_length_tokens_approx": 266,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

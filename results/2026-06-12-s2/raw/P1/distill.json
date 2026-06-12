@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the workspace contain `AccountService`. Either the codebase isn't in this directory, or the class doesn't exist yet.\n\nWhere is the repo? If you can point me to the path, I'll do the rename with a `replace_all` edit across affected files — or a single `sed`/`grep -rl` + batch replace via Bash if it spans many files.",
+  "timestamp": "2026-06-12T06:57:40Z",
+  "latency_ms": 8571,
+  "exit_code": 0,
+  "output_length_chars": 330,
+  "output_length_tokens_approx": 82,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

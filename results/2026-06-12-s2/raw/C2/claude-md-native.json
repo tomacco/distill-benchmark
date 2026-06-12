@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "claude-md-native",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "Hard no. The team evaluated DynamoDB and explicitly rejected it — the constraint is in `decisions.md`.\n\nThe issue for a **session store** specifically: DynamoDB's per-item eventual consistency and lack of native TTL-based atomic ops make it awkward. You already have **Redis** in the stack, which is the standard answer here:\n\n- Sub-millisecond reads: yes, Redis is ~0.1–0.5ms vs DynamoDB's ~1–3ms (with DAX, still ~0.3ms)\n- `SETEX` / `EXPIRE` gives you TTL out of the box\n- No additional AWS service to operate or IAM-scope\n- You already know its operational characteristics\n\nRedis is the right call. DynamoDB would be a new dependency that gives you worse latency than what you already have.",
+  "timestamp": "2026-06-12T07:06:21Z",
+  "latency_ms": 11892,
+  "exit_code": 0,
+  "output_length_chars": 699,
+  "output_length_tokens_approx": 174,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

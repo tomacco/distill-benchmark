@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Payment processing is still in the monolith on your stack. Given you have Redis and PostgreSQL already, no new infrastructure needed.\n\n**Recommendation: DB-backed flag + Redis cache**\n\n```kotlin\n// FlagService.kt\nenum class Flag { NEW_PAYMENT_FLOW }\n\nfun isEnabled(flag: Flag, accountId: String? = null): Boolean {\n    val cacheKey = \"flag:${flag.name}:${accountId ?: \"global\"}\"\n    return redis.get(cacheKey)?.toBoolean()\n        ?: db.queryFlag(flag, accountId).also { redis.set(cacheKey, it, ttl = 60) }\n}\n```\n\nDB schema:\n```sql\nCREATE TABLE feature_flags (\n    flag_name TEXT NOT NULL,\n    account_id TEXT,          -- NULL = global\n    enabled BOOLEAN NOT NULL DEFAULT false,\n    PRIMARY KEY (flag_name, COALESCE(account_id, ''))\n);\n```\n\n**Usage at payment flow entry:**\n```kotlin\nif (flagService.isEnabled(Flag.NEW_PAYMENT_FLOW, accountId)) {\n    newPaymentFlow.process(request)\n} else {\n    legacyPaymentFlow.process(request)\n}\n```\n\n**Why this over LaunchDarkly/Unleash:**\n- Zero new infra — you already have Postgres + Redis\n- Audit trail is native (fintech compliance-friendly)\n- Toggleable at runtime without redeploy\n\n**Tradeoff:** No % rollout or cohort targeting out of the box. If you want \"roll out to 10% of accounts,\" you'd either add a `rollout_pct` column or switch to Unleash (which has a Kotlin SDK and can self-host on EKS). For a true dark-launch (internal accounts only, then flip global), this schema handles it.\n\nWhich do you need — pure on/off, or % rollout eventually?",
+  "timestamp": "2026-06-12T06:26:17Z",
+  "latency_ms": 31736,
+  "exit_code": 0,
+  "output_length_chars": 1500,
+  "output_length_tokens_approx": 375,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

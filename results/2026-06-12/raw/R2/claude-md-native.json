@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "claude-md-native",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Stack is Kotlin + PostgreSQL + **Flyway**. Here's the standard setup for a new service:\n\n**1. Directory structure**\n```\nsrc/main/resources/db/migration/\n  V1__initial_schema.sql\n  V2__add_indexes.sql\n```\n\nFlyway auto-discovers `classpath:db/migration` by default — no extra config needed.\n\n**2. Gradle dependency**\n```kotlin\nimplementation(\"org.flywaydb:flyway-core:9.x\")\n```\n\n**3. Spring Boot auto-config** (if Spring)\n```yaml\n# application.yml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: true  # only for first deploy on existing DB\n```\n\n**4. Naming convention the team uses**\n- `V{version}__{description}.sql` — versioned, runs once\n- `R__{description}.sql` — repeatable (views, functions), reruns when checksum changes\n\n**5. Local dev**\nRun migrations via Flyway CLI or let the app run them on startup — check how `account-service` or `auth-service` handles it for consistency.\n\n**Key constraint:** Flyway checksums are immutable once applied. Never edit a migration file that's been run — add a new version instead. For financial data especially, keep migrations strictly additive (add columns, don't drop or rename until safe).\n\nGrep the existing services for `flyway` config to replicate the exact baseline pattern before writing your first migration.",
+  "timestamp": "2026-06-12T06:37:08Z",
+  "latency_ms": 15735,
+  "exit_code": 0,
+  "output_length_chars": 1323,
+  "output_length_tokens_approx": 330,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

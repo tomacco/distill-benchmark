@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB is a reasonable fit, but **not** for sub-millisecond reads — that's the mismatch.\n\nDynamoDB single-digit millisecond latency is the standard guarantee. For sub-millisecond you need an in-memory store.\n\n**Actual options:**\n\n| Store | Latency | Notes |\n|---|---|---|\n| **Redis / Valkey** | ~0.1–0.5ms | Purpose-built for this; TTL, eviction built-in |\n| **DynamoDB** | 1–5ms | Good enough for most sessions; not sub-ms |\n| **DynamoDB + DAX** | ~microseconds | Adds in-memory caching layer in front of Dynamo; AWS-native but heavier |\n| **Momento** | ~1ms | Serverless Redis-compatible; zero ops |\n\n**My pushback:** Do you actually need sub-millisecond, or is that a target you're defending proactively? Session lookups at 2–3ms are invisible to users unless they're on every hot path at high frequency. If you're already on AWS and don't want to manage Redis, DynamoDB is fine and operationally simpler. If you're doing auth token validation on every request at high RPS, Redis is the right answer.\n\nWhat's the read frequency and request volume?",
+  "timestamp": "2026-06-12T07:17:29Z",
+  "latency_ms": 10827,
+  "exit_code": 0,
+  "output_length_chars": 1060,
+  "output_length_tokens_approx": 265,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

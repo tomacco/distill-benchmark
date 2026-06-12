@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "No SPINE entry for the payment service — answering from the context provided.\n\nGiven Kotlin + REST external / gRPC internal + EKS, two realistic options:\n\n**Option A — Third-party (Plaid / Stripe Financial Connections)**\n- REST endpoint receives an OAuth callback token, call Plaid to retrieve/verify account instantly\n- No async state machine, no micro-deposit retry logic\n- Adds a vendor dependency and per-call cost\n\n**Option B — Micro-deposits (in-house)**\n- `POST /bank-accounts` → store routing+account, enqueue deposit job\n- `POST /bank-accounts/{id}/confirm` → accept two cent amounts, flip status to `VERIFIED`\n- You own it; a bit of state to manage (pending/verified/failed/expired)\n\n**Recommendation: Option A** unless you already have ACH infrastructure. Plaid does the heavy lifting, the endpoint is ~50 lines, and you're not shipping a retry/expiry/fraud state machine for bank verification on day one.\n\nThe payment service exposes the REST surface; if account-service already stores merchant profiles, the bank account record likely belongs there — payment service calls it via gRPC to read/write status rather than owning the entity.\n\nOne thing to confirm before starting: does account-service own merchant identity, or is that split differently? That determines whether bank account state lives in account-service (gRPC call) or payment-service (new table).",
+  "timestamp": "2026-06-12T07:19:16Z",
+  "latency_ms": 28256,
+  "exit_code": 0,
+  "output_length_chars": 1386,
+  "output_length_tokens_approx": 346,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

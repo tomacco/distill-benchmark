@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "You already have Redis in the stack. Use it.\n\n**Redis** fits exactly:\n- `SET key value EX 300` — native TTL, zero ceremony\n- Values are arbitrary blobs — JSON strings work as-is\n- Already deployed, already understood by the team\n- Sub-millisecond latency for in-memory ops\n\nNo reason to introduce another system. If you don't already have a client library wired up in the target service, `lettuce` is the idiomatic Kotlin/JVM choice (non-blocking, coroutine-friendly since you're on coroutines).\n\nThe only alternative worth considering is **in-process cache** (Caffeine) — faster (no network hop), simpler (no infra), but cache is per-instance and doesn't survive restarts. Fine if you have one instance or don't mind cold starts; wrong if multiple instances need shared cache state.",
+  "timestamp": "2026-06-12T11:28:47Z",
+  "latency_ms": 12646,
+  "exit_code": 0,
+  "output_length_chars": 789,
+  "output_length_tokens_approx": 197,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

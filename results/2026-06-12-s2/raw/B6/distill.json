@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB.** It reads CSVs directly out-of-core (no memory limit), aggregations are trivial SQL, and JSON output is built-in. For a one-off 50GB file this is the shortest path.\n\n```sql\n-- run with: duckdb -json -c \"$(cat query.sql)\" > summary.json\nSELECT\n    merchant_id,\n    COUNT(*) AS tx_count,\n    SUM(amount) AS total_amount,\n    AVG(amount) AS avg_amount,\n    MIN(ts) AS first_tx,\n    MAX(ts) AS last_tx\nFROM read_csv_auto('/path/to/file.csv')\nGROUP BY merchant_id\nORDER BY merchant_id;\n```\n\nOr as a one-liner:\n```bash\nduckdb -json -c \"SELECT merchant_id, COUNT(*), SUM(amount) FROM read_csv_auto('data.csv') GROUP BY merchant_id\" > summary.json\n```\n\n**Tradeoffs vs alternatives:**\n- **Python + Polars** — better if aggregations need custom logic (e.g. weighted medians, complex conditionals). Polars lazy mode also handles 50GB fine, but more code.\n- **Python + Pandas** — requires `chunksize` chunking and manual accumulation; tedious at this scale.\n- **Go/Rust** — fastest wall-clock, but 10x the boilerplate for a one-off.\n\nIf your aggregations are expressible in SQL, DuckDB wins hands-down. What columns/aggregations do you need?",
+  "timestamp": "2026-06-12T06:53:35Z",
+  "latency_ms": 17748,
+  "exit_code": 0,
+  "output_length_chars": 1146,
+  "output_length_tokens_approx": 286,
+  "versions": {
+    "competitor": "1.1.4",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

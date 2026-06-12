@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "claude-md-native",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack (Kotlin monolith, Redis already in place, payment still un-extracted), two realistic options:\n\n---\n\n**Option A — Redis-backed flag (simplest, no new dependency)**\n\nStore a config key in Redis: `feature:payment_flow_v2 = {enabled: false, rollout_pct: 0, allowed_user_ids: []}`. Read it at the payment entry point with a short TTL cache. Toggle at runtime without redeploy.\n\nTradeoff: you own the rollout logic, no UI, no audit trail out of the box.\n\n---\n\n**Option B — Unleash (recommended for a payment flow)**\n\nSelf-hosted (one Kubernetes deployment), Kotlin SDK is first-class, gives you:\n- Gradual rollout by user ID / account ID out of the box\n- Kill switch via UI\n- Audit log (important for fintech)\n\nTradeoff: ~1 day to deploy + wire up, one more service to operate.\n\n---\n\n**My recommendation: Unleash.** Payment flows have compliance/audit surface — you'll want a record of when and for whom the flag was enabled. Rolling your own audit trail on Redis isn't complex but it's toil you'll resent. The Kotlin SDK drops in cleanly, and the Helm chart deploys in under an hour on EKS.\n\nIf this is purely a short-lived dark-launch (flip on, observe, delete flag within a sprint), Option A is defensible. But if there's any chance of a phased rollout or regulatory question later, Unleash pays for itself immediately.",
+  "timestamp": "2026-06-12T06:36:29Z",
+  "latency_ms": 24635,
+  "exit_code": 0,
+  "output_length_chars": 1339,
+  "output_length_tokens_approx": 334,
+  "versions": {
+    "competitor": "proto-2026-06-12 (in-repo research prototype; read-path simulation of CC native memory)",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}
