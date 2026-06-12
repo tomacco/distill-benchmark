@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "no-memory",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "",
+  "timestamp": "2026-06-12T06:06:58Z",
+  "latency_ms": 816,
+  "exit_code": 1,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "none",
+    "claude": "2.1.175 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

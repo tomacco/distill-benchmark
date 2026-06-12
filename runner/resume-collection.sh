@@ -11,7 +11,8 @@ export PYTHON_BIN=python
 export BENCH_MODEL=sonnet
 
 cd "$(dirname "$0")/.."
-RD="results/2026-06-12"
+RD="${RESULTS_DIR:-results/2026-06-12}"
+COMPETITORS="${COMPETITORS:-no-memory distill claude-md-native sqlite-bm25}"
 
 ok() {
     # valid result: exit 0, substantive output, not a rate-limit message
@@ -19,7 +20,7 @@ ok() {
 }
 
 missing=0
-for c in no-memory distill claude-md-native sqlite-bm25; do
+for c in $COMPETITORS; do
     for t in tests/*/*.md; do
         id=$(basename "$t" .md)
         f="$RD/raw/$id/$c.json"
