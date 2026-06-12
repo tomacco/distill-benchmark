@@ -16,7 +16,10 @@ mkdir -p "$WORKSPACE_DIR/knowledge"
 # NOTE (fairness): the Always-On style block appended below is now ALSO injected into
 # claude-md-native and sqlite-bm25, so style is parity across arms and only the retrieval
 # protocol differs (adversarial-review fix #1).
-cat /tmp/aura-distill-v2/rules/distill.md > "$WORKSPACE_DIR/.claude/rules/distill.md"
+# Resolve the {DISTILL_DIR} placeholder exactly as install.sh does for real users —
+# here it resolves to the workspace-relative knowledge dir. Without this the agent
+# chases a literal "{DISTILL_DIR}/SPINE.md" path (found in 2026-06-12 isolation re-test).
+sed 's|{DISTILL_DIR}|knowledge|g' /tmp/aura-distill-v2/rules/distill.md > "$WORKSPACE_DIR/.claude/rules/distill.md"
 
 # Populate the Always-On section — v3: output + interaction rules ONLY (no identity context)
 cat >> "$WORKSPACE_DIR/.claude/rules/distill.md" << 'ALWAYSON_EOF'
@@ -33,6 +36,11 @@ cat >> "$WORKSPACE_DIR/.claude/rules/distill.md" << 'SPINE_POINTER'
 
 `knowledge/SPINE.md` — maps topics to knowledge files in the `knowledge/` directory.
 SPINE_POINTER
+
+# Arm payload for --append-system-prompt-file (2026-06-12 isolation redesign: user-level
+# memory is disabled via CLAUDE_CODE_DISABLE_CLAUDE_MDS, so arm instructions travel via
+# the system prompt — the same channel for every arm).
+cp "$WORKSPACE_DIR/.claude/rules/distill.md" "$WORKSPACE_DIR/.arm-system-prompt.md"
 
 # --- SPINE Index ---
 cat > "$WORKSPACE_DIR/knowledge/SPINE.md" << 'SPINE_EOF'

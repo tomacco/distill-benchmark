@@ -37,8 +37,21 @@ collect_run() {
         --dangerously-skip-permissions
         -p "$prompt"
     )
+    # Merge the arm's instruction payload (written by inject.sh; absent for no-memory)
+    # with the per-test context. Arm instructions come FIRST (mirrors instruction-before-
+    # history precedence). User-level memory is disabled below, so this is the only
+    # instruction channel — identical for every arm.
+    local merged_sp="$workspace/.merged-system-prompt.md"
+    rm -f "$merged_sp"
+    if [ -f "$workspace/.arm-system-prompt.md" ]; then
+        cat "$workspace/.arm-system-prompt.md" >> "$merged_sp"
+    fi
     if [ -n "$system_prompt_file" ] && [ -f "$system_prompt_file" ]; then
-        cmd_args+=(--append-system-prompt-file "$system_prompt_file")
+        [ -f "$merged_sp" ] && printf '\n\n---\n\n' >> "$merged_sp"
+        cat "$system_prompt_file" >> "$merged_sp"
+    fi
+    if [ -f "$merged_sp" ]; then
+        cmd_args+=(--append-system-prompt-file "$merged_sp")
     fi
     # Optional model pin for within-run consistency (e.g. BENCH_MODEL=sonnet)
     if [ -n "${BENCH_MODEL:-}" ]; then
@@ -47,10 +60,19 @@ collect_run() {
 
     start_time=$($PYTHON_BIN -c 'import time; print(int(time.time()*1000))')
 
-    # Run with isolation env vars and timeout
+    # Run with isolation env vars and timeout.
+    # CRITICAL (2026-06-12 post-mortem): claude.exe on Windows cannot resolve POSIX-style
+    # paths like /c/Users/... in CLAUDE_CONFIG_DIR — it silently falls back to ~/.claude,
+    # destroying profile isolation. cygpath -m yields a Windows-native C:/... form.
+    local bench_cfg="${BENCH_CONFIG_DIR:-$HOME/.claude-tester}"
+    if command -v cygpath >/dev/null 2>&1; then
+        bench_cfg=$(cygpath -m "$bench_cfg")
+    fi
     (
         cd "$workspace" && \
-        CLAUDE_CONFIG_DIR="${BENCH_CONFIG_DIR:-$HOME/.claude-tester}" \
+        CLAUDE_CONFIG_DIR="$bench_cfg" \
+        CLAUDE_CODE_DISABLE_CLAUDE_MDS=1 \
+        CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 \
         CLAUDE_CODE_USE_BEDROCK=0 \
         ANTHROPIC_DEFAULT_OPUS_MODEL= \
         ANTHROPIC_DEFAULT_SONNET_MODEL= \

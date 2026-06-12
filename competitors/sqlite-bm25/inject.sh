@@ -35,4 +35,8 @@ RULES:
 **Interaction rules**: Terse input = terse output. Don't ask what you can infer from context. When corrected, apply immediately — no "good point" acknowledgment needed.
 RULES_EOF
 
+# Arm payload for --append-system-prompt-file (user-level memory disabled in collection;
+# same delivery channel for every arm).
+cp "$WORKSPACE_DIR/.claude/rules/kb-search.md" "$WORKSPACE_DIR/.arm-system-prompt.md"
+
 echo "[sqlite-bm25] Injected: kb.py + knowledge.db + rules"

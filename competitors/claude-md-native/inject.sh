@@ -29,4 +29,9 @@ When the user announces an action, check the relevant file for constraints first
 **Interaction rules**: Terse input = terse output. Don't ask what you can infer from context. When corrected, apply immediately — no "good point" acknowledgment needed.
 INDEX_EOF
 
+# Arm payload for --append-system-prompt-file (user-level memory disabled in collection;
+# same delivery channel for every arm). The workspace CLAUDE.md stays for documentation,
+# but the system prompt is what the agent actually receives.
+cp "$WORKSPACE_DIR/CLAUDE.md" "$WORKSPACE_DIR/.arm-system-prompt.md"
+
 echo "[claude-md-native] Injected: CLAUDE.md + 5 memory files"
