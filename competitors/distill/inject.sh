@@ -9,8 +9,13 @@ echo "[distill] Injecting knowledge into $WORKSPACE_DIR"
 mkdir -p "$WORKSPACE_DIR/.claude/rules"
 mkdir -p "$WORKSPACE_DIR/knowledge"
 
-# --- Rules file: v2 with Always-On User Preferences ---
-# Uses the full rules/distill.md from feature/user-model-v2 branch
+# --- Rules file ---
+# 2026-06-12 run: /tmp/aura-distill-v2/rules/distill.md is a verbatim copy of aura-distill
+# MAIN @ v1.1.4 (repo rules template, 6427 chars; the 1,823-token figure measured elsewhere is
+# the user-INSTALLED copy with the Always-On section populated). Stale v2-branch comment removed.
+# NOTE (fairness): the Always-On style block appended below is now ALSO injected into
+# claude-md-native and sqlite-bm25, so style is parity across arms and only the retrieval
+# protocol differs (adversarial-review fix #1).
 cat /tmp/aura-distill-v2/rules/distill.md > "$WORKSPACE_DIR/.claude/rules/distill.md"
 
 # Populate the Always-On section — v3: output + interaction rules ONLY (no identity context)

@@ -30,6 +30,9 @@ RULES:
 3. Results marked ⛔ are non-negotiable corrections. Never violate them.
 4. Trust the knowledge base over your assumptions. If results are empty, retry once with
    different keywords, then proceed honestly.
+
+**Output rules**: Concise: default to bullets and code. No filler preambles ("Great question!"). Uncertainty: say "I'm not sure" directly. Keep explanations short — user reads code faster than prose.
+**Interaction rules**: Terse input = terse output. Don't ask what you can infer from context. When corrected, apply immediately — no "good point" acknowledgment needed.
 RULES_EOF
 
 echo "[sqlite-bm25] Injected: kb.py + knowledge.db + rules"

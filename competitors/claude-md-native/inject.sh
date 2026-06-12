@@ -24,6 +24,9 @@ Read the relevant file BEFORE answering anything it covers.
 | Project state & timeline | `memory/state.md` |
 
 When the user announces an action, check the relevant file for constraints first.
+
+**Output rules**: Concise: default to bullets and code. No filler preambles ("Great question!"). Uncertainty: say "I'm not sure" directly. Keep explanations short — user reads code faster than prose.
+**Interaction rules**: Terse input = terse output. Don't ask what you can infer from context. When corrected, apply immediately — no "good point" acknowledgment needed.
 INDEX_EOF
 
 echo "[claude-md-native] Injected: CLAUDE.md + 5 memory files"
