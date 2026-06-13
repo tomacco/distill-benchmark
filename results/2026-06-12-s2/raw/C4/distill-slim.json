@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill-slim",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already uses structured logging with correlation IDs across services. Match that pattern:\n\n**Use `kotlin-logging` + `logstash-logback-encoder` (JSON to stdout → EKS picks it up)**\n\n```kotlin\n// build.gradle.kts\nimplementation(\"io.github.microutils:kotlin-logging-jvm:3.0.5\")\nimplementation(\"ch.qos.logback:logback-classic:1.4.14\")\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\n```\n\n```xml\n<!-- src/main/resources/logback.xml -->\n<configuration>\n  <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n  </appender>\n  <root level=\"INFO\">\n    <appender-ref ref=\"STDOUT\"/>\n  </root>\n</configuration>\n```\n\n```kotlin\n// Correlation ID propagation (match the pattern from other services)\nclass CorrelationIdFilter : Filter<ILoggingEvent>() {\n    override fun decide(event: ILoggingEvent) = FilterReply.NEUTRAL\n}\n\n// In your gRPC interceptor\nMDC.put(\"correlationId\", request.header(\"x-correlation-id\") ?: UUID.randomUUID().toString())\n\n// Usage in any class\nprivate val logger = KotlinLogging.logger {}\n\nlogger.info { \"Payment initiated\" }  // → {\"message\":\"Payment initiated\",\"correlationId\":\"...\",\"level\":\"INFO\",...}\n```\n\nFor the payment service specifically, also log these fields on every transaction:\n- `paymentId`, `accountId` in MDC (not inline) so they appear on all subsequent log lines in the request\n- Never log raw amounts or card data — mask anything sensitive at the logger level\n\nThis stays consistent with your existing services, keeps dependencies minimal, and JSON-to-stdout is native for EKS log forwarding.",
+  "timestamp": "2026-06-12T23:33:51Z",
+  "latency_ms": 25360,
+  "exit_code": 0,
+  "output_length_chars": 1640,
+  "output_length_tokens_approx": 410,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

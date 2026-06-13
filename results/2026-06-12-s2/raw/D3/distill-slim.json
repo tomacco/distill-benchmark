@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill-slim",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup — Kotlin, gRPC internally, REST externally, Kafka for events, account-service already handling bank account CRUD — here's the simplest approach:\n\n**Add a REST endpoint to the payment service that delegates to account-service via gRPC.**\n\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\n```\n\nThe verification flow:\n1. Payment service receives REST request, calls `account-service` over gRPC to fetch account details\n2. Use **micro-deposits** (standard for bank account verification): deposit 2 small amounts (<$0.10), wait for merchant to confirm the amounts\n3. Store verification state (`PENDING` → `VERIFIED` / `FAILED`) in a `bank_account_verifications` table in the payment service's own PostgreSQL schema\n4. Emit a `bank_account.verified` Kafka event on success so other services can react\n\n**Simpler alternative** if you don't want to manage micro-deposits: integrate **Plaid** (instant verification via bank login) or **Stripe Financial Connections** — REST call out, no state machine needed. Worth checking if either is already approved at Helios before adding a new vendor.\n\n**My recommendation**: Plaid/Stripe instant verification if a vendor can be approved quickly; otherwise micro-deposits since you already have the Kafka + Postgres infrastructure and account-service owns the account data. The micro-deposit path is more work (~2 days) but zero new dependencies.\n\nSofia is leading the payment extraction — worth looping her in since this will likely sit in that service boundary.",
+  "timestamp": "2026-06-12T23:37:10Z",
+  "latency_ms": 21431,
+  "exit_code": 0,
+  "output_length_chars": 1541,
+  "output_length_tokens_approx": 385,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

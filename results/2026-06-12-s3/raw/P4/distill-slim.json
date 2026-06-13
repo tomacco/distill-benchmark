@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Payment processing is still in the monolith, and you already have Redis — that's the simplest path with zero new dependencies.\n\n**Option 1: Redis flag (recommended for dark-launch)**\n\nA single key gives you runtime toggle without a redeploy:\n\n```kotlin\n// in your payment flow entry point\nval enabled = redisTemplate.opsForValue().get(\"feature:new-payment-flow\") == \"true\"\nif (enabled) {\n    newPaymentFlow.process(request)\n} else {\n    legacyPaymentFlow.process(request)\n}\n```\n\nToggle it: `redis-cli SET feature:new-payment-flow true`\n\nFor per-user dark-launch (internal team first), use a Redis Set:\n\n```kotlin\nval enabled = redisTemplate.opsForSet().isMember(\"feature:new-payment-flow:users\", userId.toString()) == true\n```\n\n**Option 2: Env var** — even simpler, but requires a pod restart to toggle (fine if you just want to ship it off by default and flip it once).\n\n**Option 3: LaunchDarkly / Unleash** — only worth adding if you need percentage rollout, A/B targeting, or audit trails. Adds a dependency and operational surface area for what sounds like a simple gate right now.\n\n**Recommendation:** Redis flag for the dark-launch. It uses infra you already operate, toggles at runtime, and you can graduate to a proper feature flag service later if you need per-user percentage rollouts.\n\nThe main tradeoff vs an env var: Redis adds a dependency on your cache being up, but given you're already using it for caching in `account-service`, that's not a new risk.",
+  "timestamp": "2026-06-12T23:51:53Z",
+  "latency_ms": 28717,
+  "exit_code": 0,
+  "output_length_chars": 1474,
+  "output_length_tokens_approx": 368,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

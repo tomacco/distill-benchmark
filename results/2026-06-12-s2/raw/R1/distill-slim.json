@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key considerations for the payment processing service, given your stack (Kotlin, PostgreSQL, Kafka, gRPC, EKS):\n\n**Data & Transactions**\n- Use PostgreSQL with strong ACID guarantees — financial data requires multi-table transactions (e.g., debit + credit as a single atomic unit)\n- Design for idempotency keys on all payment operations — network retries must not create duplicate charges\n- Use Flyway for schema migrations (consistent with your existing services)\n\n**Architecture / Integration**\n- Expose internal API via gRPC (consistent with your recent migration), REST/OpenAPI for external partners\n- Publish payment events to Kafka so `account-service` and future `transaction-history-service` can consume them without tight coupling\n- Plan for eventual extraction of `transaction-history` from the monolith in parallel — payment events on Kafka make this cheaper\n\n**Reliability**\n- Implement outbox pattern: write the payment record and the Kafka event in the same PostgreSQL transaction to prevent \"payment saved but event lost\" split-brain\n- Design a reconciliation job to catch stuck/unconfirmed payments (network failures with payment processors are common)\n\n**Security & Compliance**\n- PCI DSS scope — avoid storing raw card data; use a tokenization vault (Stripe, Braintree, etc.) and store only tokens\n- Audit log every state transition with correlation IDs (already your standard)\n- Consider a separate PostgreSQL schema or even a separate cluster if you need to narrow PCI audit scope\n\n**Operational**\n- Payment state machines are subtle — model states explicitly (PENDING → PROCESSING → SETTLED / FAILED / REVERSED) and make transitions idempotent\n- Circuit breaker around the upstream payment processor (Resilience4j is idiomatic in Kotlin/JVM)\n\nThe biggest risk is usually the outbox pattern + idempotency combination — get that right first before worrying about throughput. Want me to sketch a service structure or data model?",
+  "timestamp": "2026-06-12T23:39:07Z",
+  "latency_ms": 23729,
+  "exit_code": 0,
+  "output_length_chars": 1961,
+  "output_length_tokens_approx": 490,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

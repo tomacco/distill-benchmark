@@ -1,0 +1,16 @@
+{
+  "test_id": "D4",
+  "competitor_id": "distill-slim",
+  "prompt": "Help me set up a new Kafka consumer for the payment-completed events.",
+  "output": "Here's what was created:\n\n**`PaymentCompletedEvent.kt`** — data class with `correlationId` field (matches your structured logging standard).\n\n**`PaymentCompletedConsumer.kt`** — key decisions:\n- `runBlocking` bridges the `@KafkaListener` callback (blocking JVM thread) into coroutines for `AccountBalanceService`\n- Manual `Acknowledgment` — only acks after successful processing, so failures don't silently drop events\n- Topic/group wired via config (`kafka.topics.payment-completed`, `spring.kafka.consumer.group-id`) — no hardcoded strings\n- Structured log lines with `paymentId`, `accountId`, `correlationId` on both entry and exit\n\n**`PaymentCompletedConsumerTest.kt`** — Testcontainers (not mocks), publishes a real event and asserts on the `AccountBalanceService` state via `awaitility`.\n\nYou'll need to implement `AccountBalanceService.applyPayment()` and `getBalance()`. Want me to scaffold those as well?",
+  "timestamp": "2026-06-12T23:36:00Z",
+  "latency_ms": 63449,
+  "exit_code": 0,
+  "output_length_chars": 923,
+  "output_length_tokens_approx": 230,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

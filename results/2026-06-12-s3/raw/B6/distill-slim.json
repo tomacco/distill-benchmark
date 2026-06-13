@@ -1,0 +1,16 @@
+{
+  "test_id": "B6",
+  "competitor_id": "distill-slim",
+  "prompt": "I need a quick script to parse a 50GB CSV file, compute aggregations per merchant, and output a summary JSON. This is a one-time data migration task, won't be maintained. What language should I use?",
+  "output": "**DuckDB** is the best fit here — SQL syntax, streams the CSV without loading it into memory, built-in aggregation, and can write JSON directly. One-time scripts don't need a \"real\" language.\n\nRunner-up: **Python + Polars** (lazy evaluation, handles 50GB fine with streaming). Avoid pandas — it'll try to load the full file into RAM.\n\nQuick DuckDB example (Python or CLI):\n\n```python\nimport duckdb\n\nduckdb.sql(\"\"\"\n    COPY (\n        SELECT\n            merchant_id,\n            COUNT(*)           AS tx_count,\n            SUM(amount)        AS total_amount,\n            AVG(amount)        AS avg_amount,\n            MIN(created_at)    AS first_tx,\n            MAX(created_at)    AS last_tx\n        FROM read_csv_auto('transactions.csv', sample_size=-1)\n        GROUP BY merchant_id\n    )\n    TO 'summary.json' (FORMAT JSON, ARRAY true)\n\"\"\")\n```\n\nOr purely via CLI (no code at all):\n```bash\nduckdb -c \"COPY (SELECT merchant_id, COUNT(*), SUM(amount) FROM read_csv_auto('transactions.csv', sample_size=-1) GROUP BY merchant_id) TO 'summary.json' (FORMAT JSON, ARRAY true)\"\n```\n\nKey flags:\n- `sample_size=-1` forces full schema scan so type inference doesn't break on edge cases deep in the file\n- DuckDB will stream the CSV in chunks — memory stays low regardless of file size\n\nInstall: `pip install duckdb` or download the single-binary CLI.",
+  "timestamp": "2026-06-12T23:44:42Z",
+  "latency_ms": 16431,
+  "exit_code": 0,
+  "output_length_chars": 1345,
+  "output_length_tokens_approx": 336,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill-slim",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "Given your existing stack (AWS, PostgreSQL expertise, Kafka for events), two strong options:\n\n**Recommended: Amazon Redshift**\n- Columnar storage purpose-built for OLAP — fast aggregations on large datasets\n- AWS-native, fits your EKS/Terraform setup, managed ops burden\n- Familiar SQL, so your PostgreSQL-skilled team ramps quickly\n- Kafka → Redshift Streaming Ingestion is a clean fit for your event pipeline\n\n**Alternative: ClickHouse**\n- Faster raw query performance than Redshift, especially for high-cardinality filters\n- Self-hosted on EKS (more ops overhead) or ClickHouse Cloud on AWS\n- Best choice if you need sub-second latency at very high query volumes\n\n**Skip**: DynamoDB and MongoDB were already evaluated and rejected for your financial data requirements (strong consistency, relational model, PostgreSQL expertise).\n\n**My take**: Start with Redshift — it minimizes operational complexity for a team whose strength is PostgreSQL, and the Kafka integration is first-class. Revisit ClickHouse if query latency becomes a bottleneck after launch.",
+  "timestamp": "2026-06-12T23:40:09Z",
+  "latency_ms": 27839,
+  "exit_code": 0,
+  "output_length_chars": 1064,
+  "output_length_tokens_approx": 266,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

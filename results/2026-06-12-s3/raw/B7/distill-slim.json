@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill-slim",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "",
+  "timestamp": "2026-06-12T23:46:44Z",
+  "latency_ms": 120102,
+  "exit_code": 143,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

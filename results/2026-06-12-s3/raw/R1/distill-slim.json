@@ -1,0 +1,16 @@
+{
+  "test_id": "R1",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a new service for payment processing. What should I consider?",
+  "output": "Key considerations for a payment-processing service at Helios, given your stack and domain:\n\n**Data & Consistency**\n- PostgreSQL is the right call — payment records need ACID transactions, especially for things like double-spend prevention and idempotent retries\n- Design for idempotency from day one: every payment operation needs a client-generated idempotency key to safely retry on network failure\n\n**Service Design**\n- Extract from the monolith as a standalone Kotlin service, consistent with `auth-service` and `account-service`\n- Use Kafka to publish payment events (e.g., `payment.initiated`, `payment.settled`, `payment.failed`) — other services (notification, account balance) consume these rather than calling you synchronously\n- Internal API via gRPC (matches the migration you just completed); external partner API via REST/OpenAPI\n\n**Financial Correctness**\n- Store amounts as `BIGINT` (minor currency units — cents), never `FLOAT`\n- Implement a ledger pattern (append-only transaction log) rather than mutable balance fields\n- Flyway for all schema migrations, consistent with the rest of the platform\n\n**Compliance & Security**\n- PCI-DSS scope: determine if you're storing card data or delegating to a processor (Stripe, Adyen). Delegation is strongly preferred — it keeps you out of PCI scope for raw card numbers\n- Audit log every state transition with correlation IDs (you already do structured logging platform-wide)\n- Encrypt sensitive fields at rest (card last 4, tokenized references)\n\n**Operational**\n- Distributed tracing across the gRPC calls (you're on Kafka + gRPC — OpenTelemetry fits naturally)\n- Dead-letter queues on Kafka consumers for failed payment events — silent drops in finance are dangerous\n- Alerting on payment failure rates and settlement lag from day one\n\nThe biggest early decision is **own the payment rails vs. delegate to a processor** — that shapes your PCI scope and roughly 80% of the complexity.",
+  "timestamp": "2026-06-12T23:52:16Z",
+  "latency_ms": 22109,
+  "exit_code": 0,
+  "output_length_chars": 1961,
+  "output_length_tokens_approx": 490,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

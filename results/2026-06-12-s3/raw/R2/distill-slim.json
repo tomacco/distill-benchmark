@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill-slim",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "You're using **Flyway** (already decided). Here's the standard setup for a new Kotlin/PostgreSQL service:\n\n**Directory structure:**\n```\nsrc/main/resources/db/migration/\n  V1__create_initial_schema.sql\n  V2__add_indexes.sql\n```\n\n**Flyway naming convention:** `V{version}__{description}.sql` — two underscores, description in snake_case.\n\n**Gradle dependency:**\n```kotlin\n// build.gradle.kts\nimplementation(\"org.flywaydb:flyway-core:10.x.x\")\nruntimeOnly(\"org.postgresql:postgresql\")\n```\n\n**Spring Boot auto-configuration picks it up automatically** — just set:\n```yaml\n# application.yml\nspring:\n  flyway:\n    enabled: true\n    locations: classpath:db/migration\n    baseline-on-migrate: false  # only set true if migrating existing DB\n```\n\n**First migration** (`V1__create_initial_schema.sql`):\n```sql\nCREATE TABLE your_entity (\n    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n```\n\n**Key rules for financial data:**\n- Never drop columns/tables in the same migration that removes code — two-phase (code first, then migration)\n- Always use `TIMESTAMPTZ`, not `TIMESTAMP`\n- Prefer `UUID` PKs over serial integers for distributed safety\n- Add indexes in separate migrations so large tables don't block deploys\n\nFlyway runs on startup and blocks until migrations complete, so no separate job needed. Consistent with what auth-service and account-service already do.",
+  "timestamp": "2026-06-12T23:52:35Z",
+  "latency_ms": 17250,
+  "exit_code": 0,
+  "output_length_chars": 1481,
+  "output_length_tokens_approx": 370,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

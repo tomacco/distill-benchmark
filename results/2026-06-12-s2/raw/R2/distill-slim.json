@@ -1,0 +1,16 @@
+{
+  "test_id": "R2",
+  "competitor_id": "distill-slim",
+  "prompt": "How should I set up the database migrations for the new service?",
+  "output": "Use **Flyway** — that's the team's chosen migration tool (picked over Liquibase after evaluation).\n\n**Standard setup for a new Kotlin service:**\n\n1. **Dependency** (`build.gradle.kts`):\n   ```kotlin\n   implementation(\"org.flywaydb:flyway-core:10.x.x\")\n   runtimeOnly(\"org.flywaydb:flyway-database-postgresql:10.x.x\")\n   ```\n\n2. **Migration files** — follow the existing convention:\n   ```\n   src/main/resources/db/migration/\n     V1__create_initial_schema.sql\n     V2__add_indexes.sql\n   ```\n   Naming: `V{version}__{description}.sql` (two underscores).\n\n3. **Config** (`application.yml`):\n   ```yaml\n   spring:\n     flyway:\n       locations: classpath:db/migration\n       baseline-on-migrate: false   # false for new services\n       out-of-order: false\n   ```\n\n4. **CI/CD** — Flyway runs on app startup, so migrations apply automatically when ArgoCD deploys to EKS. No separate migration job needed unless you want pre-deploy validation (some teams add a `flyway validate` step in GitHub Actions before the rollout).\n\n5. **Financial data considerations** — since this is fintech, write migrations as additive-only at first (add columns/tables, never drop). Use separate cleanup migrations after you're sure the old code is gone from all replicas.\n\nIs this a new service being extracted from the monolith, or a greenfield one? That affects whether you need a baseline migration for existing data.",
+  "timestamp": "2026-06-12T23:39:27Z",
+  "latency_ms": 17387,
+  "exit_code": 0,
+  "output_length_chars": 1404,
+  "output_length_tokens_approx": 351,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

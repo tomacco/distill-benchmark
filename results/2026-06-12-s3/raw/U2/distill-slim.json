@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "distill-slim",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "```\nRemove account-service REST layer after gRPC migration\n\nDelete endpoint handlers, internal OpenAPI specs, and CI stub\ngeneration now that all consumers have migrated to gRPC.\n```\n\nThe subject line leads with the \"what and why\" at a glance; the body covers the three specific changes without restating the obvious. If you want to reference a tracking ticket or PR, append it on a third line (e.g., `Closes #1234`).",
+  "timestamp": "2026-06-12T23:54:29Z",
+  "latency_ms": 6819,
+  "exit_code": 0,
+  "output_length_chars": 417,
+  "output_length_tokens_approx": 104,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

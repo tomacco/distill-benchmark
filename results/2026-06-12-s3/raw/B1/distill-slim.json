@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. You already have it in the stack as the designated caching layer, and session token storage is a textbook Redis use case — atomic O(1) get/set, native TTL, low memory footprint per key.\n\nA few things worth getting right in the implementation:\n\n- **Key naming**: use a prefix like `session:{token_id}` rather than the raw token, so you can scan/purge by pattern if needed.\n- **TTL**: set it at write time (`SET key value EX <seconds>`) and consider whether you want sliding expiry (reset TTL on access) or absolute expiry. For a banking platform, absolute is safer — it bounds the session window regardless of activity.\n- **Value**: store the user ID (and any claims you'd otherwise re-fetch), not the full JWT — keeps the stored value small and avoids stale claim issues.\n- **Revocation**: Redis is the right place for an explicit revocation set too, if you need to invalidate tokens before their TTL expires (e.g., on logout or password change).\n\nSince this lives in `auth-service` (Kotlin), you'll likely use Lettuce or Jedis via Spring Data Redis or the raw Lettuce coroutine client if you want idiomatic coroutine support.",
+  "timestamp": "2026-06-12T23:43:10Z",
+  "latency_ms": 29053,
+  "exit_code": 0,
+  "output_length_chars": 1167,
+  "output_length_tokens_approx": 291,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

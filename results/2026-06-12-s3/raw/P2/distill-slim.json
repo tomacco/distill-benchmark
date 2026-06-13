@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill-slim",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "`GET /health` returns `{\"status\": \"ok\"}` with HTTP 200. That's all the load balancer needs.\n\n**One thing to check**: if the load balancer routes through the same auth path as JWT-protected endpoints, make sure `/health` is excluded from your security filter chain:\n\n```kotlin\n// In your SecurityConfig\nhttp.authorizeHttpRequests { auth ->\n    auth\n        .requestMatchers(\"/health\").permitAll()\n        .anyRequest().authenticated()\n}\n```\n\nIf you already have Spring Actuator on the classpath, `/actuator/health` works out of the box — but a custom `/health` endpoint is cleaner for load balancer config since it doesn't expose the actuator surface.",
+  "timestamp": "2026-06-12T23:51:14Z",
+  "latency_ms": 42406,
+  "exit_code": 0,
+  "output_length_chars": 652,
+  "output_length_tokens_approx": 163,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "test_id": "U2",
+  "competitor_id": "distill-slim",
+  "prompt": "Help me write a commit message for this change: removed all the old REST endpoint handlers from account-service now that gRPC migration is complete, deleted the OpenAPI spec files that were only used internally, and updated the CI pipeline to stop generating REST client stubs.",
+  "output": "```\nRemove REST handlers and OpenAPI specs from account-service post-gRPC migration\n\n- Delete REST endpoint handlers superseded by gRPC\n- Remove OpenAPI spec files (internal use only)\n- Update CI to skip REST client stub generation\n```\n\nThe subject line leads with the \"why\" (migration complete), the body covers the three concrete changes. If your team uses a type prefix, `chore:` fits since this is pure cleanup with no behavior change.",
+  "timestamp": "2026-06-12T23:41:18Z",
+  "latency_ms": 8058,
+  "exit_code": 0,
+  "output_length_chars": 439,
+  "output_length_tokens_approx": 109,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

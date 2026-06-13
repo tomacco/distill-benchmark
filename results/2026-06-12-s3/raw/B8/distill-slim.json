@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill-slim",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "For a side project CMS, **PostgreSQL with JSONB** is the strongest fit — and you already know it well from Helios, so there's no new infra to learn or operate.\n\n**Schema approach:**\n\n```sql\n-- Structured content (blog posts)\nCREATE TABLE posts (\n  id UUID PRIMARY KEY,\n  slug TEXT UNIQUE NOT NULL,\n  title TEXT NOT NULL,\n  body TEXT,\n  published_at TIMESTAMPTZ,\n  metadata JSONB  -- tags, SEO fields, etc.\n);\n\n-- Flexible UGC / varying schemas per type\nCREATE TABLE content_items (\n  id UUID PRIMARY KEY,\n  type TEXT NOT NULL,         -- 'video', 'gallery', 'review', etc.\n  data JSONB NOT NULL,        -- schema varies by type\n  created_at TIMESTAMPTZ DEFAULT now()\n);\nCREATE INDEX ON content_items USING gin(data);  -- fast JSON queries\n```\n\n**Why this works well:**\n\n- JSONB handles per-content-type schema variance without fighting the DB\n- `tsvector` / `to_tsvector` gives you full-text search on post bodies for free\n- GIN index on JSONB makes querying nested metadata fast\n- Flyway (which you already use) handles migrations cleanly\n- No separate infra — runs alongside your existing Postgres or a cheap managed instance (Supabase free tier, Railway, Render)\n\n**One trade-off to know:** deeply nested or frequently mutating JSONB gets messy over time. If a content type stabilizes (e.g., media always has the same 10 fields), migrate it to proper columns. Start flexible, tighten as schemas stabilize.\n\nFor a low-traffic side project, SQLite + [Litestream](https://litestream.io) for streaming backup is also worth considering — zero managed DB cost, same SQL skills, trivially simple ops.",
+  "timestamp": "2026-06-12T23:47:20Z",
+  "latency_ms": 34704,
+  "exit_code": 0,
+  "output_length_chars": 1602,
+  "output_length_tokens_approx": 400,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

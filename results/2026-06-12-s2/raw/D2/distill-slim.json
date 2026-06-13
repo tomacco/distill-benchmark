@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill-slim",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — no evaluation needed, it's already your primary database and the right fit here.\n\nYour requirements (complex aggregations across multiple tables, strong consistency) are exactly what PostgreSQL excels at, and your team already has deep expertise with it:\n\n- **Multi-table aggregations**: Window functions, CTEs, and lateral joins handle complex reporting queries well\n- **Strong consistency**: ACID transactions, no eventual-consistency trade-offs\n- **Zero operational overhead**: No new infra to manage, same Flyway migration workflow\n\n**Practical recommendations for a reporting service on top of Postgres:**\n\n- Use **read replicas** (RDS read replica or Aurora) to isolate reporting query load from OLTP traffic — long-running aggregation queries shouldn't compete with account/payment writes\n- Consider **materialized views** for expensive aggregations that can tolerate slight staleness (e.g., daily summaries refreshed on a schedule)\n- If query volume grows significantly, **pg_partman** for table partitioning by date is a natural next step for transaction history tables\n\nIf reporting volume eventually outgrows Postgres, the standard path is a dedicated OLAP store (e.g., **Redshift** or **ClickHouse**) fed via Kafka — but that's a future problem, not a day-one requirement.",
+  "timestamp": "2026-06-12T23:34:27Z",
+  "latency_ms": 24546,
+  "exit_code": 0,
+  "output_length_chars": 1307,
+  "output_length_tokens_approx": 326,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

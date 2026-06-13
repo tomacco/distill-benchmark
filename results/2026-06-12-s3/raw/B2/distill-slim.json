@@ -1,0 +1,16 @@
+{
+  "test_id": "B2",
+  "competitor_id": "distill-slim",
+  "prompt": "I'm thinking of rewriting the notification service in Go. It's a simple service — just consumes Kafka events and dispatches to SNS. The Kotlin version feels over-engineered for what it does. Thoughts?",
+  "output": "The Go rewrite makes technical sense for the use case, but there's a meaningful org cost to weigh:\n\n**For it:**\n- Kafka consumer + SNS dispatch is genuinely a poor fit for Kotlin's weight. Go's concurrency model (`goroutines` + `confluent-kafka-go`) is a natural match for a high-throughput consumer.\n- Smaller binary, lower memory footprint, faster cold starts in EKS.\n- No JVM tuning, no coroutine complexity for what is essentially a pipeline.\n\n**Against it:**\n- Your entire backend stack is Kotlin. Introducing Go means a second language in the service tier — different toolchain, different logging/tracing idioms, different reviewers needed.\n- The CI/CD pipeline (GitHub Actions → ECR → ArgoCD) will work fine, but your build config, linting, and observability setup (structured logging with correlation IDs) all need to be rebuilt for Go.\n- \"Over-engineered\" is fixable in Kotlin without a rewrite. If the issue is complexity, stripping the Kotlin service down is lower risk.\n\n**My take:** I'd push back on the rewrite. The technical fit of Go is real, but the org cost of a second backend language at 80 engineers — shared ownership, on-call familiarity, code review — is non-trivial for a glue service. A simplified Kotlin version (straightforward coroutine consumer, no extra abstractions) gets you most of the benefit at a fraction of the risk. If the service is causing real operational pain, that changes the calculus.\n\nWhat's the specific over-engineering complaint — is it code complexity, operational issues, or something else?",
+  "timestamp": "2026-06-12T23:43:32Z",
+  "latency_ms": 20483,
+  "exit_code": 0,
+  "output_length_chars": 1554,
+  "output_length_tokens_approx": 388,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

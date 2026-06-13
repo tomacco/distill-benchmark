@@ -18,15 +18,19 @@ done
 
 export CLAUDE_BIN=/c/Users/Ivan/.local/bin/claude.exe PYTHON_BIN=python EVAL_MODEL=opus
 for d in results/2026-06-12 results/2026-06-12-s2 results/2026-06-12-s3; do
-    # Resume-cheap: skip dirs whose 29 evals already include the slim arm in the joint
-    # ranking (i.e. were produced AFTER slim collection). Pre-slim evals lack the label.
-    n=$(ls "$d/scores/"*.json 2>/dev/null | wc -l)
-    probe=$(ls "$d/scores/"*.json 2>/dev/null | head -1)
-    if [ "$n" -eq 29 ] && [ -n "$probe" ] && \
-       jq -e '.label_mapping | to_entries | map(.value) | index("distill-slim")' "$probe" >/dev/null 2>&1; then
-        echo "===== SKIP EVAL $d (29 fresh slim-inclusive scores) ====="
+    # Resume-cheap: skip dirs ONLY when ALL 29 evals include the slim arm in the joint
+    # ranking (probing one file is not enough — a limit-killed eval pass leaves a fresh/stale
+    # mix, observed 2026-06-13: 5 fresh + 24 stale in one dir).
+    fresh=0
+    for f in "$d/scores/"*.json; do
+        [ -f "$f" ] || continue
+        jq -e '.label_mapping | to_entries | map(.value) | index("distill-slim")' "$f" >/dev/null 2>&1 && fresh=$((fresh+1))
+    done
+    if [ "$fresh" -eq 29 ]; then
+        echo "===== SKIP EVAL $d (29/29 fresh slim-inclusive scores) ====="
         continue
     fi
+    echo "($fresh/29 fresh in $d)"
     echo "===== RE-EVAL $d (joint ranking incl. slim) ====="
     ./runner/blind-eval.sh --results-dir "$d"
 done

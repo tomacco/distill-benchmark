@@ -1,0 +1,16 @@
+{
+  "test_id": "P2",
+  "competitor_id": "distill-slim",
+  "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
+  "output": "",
+  "timestamp": "2026-06-12T23:38:15Z",
+  "latency_ms": 120113,
+  "exit_code": 143,
+  "output_length_chars": 0,
+  "output_length_tokens_approx": 0,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

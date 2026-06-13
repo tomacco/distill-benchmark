@@ -1,0 +1,16 @@
+{
+  "test_id": "D2",
+  "competitor_id": "distill-slim",
+  "prompt": "I'm evaluating database options for the new reporting service. We need something that can handle complex aggregation queries across multiple tables with strong consistency. What would you recommend?",
+  "output": "**PostgreSQL** — it's the right call here, and it's already your primary database.\n\nYour requirements map directly to PostgreSQL's strengths:\n- **Complex aggregations across multiple tables**: window functions, CTEs, `GROUPING SETS`/`ROLLUP`/`CUBE` — all first-class\n- **Strong consistency**: ACID transactions, serializable isolation level available\n- **Multi-table joins**: the relational model is exactly what you're working with for financial data\n\n**Practical approach for a reporting service:**\n\n- **Read replica** — point the reporting service at a PostgreSQL read replica so heavy aggregation queries don't hit the primary. AWS RDS supports this natively.\n- **Materialized views** — pre-aggregate expensive queries on a schedule (e.g. daily summaries), refreshed via a Kotlin coroutine job or a Kafka consumer on transaction events.\n- **Schema separation** — consider a `reporting` schema within the same (or a dedicated) PostgreSQL instance, fed by Flyway migrations, to isolate reporting tables from OLTP tables.\n\nIf query volume grows to the point where even a read replica struggles (millions of rows, sub-second dashboard requirements), the natural next step is **Amazon Redshift** or **ClickHouse** as an OLAP layer — but start with PostgreSQL; premature OLAP adoption is a common over-engineering trap for Series B companies.",
+  "timestamp": "2026-06-12T23:48:35Z",
+  "latency_ms": 16178,
+  "exit_code": 0,
+  "output_length_chars": 1352,
+  "output_length_tokens_approx": 338,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

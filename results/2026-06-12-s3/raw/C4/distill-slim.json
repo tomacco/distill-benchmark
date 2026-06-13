@@ -1,0 +1,16 @@
+{
+  "test_id": "C4",
+  "competitor_id": "distill-slim",
+  "prompt": "Set up logging for the new payment service. What should I use?",
+  "output": "Your team already standardized on **structured logging with correlation IDs** across all services, so match that pattern. For Kotlin + the EKS/CloudWatch stack:\n\n**Libraries**\n- `SLF4J` + `Logback` (default with Spring Boot — no extra dep)\n- `logstash-logback-encoder` for JSON output\n- `kotlinx-coroutines-slf4j` for MDC propagation across coroutines (critical — standard MDC breaks on coroutine thread switches)\n\n**build.gradle.kts**\n```kotlin\nimplementation(\"net.logstash.logback:logstash-logback-encoder:7.4\")\nimplementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.0\")\n```\n\n**logback-spring.xml**\n```xml\n<appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\">\n  <encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"/>\n</appender>\n<root level=\"INFO\"><appender-ref ref=\"JSON\"/></root>\n```\n\n**Correlation ID middleware**\n```kotlin\n// gRPC interceptor — propagate from incoming request header\nclass CorrelationIdInterceptor : ServerInterceptor {\n    override fun <Q, R> interceptCall(\n        call: ServerCall<Q, R>, headers: Metadata, next: ServerCallHandler<Q, R>\n    ): ServerCall.Listener<Q> {\n        val correlationId = headers.get(CORRELATION_ID_KEY) ?: UUID.randomUUID().toString()\n        MDC.put(\"correlationId\", correlationId)\n        return Contexts.interceptCall(\n            Context.current().withValue(CORRELATION_CTX_KEY, correlationId),\n            call, headers, next\n        ).also { MDC.remove(\"correlationId\") }\n    }\n}\n```\n\n**Usage in coroutines — pass MDCContext explicitly**\n```kotlin\nsuspend fun processPayment(request: PaymentRequest) = withContext(MDCContext()) {\n    logger.info(\"Processing payment\", kv(\"amount\", request.amount), kv(\"currency\", request.currency))\n    // MDC (including correlationId) is preserved across suspension points\n}\n```\n\nThe `MDCContext()` in coroutines is the non-obvious part — without it, `correlationId` disappears after the first suspension point.",
+  "timestamp": "2026-06-12T23:48:17Z",
+  "latency_ms": 26330,
+  "exit_code": 0,
+  "output_length_chars": 1947,
+  "output_length_tokens_approx": 486,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

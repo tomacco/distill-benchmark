@@ -1,0 +1,16 @@
+{
+  "test_id": "B7",
+  "competitor_id": "distill-slim",
+  "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
+  "output": "`merchant-verification-demo.html` is ready. Open it directly in a browser — no server or build needed.\n\n**Flow:**\n1. **Form** — business name, EIN, type, owner name + email\n2. **Verifying** — animated progress through 5 KYB steps (~4 seconds)\n3. **Approved** — verified badge, generated merchant ID, unlocked capabilities\n\nThere's a \"Start over\" button so you can loop through the demo multiple times in the meeting.",
+  "timestamp": "2026-06-12T23:36:35Z",
+  "latency_ms": 70513,
+  "exit_code": 0,
+  "output_length_chars": 424,
+  "output_length_tokens_approx": 106,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

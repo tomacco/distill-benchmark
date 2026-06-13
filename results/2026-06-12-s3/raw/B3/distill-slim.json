@@ -1,0 +1,16 @@
+{
+  "test_id": "B3",
+  "competitor_id": "distill-slim",
+  "prompt": "Dev asked me: what's the simplest way to deploy a static marketing site? Just HTML/CSS/JS, no backend. Where should he put it?",
+  "output": "**Netlify** — drag-and-drop the folder at netlify.com, done. Free tier is generous, includes CDN, HTTPS, and custom domains. Best for one-shot deploys.\n\nIf he wants Git-based CI/CD (push to deploy):\n- **Netlify** or **Vercel** — connect repo, auto-deploys on push, ~2 min setup\n- **GitHub Pages** — free, zero infra, good if the repo is already on GitHub\n\nFor something more controlled or if it'll sit under an existing domain on AWS/GCP/Azure, **S3 + CloudFront** or **GCS + CDN** work fine but are overkill for a plain marketing site.\n\n**Recommendation:** Netlify drop-deploy for immediate, Netlify/Vercel Git integration if he wants push-to-deploy going forward.",
+  "timestamp": "2026-06-12T23:43:32Z",
+  "latency_ms": 13779,
+  "exit_code": 0,
+  "output_length_chars": 671,
+  "output_length_tokens_approx": 167,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

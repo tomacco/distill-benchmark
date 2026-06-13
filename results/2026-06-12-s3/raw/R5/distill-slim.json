@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill-slim",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "**What's in the Dockerfile:**\n\n- **Multi-stage build** — `gcc` and build tools stay in the builder stage; the final image is slim (~200MB vs ~800MB+)\n- **Non-root user** (`uid 1001`) — no process runs as root\n- **Layer caching** — `requirements.txt` copied before app code so deps only reinstall when they change\n- **`PYTHONDONTWRITEBYTECODE` + `PYTHONUNBUFFERED`** — cleaner container behavior\n- **`HEALTHCHECK`** — Docker/orchestrators can detect when the service is genuinely ready\n- **`MODEL_PATH` env var** — override at runtime without rebuilding\n\n**Expected project layout:**\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── app/\n│   └── main.py\n└── models/\n    └── fraud_model.pkl     # your serialized sklearn model\n```\n\n**Build and run:**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 -e FRAUD_THRESHOLD=0.6 fraud-scorer\n```\n\n**To mount a model at runtime instead of baking it in:**\n```bash\ndocker run -p 8000:8000 -v /path/to/models:/app/models fraud-scorer\n```\n\nAdjust `TransactionFeatures` in `app/main.py` to match your model's actual feature set.",
+  "timestamp": "2026-06-12T23:53:51Z",
+  "latency_ms": 27945,
+  "exit_code": 0,
+  "output_length_chars": 1125,
+  "output_length_tokens_approx": 281,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

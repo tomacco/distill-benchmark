@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB has been evaluated and rejected for your stack — the team's expertise is PostgreSQL and the domain needs strong consistency. That decision stands even for a simpler use case like session storage.\n\nFor sub-millisecond key-value reads, **Redis** is the standard fit:\n- O(1) GET/SET, typically <1ms on local network\n- Built-in TTL for session expiry\n- No schema, pure key-value — exactly what session storage needs\n- Doesn't require abandoning the PostgreSQL-centric stack\n\nIf you want to avoid a new infrastructure dependency, **PostgreSQL with `unlogged` tables** can hit low single-digit milliseconds for simple key lookups with a proper index — acceptable for most session workloads, though not sub-millisecond.\n\nRedis is the right call here if the latency target is strict.",
+  "timestamp": "2026-06-12T23:33:06Z",
+  "latency_ms": 10355,
+  "exit_code": 0,
+  "output_length_chars": 790,
+  "output_length_tokens_approx": 197,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

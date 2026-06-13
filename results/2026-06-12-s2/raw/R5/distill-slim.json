@@ -1,0 +1,16 @@
+{
+  "test_id": "R5",
+  "competitor_id": "distill-slim",
+  "prompt": "Write me a dockerfile for a Python ML service that does fraud scoring. It loads a scikit-learn model and exposes predictions via FastAPI.",
+  "output": "**Expected project layout:**\n```\n.\n├── Dockerfile\n├── requirements.txt\n├── model/\n│   └── fraud_model.joblib   # your trained sklearn model\n└── app/\n    └── main.py\n```\n\n**Build & run:**\n```bash\ndocker build -t fraud-scorer .\ndocker run -p 8000:8000 fraud-scorer\n```\n\n**Key design choices:**\n\n| Choice | Reason |\n|---|---|\n| Multi-stage build | Build tools (gcc, etc. pulled by some sklearn deps) stay out of the runtime image |\n| `python:3.11-slim` | ~50% smaller than the full image; no Debian extras needed for pure sklearn |\n| Non-root `appuser` | Container escape doesn't yield root on the host |\n| `lifespan` startup hook | Model loads once at startup, not per-request; fails fast if the artifact is missing |\n| `--workers 1` | sklearn `predict_proba` releases the GIL briefly but is mostly CPU-bound — more workers means more processes, tune to your CPU count |\n\nIf you need to pass the model artifact in at runtime instead of baking it into the image, mount it: `docker run -v $(pwd)/model:/app/model ...`.",
+  "timestamp": "2026-06-12T23:40:46Z",
+  "latency_ms": 35054,
+  "exit_code": 0,
+  "output_length_chars": 1054,
+  "output_length_tokens_approx": 263,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

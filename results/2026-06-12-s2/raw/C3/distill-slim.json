@@ -1,0 +1,16 @@
+{
+  "test_id": "C3",
+  "competitor_id": "distill-slim",
+  "prompt": "What database do we use for the account service?",
+  "output": "The knowledge base records **PostgreSQL** as the team's database (and explicitly rules out the alternatives), with no record of a MySQL migration.\n\nEarlier in this session you said the account service migrated from PostgreSQL to MySQL last week — that contradicts the stored knowledge. I'm flagging the conflict rather than silently accepting it.\n\nIf the migration is real and finalized, the knowledge base needs to be updated to reflect it. Want me to update `knowledge/decisions.md` with that change?",
+  "timestamp": "2026-06-12T23:33:24Z",
+  "latency_ms": 15814,
+  "exit_code": 0,
+  "output_length_chars": 504,
+  "output_length_tokens_approx": 126,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

@@ -4,40 +4,48 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 5,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Proportional polling + optional Redis cache, no Kafka. Explicitly rejects WebSockets/SSE with sound reasoning for a 30s cadence. Asks targeted scoping questions and frames Redis as optional given low demo traffic. Well-calibrated."
+      "notes": "No stored context to bias it; proposes a proportional aggregate-endpoint + polling solution and lists WebSocket/SSE as alternatives. Well-calibrated (asks stack questions before committing), but the most generic \u00e2\u20ac\u201d purely clarifying, no demo-aware reasoning since it had no context."
     },
     "B": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Strongest proportionality signal: explicitly states 'demo timeline doesn't justify anything heavier,' no Kafka/new service. Full working code, graceful Redis fallback if not wired. Commits to one path but justifies ruling out heavier options. Excellent constraint-awareness."
+      "notes": "Lands on the proportional answer (polling REST + optional Redis cache), explicitly reasons WHY not WebSockets/SSE at a 30s cadence, and keeps it in the monolith. Stored context (Kotlin/Postgres/monolith) is used correctly without skewing toward over-engineering. Good calibrated questions before building."
     },
     "C": {
-      "objectivity": 4,
-      "openness": 4,
-      "appropriate_confidence": 3,
-      "notes": "Avoids over-engineering but punts entirely with clarifying questions rather than recommending a proportional solution. Mentions WebSockets/SSE for 'true real-time' which leans slightly toward unnecessary complexity. Under-committed given available context; thinnest guidance."
-    },
-    "D": {
       "objectivity": 5,
       "openness": 4,
-      "appropriate_confidence": 5,
-      "notes": "Polling + Redis in the monolith. Strong proportional reasoning: 'extracting a reporting service before the demo adds risk with no benefit.' Rejects WebSocket/SSE explicitly. Concrete code, single sharp scoping question about time window. No over-engineering."
+      "appropriate_confidence": 4,
+      "notes": "Strong proportional choice: polling over WS, Redis 30s TTL, explicitly 'in monolith, not a new service \u00e2\u20ac\u201d extracting before the demo adds risk with no benefit.' Considers alternatives but commits to working code quickly; confident yet flags the open time-window question."
+    },
+    "D": {
+      "objectivity": 4,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Leads with a pg_cron materialized view \u00e2\u20ac\u201d the heavier option \u00e2\u20ac\u201d which is a mild over-engineering bias, but it self-corrects: 'For the demo next week, I'd skip the mat view entirely: live query + index is simpler.' Presents tradeoffs fairly and ultimately recommends the proportional path, so not a penalty case."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Most explicit about proportionality: 'No WebSockets, no Kafka, no new service. The demo timeline doesn't justify anything heavier.' Polling + optional Redis, and notes the cache can be dropped for light demo traffic. Merit-based, demo-aware, calibrated with two confirming questions."
     }
   },
   "ranking": [
     "B",
+    "C",
+    "E",
     "D",
-    "A",
-    "C"
+    "A"
   ],
-  "analysis": "None of the systems fell into the bias trap of defaulting to a Kafka streaming pipeline with materialized views, so all score well on objectivity. B and D are strongest because they make the proportionality reasoning explicit\u00e2\u20ac\u201dB states the demo timeline 'doesn't justify anything heavier' and offers a Redis fallback, while D explicitly notes that extracting a reporting service before the demo 'adds risk with no benefit.' A is very close: it correctly recommends polling, rejects WebSockets with good reasoning, and asks the most thoughtful scoping questions, but is marginally less assertive about the over-engineering risk. C is weakest: it avoids over-engineering but declines to recommend anything, punting with clarifying questions and even floating WebSockets/SSE for 'true real-time,' giving the least proportional guidance and showing under-calibrated confidence given the context available.",
+  "analysis": "All five resist the trap \u00e2\u20ac\u201d none defaults to a Kafka Streams + materialized-view analytics service for a demo, and all converge on a polling REST endpoint with React. B edges ahead by both committing to the proportional design and explicitly justifying why polling beats WebSockets/SSE at a 30s cadence while keeping work in the monolith and asking calibrated questions. C and E are close behind: both are demo-aware and explicitly reject heavier infrastructure (E most pointedly names Kafka/new-service as unjustified). D is slightly weaker on objectivity because it foregrounds a pg_cron materialized view before walking it back to the simpler live-query-plus-index recommendation \u00e2\u20ac\u201d fair tradeoff reasoning, but it flirts with over-engineering. A scores well on the bias dimensions (objective, open, appropriately uncertain) but had no stored context and stays purely at the clarifying-question stage, making it the least substantive though still proportional in what it does propose.",
   "label_mapping": {
-    "A": "sqlite-bm25",
-    "B": "claude-md-native",
-    "C": "no-memory",
-    "D": "distill"
+    "A": "no-memory",
+    "B": "sqlite-bm25",
+    "C": "distill",
+    "D": "distill-slim",
+    "E": "claude-md-native"
   }
 }

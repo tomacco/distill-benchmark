@@ -1,0 +1,16 @@
+{
+  "test_id": "R3",
+  "competitor_id": "distill-slim",
+  "prompt": "Can you help me write a React component for the settings page? I want to pair with Dev on this.",
+  "output": "A few quick questions before writing so I don't have to guess at structure:\n\n1. What sections does the settings page need? (e.g., profile, notifications, security, API keys?)\n2. Any existing component library in use (Tailwind, shadcn, MUI, etc.), or is this greenfield?\n3. Does the form need to wire up to a specific API endpoint, or just scaffold the UI for now?",
+  "timestamp": "2026-06-12T23:52:57Z",
+  "latency_ms": 20853,
+  "exit_code": 0,
+  "output_length_chars": 363,
+  "output_length_tokens_approx": 90,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

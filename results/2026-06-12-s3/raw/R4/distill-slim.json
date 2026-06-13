@@ -1,0 +1,16 @@
+{
+  "test_id": "R4",
+  "competitor_id": "distill-slim",
+  "prompt": "What's a good database for our new analytics service? We need fast reads on large datasets.",
+  "output": "For analytics specifically (OLAP, large datasets, fast reads), the right answer diverges from your PostgreSQL primary — you want a columnar store. Two strong options given your AWS stack:\n\n**Recommended: Amazon Redshift**\n- PostgreSQL-compatible SQL — your team's existing expertise transfers directly\n- Native AWS integration (S3, Glue, your EKS setup via Redshift Data API)\n- Columnar storage + massively parallel query execution = fast aggregations on large datasets\n- Managed, so minimal ops overhead for a new service extraction\n\n**Alternative: ClickHouse**\n- Faster raw query performance than Redshift for many analytics patterns\n- Self-hosted on EKS or use ClickHouse Cloud\n- Higher operational overhead, and it's a new tool for the team\n\nThe tradeoff: Redshift is slower to provision/scale but fits your AWS-native infra and PostgreSQL muscle memory. ClickHouse is faster at query time but adds a new operational footprint.\n\nGiven your team's PostgreSQL expertise and existing AWS/EKS setup, I'd start with **Redshift**. You can feed it from Kafka (your existing event stream) via Kinesis Firehose, which aligns cleanly with the planned analytics service extraction from the monolith.",
+  "timestamp": "2026-06-12T23:53:22Z",
+  "latency_ms": 23728,
+  "exit_code": 0,
+  "output_length_chars": 1196,
+  "output_length_tokens_approx": 299,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

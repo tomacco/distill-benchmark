@@ -1,0 +1,16 @@
+{
+  "test_id": "P4",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a feature flag for the new payment flow so we can dark-launch it. What's the simplest approach?",
+  "output": "Given your stack and preference for minimal dependencies, the simplest dark-launch approach is a `feature_flags` table in Postgres — no new infra, toggleable without a deploy.\n\n**Schema (Flyway migration):**\n```sql\n-- V{next}__add_feature_flags.sql\nCREATE TABLE feature_flags (\n    name        TEXT PRIMARY KEY,\n    enabled     BOOLEAN NOT NULL DEFAULT false,\n    description TEXT,\n    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()\n);\n\nINSERT INTO feature_flags (name, enabled, description)\nVALUES ('new_payment_flow', false, 'Dark-launch new payment processing flow');\n```\n\n**Kotlin service (in the monolith):**\n```kotlin\n@Repository\nclass FeatureFlagRepository(private val db: JdbcTemplate) {\n    fun isEnabled(flag: String): Boolean =\n        db.queryForObject(\n            \"SELECT enabled FROM feature_flags WHERE name = ?\",\n            Boolean::class.java, flag\n        ) ?: false\n}\n\n// Usage at the call site\nif (featureFlags.isEnabled(\"new_payment_flow\")) {\n    newPaymentService.process(payment)\n} else {\n    legacyPaymentService.process(payment)\n}\n```\n\n**To enable for dark-launch:**\n```sql\nUPDATE feature_flags SET enabled = true, updated_at = now()\nWHERE name = 'new_payment_flow';\n```\n\n**Main tradeoff:** This hits the DB on every check — add a short Redis TTL cache (you already have Redis) if the payment path is high-frequency. The alternative would be a Kubernetes ConfigMap, but that requires a pod rollout to toggle, which defeats the dark-launch point.",
+  "timestamp": "2026-06-12T23:38:41Z",
+  "latency_ms": 24373,
+  "exit_code": 0,
+  "output_length_chars": 1476,
+  "output_length_tokens_approx": 369,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

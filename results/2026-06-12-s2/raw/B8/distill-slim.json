@@ -1,0 +1,16 @@
+{
+  "test_id": "B8",
+  "competitor_id": "distill-slim",
+  "prompt": "We're building a content management system as a side project — blog posts, media metadata, user-generated content with varying schemas per content type. What database would work well?",
+  "output": "For a side project CMS with varying schemas, **PostgreSQL with JSONB** is the right call — and aligns with your team's existing expertise.\n\n**Why it fits:**\n- Blog posts and media metadata → clean relational tables, foreign keys, full-text search built in\n- Varying schemas per content type → a `metadata JSONB` column per content type handles this without needing a document store; you can even index specific JSONB paths\n- Single database to operate, no new tooling to learn\n\n**Rough schema shape:**\n```sql\nCREATE TABLE content (\n  id          uuid PRIMARY KEY,\n  type        text NOT NULL,          -- 'post', 'video', 'ugc', etc.\n  slug        text UNIQUE,\n  created_by  uuid REFERENCES users,\n  created_at  timestamptz DEFAULT now(),\n  published   bool DEFAULT false\n);\n\nCREATE TABLE content_data (\n  content_id  uuid PRIMARY KEY REFERENCES content,\n  body        text,                   -- structured fields\n  metadata    jsonb                   -- type-specific varying fields\n);\n\nCREATE INDEX ON content_data USING gin (metadata);\n```\n\n**Main tradeoff:** If the varying schemas balloon to dozens of types with deep nesting, querying JSONB gets awkward vs. a dedicated document store — but that's a scaling concern, not a starting one. For a side project you won't hit it.\n\nSince you're already using Flyway on the main project, it carries over naturally here too.",
+  "timestamp": "2026-06-12T23:32:44Z",
+  "latency_ms": 21145,
+  "exit_code": 0,
+  "output_length_chars": 1379,
+  "output_length_tokens_approx": 344,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

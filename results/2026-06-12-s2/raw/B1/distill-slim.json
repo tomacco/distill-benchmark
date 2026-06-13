@@ -1,0 +1,16 @@
+{
+  "test_id": "B1",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use Redis for caching user session tokens? We already have Redis in the stack and the access pattern is simple key-value with TTL expiry.",
+  "output": "Yes, Redis is the right call here. You're already using it for caching, and session token storage is a textbook Redis use case:\n\n- **Key-value with TTL** maps directly to `SET token:<id> <payload> EX <ttl>` — no schema overhead\n- **Invalidation is simple** — `DEL token:<id>` on logout/revocation, no complex queries\n- **Performance** — sub-millisecond reads on every authenticated request matter at scale\n- **No new infrastructure** — it's already in your stack\n\nOne thing worth considering since this is a fintech context: if you need to **audit session activity** (regulators sometimes want this), you may also want to emit a Kafka event on login/logout in addition to the Redis store. Redis alone is ephemeral — once a key expires, the history is gone.\n\nImplementation-wise in `auth-service` (Kotlin), a simple wrapper around Lettuce or Jedis via Spring Data Redis keeps it clean.",
+  "timestamp": "2026-06-12T23:19:20Z",
+  "latency_ms": 16454,
+  "exit_code": 0,
+  "output_length_chars": 894,
+  "output_length_tokens_approx": 223,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

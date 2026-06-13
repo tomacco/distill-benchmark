@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill-slim",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "The workspace appears to be empty — no files contain `AccountService`. If you have files elsewhere, point me to the directory and I'll do the rename with a single `Edit` pass per file (or a sed-style `replace_all` if they're straightforward text files).\n\nThe fastest approach once we have the files:\n1. `Grep` to find every file containing `AccountService`\n2. `Edit` each file with `replace_all: true` to swap `AccountService` → `BankAccountService`\n\nThis handles class declarations, imports, type annotations, and string references in one shot per file. Want me to proceed on a specific path?",
+  "timestamp": "2026-06-12T23:50:30Z",
+  "latency_ms": 9546,
+  "exit_code": 0,
+  "output_length_chars": 597,
+  "output_length_tokens_approx": 149,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

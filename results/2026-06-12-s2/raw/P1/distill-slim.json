@@ -1,0 +1,16 @@
+{
+  "test_id": "P1",
+  "competitor_id": "distill-slim",
+  "prompt": "I need to rename the AccountService class to BankAccountService across the codebase. What's the fastest way?",
+  "output": "No files in the working directory contain `AccountService`. The codebase appears to be empty or the class doesn't exist yet here.\n\nIf you're working in a different directory, share the path and I'll run the rename. Otherwise, the fastest approach when files do exist is:\n\n```powershell\n# Dry-run first\nGet-ChildItem -Recurse -File | Select-String -Pattern \"AccountService\" | Select-Object Path -Unique\n\n# Then rename content in all files\nGet-ChildItem -Recurse -File | ForEach-Object {\n    (Get-Content $_.FullName) -replace 'AccountService', 'BankAccountService' | Set-Content $_.FullName\n}\n\n# Then rename any files named AccountService.*\nGet-ChildItem -Recurse -Filter \"*AccountService*\" | Rename-Item -NewName { $_.Name -replace 'AccountService', 'BankAccountService' }\n```\n\nOr if you want me to do it directly — point me to the right directory.",
+  "timestamp": "2026-06-12T23:36:13Z",
+  "latency_ms": 10192,
+  "exit_code": 0,
+  "output_length_chars": 850,
+  "output_length_tokens_approx": 212,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

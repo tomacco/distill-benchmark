@@ -1,0 +1,16 @@
+{
+  "test_id": "D3",
+  "competitor_id": "distill-slim",
+  "prompt": "The payment service needs an endpoint to verify a merchant's bank account. What's the simplest approach given our setup?",
+  "output": "Given your setup, **micro-deposit verification** is the simplest path — no new third-party dependency, fits your existing stack cleanly.\n\n**Flow:**\n\n1. Payment service initiates two small ACH credits to the merchant's bank account (via your ACH processor)\n2. Merchant submits the amounts back via a REST endpoint (external-facing)\n3. Payment service validates and marks the account verified in PostgreSQL\n4. Kafka event → `account.bank_account.verified` for downstream consumers\n\n**Endpoint shape** (REST, since merchants are external partners):\n```\nPOST /v1/merchants/{merchantId}/bank-accounts/{accountId}/verify\n{ \"amounts\": [0.32, 0.47] }\n```\n\n**Internal calls** (gRPC):\n- `payment-service` → `account-service` to read/write verification status on the account record\n- `payment-service` → `notification-service` to alert the merchant when deposits land\n\n**State in PostgreSQL** (on the account record in `account-service`, or a `bank_account_verifications` table in payment-service):\n```\nstatus: PENDING | VERIFIED | FAILED\nattempts: int  -- cap at 3, then lock\nexpires_at: timestamp  -- micro-deposits expire in ~3 days\n```\n\n**One decision to make:** whether `verified` state lives in `account-service` (since it owns bank account CRUD) or in `payment-service`. Given account-service is already in staging and verification is a payment concern, I'd lean toward a `bank_account_verifications` table owned by payment-service with a gRPC call to `account-service` to fetch the account details.\n\nIf you want instant verification, Plaid is the standard alternative — worth it if the 1–3 day delay is a UX problem for onboarding.",
+  "timestamp": "2026-06-12T23:49:11Z",
+  "latency_ms": 33965,
+  "exit_code": 0,
+  "output_length_chars": 1640,
+  "output_length_tokens_approx": 410,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

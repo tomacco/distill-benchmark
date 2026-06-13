@@ -1,0 +1,16 @@
+{
+  "test_id": "B4",
+  "competitor_id": "distill-slim",
+  "prompt": "We got a new requirement: a real-time dashboard showing transaction counts per merchant, updated every 30 seconds. Marcus wants it for the investor demo next week.",
+  "output": "Here's the situation: transaction data is still in the monolith (not yet extracted), so the data lives in PostgreSQL. For a demo next week, here's my recommendation — the bicycle version:\n\n**Backend:** A single REST endpoint on the monolith that runs a `GROUP BY merchant_id` query on the transactions table. No new infrastructure.\n\n**Frontend:** A React/TypeScript component that polls that endpoint with `setInterval` every 30 seconds and renders a table or bar chart.\n\n**Optional but fits your preferences:** a PostgreSQL materialized view refreshed by `pg_cron` so the query is instant and doesn't hit the live table under demo load.\n\n```sql\n-- Materialized view (optional, good for demo stability)\nCREATE MATERIALIZED VIEW merchant_transaction_counts AS\n  SELECT merchant_id, COUNT(*) AS tx_count, MAX(created_at) AS last_tx\n  FROM transactions\n  GROUP BY merchant_id;\n\n-- pg_cron refresh every 30s (or just query live for a small dataset)\nSELECT cron.schedule('refresh-merchant-counts', '30 seconds',\n  'REFRESH MATERIALIZED VIEW CONCURRENTLY merchant_transaction_counts');\n```\n\n```kotlin\n// Monolith: one new REST endpoint\n@GetMapping(\"/internal/dashboard/merchant-transaction-counts\")\nfun merchantCounts(): List<MerchantCountDto> = repo.getMerchantTransactionCounts()\n```\n\n```tsx\n// React: poll every 30s\nuseEffect(() => {\n  const fetch = () => api.get('/internal/dashboard/merchant-transaction-counts').then(setData)\n  fetch()\n  const id = setInterval(fetch, 30_000)\n  return () => clearInterval(id)\n}, [])\n```\n\nTwo things worth flagging:\n1. **Kafka is already in the stack** — if you want real-time streaming instead of polling, we could consume transaction events and maintain a running count. More work but cleaner for the \"modern architecture\" investor story.\n2. **This endpoint lives on the monolith** — fine for demo, but if payment processing extraction is starting soon (Sofia's project), you'd want to plan where this endpoint eventually lives.\n\nWant me to implement the full endpoint + React component, or just one side?",
+  "timestamp": "2026-06-12T23:44:06Z",
+  "latency_ms": 33235,
+  "exit_code": 0,
+  "output_length_chars": 2045,
+  "output_length_tokens_approx": 511,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

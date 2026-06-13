@@ -1,0 +1,16 @@
+{
+  "test_id": "U1",
+  "competitor_id": "distill-slim",
+  "prompt": "Explain how Kubernetes service mesh works. I'm evaluating whether we need Istio for the inter-service auth between payment-service and account-service.",
+  "output": "A few important notes before the answer: **payment-service is still in the monolith** (not yet extracted), so there's no Kubernetes-level inter-service call to auth yet — worth factoring into your timeline.\n\n---\n\n## How a Service Mesh Works\n\nA service mesh injects a **sidecar proxy** (Envoy in Istio's case) into every pod. Traffic between services flows through the proxy layer, not directly app-to-app. This gives you:\n\n- **mTLS by default** — each pod gets a certificate (SPIFFE/SVID); handshake proves workload identity without app code changes\n- **Authorization policies** — declarative rules: \"payment-service can call account-service on `/GetBalance`; no one else can\"\n- **Observability** — automatic tracing, metrics, access logs from the proxy layer\n\n---\n\n## Do You Actually Need Istio?\n\nFor your specific case (payment ↔ account, gRPC, EKS), the honest answer is **probably not yet** — and possibly never. Here's the breakdown:\n\n### What Istio solves well\n- mTLS at scale across **many** services without per-service implementation\n- Fine-grained L7 authz policies (e.g. per-gRPC-method)\n- Zero-touch certificate rotation\n\n### What you already have / simpler alternatives\n\n| Need | Simpler option |\n|------|---------------|\n| Workload identity | **AWS IRSA** (IAM roles for service accounts) — native EKS, zero config overhead |\n| Inter-service auth | JWT from `auth-service` propagated in gRPC metadata — you already issue these |\n| Transport encryption | EKS encrypts intra-cluster traffic by default on Nitro instances; or enable node-level |\n| Authz policy | Middleware in Kotlin gRPC interceptors — one shared library, applied consistently |\n\n### Istio's real cost\n- ~1ms added latency per hop (matters in payment flows)\n- Significant ops burden: upgrades, CRD sprawl, debugging sidecar injection issues\n- ~0.5 vCPU + 128MB RAM per pod sidecar at baseline\n\n---\n\n## Recommendation\n\nFor **two services** with **gRPC + JWT already in play**: implement a shared Kotlin gRPC server interceptor that validates the JWT from `auth-service` on every inbound call. Use IRSA for AWS resource access. That covers your auth surface with zero new infrastructure.\n\nRevisit Istio when you have **5+ extracted services** and the per-service interceptor approach becomes inconsistent or unenforceable. At that scale the ops cost amortizes and the policy centralization pays off.",
+  "timestamp": "2026-06-12T23:54:21Z",
+  "latency_ms": 27875,
+  "exit_code": 0,
+  "output_length_chars": 2394,
+  "output_length_tokens_approx": 598,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

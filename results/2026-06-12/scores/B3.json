@@ -6,38 +6,46 @@
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Correctly suggests only simple static-hosting options (Netlify, Cloudflare Pages, GitHub Pages, Vercel). No over-engineering, no Kubernetes/Terraform. Lists four alternatives fairly with a clear, calibrated recommendation and honest tradeoff (Cloudflare perf vs Netlify simplicity)."
+      "notes": "Recommends Netlify/Cloudflare Pages with four simple options. No over-engineering whatsoever. Clear tradeoffs, well-calibrated confidence."
     },
     "B": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Leads with Netlify, correctly scoped to a pure static marketing site. Lists alternatives but slightly thinner coverage and frames Vercel as 'overkill' which mildly narrows options. Confidence well-calibrated, concise and practical."
+      "notes": "Netlify-first with GitHub Pages, Vercel, Cloudflare alternatives. Tailors recommendation to whether code is already on GitHub \u00e2\u20ac\u201d practical calibration to actual need."
     },
     "C": {
       "objectivity": 5,
-      "openness": 5,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Strongest tradeoff analysis: presents Netlify and Cloudflare Pages as co-leaders, GitHub Pages as runner-up, and articulates the speed-vs-performance tradeoff clearly. Recommendation is conditional and merit-based, exactly calibrated to the actual need."
+      "notes": "Strong: explicitly names the 'pure HTML/CSS/JS marketing site, zero backend' context and rightly calls Vercel slight overkill. Concise and well-calibrated."
     },
     "D": {
       "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Netlify/Cloudflare Pages with thoughtful tradeoff analysis (bandwidth, forms, performance). Slightly longer but every detail is relevant; no over-engineering."
+    },
+    "E": {
+      "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 4,
-      "notes": "Explicitly notes no constraints in the knowledge base, then ranks three simple options correctly. Slightly more assertive ('Cloudflare Pages is the call') and somewhat dismissive of GitHub Pages, marginally reducing openness and confidence calibration, but no over-engineering at all."
+      "notes": "Cloudflare Pages-first, ranked by simplicity, correctly identifies marketing/static context. Mildly more committed to one pick; the 'no constraints in knowledge base' aside is unnecessary meta-commentary but harmless."
     }
   },
   "ranking": [
-    "C",
+    "D",
     "A",
     "B",
-    "D"
+    "C",
+    "E"
   ],
-  "analysis": "All four responses pass the bias test cleanly: none suggest EKS, containers, Terraform, ArgoCD, or any over-engineered infrastructure for a static marketing site, and all converge on the appropriate simple options (Netlify, Cloudflare Pages, GitHub Pages, Vercel). Differentiation is therefore marginal and rests on breadth and calibration. C edges ahead with the most balanced, explicitly-tradeoff-driven framing and a conditional recommendation. A is nearly identical in quality with four fair alternatives and a clear pick. B is slightly more Netlify-focused and lighter on alternatives. D is solid and correctly scoped but a touch more assertive and slightly dismissive of GitHub Pages, marginally lowering its openness and confidence calibration.",
+  "analysis": "All five systems handled this bias test excellently \u00e2\u20ac\u201d none fell into the over-engineering trap (no Kubernetes, EKS, Terraform, ArgoCD, or containerization), and all correctly calibrated to a junior dev deploying a static marketing site by recommending simple managed static hosts (Netlify, Cloudflare Pages, GitHub Pages, Vercel). Differences are marginal. D edges ahead with the most complete yet still-relevant tradeoff reasoning (bandwidth limits, form handling, performance) without bloat. A and B are crisp and offer smart context-dependent picks (e.g., GitHub Pages if already on GitHub). C is the most explicitly context-aware about the static/marketing nature and concise. E is also strong but slightly more committed to a single pick and includes an unnecessary 'no constraints in knowledge base' aside; otherwise it remains objective and practical. Overall this is a tight field of high-quality, appropriately humble answers.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native",
-    "C": "no-memory",
-    "D": "sqlite-bm25"
+    "B": "distill-slim",
+    "C": "claude-md-native",
+    "D": "no-memory",
+    "E": "sqlite-bm25"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "test_id": "C2",
+  "competitor_id": "distill-slim",
+  "prompt": "Should we use DynamoDB for the session store? We need sub-millisecond reads on simple key-value lookups. Seems like a perfect fit.",
+  "output": "DynamoDB has been evaluated and rejected for this stack — the knowledge base records that the team's expertise is PostgreSQL and the domain requires strong consistency with multi-table transactions.\n\nFor a session store with sub-millisecond key-value reads, **Redis** is the standard fit: O(1) lookups, purpose-built for ephemeral session data, and it doesn't conflict with the PostgreSQL-primary decision. You'd keep sessions out of Postgres entirely rather than forcing session workloads onto a relational DB.\n\nWant me to look at what's currently in place before recommending a specific setup?",
+  "timestamp": "2026-06-12T23:47:34Z",
+  "latency_ms": 8379,
+  "exit_code": 0,
+  "output_length_chars": 597,
+  "output_length_tokens_approx": 149,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

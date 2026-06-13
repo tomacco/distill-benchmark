@@ -1,0 +1,16 @@
+{
+  "test_id": "B5",
+  "competitor_id": "distill-slim",
+  "prompt": "We need a fast key-value store for caching API responses. Keys are request hashes, values are JSON blobs, TTL of 5 minutes. No consistency requirements, no transactions, no cross-key queries. What should we use?",
+  "output": "**Redis** — you're already running it.\n\nYou have Redis in your stack for caching, so there's no new infrastructure to add. It's a perfect fit for this use case:\n\n```kotlin\n// SET with TTL in one atomic command\nredis.set(\"cache:$requestHash\", jsonBlob, SetArgs().ex(300))\n\n// GET\nval cached = redis.get(\"cache:$requestHash\")\n```\n\n- TTL: `EX 300` (5 minutes) built-in\n- No consistency/transaction needs: Redis is ideal here (eventual is fine for a response cache)\n- Key pattern: prefix like `cache:` or `api-response:` to avoid collisions with other uses\n\nThe only thing to confirm is whether the existing Redis instance has enough headroom (memory), or if a dedicated Redis instance/separate keyspace is warranted — depends on your current cache usage volume.",
+  "timestamp": "2026-06-12T23:44:24Z",
+  "latency_ms": 15916,
+  "exit_code": 0,
+  "output_length_chars": 762,
+  "output_length_tokens_approx": 190,
+  "versions": {
+    "competitor": "prototype-2026-06-13",
+    "claude": "2.1.176 (Claude Code)",
+    "benchmark": "0.1.0"
+  }
+}

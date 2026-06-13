@@ -78,7 +78,7 @@ if scores_dir.exists():
         test_id = score_file.stem
         category = get_category(test_id)
         try:
-            with open(score_file) as f:
+            with open(score_file, encoding="utf-8") as f:
                 data = json.load(f)
         except (json.JSONDecodeError, IOError):
             continue
@@ -110,7 +110,7 @@ if raw_dir.exists():
         for result_file in test_dir.glob('*.json'):
             comp_id = result_file.stem
             try:
-                with open(result_file) as f:
+                with open(result_file, encoding="utf-8") as f:
                     data = json.load(f)
             except (json.JSONDecodeError, IOError):
                 continue
@@ -146,7 +146,7 @@ summary_file = Path(results_dir) / 'summary.json'
 metadata = {}
 if summary_file.exists():
     try:
-        with open(summary_file) as f:
+        with open(summary_file, encoding="utf-8") as f:
             metadata = json.load(f)
     except (json.JSONDecodeError, IOError):
         pass
@@ -168,7 +168,7 @@ output = {
 }
 
 output_path.parent.mkdir(parents=True, exist_ok=True)
-with open(output_path, 'w') as f:
+with open(output_path, "w", encoding="utf-8") as f:
     json.dump(output, f, indent=2)
 
 print(f"Written: {output_path}")
