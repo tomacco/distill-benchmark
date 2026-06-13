@@ -3,25 +3,33 @@
   "category": "persistence",
   "scores": {
     "A": {
-      "quality": 3,
-      "relevance": 3,
-      "helpfulness": 3,
-      "notes": "Lands on PostgreSQL and correctly rejects DynamoDB/MongoDB, but the framing is self-contradictory ('no stored knowledge found' yet immediately cites the prior rejections). Treats Postgres as a generic first-principles default rather than the team's established primary DB, never references existing PostgreSQL expertise or extensions (pgvector/pg_cron), and ends by asking the user for data-volume clarification \u00e2\u20ac\u201d leaning on re-prompting rather than committed recall."
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Recommends PostgreSQL decisively without prompting, and proactively references that DynamoDB and MongoDB were 'formally ruled out' by the team for the exact reasons that apply here \u00e2\u20ac\u201d strong correction durability. Leverages existing team context (Postgres 14 on EKS), adds read replicas and materialized views, and names Redshift/ClickHouse as a measured next step. No re-prompting needed."
     },
     "B": {
       "quality": 5,
       "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Commits decisively to PostgreSQL precisely because it is the team's primary database, citing existing Postgres 14 on EKS and operational familiarity as factors. Surfaces the prior DynamoDB/MongoDB rejection unprompted and explains why it still applies, demonstrating durable correction memory without conversational re-prompting. Adds practical, infra-light reporting guidance (read replicas, materialized views) before naming OLAP escalation paths. Strongest on persistence, user model, and proportionality."
+      "helpfulness": 4,
+      "notes": "Clean PostgreSQL recommendation with excellent practical detail (read replica, materialized views via Kotlin/Kafka, reporting schema via Flyway). Never resurrects DynamoDB/MongoDB, so correction durability is intact \u00e2\u20ac\u201d though it doesn't explicitly acknowledge the prior rejection as a confirming signal. Good warning against premature OLAP adoption."
+    },
+    "C": {
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Lands on PostgreSQL but opens with 'No stored knowledge found / fresh session,' then somewhat incoherently 'notes' the rejection anyway. Reintroduces a full 'Why not DynamoDB/MongoDB' discussion and ends by asking for data volume/latency \u00e2\u20ac\u201d pushing the decision back to the user. The rejected options resurfacing and the clarifying question represent exactly the re-prompting cost this test measures."
     }
   },
   "ranking": [
+    "A",
     "B",
-    "A"
+    "C"
   ],
-  "analysis": "Both responses reach the correct recommendation (PostgreSQL) and both avoid suggesting the previously rejected DynamoDB/MongoDB, so neither incurs correction tokens. The difference is in correction durability and user modeling. System B treats PostgreSQL as the obvious choice *because* it is the team's existing primary database, references concrete operational context (Postgres 14 on EKS), recalls the formal prior rejection of DynamoDB/MongoDB unprompted with reasoning, and offers infra-light reporting patterns (read replicas, materialized views) before escalation \u00e2\u20ac\u201d exactly the persistent, committed behavior the test targets. System A reaches the same destination but with a self-contradictory 'no stored knowledge' framing, a generic first-principles tone that ignores team expertise and Postgres extensions, and a closing request for clarification that signals weaker commitment. System B is clearly stronger.",
+  "analysis": "All three correctly converge on PostgreSQL and none actually recommends a rejected option, so the differentiation is purely on correction durability and economy. System A is best: it recommends Postgres without prompting and proactively frames the prior DynamoDB/MongoDB rejection as confirming evidence, while grounding the answer in known team context (Postgres 14 on EKS). System B is nearly as strong and operationally rich, but treats the question from scratch without surfacing the prior rejection as a durable signal. System C is weakest despite a reasonable final answer: it declares no stored knowledge, then re-opens a full comparison of the already-rejected alternatives and defers the decision back to the user with a clarifying question \u00e2\u20ac\u201d precisely the re-prompting overhead this test penalizes.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

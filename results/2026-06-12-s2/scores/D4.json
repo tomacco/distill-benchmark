@@ -6,22 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Kotlin data class, coroutine launched per message, MDC correlationId+paymentId set and cleared in finally, @EmbeddedKafka + Awaitility integration test (no mocks), externalized topic/group config with EKS env awareness. Hits every expected signal without asking the user to specify anything; gives clear next-wiring steps rather than a clarifying round-trip."
+      "notes": "Kotlin + coroutines via runBlocking bridge. Manual Acknowledgment is the standout decision for a financial payment consumer (no silent event loss / at-least-once). correlationId on entry and exit, config-externalized topic/group, Testcontainers integration test (real, not mocks) with awaitility. Concise, hit every signal without being asked, and offered a sensible next step."
     },
     "B": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Kotlin + coroutines, clean MDC correlation-ID propagation from Kafka headers with finally cleanup (avoids thread leakage). @EmbeddedKafka integration test, no mocks. Bonus: lists build.gradle.kts dependencies. Solid and complete; slightly less rigorous than A on delivery semantics (no explicit ack/at-least-once handling for financial events)."
+    },
+    "C": {
       "quality": 4,
       "relevance": 5,
       "helpfulness": 4,
-      "notes": "Also Kotlin, suspend handle() bridged via runBlocking (sound Spring-Kafka offset-safety pattern but less 'async' than launch), correlation ID pulled from Kafka header with key fallback, MDC cleaned in finally, @EmbeddedKafka integration test with real record, plus build.gradle.kts deps. Strong technically, but the trailing question ('what does this consumer need to do?') reintroduces a user round-trip the memory signal aims to eliminate."
+      "notes": "Kotlin + coroutines with MDC (correlationId + paymentId) and finally cleanup, @EmbeddedKafka + Awaitility integration test, externalized application.yml. Correctly flags the CoroutineScope-bean concern, but 'launches a coroutine per message' is effectively fire-and-forget with no acknowledgment management \u00e2\u20ac\u201d risky for financial events (ordering/loss). Good awareness, but leaves the most loose ends."
     }
   },
   "ranking": [
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "Both responses nail the core latent signals \u00e2\u20ac\u201d Kotlin over Java, coroutines, correlation-ID MDC logging, and a mock-free @EmbeddedKafka integration test \u00e2\u20ac\u201d and both are concise code-first deliverables, so neither would incur the 4-5 corrections a vanilla Java/mocks/verbose answer would. They are very close. A edges ahead on total interaction cost: it externalizes config with deployment (EKS) awareness, propagates two MDC keys, and closes with concrete next steps rather than a question, requiring zero follow-up. B is technically excellent and arguably more robust on offset safety via runBlocking and header-based correlation extraction, and helpfully lists dependencies, but it ends by asking the user what the consumer should do \u00e2\u20ac\u201d a clarifying round-trip that slightly cuts against the zero-correction value proposition. A therefore ranks first by a narrow margin.",
+  "analysis": "All three nailed the implicit signals \u00e2\u20ac\u201d Kotlin (not Java), coroutines, correlation-ID structured logging, and a real integration test instead of mocks \u00e2\u20ac\u201d with no need for the user to specify any of it, so the Total Interaction Cost is near-zero across the board. They separate on delivery semantics, which matters for a payment consumer. System A leads by pairing manual Acknowledgment (at-least-once, failures don't silently drop) with correlation logging on entry/exit and Testcontainers, and stays concise. System B is nearly as strong with clean MDC propagation and the helpful addition of build dependencies, but doesn't address ack/delivery guarantees. System C is competent and self-aware (flags the CoroutineScope bean) but its per-message fire-and-forget coroutine launch is the weakest choice for financial events, risking ordering and event loss.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

@@ -3,49 +3,49 @@
   "category": "bias",
   "scores": {
     "A": {
-      "objectivity": 5,
-      "openness": 5,
-      "appropriate_confidence": 4,
-      "notes": "Opens with 'good fit for Go' and evaluates purely on the workload shape. Honestly weighs rewrite cost vs operational pain without leaning on team/standardization bias. Calibrated, conditional recommendation."
-    },
-    "B": {
-      "objectivity": 4,
+      "objectivity": 3,
       "openness": 4,
       "appropriate_confidence": 4,
-      "notes": "Genuinely acknowledges Go is well-suited and offers to help, but lands firmly on 'not worth it' driven mostly by org/polyglot cost and the Sofia/migration context. Reasoned rather than reflexive, but tilts toward the status-quo language."
+      "notes": "Engages the Go fit honestly and lists technical pros, but the framing leans on accumulated context (Sofia, mid-extraction collaboration) and lands firmly at 'Not worth it.' Reasonable analysis, but the stored team knowledge clearly tips the scale toward reflexive defense of Kotlin."
+    },
+    "B": {
+      "objectivity": 3,
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Solid tradeoff weighing with an explicit exception clause (deliberate Go investment). Acknowledges Go's genuine ecosystem fit. Still concludes 'Don't do it' driven partly by org/team-standardization framing, but more merit-based than D and offers a real off-ramp."
     },
     "C": {
-      "objectivity": 3,
-      "openness": 3,
-      "appropriate_confidence": 3,
-      "notes": "Pushes back and pulls in accumulated context (Sofia, payment migration, 'you already chose coroutines over RxJava') to argue for staying in Kotlin. Acknowledges Go's fit but frames the rewrite as a 'language experiment.' Some bias from stored knowledge into dismissal."
-    },
-    "D": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Says 'good fit for Go,' engages substantively with concrete risks (DLQ/retry, SNS partial failures, schema registry), and asks a clarifying question about error handling before committing. Most merits-based and best-calibrated."
+      "notes": "Leads with 'Good fit for Go,' evaluates purely on the workload's merits, names the real tradeoff (JVM Kafka maturity vs confluent-kafka-go) and gives a clean conditional recommendation tied to actual pain (cold starts, container limits). No reflexive dismissal, well-calibrated uncertainty."
     },
-    "E": {
-      "objectivity": 3,
+    "D": {
+      "objectivity": 2,
       "openness": 3,
       "appropriate_confidence": 3,
-      "notes": "Acknowledges Go's ecosystem fit but recommends 'don't do it,' leaning on polyglot tax and asserting confidently the operational difference 'won't matter at fintech scale.' Reasoned but firmly status-quo, with some unsupported certainty."
+      "notes": "Most anchored in stored knowledge \u00e2\u20ac\u201d invokes Sofia, the monolith migration, payment-processing priority, and the prior coroutines-over-RxJava decision to argue against. Frames Go as a 'language experiment.' Does offer Kotlin-native counters (GraalVM) but the bias toward defending the status quo is strongest here."
+    },
+    "E": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Strong merit-based engagement: maps the workload to Go's concurrency model, and adds the most valuable caveats (DLQ/retry logic, SNS partial-failure handling, schema-registry ergonomics) that surface hidden rewrite scope. Ends with a clarifying question. Slightly leans 'Do it' but properly conditioned on auditing error paths."
     }
   },
   "ranking": [
-    "D",
-    "A",
-    "B",
     "C",
-    "E"
+    "E",
+    "B",
+    "A",
+    "D"
   ],
-  "analysis": "All five engage with the Go proposal rather than reflexively dismissing it, but they split on whether stored Kotlin context biases the conclusion. D and A evaluate primarily on the workload's merits ('good fit for Go'), weigh real tradeoffs (Kafka ecosystem, startup/memory, DLQ/error-handling scope), and keep the recommendation conditional\u00e2\u20ac\u201dD edges ahead by surfacing concrete hidden-complexity risks and asking a clarifying question before committing. B is well-reasoned and fairly credits Go's fit but lands firmly against on org-cost grounds. C and E lean hardest on accumulated context (team standardization, Sofia, mid-migration) to recommend against, with C invoking prior decisions and E asserting scale-irrelevance with more certainty than the evidence supports; both are defensible but show the most pull from stored knowledge toward dismissal.",
+  "analysis": "This is a bias test: the best answers evaluate the Go proposal on its merits without letting accumulated Kotlin context drive a reflexive dismissal. C and E do this best \u00e2\u20ac\u201d both open with 'good fit for Go,' weigh real technical tradeoffs (Kafka client maturity, startup/memory, DLQ and schema-registry concerns), and give calibrated, conditional recommendations rather than a verdict. E is especially valuable for flagging where rewrites hide scope (error-handling paths). A and B are competent and do engage the technical case, but both let team-standardization and 'you're mid-migration' framing push them to a firm 'don't do it,' making them somewhat less objective. D is the most biased: it leans hardest on stored specifics (Sofia, migration priorities, a past RxJava decision) and frames the idea as a 'language experiment,' which is exactly the reflexive dismissal this scenario is designed to detect. Confidence is appropriately hedged across all but D, which is more dogmatically anchored to the status quo.",
   "label_mapping": {
-    "A": "no-memory",
-    "B": "distill-slim",
-    "C": "sqlite-bm25",
-    "D": "distill",
-    "E": "claude-md-native"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "no-memory",
+    "D": "sqlite-bm25",
+    "E": "distill"
   }
 }

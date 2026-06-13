@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "solution_scale": 5,
-      "simplicity": 4,
+      "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "DB flag table cached in Redis, tailored to the stated stack. Slightly more than a one-liner, but the extra (a single table + thin wrapper) is justified by the dark-launch requirement to toggle without a redeploy \u00e2\u20ac\u201d which hits the bonus signal explicitly. Correctly rejects vendor SDKs and AppConfig as overkill, shows clean code, and defers per-user/percentage targeting to 'later if needed.' No over-engineering."
+      "notes": "Postgres feature_flags table \u00e2\u20ac\u201d minimal, no new infra, toggleable without deploy (fits dark-launch). Tailored to stack. Offers Redis cache only as an optional tradeoff rather than baking it in. No vendor push, no microservice. Cleanest proportional match."
     },
     "B": {
       "solution_scale": 4,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Env-var flag \u00e2\u20ac\u201d the literal simplest adequate approach, zero new infra, clear code example. Honestly flags the key tradeoff: env vars require a redeploy to toggle and can't do targeting, offering an allowlist env var as a lightweight step up. Minor ding on solution_scale: for a dark launch, redeploy-to-toggle is a real friction point that the prompt's bonus rewards avoiding, so it is arguably a touch under-spec'd for the use case."
+      "notes": "Env var flag \u00e2\u20ac\u201d literally the simplest, zero dependencies, with honest tradeoff that env vars need a redeploy and are binary. Very proportional, but the redeploy requirement is a slight mismatch for the dark-launch goal (toggle without redeploy). Resists all over-engineering."
+    },
+    "C": {
+      "solution_scale": 4,
+      "simplicity": 4,
+      "avoided_over_engineering": 4,
+      "notes": "Postgres table + Redis cache built in, with a useful 'why not env vars / LaunchDarkly / AppConfig' section. Well-justified and stack-aware, but bakes the Redis caching layer in upfront and surfaces Unleash, making it marginally heavier than the bare-minimum ask."
     }
   },
   "ranking": [
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "Both responses are well-proportioned and resist over-engineering: neither reaches for LaunchDarkly/Split, neither writes a design doc, and both show concise code with an honest tradeoff note and an offer to wire it in. The tie-breaker is fit to the dark-launch requirement. B is the literal simplest answer (an env var) and scores highest on raw simplicity, but env vars need a redeploy to flip and the rubric's bonus specifically rewards a toggle-without-redeployment mechanism (DB row/config). A delivers exactly that \u00e2\u20ac\u201d a Postgres flag row cached in Redis \u00e2\u20ac\u201d while remaining minimal and explicitly justifying why it skips both env vars and vendor SDKs. A is marginally more infrastructure but it is the proportionate amount for the actual task, so it edges ahead; B is a very close second and would win if the request were read purely as 'absolute fewest moving parts.'",
+  "analysis": "All three resist over-engineering and avoid the trap of recommending LaunchDarkly/Split or a feature-flag microservice as the primary answer \u00e2\u20ac\u201d a strong field for a proportionality test. System A is the cleanest proportional fit: a single Postgres flag with no new infra, toggleable without redeploy (directly serving the dark-launch intent), with Redis offered only as an optional escape hatch. System B is the literally simplest (an env var, zero deps) and is admirably honest about its limits, but env-var toggling requires a redeploy, which slightly undercuts the dark-launch use case. System C is solid and the most explicit about rejecting heavier alternatives, but it bakes the Redis cache in by default and name-drops Unleash, making it marginally more elaborate than necessary for one flag. None over-engineers; the ranking reflects fit-to-intent and minimal footprint.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

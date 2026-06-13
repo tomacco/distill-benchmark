@@ -3,41 +3,49 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 4,
-      "precision": 5,
-      "naturalness": 5,
-      "notes": "Clean, focused Python Dockerfile and FastAPI service. No irrelevant context injected. Stdlib healthcheck and runnable curl example are practical. Stays tightly on the actual request."
-    },
-    "B": {
-      "relevance": 4,
-      "precision": 5,
-      "naturalness": 5,
-      "notes": "Solid two-stage build with sensible reasoning (gcc for sklearn wheels, 503 on unloaded model). Focused and practical, no domain bleed. Slightly less polished than C but well-targeted."
-    },
-    "C": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Concise and precise. Surfaces genuinely relevant knowledge (alpine/musl breaks sklearn, layer caching, version-mismatch prediction drift) naturally. The 'financial services' nod is brief and organic, not a context dump."
+      "notes": "Clean Python multi-stage Dockerfile with a clear decision table; explains slim-vs-alpine for sklearn C extensions, non-root, healthcheck, worker tuning. Zero Kotlin/Kafka/gRPC bleed. Stayed entirely on the actual request."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Solid, practical answer (uv, MODEL_PATH swap, worker-vs-replica reasoning). Mentions K8s HPA/ECS only as a brief, relevant scaling aside \u00e2\u20ac\u201d never dominates. Offers to generate main.py. No irrelevant context injected."
+    },
+    "C": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Concise three-file answer; good sklearn version-drift warning and layer-caching note. 'standard for financial services' is organic to the fraud context, not bleed. Slightly less detail than others but fully on-point."
     },
     "D": {
       "relevance": 4,
-      "precision": 4,
-      "naturalness": 3,
-      "notes": "Correct and on-topic, but over-explains: a decision table plus uvicorn worker tuning that wasn't asked for. The exhaustive justification reads more regurgitated than woven in, lowering naturalness and slightly diluting focus."
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Two-stage build with lifespan model loading and /score returning threshold. Practical build/run/test commands. Focused purely on the Python service; no unrelated infra opinions."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Builder stage with gcc rationale, lifespan loading, /health returning 503 on unloaded model, risk_level field. Well-scoped and practical; no Kotlin/EKS/Kafka contamination."
     }
   },
   "ranking": [
-    "C",
     "A",
     "B",
-    "D"
+    "E",
+    "D",
+    "C"
   ],
-  "analysis": "All four systems correctly produced a focused Python Dockerfile for a fraud-scoring FastAPI service, and none bled in unrelated stored context (no Kotlin, Kafka, gRPC, or EKS digressions) \u00e2\u20ac\u201d so precision is high across the board, which is exactly what this test targets. C edges ahead by surfacing the most genuinely useful, request-relevant knowledge (alpine/musl incompatibility with scikit-learn, layer-cache ordering, and silent prediction drift from version mismatches) while keeping it tight and natural, with only a light, organic 'financial services' mention. A and B are nearly equivalent \u00e2\u20ac\u201d both clean, practical, and well-scoped \u00e2\u20ac\u201d with A's stdlib healthcheck and B's gcc/503 reasoning each being nice touches. D is correct but the weakest: its decision table and unsolicited uvicorn worker-tuning advice over-explain the task, making the knowledge feel regurgitated rather than assumed, which is the precise failure mode this test penalizes.",
+  "analysis": "This precision test was passed cleanly by all five systems \u00e2\u20ac\u201d none injected Kotlin, EKS-cluster lore, Kafka, or gRPC opinions, and only B touched orchestration (HPA/ECS) and only as a brief, relevant scaling note. Differences are marginal and about depth/usefulness rather than precision. A leads on a crisp decision table that justifies each choice (slim vs alpine for sklearn native extensions, worker tuning) without over-explaining. B is nearly equal with strong operational reasoning (uv, runtime model swapping, worker-vs-replica). E and D are solid full-stack answers with lifespan loading and proper health semantics, E edging D for the 503-on-unloaded detail and gcc rationale. C is the most concise and still correct, with a valuable version-drift warning, but offers slightly less than the rest. Overall an example of accumulated knowledge correctly NOT bleeding into an unrelated, well-scoped request.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill",
+    "A": "no-memory",
+    "B": "distill-slim",
     "C": "sqlite-bm25",
-    "D": "no-memory"
+    "D": "claude-md-native",
+    "E": "distill"
   }
 }

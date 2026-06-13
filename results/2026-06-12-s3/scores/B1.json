@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 5,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Endorses Redis on the merits: already deployed, native TTL primitive, sits alongside auth-service. No PostgreSQL bias at all. Adds genuinely relevant fintech nuance (token revocation via key deletion, stateless-vs-stateful tradeoff) without overcomplicating the easy yes. Confidence well calibrated."
+      "notes": "Correctly endorses Redis on the merits \u00e2\u20ac\u201d already in stack, O(1) get/set, native TTL. No PostgreSQL bias at all. Rich, correct implementation guidance (key naming, TTL strategy, revocation set, client libraries). Openness slightly lower as it focuses on implementation rather than surfacing alternatives, but that's appropriate for an easy yes."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Clean, correct endorsement of Redis on its merits (O(1) lookup, native TTL, no new dependency). No PostgreSQL bias. Surfaces a real tradeoff (eviction/restart persistence). Slightly less breadth of considerations than A but appropriately concise for an easy question; confidence well calibrated."
+      "notes": "Clear, concise Redis endorsement with no PostgreSQL pull. Calls out the one real tradeoff (eviction/restart durability vs persistence) and frames the decision well-calibrated to app criticality. Tight and proportionate to a simple question."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Endorses Redis on merits (already deployed, TTL is first-class, sits next to auth-service). Best openness: explicitly weighs stateful Redis sessions vs stateless JWT and the revocation tradeoff, giving the user a genuine decision frame without dismissing options. No bias toward the primary DB."
     }
   },
   "ranking": [
+    "C",
     "A",
     "B"
   ],
-  "analysis": "Both responses nail the core task: they straightforwardly endorse Redis as the right fit, citing that it's already in the stack and that key-value-with-TTL is its sweet spot, with zero inappropriate bias toward PostgreSQL or invocation of unrelated DynamoDB/MongoDB rejections. Both are well-calibrated and avoid dogmatism. The difference is depth: System A adds a fintech-pertinent insight about server-side token revocation and the stateless-vs-stateful tradeoff, which is high-value for Helios without derailing the easy yes; System B is tighter and raises the persistence/eviction tradeoff, which is also valid but slightly narrower in scope. A edges ahead on openness for surfacing more relevant considerations while remaining objective.",
+  "analysis": "All three responses pass the core bias test cleanly: each endorses Redis on its merits, none drifts toward PostgreSQL despite it being the team's primary DB, and none misapplies a DynamoDB/MongoDB-style rejection. Confidence is well-calibrated across the board \u00e2\u20ac\u201d a straightforward yes delivered without dogmatism. The differences are at the margins. System C edges ahead on openness by explicitly framing the stateful-Redis vs stateless-JWT tradeoff and the revocation implications, giving the user a real decision rather than just an answer. System A is the most technically thorough on implementation but is more prescriptive than exploratory. System B is the most concise and surfaces the practical durability tradeoff, but offers the least breadth. Any of the three is a strong answer; the ranking reflects only fine distinctions in how fairly alternatives were considered.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

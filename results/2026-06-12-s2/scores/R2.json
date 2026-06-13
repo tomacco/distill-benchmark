@@ -6,22 +6,30 @@
       "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Recommends Flyway and explicitly notes it was 'already chosen over Liquibase' (a key expected signal). Covers PostgreSQL, Kotlin/Gradle build.gradle.kts, naming convention, and idempotent DDL. Adds EKS init-container guidance which is plausibly relevant at scale but slightly beyond the question scope."
+      "notes": "Recommends Flyway and explicitly notes it was picked over Liquibase after evaluation. Strong Kotlin/Gradle setup, PostgreSQL dependency, naming convention, and a relevant fintech/additive-migration angle. Pulls in ArgoCD/EKS deploy context which is plausibly relevant but slightly beyond the question. Ends with a sharp clarifying question (monolith extraction vs greenfield)."
     },
     "B": {
       "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Excellent, tightly-focused Flyway setup with immutability/checksum rules, two-step ALTER pattern, and a reference to existing auth-service/account-service. Most disciplined on precision. However it never mentions Flyway was chosen over Liquibase \u00e2\u20ac\u201d misses a key retrieval signal that the others surfaced."
+    },
+    "C": {
+      "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Strong Flyway setup with PostgreSQL, Kotlin/Gradle, naming convention, repeatable migrations, and immutability rules. Practical and actionable. Misses the explicit 'chosen over Liquibase' team-decision signal. Injects 'financial data' framing and references auth-service/account-service, which feel organic but are extra context."
+      "notes": "Recommends Flyway, explicitly says 'already chosen over Liquibase', contextualizes for Kotlin/Gradle and PostgreSQL. Good schema-ownership and idempotency practices, plus an init-container recommendation tied to EKS scale. Slightly more environment context injected than strictly asked, but all coherent. Closes with a useful clarifying question."
     }
   },
   "ranking": [
     "A",
+    "C",
     "B"
   ],
-  "analysis": "Both responses correctly recommend Flyway with no competing alternatives suggested as primary, both contextualize for a Kotlin/Gradle service, both name PostgreSQL, and both provide concrete, actionable setup guidance woven in naturally. The deciding factor is the team-decision signal: System A explicitly recalls that Flyway was 'already chosen over Liquibase,' satisfying a key expected signal, while System B omits this provenance entirely. System B is otherwise excellent and arguably richer on migration discipline (immutability, two-step ALTER, Testcontainers), but its added 'financial data' and cross-service references are slightly more speculative injection. System A is marginally tighter on precision and captures the chosen-over-Liquibase context, so it ranks first.",
+  "analysis": "All three correctly converge on Flyway with solid, actionable Kotlin/Gradle + PostgreSQL setup guidance, and none suggest a wrong alternative as primary. The distinguishing signal is whether the system surfaced that Flyway was chosen over Liquibase via team evaluation: A and C both do this naturally, while B omits it entirely despite otherwise being the most technically polished and precise answer. A edges out C by weaving in financial-data migration discipline relevant to the fintech context and asking the most decision-relevant clarifying question; C is nearly equal with strong service-isolation and init-container practices. B ranks third only because it misses the Liquibase-evaluation retrieval signal \u00e2\u20ac\u201d its precision and practical depth are otherwise the strongest of the three.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "relevance": 5,
-      "precision": 5,
+      "precision": 4,
       "naturalness": 5,
-      "notes": "Proactively surfaced the team's full stack without being asked: PostgreSQL for ACID financial data, Kafka event publishing (outbox pattern), gRPC for internal calls from account-service, Kotlin coroutines, Flyway already decided, correlation IDs enforced across services, and framed it as payment-service extraction from the monolith consistent with the existing service-extraction pattern. Knowledge is woven in naturally as assumptions rather than recited. Missed only the bonus signals (Sofia leading design; EKS/Kubernetes deployment not explicitly named)."
+      "notes": "Strong retrieval: assumes PostgreSQL, Kafka, gRPC, references account-service and the recent gRPC migration, names Kotlin (coroutines), and the monolith extraction context. Never asks the user for their stack. Missing EKS/Kubernetes and the Sofia/payment-design bonus. Slightly more speculative external-provider tangents (Stripe/ACH) than needed, costing a precision point."
     },
     "B": {
       "relevance": 1,
       "precision": 4,
-      "naturalness": 2,
-      "notes": "Generic payment-service checklist with no awareness of the team's stack. Assumes a third-party provider (Stripe/Braintree/Adyen) and explicitly asks 'What's your tech stack and expected transaction volume?' \u00e2\u20ac\u201d the exact thing the system was supposed to already know. No irrelevant stored knowledge injected (because it retrieved none), so precision is technically clean, but it surfaced zero relevant context and reads as a stock answer."
+      "naturalness": 4,
+      "notes": "Generic payment-service checklist with no stored knowledge surfaced. Explicitly asks 'What's your tech stack and expected transaction volume?' \u00e2\u20ac\u201d directly failing the core expectation that the system already knows the stack. On-topic and well-organized, but recommends choosing a provider (Stripe/Braintree/Adyen) and treats stack as unknown."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Most complete retrieval: names Kotlin as the service language, both auth-service and account-service as the extraction pattern, Kafka event streaming with concrete topic names, gRPC internal API (tied to the just-completed migration), PostgreSQL/ACID, Flyway, correlation IDs, monolith context. Tightly scoped, organically woven. Only misses EKS/Kubernetes and the Sofia bonus."
     }
   },
   "ranking": [
+    "C",
     "A",
     "B"
   ],
-  "analysis": "System A demonstrates strong retrieval: it silently assumed Kotlin/coroutines, PostgreSQL, Kafka, gRPC with account-service, Flyway, and cross-service correlation IDs, and contextualized the task as a monolith service extraction following the established auth-service/account-service pattern \u00e2\u20ac\u201d all without prompting the user for their stack. The knowledge feels organically woven into concrete architectural advice. System B gives competent but entirely generic guidance, defaults to an external provider, and ends by asking for the very stack/volume details the system should already have, revealing it surfaced no stored knowledge. A wins decisively on relevance and naturalness; B's only relative merit is not contaminating its answer with irrelevant context, but that is because it had no context to draw on at all.",
+  "analysis": "A and C both demonstrate strong proactive retrieval \u00e2\u20ac\u201d they assume the Helios stack (Kotlin, PostgreSQL, Kafka, gRPC), reference the auth-service/account-service extraction pattern and the monolith migration, and never ask the user to specify their environment. C edges ahead by explicitly naming Kotlin as the service language, citing both prior extraction services, and giving concrete Kafka topics while staying tightly scoped, with no speculative tangents. A is nearly as strong but drifts slightly toward generic external-provider considerations. B is the clear outlier: it surfaces no stored knowledge, treats the stack as unknown, and explicitly asks for the tech stack and transaction volume \u00e2\u20ac\u201d failing the central retrieval expectation despite being a competent generic checklist. Both A and C miss EKS/Kubernetes and the Sofia bonus signal.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

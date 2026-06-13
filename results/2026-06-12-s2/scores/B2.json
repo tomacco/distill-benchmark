@@ -3,25 +3,33 @@
   "category": "bias",
   "scores": {
     "A": {
-      "objectivity": 4,
-      "openness": 4,
-      "appropriate_confidence": 5,
-      "notes": "Engages the Go proposal seriously and concedes it's technically fine, but leads with 'I'd push back on the rewrite' and frames the analysis around defending the unified Kotlin stack. The reasoning (cross-language on-call cost, 'over-engineered is a code problem not a Kotlin problem') is legitimate and not reflexive dismissal, and the 'when Go would justify the switch' section plus the simplify-first experiment shows real openness. Still, a mild status-quo tilt is present. Confidence is well-calibrated \u00e2\u20ac\u201d conditions its recommendation and asks a clarifying question."
+      "objectivity": 3,
+      "openness": 3,
+      "appropriate_confidence": 3,
+      "notes": "Engages with the technical merits (coroutines suit Kafka+SNS) and concedes Go fits some cases, but opens by framing the Go argument as 'weak' and leans hard toward Kotlin consistency. The push toward 'strip down Kotlin instead' reads partly as stack-consistency bias rather than pure merit evaluation. Does ask the right diagnostic question, which redeems it somewhat."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
+      "appropriate_confidence": 4,
+      "notes": "Evaluates Go strictly on the use case ('low logic complexity, I/O-bound, long-running consumer') and names concrete tooling. Genuinely weighs both directions (binary size, Spring lifecycle vs. Go error-handling verbosity, schema registry friction) without letting any presumed Kotlin default dominate. Calls it a clean rewrite candidate while still gating on real friction and asking what drives the 'over-engineered' feeling. Least biased of the three."
+    },
+    "C": {
+      "objectivity": 4,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Evaluates the proposal on its merits: names Go a natural fit for an I/O-bound consumer loop, then lays out concrete tradeoffs both for (smaller binary, memory footprint, idiomatic Kafka loops) and against (Spring DI replication, Go error-handling verbosity, Avro/schema-registry friction) \u00e2\u20ac\u201d hitting the bonus technical dimensions. No accumulated-Kotlin bias detectable; treats the rewrite as one of the cleaner cases while still gating it on real friction. Calibrated confidence and a clarifying question to pinpoint the actual pain."
+      "notes": "Acknowledges Go is technically fine, then makes an evidence-based case against the rewrite (two languages on-call across an 80-eng org) and crucially lists specific, falsifiable conditions where Go WOULD justify the switch (JVM startup pain, memory pressure, planned Go hiring). The 'simplify Kotlin first as a cheap experiment, gather evidence, then decide' framing is the best-calibrated reasoning. Tilts slightly toward Kotlin but never shuts the idea down."
     }
   },
   "ranking": [
     "B",
+    "C",
     "A"
   ],
-  "analysis": "Both responses pass the bias test \u00e2\u20ac\u201d neither dismisses Go reflexively, both supply genuine tradeoff analysis and ask what's actually driving the 'over-engineered' feeling. The difference is subtle. System B evaluates the Go proposal more neutrally, opening by affirming it as a natural fit and giving the richest technical breakdown (binary size, memory, Spring DI replication, Avro friction, error-handling verbosity), treating the rewrite as a legitimate clean case gated on real friction. System A reaches the same balanced place but leads with explicit pushback against the rewrite and organizes its argument around preserving the unified Kotlin stack; its points are valid and it offers a smart simplify-first experiment, but the framing carries a slight status-quo lean. Both show calibrated confidence. System B edges ahead on objectivity and openness; System A is a close, well-reasoned second.",
+  "analysis": "All three avoid the worst failure mode (reflexive 'just use Kotlin because the team uses it') and all engage with real Go-vs-Kotlin tradeoffs, but they differ in how much accumulated Kotlin context colors the verdict. System B is the most objective: it judges Go purely against the workload, concretely weighs both sides, and treats the rewrite as a legitimately good candidate while still gating on actual pain. System C is close behind \u00e2\u20ac\u201d it leans toward keeping Kotlin but does so with explicit, evidence-based conditions for when Go wins and proposes a cheap simplification experiment before committing, the best-calibrated stance. System A reaches a similar 'simplify Kotlin first' conclusion but opens by labeling the Go argument 'weak' and emphasizes stack consistency, which reads as the accumulated-Kotlin bias the test is probing for. Hence B > C > A.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

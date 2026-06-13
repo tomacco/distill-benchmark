@@ -3,41 +3,49 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 1,
-      "precision": 5,
-      "naturalness": 3,
-      "notes": "Surfaced no stored knowledge; asked clarifying questions instead of recommending Flyway. Precise in that it injected nothing irrelevant, but failed the core retrieval task entirely."
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Recommends Flyway+PostgreSQL with strong Kotlin/Gradle setup and useful Helios-specific operational notes (ArgoCD, correlation-ID, no flyway repair in prod). Did not explicitly note it was chosen over Liquibase, and the extra ops context is slightly beyond the question, but all woven naturally."
     },
     "B": {
-      "relevance": 1,
-      "precision": 2,
-      "naturalness": 2,
-      "notes": "No retrieval of the team's Flyway/Liquibase decision. Dumped a generic multi-language migration survey including Alembic and Liquibase as options \u00e2\u20ac\u201d exactly the alternatives a good answer should avoid. Verbose and off-target."
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused Flyway setup for Kotlin/Gradle with good conventions and CI/CD note. Missing the 'chosen over Liquibase' provenance and no PostgreSQL 14 mention, so less complete on stored knowledge, but tightly scoped and natural."
     },
     "C": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Recommended Flyway, noted it was chosen over Liquibase via team evaluation, cited PostgreSQL 14, and contextualized for Kotlin/Gradle with concrete setup. Wove in additional team conventions naturally. Hits every expected signal including bonuses."
+      "notes": "Best retrieval: names Flyway, PostgreSQL 14, and explicitly that it was chosen over Liquibase after team evaluation. Practical setup plus financial-data conventions (TIMESTAMPTZ, gen_random_uuid) tied to existing services. Hits all expected and bonus signals naturally."
     },
     "D": {
-      "relevance": 4,
-      "precision": 4,
-      "naturalness": 5,
-      "notes": "Correctly recommended Flyway with strong Kotlin/Gradle/Spring Boot setup guidance and CI/CD context. Missing the Liquibase-evaluation provenance and PostgreSQL 14 mention, so slightly less complete on retrieval signals, but no irrelevant alternatives suggested and feels organic."
+      "relevance": 1,
+      "precision": 5,
+      "naturalness": 3,
+      "notes": "No stored knowledge surfaced \u00e2\u20ac\u201d falls back to generic clarifying questions. Didn't inject wrong info, but completely failed to retrieve the team's Flyway decision."
+    },
+    "E": {
+      "relevance": 1,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Empty workspace; gives generic framework-agnostic advice and actively lists Liquibase/Alembic/others as options \u00e2\u20ac\u201d contradicts the team's chosen tool. Worst retrieval and suggests disallowed alternatives."
     }
   },
   "ranking": [
     "C",
-    "D",
     "A",
-    "B"
+    "B",
+    "D",
+    "E"
   ],
-  "analysis": "C and D both correctly retrieved the team's Flyway decision and provided actionable, stack-appropriate setup, with C the clear winner for additionally surfacing the Liquibase evaluation provenance, PostgreSQL 14 target, and broader team conventions while remaining natural; D is strong and practical but omits the Liquibase choice and PostgreSQL 14 details. A and B failed the retrieval task: A injected nothing and asked questions (precise but unhelpful), while B was worse, dumping a generic cross-language survey that explicitly floated Liquibase and Alembic \u00e2\u20ac\u201d the very alternatives a good answer should avoid. A edges out B because it at least avoided polluting the response with wrong-tool recommendations.",
+  "analysis": "System C is the clear winner, surfacing every expected signal including the Liquibase-vs-Flyway provenance and PostgreSQL 14, plus contextualized financial-data conventions, all woven naturally. System A is a close second with excellent practical, Helios-specific guidance but omits the explicit 'chosen over Liquibase' rationale. System B is solid and precise but thinner on stored provenance (no Liquibase or PG14). System D retrieves nothing and asks generic questions, while System E is worst: it not only fails to retrieve but actively recommends Liquibase/Alembic and other alternatives, directly violating the team's decision.",
   "label_mapping": {
-    "A": "distill",
-    "B": "no-memory",
+    "A": "distill-slim",
+    "B": "claude-md-native",
     "C": "sqlite-bm25",
-    "D": "claude-md-native"
+    "D": "distill",
+    "E": "no-memory"
   }
 }

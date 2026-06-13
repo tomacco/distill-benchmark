@@ -3,25 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 4,
-      "style_match": 3,
-      "preference_recall": 4,
-      "notes": "Pitches at senior level overall and engages the real decision (do they need Istio now? recommends not yet), with strong use of their existing context: payment-service still in the monolith, existing auth-service/JWT pattern, gRPC interceptors, EKS scale. Gives a direct, opinionated recommendation rather than 'it depends'. However, it leads with a full 'How a Service Mesh Works' tutorial section explaining sidecars, mTLS, and control plane basics \u00e2\u20ac\u201d exactly the kind of foundational padding a senior engineer doesn't need, which dents calibration and style. The pragmatic-path code and 'when to revisit' triggers are exactly right and recover much of the value."
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 5,
+      "notes": "Senior-level throughout, assumes knowledge of sidecars/mTLS/SPIFFE. Recalls specifics: payment-service still in monolith, existing auth-service/JWT pattern, gRPC interceptors in Kotlin, EKS. Direct recommendation (probably not yet, finish extraction first). Slightly longer with more code/diagrams than strictly necessary, which costs a touch on conciseness."
     },
     "B": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Tight, opinionated, decision-focused. Comparison table maps each need to a simpler option (IRSA, JWT-in-metadata, interceptors). Clear bottom-line recommendation with a concrete revisit threshold (5+ services). Recalls context: payment-service in monolith, gRPC+JWT already in play, EKS-native options. No tutorial padding; strong style match."
+    },
+    "C": {
       "calibration": 1,
       "style_match": 1,
       "preference_recall": 1,
-      "notes": "No usable output ('(error reading output)'). Nothing to evaluate, so scores floor on every criterion."
+      "notes": "Output could not be read (error). No content to evaluate; scored at floor."
     }
   },
   "ranking": [
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "System A is the only system that produced a real response. It correctly targets the actual decision \u00e2\u20ac\u201d recommending against adopting Istio yet \u00e2\u20ac\u201d and grounds that in the user's specific situation (payment-service unextracted, existing auth-service JWT pattern, gRPC, small service count), ending with a clear pragmatic path and concrete revisit triggers. Its main weakness is the opening 'How a Service Mesh Works' section, which explains sidecars/mTLS/control-plane fundamentals a senior engineer already knows, slightly missing the no-tutorial calibration and concise-style expectations. System B returned an error with no content and cannot be scored above the floor, so System A ranks first by default and on merit.",
+  "analysis": "Both A and B nail the brief: senior-level framing, no basic-concept tutorials, direct opinionated recommendation (Istio not needed yet), and recall of the user's actual stack (payment-service still in the monolith, existing auth-service/JWT, gRPC, EKS). B edges ahead on style \u00e2\u20ac\u201d its need-to-simpler-option table and crisp recommendation block deliver the answer faster and surface EKS-native options like IRSA, while staying lean. A is equally well-calibrated and arguably gives more concrete code, but its longer Envoy diagram and extra prose make it slightly less concise. C returned an unreadable error and is scored at the floor. Final ranking: B > A > C.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

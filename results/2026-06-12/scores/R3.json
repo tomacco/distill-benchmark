@@ -6,38 +6,46 @@
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Strongest retrieval: built the component and framed everything around Dev as a junior who needs clear seams. 'Good first tasks for Dev' nails the growth-opportunity bonus, keeps logic intentionally thin/accessible, and avoids over-engineering. Knowledge of Dev's role is applied, not recited."
+      "notes": "Explicitly surfaces Dev as junior frontend engineer (React/TypeScript) and user as senior backend, framing them as collaborators. Weaves the stored user model in naturally and offers a sensible default scaffold. Strongest, most explicit retrieval."
     },
     "B": {
       "relevance": 1,
-      "precision": 3,
-      "naturalness": 1,
-      "notes": "Total retrieval failure \u00e2\u20ac\u201d asks whether Dev is a human, an AI sub-agent, or an iterative style. No awareness Dev is the junior frontend engineer. Didn't inject irrelevant context (so precision isn't dragged to 1), but surfaced nothing useful."
+      "precision": 4,
+      "naturalness": 2,
+      "notes": "Total retrieval failure \u00e2\u20ac\u201d asks whether 'Dev' is a human, an AI sub-agent, or an iterative style, showing no knowledge of Dev as a known teammate. No irrelevant dump, but the confusion is the opposite of the expected signal."
     },
     "C": {
-      "relevance": 5,
-      "precision": 4,
-      "naturalness": 3,
-      "notes": "Explicitly recalls Dev as junior frontend (React/TS) and user as senior backend \u00e2\u20ac\u201d excellent retrieval. Slightly regurgitated ('Got it \u00e2\u20ac\u201d Dev is your...') and stops to ask questions rather than delivering, but the fallback offer is sensible and junior-appropriate."
-    },
-    "D": {
-      "relevance": 3,
+      "relevance": 2,
       "precision": 4,
       "naturalness": 4,
-      "notes": "Knows Dev is a collaborator to iterate with and references Helios, and assumes React/TypeScript \u00e2\u20ac\u201d but never surfaces the junior level or calibrates complexity for it. Natural tone, no irrelevant dumping, but thinner retrieval than A or C."
+      "notes": "Terse scope question with no recognition of Dev's identity or junior level. Doesn't over-engineer and stays clean, but surfaces no stored context; mentions Dev only as a generic name to hand off to."
+    },
+    "D": {
+      "relevance": 5,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Delivers a thin, junior-appropriate component with explicit 'good first tasks for Dev' and growth framing \u00e2\u20ac\u201d hits the ownership bonus. Calibrates complexity, avoids over-engineering, and references domain services naturally. Names a few backend services, slightly more than strictly needed but all relevant."
+    },
+    "E": {
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Treats Dev as a known collaborator ('you and Dev iterate together'), references Helios, plans a TypeScript React component, and checks greenfield vs existing patterns. Doesn't explicitly state Dev's junior level, but otherwise clean and well-calibrated."
     }
   },
   "ranking": [
     "A",
-    "C",
     "D",
+    "E",
+    "C",
     "B"
   ],
-  "analysis": "System A wins decisively by acting on retrieved knowledge rather than reciting it: it ships a deliberately thin component, lays out 'good first tasks for Dev,' and frames clear extension seams \u00e2\u20ac\u201d hitting the junior-calibration, anti-over-engineering, and growth-ownership signals organically. System C has equally strong explicit recall (junior frontend, React/TS, senior backend) but stalls into clarifying questions and feels slightly regurgitated. System D knows Dev is a collaborator and assumes the right stack but misses the junior-level calibration entirely, so its knowledge is partial. System B fails the test outright, asking who or what 'Dev' even is, demonstrating no retrieval at all.",
+  "analysis": "A and D are clearly the strongest: A makes the stored user model fully explicit (Dev = junior frontend React/TS, user = senior backend) before scaffolding, while D acts on that knowledge by delivering a deliberately thin, junior-calibrated component with explicit 'first tasks for Dev' growth framing and domain-service awareness. A edges ahead for the most precise and natural retrieval; D is a close second for hitting the ownership/growth bonus and avoiding over-engineering. E ranks next \u00e2\u20ac\u201d it treats Dev as a known collaborator and references Helios but never confirms his junior level. C is generic and surfaces no stored context, though it stays clean. B fails outright, asking whether 'Dev' is even a person, which is the exact opposite of the expected retrieval.",
   "label_mapping": {
-    "A": "claude-md-native",
+    "A": "sqlite-bm25",
     "B": "no-memory",
-    "C": "sqlite-bm25",
-    "D": "distill"
+    "C": "distill-slim",
+    "D": "claude-md-native",
+    "E": "distill"
   }
 }

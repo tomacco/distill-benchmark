@@ -3,41 +3,49 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 1,
-      "strength": 3,
-      "contradiction_handling": 3,
-      "notes": "No sign of recalling the team's prior rejection of DynamoDB. Treats it purely as a latency-mismatch question and redirects to Redis on technical merits. Sound answer, but no corrective memory and no citation of the team decision."
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Clearly recalls the team's prior evaluation and rejection, actively warns against DynamoDB, validates the use case, and redirects to Redis (already in stack) with concrete reasoning and an honest tradeoff. Not preachy."
     },
     "B": {
       "recall": 1,
-      "strength": 3,
-      "contradiction_handling": 3,
-      "notes": "Explicitly states 'No prior knowledge to apply here' \u00e2\u20ac\u201d zero recall of the team's decision. Strong technical answer with a good tradeoff table and clarifying question, but actively says DynamoDB is fine when you don't need sub-ms, which undercuts any standing correction."
+      "strength": 2,
+      "contradiction_handling": 2,
+      "notes": "No sign of remembering the team's decision. Treats it as a generic latency question; correctly redirects to Redis on technical merits but frames DynamoDB as a 'good fit in general,' missing the standing constraint."
     },
     "C": {
       "recall": 5,
       "strength": 5,
       "contradiction_handling": 4,
-      "notes": "Clearly recalls that the team evaluated and rejected DynamoDB, and cites the named reasoning (strong consistency for financial session data). Active warning plus Redis-already-in-stack recommendation with TTL and ops points. Acknowledges the in-memory tradeoff. Hits nearly all expected signals without being preachy."
+      "notes": "Recalls the rejection and cites the knowledge base, gives reasoning (consistency, transactions, PostgreSQL expertise), recommends Redis, and offers to verify decisions.md. Strong, slightly less detail on the Redis tradeoffs."
     },
     "D": {
+      "recall": 1,
+      "strength": 2,
+      "contradiction_handling": 2,
+      "notes": "Explicitly states 'no prior knowledge to apply.' Excellent standalone technical analysis with a tradeoff table, but fails the correction: even says DynamoDB is a good fit when sub-ms isn't needed, contradicting the standing rejection."
+    },
+    "E": {
       "recall": 5,
       "strength": 5,
-      "contradiction_handling": 4,
-      "notes": "Recalls the explicit rejection with specific provenance (analytics service evaluation, standing constraint). Active warning, redirects to Redis already in the stack, and uniquely flags the persistence/ephemerality tradeoff plus ElastiCache fit. Slightly more emphatic/emoji-flavored but still acknowledges DynamoDB could work."
+      "contradiction_handling": 5,
+      "notes": "Recalls the specific analytics-service evaluation and frames it as a standing constraint, actively warns, validates use case, redirects to Redis with TTL/persistence tradeoffs and AWS/EKS fit. The \u00e2\u203a\u201d emoji edges toward emphatic but content is solid."
     }
   },
   "ranking": [
+    "A",
+    "E",
     "C",
     "D",
-    "B",
-    "A"
+    "B"
   ],
-  "analysis": "Two clear tiers emerge. Systems C and D both recall the team's prior evaluation and rejection of DynamoDB and apply it as an active correction, redirecting to Redis (already in the stack) with TTL, ops, and consistency reasoning \u00e2\u20ac\u201d exactly the expected behavior. C leads slightly by explicitly naming the strong-consistency rationale for financial session data, while D matches it with more specific provenance (the analytics service evaluation) and a sharper persistence/ephemerality tradeoff; both are excellent and nearly tied. Systems A and B have no memory of the decision \u00e2\u20ac\u201d B even states outright that it has no prior knowledge \u00e2\u20ac\u201d so they answer the latency question on technical merits alone and recommend Redis without any corrective force; B edges A for thoroughness and honesty but weakens its correction by affirming DynamoDB as 'fine' for non-sub-ms use.",
+  "analysis": "A, E, and C all correctly recalled the team's prior evaluation and rejection of DynamoDB, actively warned against it, acknowledged the valid use case, and redirected to Redis (already in the stack) \u00e2\u20ac\u201d exactly the corrective behavior the scenario demands. A edges ahead for its clean, non-preachy strong-consistency reasoning paired with a fair tradeoff; E is nearly identical in quality but cites the most specific origin (the analytics-service evaluation) at the cost of a slightly emphatic tone; C is strong and uniquely offers to verify the knowledge file, though lighter on Redis specifics. D and B failed the core test: both gave high-quality generic technical answers but showed no recall of the correction, with D explicitly disclaiming prior knowledge and both treating DynamoDB as acceptable in cases the team had already ruled out.",
   "label_mapping": {
-    "A": "no-memory",
-    "B": "distill",
-    "C": "claude-md-native",
-    "D": "sqlite-bm25"
+    "A": "claude-md-native",
+    "B": "no-memory",
+    "C": "distill-slim",
+    "D": "distill",
+    "E": "sqlite-bm25"
   }
 }

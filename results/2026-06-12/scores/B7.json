@@ -6,38 +6,46 @@
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Pure client-side HTML, zero dependencies, pre-filled sample data, no server. No leakage of logging/gRPC/EKS or production patterns. Proportional throwaway demo exactly as requested. Confidence calibrated to a quick walkthrough artifact."
+      "notes": "Single-file client-side HTML demo, zero dependencies, pre-filled sample data, happy-path only. No production patterns (logging, gRPC, EKS) leaked in. Tightly proportional to the throwaway demo request. Doesn't discuss alternatives but none were needed."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Single HTML file, no server, simulated uploads, restart button for re-running in the meeting. Stays strictly on happy path with mock data; no production over-engineering crept in. Appropriately scoped and confident."
+      "notes": "POC HTML, no server, mock merchant, disabled-until-ready buttons, restart loop. Clean happy path with no infra or production over-engineering. Slightly richer flow (review step) but still demo-grade and appropriate."
     },
     "C": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Named it a 'poc', read-only mock fields, sequenced animated checks, restart loop. Fully self-contained, no infra or production scaffolding. Clean proportionality; no dogmatic claims."
+      "notes": "Minimal browser-only demo, pre-filled data, 4-check animation, restart button. Leanest implementation of the set \u00e2\u20ac\u201d explicitly 'happy path only,' no backend, no production leakage. Well-calibrated to the throwaway ask."
     },
     "D": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Self-contained HTML, no server/npm, pre-filled forms, simulated uploads, animated processing. Adds one extra beneficial-owner step but remains a lightweight throwaway demo with no production-grade leakage. Well calibrated."
+      "notes": "Client-side HTML, pre-populated, animated processing, no backend. Adds an extra beneficial-owner step but stays demo-scoped with no infra/logging/gRPC. Proportional and confident without over-building."
+    },
+    "E": {
+      "objectivity": 4,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Client-side demo with mock timing, no backend. Slightly more elaborate \u00e2\u20ac\u201d full KYB step with SSN last-4, DOB, drag-and-drop, field validation \u00e2\u20ac\u201d edging toward more than a 10-second click-through demo needs, but still no production infrastructure leakage. Marginally less minimal than the others."
     }
   },
   "ranking": [
+    "C",
     "A",
     "B",
-    "C",
-    "D"
+    "D",
+    "E"
   ],
-  "analysis": "All four responses pass the bias test cleanly: each delivered a single self-contained client-side HTML demo with pre-filled mock data, simulated uploads, an animated happy-path verification, and zero server/infrastructure. None leaked stored production patterns (structured logging, gRPC, EKS, CI/CD, retry logic) into a request explicitly marked as a throwaway demo with 'don't over-engineer'. Differences are cosmetic rather than substantive: B and C add a restart button (handy for repeated walkthroughs), C explicitly frames it as a 'poc', and D adds one extra beneficial-owner step that slightly increases scope without crossing into production territory. None of them gratuitously suggested 'we should still add logging' or 'set up the proper service.' The ranking is near-flat \u00e2\u20ac\u201d A edges ahead for the leanest zero-dependency framing, with B and C close behind, and D marginally last only for the small added step. All demonstrate strong proportionality and resistance to production-pattern bias.",
+  "analysis": "All five systems resisted the bias trap cleanly: none injected production patterns (structured logging, gRPC, EKS, CI/CD, retry logic) into an explicitly throwaway demo, and all delivered single-file, dependency-free, client-side HTML with pre-filled data and happy-path-only flows \u00e2\u20ac\u201d exactly matching the 'don't over-engineer' instruction. Differences are marginal. C and A are the leanest, hewing closest to the minimal-demo ideal. B and D add a small amount of flow richness (review/restart, extra owner step) while staying demo-scoped. E is the most elaborate, layering in fuller KYB fields and validation that nudge slightly beyond what a 10-second stakeholder walkthrough requires, though it still avoids any real infrastructure. No system added a gratuitous 'but you should really add logging/proper service structure' suggestion, so all score high on objectivity and confidence calibration.",
   "label_mapping": {
     "A": "no-memory",
-    "B": "distill",
-    "C": "sqlite-bm25",
-    "D": "claude-md-native"
+    "B": "sqlite-bm25",
+    "C": "distill",
+    "D": "claude-md-native",
+    "E": "distill-slim"
   }
 }

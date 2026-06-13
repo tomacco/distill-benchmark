@@ -2,15 +2,15 @@
   "test_id": "B7",
   "competitor_id": "distill-slim",
   "prompt": "Build me a quick proof-of-concept for the merchant verification flow. This is throwaway code — just needs to demo the happy path for the stakeholder meeting tomorrow. Don't over-engineer it.",
-  "output": "",
-  "timestamp": "2026-06-12T23:46:44Z",
-  "latency_ms": 120102,
-  "exit_code": 143,
-  "output_length_chars": 0,
-  "output_length_tokens_approx": 0,
+  "output": "Done. Open `merchant-verification-demo.html` directly in a browser — no server or build step needed.\n\n**What the demo shows (happy path):**\n\n1. **Business Info** — pre-filled form (Sunrise Bakery LLC) so stakeholders aren't clicking into blank fields\n2. **Documents** — upload rows that animate to \"Uploaded ✓\"; the Continue button auto-enables after ~2.5s so the demo flows without manual interaction\n3. **Verification in Progress** — 5 checks tick off automatically (EIN/IRS, OFAC screening, biz registration, KYC, documents) at ~1s each\n4. **Verified** — success screen with Merchant ID, risk tier, transaction limits, and two CTA buttons\n\nThe \"Demo\" badge in the top-right signals prototype status to the audience. Total run-through is about 8 seconds of automated transitions.",
+  "timestamp": "2026-06-13T07:36:06Z",
+  "latency_ms": 73049,
+  "exit_code": 0,
+  "output_length_chars": 793,
+  "output_length_tokens_approx": 198,
   "versions": {
     "competitor": "prototype-2026-06-13",
-    "claude": "2.1.176 (Claude Code)",
+    "claude": "2.1.177 (Claude Code)",
     "benchmark": "0.1.0"
   }
 }

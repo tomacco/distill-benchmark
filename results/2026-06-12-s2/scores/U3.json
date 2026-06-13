@@ -6,22 +6,30 @@
       "calibration": 1,
       "style_match": 1,
       "preference_recall": 1,
-      "notes": "No usable output (error reading output). Cannot evaluate; scored at floor."
+      "notes": "No output produced (error reading output). Cannot evaluate; scored at floor."
     },
     "B": {
       "calibration": 5,
-      "style_match": 2,
-      "preference_recall": 2,
-      "notes": "Technically excellent and genuinely senior-level: addresses the 2000 tx/s constraint quantitatively, respects the event-driven architecture, and is opinionated ('What I'd do: Redis dirty flag'). But it badly misses the conciseness preference \u00e2\u20ac\u201d it's roughly as long as the prompt, walks through every considered option in detail before answering, and adds a secondary alternative plus a tertiary variant. Good content, wrong proportionality."
+      "style_match": 3,
+      "preference_recall": 4,
+      "notes": "Strongly opinionated single recommendation (Redis dirty bit) with code, senior-level framing, and a sharp architectural flag (monolith Redis client). Addresses the 2000 tx/s and Kafka-lag constraints directly. But well over the ~300-word target with a table and a second fallback \u00e2\u20ac\u201d does not honor the conciseness preference implied by the long input. No problem-restating preamble, which is good."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Also opinionated and senior-calibrated, same dirty-flag recommendation with concrete numbers and good reasoning about coupling-vs-contract. However it is the longest response, enumerates more (L1/L2 tier, pub/sub variant) and matches the prompt's verbosity rather than trimming it \u00e2\u20ac\u201d directly against the conciseness signal. Strong technical content but least proportional."
     }
   },
   "ranking": [
     "B",
+    "C",
     "A"
   ],
-  "analysis": "System A produced no readable output and is scored at the floor across all criteria. System B is a substantive, expert-level answer that correctly leverages the existing Redis infrastructure, quantifies the trade-offs, and commits to a clear recommendation \u00e2\u20ac\u201d strong calibration. However, it violates the user's demonstrated preference for concise, proportional answers: it is nearly as long as the 400+ word prompt, enumerates and rebuts each considered option in full, and tacks on multiple alternatives rather than leading with one opinionated fix. So while B wins by default (A is unusable), it would not have scored highly on style/preference even against a strong field.",
+  "analysis": "Systems B and C are nearly equivalent in technical quality: both correctly leverage the existing Redis in the stack, both land on a synchronous dirty-bit/fence-token pattern as the most proportional fix, both rebut the user's other options crisply, and both speak at the right senior level with code and concrete throughput math. Neither restates the problem before answering. The decisive difference is proportionality: the user clearly prefers concise, opinionated answers, and both responses run long, but B is tighter \u00e2\u20ac\u201d one recommendation, one fallback, one practical flag \u00e2\u20ac\u201d while C piles on additional alternatives (two-tier L1/L2, pub/sub variant) and matches the prompt's verbosity, which the rubric penalizes. B edges ahead on style/preference fit. A produced no output and is scored at the floor.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

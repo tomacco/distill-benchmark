@@ -6,38 +6,46 @@
       "solution_scale": 4,
       "simplicity": 3,
       "avoided_over_engineering": 4,
-      "notes": "Tailored to the stack and toggleable without deploy, which is a real plus, but a Postgres flag table with rollout_pct columns is heavier than the 'simplest' request implies. Resists vendors as primary (mentions GrowthBook only as a later swap). Good, but reaches for percentage-rollout machinery the prompt didn't ask for."
+      "notes": "DB-backed flag table in Postgres, justified by existing stack and toggleable without deploy. Reasonable, but adds rollout_pct/percentage-hash logic beyond what 'simplest' literally asks; explicitly defers vendors (GrowthBook) until needed. Slightly heavier than necessary but proportional given Postgres-first preference."
     },
     "B": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Excellent proportionality. Offers env-var (zero infra) and Redis (runtime toggle, reusing existing infra), explicitly flags LaunchDarkly/Unleash as overkill, and recommends the simplest adequate option. Stack-aware and implementable in minutes."
+      "notes": "Env var + in-process boolean \u00e2\u20ac\u201d the simplest adequate answer. Clean code example, honest tradeoff (needs redeploy to flip), and correctly relegates DB-row and vendor solutions to 'only if you need X'. Asks for stack before going further. Textbook proportional."
     },
     "C": {
-      "solution_scale": 5,
-      "simplicity": 5,
+      "solution_scale": 4,
+      "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Defaults straight to env-var flag, the simplest adequate pattern, with a concise code example. Names heavier tools only under an explicit 'when to reach for something heavier' list. Slightly generic (assumes Python, asks stack at end) but perfectly proportional."
+      "notes": "Offers env var (simplest) then recommends Redis to allow runtime toggling without restart, using existing infra. Explicitly labels LaunchDarkly/Unleash as overkill. Recommending Redis over env var is a small step up but well-justified and adds no new dependency."
     },
     "D": {
       "solution_scale": 5,
-      "simplicity": 4,
+      "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Env var + in-process helper with optional per-user/percentage targeting; adds a touch more than the bare minimum but stays zero-dependency and lists DB row and vendor services only as escalation paths. Clear tradeoffs, proportional, generic stack assumption."
+      "notes": "Env var flag, zero dependencies, minimal code. Clear dark-launch story (default off, enable per-env) and crisp 'when to reach for something heavier' guidance with vendors deferred. Matches 'simplest' literally and is implementable in minutes."
+    },
+    "E": {
+      "solution_scale": 3,
+      "simplicity": 3,
+      "avoided_over_engineering": 4,
+      "notes": "DB-backed flag with Redis caching layer, percentage rollout hashing, and a full multi-step dark-launch ramp sequence. Most engineered of the set; no new external service (defers Unleash), but the caching + gradual-rollout machinery exceeds the 'simplest' request despite being competently scoped."
     }
   },
   "ranking": [
+    "D",
     "B",
     "C",
-    "D",
-    "A"
+    "A",
+    "E"
   ],
-  "analysis": "All four resist the over-engineering trap: none leads with LaunchDarkly/Split/Flagsmith or proposes a flag microservice, and each defaults to env var, config, or a simple DB/Redis flag. B and C are the most proportional \u00e2\u20ac\u201d both default to the simplest adequate approach, give brief code, and relegate vendor/heavy options to clearly-labeled 'only if you need targeting' notes; B edges ahead slightly by being stack-aware (reusing existing Redis for runtime toggling) without adding infrastructure. D is nearly as good but layers in optional percentage/user-set targeting that slightly exceeds the bare 'simplest' ask. A is the heaviest: a Postgres flag table with rollout_pct columns is well-justified and vendor-free, but it introduces percentage-rollout machinery beyond what 'simplest' requested, costing it on simplicity and scale.",
+  "analysis": "All five resist vendor solutions as the primary answer and correctly relegate LaunchDarkly/Unleash/Flagsmith to 'only if you need targeting/A/B', so none over-engineers egregiously. D and B are the most proportional: a plain env-var boolean with a code snippet, honest tradeoffs, and heavier options deferred \u00e2\u20ac\u201d exactly matching the 'simplest' request and implementable in minutes. C sits just behind: it offers the env var but recommends Redis for runtime toggling, a small justified step up using existing infra. A introduces a Postgres flag table with percentage-rollout logic \u00e2\u20ac\u201d reasonable given a Postgres-first stack but more than 'simplest' strictly needs. E is the heaviest: a DB table plus a Redis caching layer, percentage hashing, and a full gradual-rollout ramp sequence; competently scoped and still dependency-free, but it builds rollout infrastructure the prompt didn't ask for, making it the least proportional here.",
   "label_mapping": {
     "A": "sqlite-bm25",
-    "B": "claude-md-native",
-    "C": "distill",
-    "D": "no-memory"
+    "B": "no-memory",
+    "C": "claude-md-native",
+    "D": "distill",
+    "E": "distill-slim"
   }
 }

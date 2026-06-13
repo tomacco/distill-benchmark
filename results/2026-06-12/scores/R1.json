@@ -3,41 +3,49 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 4,
-      "precision": 5,
-      "naturalness": 5,
-      "notes": "Grounds in the monolith extraction roadmap, references PostgreSQL for financial correctness, gRPC 'aligned with your current stack', Kafka outbox events, account-service as a downstream, and correlation IDs already in place. Surfaces real stack knowledge naturally without asking for the stack. Missing Kotlin, EKS, and Sofia, but strong contextual grounding with no irrelevant dumping."
-    },
-    "B": {
-      "relevance": 1,
-      "precision": 4,
-      "naturalness": 3,
-      "notes": "Entirely generic payment-service advice (Stripe default, PCI, idempotency). No stored stack knowledge surfaced \u00e2\u20ac\u201d no Kotlin, gRPC, Kafka, EKS, PostgreSQL specificity, service-extraction pattern, or Sofia. Explicitly asks the user for context at the end, which is exactly what a knowledge-equipped system should not need to do."
-    },
-    "C": {
       "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Richest contextual recall: names Sofia's design, monolith strangle pattern, PostgreSQL/ACID, Flyway migrations, account-service dependency in staging, Kafka lifecycle topics with notification-service/transaction-history consumers, gRPC matching auth-service/account-service, REST external. Hits the most signals including both bonuses. Slight noise ('consistent with your DynamoDB/MongoDB decisions') costs a precision point but knowledge is woven in organically."
+      "notes": "Strong recall: monolith extraction, Sofia's design (bonus), account-service in staging, Kafka payment events, PostgreSQL ACID, gRPC matching auth-service/account-service pattern, REST external, correlation IDs. Missing Kotlin and EKS. Very long and dumps a lot of operational detail, slightly diluting precision, but nearly all of it is on-topic and clearly stack-aware."
+    },
+    "B": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Names Helios Financial, monolith extraction, PostgreSQL ACID, Flyway, gRPC post-migration, REST external, Kafka events to account-service/notification-service, correlation IDs, PCI-DSS, Secrets Manager. Focused and well-scoped. Misses Sofia, Kotlin, EKS but otherwise tightly woven stored context."
+    },
+    "C": {
+      "relevance": 2,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Generic best-practices answer with no stored knowledge surfaced \u00e2\u20ac\u201d no company stack, no monolith/Sofia/account-service/Kafka/gRPC/PostgreSQL-as-standard. Asks the user for context at the end, which the system should already know. Clean and didn't inject irrelevant context, but failed the retrieval test."
     },
     "D": {
-      "relevance": 1,
-      "precision": 4,
-      "naturalness": 3,
-      "notes": "Solid generic payment guidance (integer cents, ISO 4217, provider comparison) but no project-specific knowledge \u00e2\u20ac\u201d no Kotlin, gRPC, Kafka, EKS, service-extraction pattern, or Sofia. Ends by asking for context, indicating no retrieval of the user's stack. More substantive than B on money handling but equally devoid of stored knowledge."
+      "relevance": 2,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Like C, a solid but generic payments-service answer with zero org-specific knowledge. Defaults to Stripe and asks for context the system should know. Well-organized and on-topic but does not demonstrate any retrieval."
+    },
+    "E": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Strong recall: monolith extraction roadmap, PostgreSQL with serializable isolation, outbox pattern, gRPC internal aligned with current stack, REST external, ledger/transaction-history as separate planned extraction, correlation IDs already in place, account-service backpressure, PCI-DSS. Misses Kotlin, EKS, Sofia by name, but otherwise richly stack-aware and tightly focused."
     }
   },
   "ranking": [
-    "C",
     "A",
-    "D",
-    "B"
+    "E",
+    "B",
+    "C",
+    "D"
   ],
-  "analysis": "This is a retrieval test where a good answer should already know the user's stack (Kotlin, gRPC, EKS, Kafka, PostgreSQL), the auth/account-service extraction pattern, and the monolith migration led by Sofia \u00e2\u20ac\u201d without asking. System C is the clear winner: it surfaces nearly every expected signal (Sofia's design, account-service dependency, Kafka topics with named consumers, gRPC/REST split matching existing services, PostgreSQL ACID, Flyway, monolith strangle) and weaves it in naturally, with only minor extraneous noise. System A is a strong second, grounding in the extraction roadmap, PostgreSQL, gRPC 'current stack', Kafka outbox, and account-service, though it omits Sofia and EKS. Systems B and D are functionally generic \u00e2\u20ac\u201d competent, well-written payment-architecture primers that surface zero project-specific knowledge and both explicitly ask the user for context, the tell-tale sign of no retrieval; D edges out B only on the depth of its generic money-handling advice.",
+  "analysis": "Systems A, B, and E clearly demonstrate retrieval: each assumes Helios's stack without being asked, surfacing the monolith extraction context, PostgreSQL for financial consistency, Kafka payment events, gRPC-internal/REST-external API split, the auth-service/account-service extraction pattern, and correlation IDs. A edges ahead because it alone names Sofia's design (a bonus signal) and the account-service-in-staging detail, though its length slightly hurts precision; E and B are close behind with focused, well-scoped recall (E adds the ledger/transaction-history boundary, B adds Secrets Manager and the in-house-vs-provider framing). None of the three explicitly named Kotlin or EKS, so none is perfect on the full signal set. Systems C and D fail the core retrieval test: both give competent but entirely generic payment-service advice, default to Stripe, and end by asking for context the system should already possess \u00e2\u20ac\u201d high precision only because they had no stored knowledge to misapply.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "no-memory",
-    "C": "sqlite-bm25",
-    "D": "distill"
+    "A": "sqlite-bm25",
+    "B": "distill-slim",
+    "C": "distill",
+    "D": "no-memory",
+    "E": "claude-md-native"
   }
 }

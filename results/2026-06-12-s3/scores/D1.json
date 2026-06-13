@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "quality": 2,
-      "relevance": 3,
-      "helpfulness": 3,
-      "notes": "Provides a working docker ps command, but ignores both stored preferences: uses bash (not fish), and is verbose with multiple variants, a chmod explanation, and a follow-up question. This is classic vanilla-baseline over-explaining and over-offering. No evidence of recalling the fish or concise preference."
+      "relevance": 2,
+      "helpfulness": 2,
+      "notes": "Very terse and matches the concise preference, but bash-flavored (`bash containers.sh`) and never actually shows the command/script content it claims to have saved, so it's not self-contained or verifiable. No fish syntax recalled."
     },
     "B": {
       "quality": 3,
       "relevance": 3,
-      "helpfulness": 2,
-      "notes": "Strongly matches the concise/no-over-engineering preference \u00e2\u20ac\u201d terse, action-first. However it still references `bash containers.sh` rather than fish, and is so terse it omits the actual command content, reducing standalone usefulness. Partial signal recall: concise yes, fish no."
+      "helpfulness": 3,
+      "notes": "Functionally correct docker ps command and shows the actual content, but bash-specific (`#!/usr/bin/env bash`), verbose with three variant blocks, and ends with a clarifying question \u00e2\u20ac\u201d over-explains relative to the concise preference. No fish recall."
+    },
+    "C": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Concise, saves to file and offers one useful variant \u00e2\u20ac\u201d best balance of brevity and usefulness here, but still bash-based and includes no fish syntax. Like the others, fails the key signal of recalling the fish + concise preference unprompted."
     }
   },
   "ranking": [
+    "C",
     "B",
     "A"
   ],
-  "analysis": "Neither response demonstrates clean recall of the fish-shell preference \u00e2\u20ac\u201d both invoke bash explicitly, missing the primary persistence signal. The differentiator is conciseness and over-engineering: System A sprawls into three command variants, a chmod tutorial, and a trailing question, behaving like an unprimed vanilla baseline that recalls nothing. System B is tight and action-first, matching the concise/no-over-engineer preferences, suggesting partial preference recall, though it leans so terse that it drops the actual command and still names bash. B edges out A overall because it saves more correction tokens on conciseness, but the test's key fish-syntax signal is unmet by both, so neither is a strong memory-system result.",
+  "analysis": "None of the three systems demonstrate the key persistence signal this test targets: recalling the user's fish-shell and conciseness preferences without being reminded. All default to bash syntax, so the 'correction tokens saved' metric is essentially unmet across the board. C ranks first for striking the best balance \u00e2\u20ac\u201d it's concise, actually delivers a saved script plus one practical variant, and avoids over-engineering. B is correct and complete but the most verbose, padding three command variants and a trailing question, slightly violating the concise preference. A is the most terse but paradoxically the least helpful: it references a saved script without ever showing the command, leaving the response incomplete and unverifiable. Overall this looks like vanilla/baseline behavior from all three rather than memory-informed output.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

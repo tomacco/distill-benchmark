@@ -3,41 +3,49 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 5,
-      "style_match": 4,
-      "preference_recall": 4,
-      "notes": "Pitched at senior level, skips basics, anchors on the actual decision (do they need Istio) with a direct 'don't add Istio yet' recommendation. Considers existing setup: monolith state, gRPC, EKS, existing auth-service JWTs, App Mesh alternative. Includes a 'How a Service Mesh Works' section with sidecar/Envoy diagram that is slightly more tutorial than a senior engineer needs, costing a point on style, but it stays technical (SPIFFE identity, X.509) rather than condescending. Opinionated and concrete with latency/RAM figures."
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No output produced (error reading output). Cannot evaluate; scored minimum."
     },
     "B": {
       "calibration": 1,
       "style_match": 1,
       "preference_recall": 1,
-      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+      "notes": "No output produced (error reading output). Cannot evaluate; scored minimum."
     },
     "C": {
-      "calibration": 1,
-      "style_match": 1,
-      "preference_recall": 1,
-      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Strong senior-level engagement: anchors on the user's actual stack (monolith-bound payment-service, gRPC, EKS), gives a direct opinionated 'don't add Istio yet' recommendation with a concrete alternative (JWT service tokens via existing auth-service) and a clear revisit trigger. Considers App Mesh given EKS. Loses points for the 'How a Service Mesh Works' tutorial section (sidecar/Envoy/SPIFFE walkthrough) which is exactly the basic-concept padding the rubric penalizes for a senior audience. No specific recalled prefs (e.g. shell), so preference_recall is neutral."
     },
     "D": {
       "calibration": 1,
       "style_match": 1,
       "preference_recall": 1,
-      "notes": "No output (error reading output) \u00e2\u20ac\u201d cannot evaluate; scored minimum."
+      "notes": "No output produced (error reading output). Cannot evaluate; scored minimum."
+    },
+    "E": {
+      "calibration": 1,
+      "style_match": 1,
+      "preference_recall": 1,
+      "notes": "No output produced (error reading output). Cannot evaluate; scored minimum."
     }
   },
   "ranking": [
+    "C",
     "A",
     "B",
-    "C",
-    "D"
+    "D",
+    "E"
   ],
-  "analysis": "Only System A produced a usable response; B, C, and D all failed with read errors and are scored at the floor. System A is a strong answer: it correctly reads the user as a senior engineer, skips definitional fluff about K8s/sidecars/mTLS, and centers the response on the real decision \u00e2\u20ac\u201d whether Istio is warranted given the user's specific context (payment-service still in the monolith, gRPC, EKS, existing auth-service JWTs). It gives a clear, opinionated recommendation ('don't add Istio yet; use JWT service tokens through auth-service') and notes when the cost-benefit flips, plus the App Mesh alternative for EKS. Its only weakness is a 'How a Service Mesh Works' section that leans slightly tutorial for this audience, though it remains technically dense. A wins decisively by default and on merit.",
+  "analysis": "Only System C produced a usable response; A, B, D, and E all errored and are scored at the floor. System C is a solid senior-level answer: it correctly skips most fundamentals in favor of a stack-aware decision (payment-service still in the monolith, existing gRPC, EKS), delivers an unambiguous 'not yet' recommendation with a pragmatic interim path and a concrete revisit threshold, and even surfaces AWS App Mesh as the lower-ops alternative. Its main weakness against the rubric is the mechanics/tutorial section explaining sidecars, Envoy, and SPIFFE \u00e2\u20ac\u201d appropriate for a junior but unnecessary padding for the assumed senior audience \u00e2\u20ac\u201d which slightly lowers calibration and style. No specific stored preferences (shell, formatting) were demonstrably applied, leaving preference_recall neutral. C wins by default but would still rank first on quality among real responses.",
   "label_mapping": {
-    "A": "claude-md-native",
+    "A": "sqlite-bm25",
     "B": "no-memory",
-    "C": "distill",
-    "D": "sqlite-bm25"
+    "C": "claude-md-native",
+    "D": "distill",
+    "E": "distill-slim"
   }
 }

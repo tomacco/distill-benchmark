@@ -5,39 +5,47 @@
     "A": {
       "calibration": 4,
       "style_match": 2,
-      "preference_recall": 2,
-      "notes": "Technically strong and senior-level, but the most verbose answer \u00e2\u20ac\u201d fully enumerates four options plus multiple 'if you don't have X' branches with equal detail, longer than the prompt. Hedges between Kafka-tuning, Redis bypass, and versioned cache rather than committing. Generic; barely uses the specific scenario context. Violates the concise/opinionated preference most."
+      "preference_recall": 3,
+      "notes": "Senior-level, opinionated single recommendation (Redis bypass tokens) with good 'why not others' reasoning. But very long with multiple code blocks, an outbox section, and TL;DR \u00e2\u20ac\u201d far exceeds the prompt length and ignores the user's concision preference."
     },
     "B": {
-      "calibration": 4,
+      "calibration": 5,
       "style_match": 3,
-      "preference_recall": 4,
-      "notes": "Leads with a clear single recommendation (Redis bypass tokens) and justifies via specific stack facts (Redis already present, payment in monolith, Sofia leading extraction, Marcus likely merchant-side). Opinionated and well-calibrated, but still long with a full 'Why not the others' section and an outbox detour. Strong user-model awareness."
+      "preference_recall": 3,
+      "notes": "Tightest of the long responses: clear single recommendation (Redis stale-marker), compact comparison table, good fail-safe note. Still well over 300 words but the most disciplined structure; reads opinionated rather than enumerative."
     },
     "C": {
       "calibration": 4,
-      "style_match": 3,
+      "style_match": 2,
       "preference_recall": 3,
-      "notes": "Decisive single recommendation (timestamp freshness hint), focused and avoids the over-engineering trap. Reuses the existing timestamp rather than inventing a version \u00e2\u20ac\u201d proportional. Still over length budget and restates the problem some, but tighter than A. Less use of named-stakeholder context."
+      "notes": "Strong technical depth \u00e2\u20ac\u201d catches the multi-pod Caffeine invalidation gap others miss. Opinionated single rec. But long, table-heavy, and adds layers that arguably over-engineer relative to the 'don't over-engineer' constraint."
     },
     "D": {
       "calibration": 5,
-      "style_match": 4,
+      "style_match": 3,
       "preference_recall": 4,
-      "notes": "Cleanest: opens by anchoring on the specific stack fact (Redis already present), commits to one approach (Redis stale-marker), and compresses all alternatives into a compact table rather than full prose \u00e2\u20ac\u201d most proportional treatment of the rejected options. Picks up monolith/Marcus context and adds a focused 'fix first' note. Still over 300 words but the most concise and opinionated of the four."
+      "notes": "Most proportional: leads with read-your-writes framing, recommends a simple timestamp/version freshness hint (the bonus approach), and is the most focused/shortest. Opinionated, addresses constraints directly without restating the problem."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 1,
+      "preference_recall": 2,
+      "notes": "Longest and least concise. Hedges with 'profile Kafka first', then enumerates multiple fixes (Redis bypass OR versioned cache) in near-equal detail plus a numbered 3-step plan. Most violates the 'be opinionated, don't enumerate' preference."
     }
   },
   "ranking": [
     "D",
     "B",
+    "A",
     "C",
-    "A"
+    "E"
   ],
-  "analysis": "All four are competent senior-level answers that converge on the same right idea (a synchronous Redis/timestamp read-your-writes signal scoped to just-paid accounts) and correctly dismiss write-through coupling and shorter TTLs \u00e2\u20ac\u201d but the test rewards conciseness, commitment, and use of the user's specific context, and all four exceed the implied length budget. D wins by committing to one approach, anchoring on the concrete stack fact (existing Redis), and collapsing alternatives into a table instead of equal-weight prose, making it the most proportional. B is close, equally opinionated and richest in named-context recall, but longer. C is decisive and elegant (reusing the existing timestamp) yet uses less specific context. A ranks last: technically deepest but the most verbose and least committed, enumerating multiple full solutions and branches \u00e2\u20ac\u201d exactly the verbosity-matching, option-dumping behavior the user dislikes.",
+  "analysis": "All five are senior-level and technically sound, converging on a Redis-marker / read-your-writes solution, but every response badly overshoots the user's concision preference \u00e2\u20ac\u201d none come close to the implied <300-word, opinionated target, so the differentiator is proportionality and focus. D ranks first: it is the most concise, frames the problem correctly as read-your-writes, and lands on the simple version/timestamp approach the rubric flags as most proportional, with minimal hedging. B is the most disciplined of the verbose answers \u00e2\u20ac\u201d one clear recommendation, compact table, no enumeration creep. A and C are both strong and opinionated but long; C earns credit for the multi-pod insight yet risks over-engineering against the explicit 'don't over-engineer' constraint. E ranks last: it hedges (profile Kafka first), presents two co-equal fixes plus a numbered plan, and is the longest \u00e2\u20ac\u201d the clearest case of enumerating options in equal detail rather than committing.",
   "label_mapping": {
-    "A": "no-memory",
-    "B": "sqlite-bm25",
-    "C": "distill",
-    "D": "claude-md-native"
+    "A": "sqlite-bm25",
+    "B": "claude-md-native",
+    "C": "distill-slim",
+    "D": "distill",
+    "E": "no-memory"
   }
 }

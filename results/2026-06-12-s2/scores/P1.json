@@ -6,22 +6,30 @@
       "solution_scale": 5,
       "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Proportional, no over-engineering \u00e2\u20ac\u201d no aliases, deprecation, or versioning. Correctly treats it as a simple find-and-replace and even covers renaming the file itself. Slightly longer with a numbered 3-step list, but still well within scale. Did not offer the bonus IDE-rename or a sed/ripgrep one-liner."
+      "notes": "Proportional: offers a straightforward grep + replace_all + file rename. No deprecation, alias, or versioning. Three-step enumeration is slightly more verbose than needed but still concise and adequate."
     },
     "B": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Maximally proportional and concise. Recognizes the class doesn't exist yet, suggests just naming it correctly from the start, and offers a single-pass find-and-replace otherwise. No phased migration, adapters, or backward-compat. Tightest possible answer, though it omits the bonus IDE/CLI one-liner options."
+      "notes": "Most concise and proportional. Notes the empty workspace, suggests just naming it correctly from the start, and offers a single-pass find-and-replace. No over-engineering whatsoever."
+    },
+    "C": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Proportional and adds the bonus CLI approach (PowerShell one-liner with dry-run + content replace + file rename). Slightly longer due to the code block, but no unnecessary infrastructure or phased rollout."
     }
   },
   "ranking": [
     "B",
+    "C",
     "A"
   ],
-  "analysis": "Both systems handled this proportionality test well \u00e2\u20ac\u201d neither over-engineered the class rename with aliases, deprecation periods, wrapper classes, or API versioning, which is the core failure mode being tested. The difference is concision. System B is tighter: it notices the class doesn't exist yet, sensibly suggests naming it correctly from the outset, and falls back to a one-pass find-and-replace. System A is also proportional and adds a useful completeness touch (renaming the file, not just occurrences), but presents a 3-step numbered procedure that reads slightly heavier than the problem warrants. Neither offered the bonus IDE rename-refactor or a sed/ripgrep one-liner. System B edges ahead on simplicity for matching the simplest adequate approach.",
+  "analysis": "All three responses correctly treat this as a trivial rename and avoid the over-engineering traps (no aliases, deprecation periods, wrapper classes, or API versioning), so they score uniformly high on scale and over-engineering avoidance. System B is the tightest: it notes the empty workspace, sensibly suggests just using the correct name from the outset, and offers a one-pass find-and-replace without extra ceremony. System C is nearly as good and earns the bonus for providing an actual CLI one-liner (with a dry-run), though the code block makes it the longest. System A is solid and proportional but its three-step enumeration is marginally more verbose than the others without adding the CLI bonus, placing it third.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

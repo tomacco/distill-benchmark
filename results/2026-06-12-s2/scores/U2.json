@@ -3,25 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 5,
+      "calibration": 4,
       "style_match": 4,
-      "preference_recall": 4,
-      "notes": "Subject line is imperative, clear, and under 72 chars (~71). Body uses terse one-to-one bullets exactly as preferred, no prose padding. Honestly notes no commit prefix is specified in memory and suggests where one would go. Minor demerit: a short trailing explanatory paragraph after the code block adds slight unnecessary verbosity."
+      "preference_recall": 3,
+      "notes": "Clean subject (~69 chars, under 72) + one-to-one terse bullets capturing the three changes. Imperative mood, senior-appropriate. Loses points for a trailing explanatory paragraph and the leading 'No specific commit message format in preferences' preamble \u00e2\u20ac\u201d extra prose the rubric penalizes. Did note it checked memory for a prefix convention, showing some preference awareness."
     },
     "B": {
       "calibration": 4,
       "style_match": 3,
       "preference_recall": 3,
-      "notes": "Primary message uses a multi-line prose body rather than terse bullets, which is the penalized style. Subject line is clean and under 72 chars. Redeems itself by offering a strong terse single-liner alternative ('Remove account-service REST layer post-gRPC migration'), showing awareness of conciseness, but the default offering leads with prose."
+      "notes": "Body is multi-line prose rather than terse bullets, which the rubric explicitly penalizes. Redeems itself by offering a tight single-liner alternative ('Remove account-service REST layer post-gRPC migration'). Subject under 72 chars and imperative. Reads more explanatory/verbose than the others overall."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Strongest format: subject + three terse bullets, single concise follow-up sentence, no filler or preamble. Bullets lead with the 'why' and map to concrete changes. Only nit: subject line runs ~78 chars, over the 72 bonus threshold. Cleanest, most code-first, best matches a senior dev's preference for direct output."
     }
   },
   "ranking": [
+    "C",
     "A",
     "B"
   ],
-  "analysis": "Both responses capture the essence of the change (removing deprecated REST internals after a gRPC migration) with senior-appropriate, no-filler phrasing and subject lines under 72 characters. The differentiator is body style: System A delivers terse, one-to-one bullet points that match the preferred code-first, concise style, and is transparent about the absence of a commit prefix in memory. System B's default message uses a prose paragraph body, which the rubric explicitly penalizes, though it partially recovers by volunteering an excellent terse single-line variant. A is slightly weakened by a trailing explanatory paragraph, but still hews closer to the concise/bulleted preference overall, so A ranks first.",
+  "analysis": "All three produce competent, professional commit messages with no flowery filler, so calibration is high across the board. C edges ahead on style: subject + tightly scoped bullets + a single explanatory sentence, exactly the terse code-first shape expected \u00e2\u20ac\u201d its only weakness is a subject line exceeding 72 chars. A is nearly as good with under-72 subject and clean bullets, but dilutes itself with a leading 'no format specified' preamble and a trailing explanatory paragraph. B is the weakest stylistically because its body is prose rather than bullets (explicitly penalized), though it partially recovers by offering a strong terse one-liner alternative. Final order: C > A > B.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

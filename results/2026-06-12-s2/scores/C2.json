@@ -6,22 +6,30 @@
       "recall": 5,
       "strength": 5,
       "contradiction_handling": 5,
-      "notes": "Clearly recalls the team's prior evaluation and rejection of DynamoDB, citing memory/decisions.md. Explains the reasoning (strong consistency for financial data, multi-table transactions, operational risk of leaving the PostgreSQL/Redis ecosystem). Actively redirects to Redis, noting it's already in the stack and purpose-built for sub-millisecond key-value with native TTL. Direct without being preachy. Hits nearly every expected signal."
+      "notes": "Recalls the rejection clearly with the actual reasoning (PostgreSQL expertise, strong consistency needs). Actively states the decision stands even for this simpler use case. Recommends Redis as the fit and offers a PostgreSQL-stack-friendly fallback, staying aligned with the team's ecosystem. Not preachy. Slightly less explicit that Redis is already in the stack, but otherwise excellent."
     },
     "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Strongest correction: 'non-starter,' cites the prior team evaluation and the specific reasons (strong consistency for financial data, multi-table transactions, operational risk). Explicitly notes Redis is already in the stack and is purpose-built for this. Concise, confident, not condescending. Hits nearly every expected signal including the bonus."
+    },
+    "C": {
       "recall": 1,
       "strength": 2,
       "contradiction_handling": 2,
-      "notes": "No sign of remembering the team's prior decision against DynamoDB. Opens by calling DynamoDB 'a good fit for session stores generally' and even leaves plain DynamoDB on the table if latency needs are relaxed. The pushback it offers is purely technical (latency tiers) rather than the team's documented decision. Recommends Redis as one option but on generic merits, not because it's in the existing stack or because of the prior evaluation."
+      "notes": "No sign of remembering the team's prior evaluation or decision against DynamoDB. Treats DynamoDB as a legitimate live option and even recommends DynamoDB/DAX paths. Technically reasonable on latency, but fails the core correction-durability test: it relitigates a settled decision rather than recalling and applying it."
     }
   },
   "ranking": [
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "System A is markedly stronger: it recalls the specific team decision, cites the source, explains the underlying reasoning (consistency, transactions, operational risk), and confidently redirects to Redis as the in-stack, purpose-built answer \u00e2\u20ac\u201d all without being condescending. System B gives a competent generic engineering comparison but shows no memory of the team's prior evaluation; it actually frames DynamoDB favorably and keeps it as a live option, which is the opposite of the expected corrective behavior. While B's latency analysis is technically informative, it misses the entire point of the test, which is whether the system retained and applied the team's correction. A wins decisively on all three criteria.",
+  "analysis": "Both A and B clearly recall the team's prior rejection of DynamoDB, apply it as an active warning, and redirect to Redis without being preachy. B edges out A because it cites the source of the decision, enumerates the specific reasoning (strong consistency for financial data, multi-table transactions, operational risk), and explicitly notes Redis is already in the stack \u00e2\u20ac\u201d hitting the bonus signals most directly. A is nearly as strong and adds a useful PostgreSQL-stack fallback, but is slightly less explicit that Redis already exists in the infrastructure. C fails the correction test entirely: it shows no memory of the prior decision, presents DynamoDB and DAX as live recommendations, and asks a clarifying question that, while reasonable in isolation, treats a settled decision as open \u00e2\u20ac\u201d exactly the durability failure this test probes.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

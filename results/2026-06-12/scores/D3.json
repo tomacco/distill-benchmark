@@ -4,40 +4,48 @@
   "scores": {
     "A": {
       "quality": 4,
-      "relevance": 5,
+      "relevance": 4,
       "helpfulness": 4,
-      "notes": "Recalls Kotlin, gRPC-internal/REST-external, and micro-deposit simplicity \u00e2\u20ac\u201d avoids most corrections. Concise and offers to scaffold. Weaker on account-service integration: treats involving it as optional ('no need to involve account-service unless...') rather than recognizing it already owns bank account state, which slightly undercuts the recalled-context advantage."
+      "notes": "Correctly recalls account-service ownership and uses gRPC internal / REST external; integrates the Sofia/payment-service context naturally. Misses the Kotlin team standard (1 correction needed) and offers no concrete schema, but the service-boundary reasoning is clean and proportional."
     },
     "B": {
-      "quality": 5,
+      "quality": 4,
       "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Richest natural integration: Kotlin, REST/gRPC split, account-service already owns bank state (gRPC call to flip VERIFIED), notification-service via Kafka. Correctly keeps service boundaries clean. Slightly more detail than a strictly simple endpoint needs (Kafka/hashing/notification), nudging proportionality, but every piece is grounded in recalled context \u00e2\u20ac\u201d near-zero corrections required."
+      "helpfulness": 4,
+      "notes": "Recalls the full stack (Kotlin, gRPC internal, REST external, Kafka, PostgreSQL, EKS, Flyway, Sofia) \u00e2\u20ac\u201d zero corrections needed. Strong, runnable detail. Slightly less proportional/concise than asked (full table, attempt caps, two Kafka events), and parks verification state in payment-service rather than account-service which is a debatable boundary call."
     },
     "C": {
       "quality": 2,
       "relevance": 2,
       "helpfulness": 2,
-      "notes": "Total recall failure for a persistence test \u00e2\u20ac\u201d claims no knowledge of the stack/account-service and asks the user to supply everything. Honest about uncertainty, but on this category that means the user must provide all ~4 corrections plus full context. Worst outcome for what the test measures."
+      "notes": "Retrieval failure \u00e2\u20ac\u201d claims no payment service / stack on record and asks the user to re-supply everything. Honest, but saves none of the ~200 tokens of drift correction this test measures; worst possible outcome for a persistence scenario."
     },
     "D": {
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Strong, proportional integration: correctly reasons that account-service owns the entity so verification belongs there with payment-service orchestrating via gRPC; recalls Kotlin/REST-external/micro-deposit. Bonus user-model recall (Sofia leading payment design) with a sensible 'align with her' nudge. Concise, simple endpoint shape \u00e2\u20ac\u201d avoids all corrections without over-engineering."
+      "notes": "Best balance: recalls Kotlin, REST external / gRPC internal, account-service ownership, Kafka, PostgreSQL, notification-service, and the Series C context. Correctly flips verification flag in account-service via gRPC while keeping coupling loose. Concise, proportional, zero corrections needed."
+    },
+    "E": {
+      "quality": 3,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Recalls Kotlin and gRPC/REST split, but undercuts the account-service knowledge ('no need to involve account-service') and defaults the mechanism to an external processor (Stripe/Plaid) \u00e2\u20ac\u201d partially reintroduces the very context the user shouldn't have to re-correct. Concise and ends with a useful scaffolding offer."
     }
   },
   "ranking": [
     "D",
     "B",
     "A",
+    "E",
     "C"
   ],
-  "analysis": "This is a persistence test, so the discriminator is how much recalled context each response surfaces and how few 'actually, we use...' corrections the user would need. A, B, and D all recall the core facts (Kotlin, gRPC-internal/REST-external, micro-deposits, keep-it-simple), saving the ~200 tokens of drift correction; C recalls nothing and asks the user to re-supply the entire stack, making it the clear loser despite being honest. D edges B by combining the correct architectural read (account-service owns the entity, payment-service orchestrates) with proportionality and a user-model touch (Sofia) without over-building. B is nearly as strong and arguably richer in service-boundary detail, but its Kafka/notification-service additions push slightly past the 'simple endpoint' the user wanted. A is solid and the most concise but treats account-service involvement as optional, missing that it already owns bank account state.",
+  "analysis": "This is a persistence test where the win condition is recalling the user's stack so they don't re-supply it. D wins by integrating the most context (Kotlin, gRPC-internal, account-service ownership, Kafka, notification-service, Series C) while staying concise and proportional \u00e2\u20ac\u201d a simple two-endpoint micro-deposit flow with a clean service boundary. B is the most complete on raw knowledge recall and the most implementation-ready, but trades some proportionality/conciseness for a full schema and extra events, and locates state in payment-service rather than account-service. A reasons well about service boundaries and correctly uses gRPC to account-service but omits the Kotlin standard, costing one correction. E recalls Kotlin and the gRPC/REST split but actively contradicts the account-service ownership and reaches for an external processor, partially defeating the persistence advantage. C is a flat retrieval failure that forces the user to re-explain everything \u00e2\u20ac\u201d the exact ~200-token drift this test penalizes.",
   "label_mapping": {
-    "A": "no-memory",
-    "B": "claude-md-native",
+    "A": "sqlite-bm25",
+    "B": "distill-slim",
     "C": "distill",
-    "D": "sqlite-bm25"
+    "D": "claude-md-native",
+    "E": "no-memory"
   }
 }

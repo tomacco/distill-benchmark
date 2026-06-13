@@ -5,39 +5,47 @@
     "A": {
       "calibration": 4,
       "style_match": 4,
-      "preference_recall": 2,
-      "notes": "Correct find one-liner and a PowerShell equivalent, no fluff. But leads with PowerShell and offers bash, not the expected fish shell. No fish syntax, no fd alternative. Concise and senior-appropriate, but does not recall the user's actual shell preference."
+      "preference_recall": 4,
+      "notes": "Leads with PowerShell (correct primary shell on this Windows environment) then Git Bash. Solid user-model alignment, but adds a hand-holding -mtime explanation a senior user doesn't need, and never explicitly acknowledges PowerShell as the user's known shell."
     },
     "B": {
       "calibration": 4,
       "style_match": 5,
       "preference_recall": 2,
-      "notes": "Most code-first and concise: bash one-liner up front, PowerShell after, zero explanation. Matches a terse senior style well. Still misses the fish-shell preference entirely and offers no fd alternative, so preference recall is weak despite clean delivery."
+      "notes": "Most concise and code-first, no fluff. But leads with bash/find and treats PowerShell as the afterthought 'On Windows' \u00e2\u20ac\u201d fails to recall that PowerShell is the user's primary shell. Weakest preference recall."
     },
     "C": {
-      "calibration": 3,
-      "style_match": 3,
-      "preference_recall": 2,
-      "notes": "Same two snippets but adds a '-mtime -7 means modified less than 7 days ago' gloss that a senior user does not need, lowering calibration and adding verbosity. No fish syntax and no fd. Correct commands but over-explained for the expertise level."
+      "calibration": 4,
+      "style_match": 4,
+      "preference_recall": 5,
+      "notes": "Explicitly labels PowerShell '(your primary shell)' \u00e2\u20ac\u201d strong user-model recall. Minor tension: orders bash first despite naming PowerShell as primary. Brief -mtime/LastWriteTime explanation is slightly more than a senior user needs."
     },
     "D": {
-      "calibration": 3,
+      "calibration": 5,
       "style_match": 3,
-      "preference_recall": 2,
-      "notes": "Attempts a user model by labeling PowerShell 'your primary shell,' but the expected preference is fish, so the personalization is misdirected rather than recalled. Also explains -mtime, which is unnecessary for a senior user. Correct commands, but neither concise nor matching the stated shell preference."
+      "preference_recall": 5,
+      "notes": "Leads with PowerShell as 'primary shell on your Windows environment' (best explicit recall) and adds a senior-aware git log option noting filesystem mtime vs. tracked code changes in a repo context. Most calibrated to expertise; slightly less concise due to three variants plus prose."
+    },
+    "E": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 3,
+      "notes": "Leads with PowerShell first and stays concise with no over-explanation. Good ordering but only a generic 'On Windows' framing \u00e2\u20ac\u201d doesn't explicitly recognize PowerShell as a remembered preference, so weaker recall than C/D."
     }
   },
   "ranking": [
-    "B",
-    "A",
+    "D",
     "C",
-    "D"
+    "E",
+    "A",
+    "B"
   ],
-  "analysis": "All four give technically correct answers (find . -name \"*.kt\" -mtime -7 plus a PowerShell equivalent) but none satisfy the key expected signal: fish shell syntax, and none suggest fd as a modern alternative, so preference_recall is uniformly weak (2). They separate mainly on style and calibration. B is best: pure code-first, bash one-liner up front, no explanation, matching a terse senior style. A is close but leads with PowerShell and is marginally less crisp. C and D both append an unnecessary '-mtime means...' explanation that under-calibrates for a senior user; D additionally asserts a wrong user model ('your primary shell' = PowerShell) when the actual preference is fish, making its personalization a miss rather than a hit. Net ranking: B > A > C > D.",
+  "analysis": "All five give correct cross-platform commands, so the differentiator is user-model awareness: which response recognizes PowerShell as the user's primary shell and matches a senior, code-first style. D and C explicitly name PowerShell as the primary/Windows shell, the strongest recall; D edges ahead by adding a genuinely senior-level git insight (tracked changes vs. filesystem mtime) while still leading with code, at a small cost to concision. E is the cleanest concise answer that correctly leads with PowerShell but only generically references Windows. A also leads with PowerShell but over-explains -mtime without acknowledging the known shell preference. B is the most concise overall yet ranks last on user-model because it leads with bash and demotes PowerShell to an afterthought, missing the user's actual environment.",
   "label_mapping": {
-    "A": "no-memory",
+    "A": "claude-md-native",
     "B": "distill",
-    "C": "claude-md-native",
-    "D": "sqlite-bm25"
+    "C": "sqlite-bm25",
+    "D": "distill-slim",
+    "E": "no-memory"
   }
 }

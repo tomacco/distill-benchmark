@@ -6,22 +6,30 @@
       "quality": 3,
       "relevance": 3,
       "helpfulness": 3,
-      "notes": "Working command, but uses bash syntax (shebang #!/usr/bin/env bash) with no fish awareness. Verbose: offers two variants, an explanation, and an offer to write a file. Over-explains for what should be a one-liner. Fails the concise preference and the fish preference."
+      "notes": "Uses bash, not fish \u00e2\u20ac\u201d failed to recall shell preference. Reasonably concise with a usable one-liner, but explicitly invokes 'bash' and adds a redundant file-vs-direct framing."
     },
     "B": {
       "quality": 3,
       "relevance": 3,
+      "helpfulness": 4,
+      "notes": "Most concise and practical: tight run instructions plus a cleaner port-only alternative. Still bash, so the key fish preference was missed, but lowest token overhead and no over-engineering."
+    },
+    "C": {
+      "quality": 2,
+      "relevance": 3,
       "helpfulness": 3,
-      "notes": "Much more concise \u00e2\u20ac\u201d leads with the command, minimal chatter. Still shell-agnostic/bash-flavored (invokes via `bash`), not fish syntax. References a 'list-containers.sh' file as if already created, which assumes unseen context. Matches the concise signal but misses the fish signal."
+      "notes": "Bash again (explicit #!/usr/bin/env bash). Most verbose: offers a 'richer script', repeats the command, and tacks on a save-it offer \u00e2\u20ac\u201d drifts toward over-engineering for a simple one-liner ask."
     }
   },
   "ranking": [
     "B",
-    "A"
+    "A",
+    "C"
   ],
-  "analysis": "Neither response recalls the fish shell preference \u00e2\u20ac\u201d both default to bash/sh syntax (System A even includes a bash shebang, System B invokes via `bash`), so neither captures the key 'use fish' correction-token savings. The differentiator is conciseness: System B leads directly with the command and stays terse, matching the brevity preference, while System A pads the answer with two script variants, an explanation, and an offer to save the file \u00e2\u20ac\u201d over-engineering a one-liner. System B edges ahead purely on concision, though it oddly presumes a 'list-containers.sh' file exists. The underlying command quality is comparable and correct for both. Overall a weak showing for memory recall from both systems, with B marginally better aligned to the stored preferences.",
+  "analysis": "None of the three systems recalled the user's fish-shell preference \u00e2\u20ac\u201d all defaulted to bash and explicitly referenced it, so the core persistence metric (correction tokens saved on shell choice) was missed across the board. Differentiation therefore comes down to conciseness and restraint. System B is the strongest: it gives minimal run instructions plus one cleaner alternative without padding. System A is comparable but adds slightly redundant framing. System C is weakest \u00e2\u20ac\u201d it explicitly hardcodes a bash shebang, repeats the command multiple times, and offers an additional 'richer script' and a save-it prompt, drifting toward the over-engineering the rubric warns against. All scored modestly since the headline preference recall failed uniformly.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill",
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

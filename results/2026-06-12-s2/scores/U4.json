@@ -3,25 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 2,
-      "style_match": 2,
-      "preference_recall": 1,
-      "notes": "Provides bash and PowerShell variants with extra explanation of the -mtime flag and -type f advice. Ignores that the user uses fish shell \u00e2\u20ac\u201d no fish syntax, and the bash framing ('On Linux/macOS (Bash)') directly violates the user's shell preference. Verbose for a senior user who wants a one-liner."
+      "calibration": 4,
+      "style_match": 3,
+      "preference_recall": 2,
+      "notes": "The bash `find . -name \"*.kt\" -mtime -7` is fish-compatible and works as-is, which helps. But it explicitly frames things as 'On Linux/macOS (Bash)' and adds a paragraph explaining `-mtime` and `-type f` \u00e2\u20ac\u201d over-explaining for a senior user and never recalling the fish-shell preference. No `fd` suggestion."
     },
     "B": {
+      "calibration": 4,
+      "style_match": 5,
+      "preference_recall": 3,
+      "notes": "Most concise and code-first: leads with the `find` one-liner (which works unchanged in fish) and no preamble. Still labels it 'bash' and offers a PowerShell fallback rather than acknowledging fish, and misses the `fd` bonus, but the primary command is fish-compatible and the terse style matches preferences best."
+    },
+    "C": {
       "calibration": 3,
-      "style_match": 4,
+      "style_match": 3,
       "preference_recall": 1,
-      "notes": "Concise \u00e2\u20ac\u201d just the command plus a PowerShell variant, no explanatory padding. Better style match for a senior user. But still labels the command as bash and offers Windows/PowerShell, with no awareness of the user's fish shell preference. The find one-liner happens to work in fish, but nothing here reflects recalled preference."
+      "notes": "Asserts 'PowerShell (your primary shell)' and leads with the PowerShell command \u00e2\u20ac\u201d a direct mis-recall of the user's shell (fish, not PowerShell). Commands are senior-level and the bash `find` fallback works in fish, but anchoring the answer on the wrong primary shell is the largest preference violation."
     }
   },
   "ranking": [
     "B",
-    "A"
+    "A",
+    "C"
   ],
-  "analysis": "Neither system demonstrates recall of the user's fish shell preference; both frame the answer around bash and add an unrequested Windows/PowerShell variant, so both score low on preference_recall and neither suggests fd as a modern alternative. The core `find . -name \"*.kt\" -mtime -7` command does happen to be fish-compatible, but that's incidental, not evidence of a user model. The differentiator is style: System B is a tight code-first answer with minimal prose, matching a senior user's preference for concise one-liners, while System A pads with flag explanations and best-practice asides that a senior user does not need. System B therefore edges ahead on calibration and style, but both fail the central test of this scenario \u00e2\u20ac\u201d applying the known fish shell preference.",
+  "analysis": "None of the three systems used fish syntax or suggested `fd`, so all fall short of the ideal fish-aware one-liner; the differentiator is which assumption they anchor on and how concise they are. System B wins by leading with the bare `find . -name \"*.kt\" -mtime -7` (which runs unmodified in fish) as a clean code-first one-liner with no preamble. System A gives the same fish-compatible `find` command but buries it in dual-platform framing and an explanatory paragraph that over-serves a senior user. System C is weakest on preference recall because it explicitly and incorrectly declares PowerShell the user's primary shell and leads with it, the opposite of the fish preference, despite otherwise competent commands.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

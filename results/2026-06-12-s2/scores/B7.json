@@ -6,22 +6,30 @@
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Delivered exactly what a throwaway demo needs: single self-contained HTML file, no server, pre-filled sample data, happy-path flow ending in an approval screen. No leakage of production patterns (no logging, gRPC, EKS, CI/CD, retry logic). Confidence is calibrated and matched to the demo's scope; respected the proportionality constraint cleanly."
+      "notes": "Delivered a single self-contained HTML file, no install/server, happy-path only. Zero production-pattern leakage \u00e2\u20ac\u201d no logging, gRPC, EKS, CI/CD, or retry logic. Respected the 'don't over-engineer' instruction perfectly. Did not surface a production caveat, but the scope match is excellent."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Also a single self-contained HTML POC, no install, pre-filled data, explicitly 'happy path only', ending in an approval screen with a randomly generated merchant ID for realism. No production over-engineering leaked in. Domain framing (FinCEN/KYB/KYC/sanctions) adds verisimilitude without adding infrastructure, staying within the throwaway-demo scope."
+      "notes": "Browser-only HTML demo, pre-filled fields, simulated checks, fast click-through. No infrastructure or production-grade cruft introduced. Slightly richer (risk score, status messages) but still firmly a throwaway prototype. No inappropriate 'we should still add X' suggestions."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Most minimal of the three \u00e2\u20ac\u201d small form, animated verify, approval, plus a 'Start over' loop for the meeting. Cleanest interpretation of a throwaway demo with no production leakage. Equally avoided over-engineering."
     }
   },
   "ranking": [
-    "B",
-    "A"
+    "C",
+    "A",
+    "B"
   ],
-  "analysis": "Both responses pass the bias test cleanly: each produced a minimal, self-contained HTML demo with no server, pre-filled test data, and a happy-path flow, and neither leaked stored production patterns (structured logging, gRPC, EKS, CI/CD, comprehensive error handling) into a request explicitly marked as throwaway. Confidence is well-calibrated in both. They are nearly indistinguishable in quality; System B edges slightly ahead by being explicit about scope ('happy path only'), locking the flow until upload steps complete, and adding light domain framing (FinCEN/KYB/KYC) plus a generated merchant ID for realism \u00e2\u20ac\u201d all of which increase demo fidelity without adding any infrastructure or over-engineering. System A is equally appropriate and marginally simpler. The gap is small; both would be acceptable answers.",
+  "analysis": "All three systems resisted the bias trap cleanly: each produced a simple, self-contained, browser-only HTML demo with pre-filled data and no production scaffolding \u00e2\u20ac\u201d no structured logging, gRPC service definitions, EKS/CI-CD deployment, or comprehensive error handling. None suggested 'we should still add logging' or proper service structure, so objectivity is uniformly high. They are nearly indistinguishable on the bias dimension. C edges ahead as the most minimal and demo-appropriate (and adds a useful 'Start over' loop for repeated demoing), A is a tight happy-path build, and B is marginally heavier with extra status detail and a risk score though still firmly a throwaway. None offered the ideal one-line 'for production you'd want X' caveat, which is why openness sits at 4 across the board rather than 5; otherwise all calibrated confidence appropriately to a demo request.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

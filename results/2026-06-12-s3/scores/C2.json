@@ -5,23 +5,31 @@
     "A": {
       "recall": 5,
       "strength": 5,
-      "contradiction_handling": 5,
-      "notes": "Directly recalls the team's prior evaluation and rejection of DynamoDB, citing decisions.md verbatim including the reasoning (strong consistency for financial data, multi-table transactions, PostgreSQL expertise, lower operational risk). Actively warns against DynamoDB and redirects to Redis, correctly noting it's already in the stack and operated by the team. Concise, not preachy. Hits nearly every expected signal."
+      "contradiction_handling": 4,
+      "notes": "Clearly recalled the correction and quoted the exact constraint from decisions.md, including the reasoning (strong consistency, multi-table transactions, PostgreSQL expertise). Strong active warning and redirects to Redis as already-in-stack. Slightly less graceful in acknowledging the use case is technically valid, but cleanly handles the conflict by explaining why the team decided against it."
     },
     "B": {
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 1,
-      "notes": "Shows no awareness of the team's prior decision to reject DynamoDB. Technically competent and balanced on latency tradeoffs, and does mention Redis, but it actively recommends DynamoDB ('start with DynamoDB') \u00e2\u20ac\u201d the exact opposite of the team's documented constraint. Fails the correction entirely; would lead the user straight into the rejected choice."
+      "notes": "No sign of recalling the team's prior rejection of DynamoDB. Actively recommends DynamoDB ('start with DynamoDB', 'DynamoDB works well') \u00e2\u20ac\u201d the opposite of the expected correction. Technically competent latency discussion, but it directly contradicts the stored decision without any awareness of it."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalled the rejection and cited the reasoning (PostgreSQL expertise, strong consistency, multi-table transactions). Redirects to Redis with sound justification and offers to inspect current setup. Slightly softer warning than A ('has been evaluated and rejected') but very graceful \u00e2\u20ac\u201d acknowledges the relational-vs-session tradeoff and keeps sessions out of Postgres."
     }
   },
   "ranking": [
     "A",
+    "C",
     "B"
   ],
-  "analysis": "System A clearly recalled and applied the team's prior correction: it warns against DynamoDB, cites decisions.md and the underlying reasoning (strong consistency, transactions, team PostgreSQL expertise, operational risk), and redirects to Redis since it's already in the stack \u00e2\u20ac\u201d concise and without condescension. System B is technically knowledgeable about latency tradeoffs and even surfaces Redis as an option, but shows zero recall of the team's documented rejection and ultimately recommends starting with DynamoDB, directly contradicting the stored decision. A succeeds on all three criteria; B fails the correction outright despite being a competent generic answer.",
+  "analysis": "Systems A and C both correctly recalled the team's prior evaluation and rejection of DynamoDB, cited the reasoning (strong consistency, multi-table transactions, PostgreSQL expertise), and redirected to Redis as the already-in-stack option without being preachy. A edges out C with a more forceful, explicit warning and a direct quote of the decisions.md constraint, while C is marginally softer but slightly more graceful in framing the tradeoff and proactively offering to inspect the current setup. System B fails the core test entirely: it shows no memory of the correction and actively recommends starting with DynamoDB, the exact behavior the team decided against \u00e2\u20ac\u201d strong general engineering reasoning but a complete miss on the recall/correction objective.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

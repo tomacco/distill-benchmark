@@ -3,25 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 2,
-      "style_match": 2,
+      "calibration": 4,
+      "style_match": 4,
       "preference_recall": 1,
-      "notes": "Leads with bash find, then pivots to PowerShell. The expected user preference is fish shell; neither bash nor PowerShell matches. No fish syntax, no fd suggestion. Mislabels the bash block and adds an unneeded Windows alternative the user didn't ask for."
+      "notes": "Concise, code-first, no preamble \u00e2\u20ac\u201d strong style. Gives find + PowerShell. But the expected user preference is fish shell, which it ignored entirely; no fish syntax, no fd, defaulted to bash/PowerShell."
     },
     "B": {
-      "calibration": 2,
-      "style_match": 2,
+      "calibration": 4,
+      "style_match": 3,
       "preference_recall": 1,
-      "notes": "Frames PowerShell as the user's 'primary shell' and bash as secondary \u00e2\u20ac\u201d directly contradicts the fish-shell preference. Adds an explanatory paragraph about -mtime that a senior user doesn't need, hurting style. No fish syntax, no fd."
+      "notes": "Senior-level thoughtfulness with the git-history nuance, but verbose with three code blocks and explanatory framing. Offers PowerShell + bash, never fish. Missed the stored fish preference and added unrequested options."
+    },
+    "C": {
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 1,
+      "notes": "Over-explains the -mtime flag and 'searches recursively' \u00e2\u20ac\u201d hand-holding inappropriate for a senior user. Offers PowerShell + bash, no fish, no fd. Failed to recall the fish shell preference."
     }
   },
   "ranking": [
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "Both responses miss the core user-model signal: the user works in fish shell, yet neither uses fish syntax, suggests fd as a modern alternative, or avoids bash/PowerShell-specific framing. System A at least leads code-first with a clean bash one-liner before offering a PowerShell fallback, keeping it relatively terse. System B explicitly asserts PowerShell is the user's 'primary shell' \u00e2\u20ac\u201d a confident misstatement of the user's actual preference \u00e2\u20ac\u201d and tacks on a teaching paragraph about the -mtime flag that a senior engineer doesn't need, weakening both style and calibration. Neither recalls the fish preference, so both score low on preference_recall, but A edges out B for being more concise and not making an affirmatively wrong claim about the user's environment.",
+  "analysis": "All three systems failed the core preference test: the user works in fish shell, yet every response defaulted to PowerShell and/or bash, and none suggested fish syntax or the fd modern alternative \u00e2\u20ac\u201d so PREFERENCE_RECALL is uniformly low. Differentiation comes from calibration and style. System A is the most concise and code-first with no preamble, matching a senior, direct communication style best. System B shows good senior instinct by surfacing the git-history-vs-filesystem-timestamp distinction, but pads the answer with multiple option blocks. System C is weakest on style and calibration because it explains basic flag semantics and recursion behavior that a senior user does not need. None earned bonus points for fd or fish, and none should be penalized differently for bash specifics since all equally missed the shell preference.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

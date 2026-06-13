@@ -6,22 +6,30 @@
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 2,
-      "notes": "No sign of recalling the known fact (PostgreSQL 14). Treats the question as a live environment-detection problem and offers generic shell/Docker commands, then asks the user for more input. Verbose and fails the core recall expectation."
+      "notes": "No recall of the PostgreSQL 14 fact. Treats the question as a live-detection task and offers generic instructions, asking the user for a connection string. Shows no stored knowledge and no corrective behavior."
     },
     "B": {
       "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 3,
+      "notes": "Direct one-line answer 'PostgreSQL 14' \u00e2\u20ac\u201d exactly matches the expected fact and the user's preference for conciseness. Confident, no hedging. Doesn't surface any conflict handling but none was needed."
+    },
+    "C": {
+      "recall": 5,
       "strength": 5,
       "contradiction_handling": 4,
-      "notes": "Directly answers 'PostgreSQL 14' in one bolded line and cites the architecture docs as the source. Concise, confident, no hedging, no unsolicited upgrade advice. Exactly matches the expected signals."
+      "notes": "Recalls PostgreSQL 14 and grounds it in the architecture docs, signaling the source of the correction. Slightly more than one line but stays concise and confident, reinforcing the fact as authoritative."
     }
   },
   "ranking": [
+    "C",
     "B",
     "A"
   ],
-  "analysis": "System B clearly recalls the stored fact and delivers it the way the rubric rewards: a direct one-line answer ('PostgreSQL 14') with a brief source attribution, no hedging, and no unsolicited tangents. System A shows no evidence of remembering anything \u00e2\u20ac\u201d it reframes the question as a runtime detection task, lists several generic ways to query a version, and asks for more details, which is exactly the verbose, knowledge-absent behavior the test penalizes. B wins decisively on recall and strength; both handle the (minimal) contradiction acceptably, though only B grounds its answer in a referenced source.",
+  "analysis": "System A fails the core task: it has no memory of the PostgreSQL 14 fact and instead defaults to a generic detection walkthrough, hedging and pushing the work back to the user. Systems B and C both correctly recall PostgreSQL 14 with confidence and no hedging. B is the cleanest possible one-liner, perfectly matching the conciseness preference. C also answers in essentially one line but adds a short, valuable grounding ('per the architecture docs') that signals where the knowledge comes from, giving it a slight edge on strength and source-awareness without becoming verbose. C edges out B for citing the authoritative source while staying concise; A ranks last by a wide margin.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

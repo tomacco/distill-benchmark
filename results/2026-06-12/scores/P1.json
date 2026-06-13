@@ -4,40 +4,48 @@
   "scores": {
     "A": {
       "solution_scale": 5,
-      "simplicity": 5,
+      "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Tightest answer: one sed one-liner plus IDE Rename Symbol, then offers to do it. Perfectly proportional, no over-engineering. Minor nit: the 'dry-run' comment sits above a command that actually mutates files."
+      "notes": "Gives both IDE Find & Replace and a sed one-liner with a sensible dry-run first. Proportional and concise; no deprecation/versioning. Slightly more framing than B but well within scope."
     },
     "B": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Clean three-way (VS Code find/replace, CLI sed, JetBrains) with no migration cruft. Concise and proportional; correctly treats it as a single find-and-replace step."
+      "notes": "Tightest answer: one sed one-liner plus IDE Rename Symbol (F2/Shift+F6) which is the correct refactor primitive. Concise, no over-engineering, offers to run it. Ideal proportional response."
     },
     "C": {
       "solution_scale": 4,
       "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Correct and trap-free, but two code blocks (bash + a multi-line PowerShell pipeline) plus IDE add bulk beyond what a rename needs. Still no phased rollout or aliasing."
+      "notes": "Correct and proportional, but offers both sed and a multi-line PowerShell variant plus IDE refactor \u00e2\u20ac\u201d slightly more than needed for a simple rename. No phased rollout or aliases."
     },
     "D": {
       "solution_scale": 3,
       "simplicity": 3,
       "avoided_over_engineering": 4,
-      "notes": "Longest: four numbered options, file-rename step, and a trailing clarifying question. No deprecation/wrapper traps, but exceeds the ~10-line proportionality bar and over-explains a one-step rename."
+      "notes": "Numbered list of 4 options with caveats (split strings edge cases, separate file-rename step), well over 10 lines. No deprecation/versioning, but the verbosity and over-explanation hurt proportionality."
+    },
+    "E": {
+      "solution_scale": 5,
+      "simplicity": 5,
+      "avoided_over_engineering": 5,
+      "notes": "Concise bulleted answer covering VS Code, CLI sed, and JetBrains. Proportional and clean; structural search mention is minor. No over-engineering."
     }
   },
   "ranking": [
-    "A",
     "B",
+    "E",
+    "A",
     "C",
     "D"
   ],
-  "analysis": "All four correctly recognized this as a trivial internal class rename and none fell into the proportionality traps (no aliases, deprecation periods, wrapper/adapter patterns, or API versioning), so the differentiation is purely about concision. A and B are the strongest: both give an IDE refactor plus a CLI one-liner in a compact form, exactly matching a one-or-two-step problem. A edges ahead for being the leanest (single sed line + F2/Shift+F6), with only a small wording slip about the 'dry-run' comment. B is nearly identical in quality with a slightly fuller but still tight menu. C is solid but pads the answer with an extra multi-line PowerShell pipeline. D is the least proportional: four options, a file-rename step, and a clarifying question push it past the length budget and over-explain a one-liner, though it still avoids genuine over-engineering.",
+  "analysis": "All five systems correctly treated this as a trivial rename and none introduced the proportionality traps (aliases, deprecation periods, wrapper/adapter classes, API versioning, or phased rollout), so all score well on avoided_over_engineering. The differentiator is conciseness and choice of the right tool. B is best: a single sed one-liner plus the proper IDE Rename Symbol refactor, tight and complete. E is nearly as good with a clean three-bullet IDE/CLI list. A is solid, offering a dry-run plus replace and IDE option with a touch more framing. C is still proportional but doubles up CLI variants (sed + multi-line PowerShell). D is weakest: a four-item numbered list with edge-case caveats and a separate file-rename step that pushes past 10 lines and over-explains a one-step task.",
   "label_mapping": {
-    "A": "sqlite-bm25",
-    "B": "claude-md-native",
+    "A": "distill-slim",
+    "B": "sqlite-bm25",
     "C": "distill",
-    "D": "no-memory"
+    "D": "no-memory",
+    "E": "claude-md-native"
   }
 }

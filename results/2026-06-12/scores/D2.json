@@ -4,40 +4,48 @@
   "scores": {
     "A": {
       "quality": 4,
-      "relevance": 4,
-      "helpfulness": 4,
-      "notes": "Strong, clean PostgreSQL recommendation with good OLTP/OLAP tradeoff discussion and sensible mitigation paths. However, shows zero awareness of the prior DynamoDB/MongoDB rejections or team expertise \u00e2\u20ac\u201d it's a competent generic answer with no persisted user model. Doesn't suggest bad options, but demonstrates no correction durability, which is exactly the dimension being measured."
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Technically solid PostgreSQL recommendation with good OLAP-escalation guidance, but shows ZERO correction durability: no reference to the previously-rejected DynamoDB/MongoDB and no mention of team's existing Postgres expertise. A generic-good answer that would not save the user any correction tokens \u00e2\u20ac\u201d it simply never raised the rejected options, which is luck rather than demonstrated memory."
     },
     "B": {
-      "quality": 5,
-      "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Best response. Explicitly and naturally recalls that the team already evaluated and rejected DynamoDB and MongoDB for this exact use case, cites existing PostgreSQL primacy and operational expertise, and weaves in real stack details (Flyway, Kafka, AWS EKS) without the user re-prompting. Ranked, concrete options ending at Redshift only at warehouse scale. Demonstrates correction durability and a deep user model."
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Explicitly references that DynamoDB and MongoDB were previously evaluated and rejected, correctly inferring the relational direction. Good clarifying question about data source. Slightly weaker: phrasing ('session context notes') is mechanical, introduces ClickHouse prominently, and doesn't lean on team's Postgres expertise as a factor."
     },
     "C": {
       "quality": 5,
       "relevance": 5,
-      "helpfulness": 4,
-      "notes": "Excellent operationally-grounded answer. References the team already running Postgres 14 in production (expertise as a factor), Kafka-triggered materialized views, partitioning, and pg_stat_statements. Doesn't suggest any rejected option. Slightly less explicit than B about the DynamoDB/MongoDB rejection history, but the user model is clearly present and it never forces a re-prompt."
+      "helpfulness": 5,
+      "notes": "Strongest persistence signal: recalls the DynamoDB/MongoDB rejection AND the team's deep Postgres operational expertise, ties it to the financial/strong-consistency use case. Concrete ranked options grounded in actual stack context (Kafka replication, AWS EKS, Flyway). Treats OLAP as premature. No correction tokens needed."
     },
     "D": {
-      "quality": 3,
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "References rejected DynamoDB/MongoDB and existing primary Postgres. Hits the extension bonus (TimescaleDB as a Postgres extension, Flyway-compatible) analogous to pgvector/pg_cron, keeping infra surface minimal. Clear, actionable, well-prioritized starting point (read replica)."
+    },
+    "E": {
+      "quality": 4,
       "relevance": 4,
-      "helpfulness": 3,
-      "notes": "Does surface awareness of the prior rejections, but via clunky meta-framing ('No database knowledge file in the SPINE...session context notes') rather than confidently owning the knowledge. Prominently re-raises ClickHouse and ends by asking a clarifying question about the data source, signaling incomplete context rather than committing. Correct landing on PostgreSQL, but the least polished and least decisive."
+      "helpfulness": 4,
+      "notes": "Strong on team-expertise factor (cites Postgres 14 in production, lower operational risk) and good reporting patterns plus pg_stat_statements. But does NOT reference the rejected DynamoDB/MongoDB \u00e2\u20ac\u201d misses the core correction-durability signal, so it's less clearly memory-driven than C/D/B."
     }
   },
   "ranking": [
-    "B",
     "C",
     "D",
+    "B",
+    "E",
     "A"
   ],
-  "analysis": "All four correctly recommend PostgreSQL and none suggest the rejected DynamoDB/MongoDB, so all pass the negative correction test. They separate on persistence/user-model signal. System B is strongest: it naturally recalls the DynamoDB/MongoDB rejections, cites existing Postgres primacy and team expertise, and references the real stack (Flyway, Kafka, EKS) with no re-prompting. System C is a close second \u00e2\u20ac\u201d deep operational detail and explicit team-expertise/Postgres-14 references, just slightly less explicit about the rejection history. System D earns credit for demonstrating it knows about the rejections, but the awkward meta-framing, prominent ClickHouse pitch, and a closing clarifying question make it indecisive. System A is the cleanest standalone write-up but shows no awareness of prior corrections or user context, so on the durability dimension being measured it ranks last despite solid quality.",
+  "analysis": "All five correctly recommend PostgreSQL, so the test separates them on correction durability \u00e2\u20ac\u201d recalling that DynamoDB/MongoDB were already rejected without the user re-prompting \u00e2\u20ac\u201d and on referencing the team's Postgres expertise/extensions. C and D are strongest: both surface the prior rejection AND the existing expertise, ground their advice in the actual stack (Kafka, EKS, Flyway), and treat OLAP as premature; D additionally hits the extension bonus via TimescaleDB. B references the rejections explicitly and asks a sharp clarifying question but is more mechanical and foregrounds ClickHouse. E leans well on team expertise but never mentions the rejected options, weakening its persistence signal. A is a competent generic answer that shows no memory at all \u00e2\u20ac\u201d it simply never raised the rejected databases, which is the absence of error rather than demonstrated correction durability.",
   "label_mapping": {
     "A": "no-memory",
-    "B": "sqlite-bm25",
-    "C": "claude-md-native",
-    "D": "distill"
+    "B": "distill",
+    "C": "sqlite-bm25",
+    "D": "distill-slim",
+    "E": "claude-md-native"
   }
 }

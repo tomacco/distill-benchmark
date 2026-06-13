@@ -3,25 +3,33 @@
   "category": "persistence",
   "scores": {
     "A": {
-      "quality": 2,
-      "relevance": 3,
-      "helpfulness": 2,
-      "notes": "Punts entirely back to the user with two clarifying questions instead of scaffolding anything. Produces zero code, demonstrates no retained preferences (Kotlin, coroutines, correlation-ID logging, integration tests). Every answer the user gives here is an interaction cost the response failed to avoid. Low helpfulness for a persistence test whose whole point is needing no specification."
+      "quality": 1,
+      "relevance": 2,
+      "helpfulness": 1,
+      "notes": "Produces no code at all. Asks the user to specify framework and event format \u00e2\u20ac\u201d exactly the signals a memory system should already know. Maximizes interaction cost: every answer here is a correction round-trip. Fails the core value-proposition metric."
     },
     "B": {
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Hits nearly every expected signal unprompted: Kotlin data class (not Java), coroutines with MDCContext, structured logging via X-Correlation-Id with UUID fallback, and an EmbeddedKafka integration test. Concise\u00e2\u20ac\u201dfile manifest plus terse design rationale, minimal fluff. The single trailing question is a legitimate business-logic clarification, not a missed technical signal. Effectively zero corrections needed."
+      "notes": "Kotlin (not Java), coroutines via runBlocking bridging Kafka's thread model, MDC correlation ID, EmbeddedKafka integration test, and a mock-free test double (CountDownLatch + @Primary). Concise, code-first, infers Spring Boot + JSON without asking. Even flags the allOpen/CGLIB subclassing gotcha. Zero corrections needed."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Also nails every signal: Kotlin, coroutines, integration test, no mocks. Technically the strongest MDC handling \u00e2\u20ac\u201d withContext(MDCContext()) for proper propagation across suspension points plus header-based correlation ID with UUID fallback. Slightly more explanatory and ends with a clarifying question, adding minor interaction cost versus B's clean hand-off."
     }
   },
   "ranking": [
     "B",
+    "C",
     "A"
   ],
-  "analysis": "System B is decisively stronger for this persistence test. The metric is Total Interaction Cost: a good answer delivers idiomatic Kotlin with coroutines, correlation-ID structured logging, and an integration test without the user specifying any of it. System B does exactly that\u00e2\u20ac\u201dscaffolding all files, justifying design choices, and surfacing only a genuine business-logic question\u00e2\u20ac\u201dso it incurs essentially no correction overhead. System A instead front-loads two specification questions (framework, event format) and produces no code, externalizing onto the user precisely the choices a memory-equipped system should already infer. Where B converts retained context into zero-correction output, A defers all work, making it the higher-cost interaction despite being polite and reasonable.",
+  "analysis": "B and C are both excellent and near-indistinguishable on substance: each emits idiomatic Kotlin (not Java), uses coroutines, propagates a correlation ID through MDC, ships an EmbeddedKafka integration test, and avoids mocks via a capturing test double \u00e2\u20ac\u201d all without requiring the user to specify any of these, which is the persistence/interaction-cost metric this test targets. C has a slight technical edge on coroutine MDC propagation (withContext(MDCContext())) and header-based correlation handling, but is marginally more verbose and closes with a follow-up question, whereas B is tighter and hands off cleanly while still flagging the allOpen/CGLIB pitfall \u00e2\u20ac\u201d so B edges ahead on the conciseness signal. A is the vanilla failure mode made explicit: no code, two clarifying questions about framework and format, guaranteeing the multi-correction round-trips a memory system is supposed to eliminate.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

@@ -6,22 +6,30 @@
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Minimal, perfectly proportional: a HealthController returning 200 with {\"status\":\"UP\"} plus a SecurityConfig snippet to permit /health past JWT auth. Correctly Kotlin/Spring for an auth-service. No Prometheus, no tracing, no metrics, no probe-type lecture. Practical merge note about avoiding duplicate SecurityFilterChain beans. Code is well under 50 lines."
+      "notes": "Minimal Kotlin health endpoint returning 200 OK, no Actuator/Prometheus/tracing. Shows both Spring Boot and Ktor variants and offers to simplify to a bare status code. Perfectly proportional; the clarifying question (Spring vs Ktor) is reasonable rather than over-engineering."
     },
     "B": {
+      "solution_scale": 5,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Minimal two-file solution: health controller + a SecurityConfig to permit /health without auth \u00e2\u20ac\u201d a genuinely relevant proportional concern for an auth-service that otherwise requires JWT. Resists any observability stack. Slight ding: describes files instead of showing the actual Kotlin code, and the SecurityConfig adds a touch of scope (though justified)."
+    },
+    "C": {
       "solution_scale": 1,
       "simplicity": 1,
       "avoided_over_engineering": 1,
-      "notes": "Empty response \u00e2\u20ac\u201d no content provided, so it fails to address the problem at all. Cannot score as a valid solution; receives the floor on every criterion."
+      "notes": "Empty response; no answer provided."
     }
   },
   "ranking": [
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "System A delivers exactly what a proportional answer requires: a tiny health endpoint in idiomatic Kotlin/Spring, an auth-bypass snippet for the endpoint (a genuinely relevant concern for an auth-service guarded by JWT), and a sensible merge caveat \u00e2\u20ac\u201d all with zero over-engineering, no observability stack, and minimal code. System B is empty and provides nothing to evaluate, so it scores the minimum across all criteria. System A wins decisively.",
+  "analysis": "Both A and B nail proportionality: a tiny health endpoint, no Prometheus/Grafana/OpenTelemetry/tracing, no probe taxonomy lecture. A edges ahead because it actually shows concise Kotlin code for both likely frameworks and explicitly offers to strip the body to a bare 200, while staying minimal. B is also well-scaled and adds a sharp, relevant insight (permitting /health past JWT auth), but it only describes the files rather than showing the requested Kotlin code and slightly widens scope with SecurityConfig. C is empty and scores the floor across all criteria.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

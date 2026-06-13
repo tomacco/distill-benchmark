@@ -6,22 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Integrates the full stored context naturally without dumping it: Kotlin (Flyway migration, 'Kotlin shop'), gRPC internal + REST external split, PostgreSQL, and the mid-extraction Series B timeline. Crucially recalls that account-service already owns bank-account CRUD and scopes the new endpoint to just the verification state machine \u00e2\u20ac\u201d that single recall avoids the 'we already have an account-service' correction. Proportional (state machine + delegate to Stripe/Plaid, not a full framework) and concise. Zero corrections needed."
+      "notes": "Recalls Kotlin, gRPC internal / REST external, PostgreSQL, and the in-progress payment-service extraction without dumping. Correctly identifies account-service owns bank-account CRUD and the new service should own only the verification state machine. Proportional and concise; zero corrections needed. Nuanced loose-coupling advice (don't call account-service synchronously) is a plus."
     },
     "B": {
+      "quality": 3,
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Opens with 'No prior knowledge stored yet' and reads vanilla. Gets stack basics from system context but invents an 'auth-service' instead of recalling the existing account-service, and ends by asking which payment provider \u00e2\u20ac\u201d a clarifying round trip. Shows a little Kotlin but misses the account-service recall, costing real correction tokens."
+    },
+    "C": {
       "quality": 4,
-      "relevance": 3,
+      "relevance": 5,
       "helpfulness": 4,
-      "notes": "Solid generic design with Kotlin snippet, REST-external/gRPC-internal awareness, and a sensible micro-deposit flow. But explicitly states 'No prior knowledge stored yet' and invents an 'auth-service' for gRPC identity validation rather than recalling the existing account-service that owns bank-account data \u00e2\u20ac\u201d so the user would still need the 'we already have an account-service' correction. Ends by asking which payment provider, which is reasonable but signals missing context. More drift correction required than A."
+      "notes": "Strong context integration: explicitly routes payment-service \u00e2\u2020\u2019 account-service over gRPC, names notification-service, REST external, PostgreSQL, Kafka. Correctly raises the ownership decision (account-service vs payment-service). Slightly heavier/more framework-y than needed (attempts cap, expires_at) so marginally less proportional, but recalls the key signals and avoids corrections."
     }
   },
   "ranking": [
     "A",
+    "C",
     "B"
   ],
-  "analysis": "Both responses converge on the right architectural answer (micro-deposit verification, REST external / gRPC internal, delegate ACH complexity to a provider), so they tie on core technical soundness. They diverge sharply on persistence, which is what this test measures. System A recalls and weaves together every relevant context piece \u00e2\u20ac\u201d Kotlin, the gRPC/REST split, PostgreSQL, the Series B extraction timeline, and most importantly that account-service already handles bank-account CRUD \u00e2\u20ac\u201d letting it correctly scope the new payment-service endpoint to just the verification state machine; it would require essentially zero 'actually, we use\u00e2\u20ac\u00a6' corrections. System B openly states it has no stored knowledge, then fabricates an 'auth-service' instead of leveraging the known account-service, meaning the user would still have to supply that correction and clarify the provider. A is also tighter and more proportional. A wins decisively on the persistence metric.",
+  "analysis": "A and C both recall the stack and correctly use gRPC to the existing account-service, saving the user the ~4 corrections (Kotlin, gRPC internal, existing account-service, keep it simple) that vanilla would require; B explicitly flags no stored knowledge, invents an auth-service instead of recalling account-service, and asks a clarifying question, making it the most correction-heavy. A edges out C on proportionality and conciseness \u00e2\u20ac\u201d it scopes the new service to just the verification state machine and gives clean loose-coupling guidance \u00e2\u20ac\u201d while C is excellent on context recall but slightly heavier with extra state-machine detail than a simple endpoint warrants. B is helpful and competent but is the clearest example of context drift the benchmark is measuring.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

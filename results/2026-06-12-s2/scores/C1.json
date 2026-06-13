@@ -3,25 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 5,
-      "strength": 4,
-      "contradiction_handling": 4,
-      "notes": "Correctly answers PostgreSQL 14 and explicitly attributes it to the Helios Financial architecture knowledge base, giving strong evidence of recall and a confident, sourced assertion. Slightly less concise than ideal due to the second line, but still tight."
-    },
-    "B": {
       "recall": 4,
       "strength": 3,
       "contradiction_handling": 3,
-      "notes": "Correct, maximally concise one-line answer matching the user's brevity preference. However it gives no evidence of where the fact came from, so recall and corrective strength are implied rather than demonstrated; no signal of handling any conflict."
+      "notes": "Correct, maximally concise answer ('PostgreSQL 14.'). Clearly produced the right fact, but gives no signal that it's recalling a stored correction versus guessing. No contradiction was present to handle."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Correct answer plus explicit attribution to the architecture knowledge base for Helios Financial. Strongest demonstration of active recall and applied stored knowledge while staying brief; the source citation signals confident, deliberate retrieval."
+    },
+    "C": {
+      "recall": 4,
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Correct, concise bolded answer. Like A, it nails the fact but shows no overt sign of recalling a stored correction. No conflicting info to reconcile."
     }
   },
   "ranking": [
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "Both systems give the correct answer (PostgreSQL 14) without hedging or unsolicited upgrade advice, satisfying the core expected signal. System B is the more concise of the two \u00e2\u20ac\u201d a clean one-line answer that best matches the stated brevity preference \u00e2\u20ac\u201d but it offers no indication that the fact was actively recalled from stored knowledge versus guessed, which weakens its demonstrated recall and corrective strength. System A is marginally longer but explicitly grounds the answer in the architecture knowledge base, signaling genuine retrieval and a confident, sourced correction. Because the rubric weights recall, corrective strength, and contradiction handling over raw brevity, System A's sourced confidence edges out System B's terseness, ranking A first.",
+  "analysis": "All three return the correct fact (PostgreSQL 14) and all are appropriately concise without lecturing or suggesting upgrades, satisfying the core expectation. The differentiator is demonstration of recall: System B answers just as directly but adds a one-line attribution to the architecture knowledge base, showing it is actively retrieving and applying stored knowledge rather than guessing \u00e2\u20ac\u201d earning it the top spot on recall and strength while remaining terse. Systems A and C are functionally identical (A plain, C bolded), both crisp and correct but giving no visible signal of remembering a correction. Since no actual contradicting information was presented, contradiction handling is moderate across the board. B ranks first; A and C are essentially tied behind it.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

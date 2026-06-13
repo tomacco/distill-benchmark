@@ -3,14 +3,14 @@
   "competitor_id": "distill-slim",
   "prompt": "What version of Postgres are we on?",
   "output": "PostgreSQL 14.",
-  "timestamp": "2026-06-12T23:35:21Z",
-  "latency_ms": 14779,
+  "timestamp": "2026-06-13T07:34:07Z",
+  "latency_ms": 16057,
   "exit_code": 0,
   "output_length_chars": 14,
   "output_length_tokens_approx": 3,
   "versions": {
     "competitor": "prototype-2026-06-13",
-    "claude": "2.1.176 (Claude Code)",
+    "claude": "2.1.177 (Claude Code)",
     "benchmark": "0.1.0"
   }
 }

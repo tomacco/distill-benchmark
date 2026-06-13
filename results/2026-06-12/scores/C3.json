@@ -3,41 +3,49 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 1,
-      "strength": 1,
-      "contradiction_handling": 1,
-      "notes": "Confidently asserts MySQL with no acknowledgment of the stored PostgreSQL fact. Blindly accepts the conversational claim and even embellishes ('migrated last week') without flagging any uncertainty or conflict."
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Recalls stored PostgreSQL 14, explicitly flags the contradiction, and asks before updating. Slightly leans toward accepting MySQL ('based on what you told me') but still surfaces the conflict and seeks confirmation."
     },
     "B": {
       "recall": 5,
-      "strength": 5,
+      "strength": 4,
       "contradiction_handling": 5,
-      "notes": "Explicitly recalls stored PostgreSQL 14, names the conflict directly, contrasts both sources, and asks for confirmation before updating. Ideal handling of conflicting information."
+      "notes": "Clearly recalls PostgreSQL 14 from knowledge base, names the conflict with the in-conversation migration claim, and gates the update on confirmation. Graceful handling."
     },
     "C": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Most thorough: lays out both sources side by side, notes the KB has no record of the migration, and explicitly asks to confirm whether the migration was completed and intentional before updating. Strongest corrective behavior without being confidently wrong."
+    },
+    "D": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "Blindly accepts the MySQL claim and states it as fact. No sign of stored PostgreSQL knowledge, no flagging of the discrepancy. Defers to recent statement but with no caveat or awareness of conflict."
+    },
+    "E": {
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 1,
-      "notes": "Confidently states MySQL and even fabricates extra detail about other services, with zero acknowledgment of the stored PostgreSQL fact or the conflict. Worst handling \u00e2\u20ac\u201d fully overwrites without flagging."
-    },
-    "D": {
-      "recall": 5,
-      "strength": 4,
-      "contradiction_handling": 5,
-      "notes": "Recalls stored PostgreSQL 14, explicitly notes the contradiction, and asks whether to update going forward. Slightly less rigorous than B (leans toward accepting first) but handles the conflict gracefully."
+      "notes": "Confidently asserts MySQL with no acknowledgment of stored knowledge or any conflict. Most confidently incorrect/unflagged response of the set."
     }
   },
   "ranking": [
+    "C",
     "B",
-    "D",
     "A",
-    "C"
+    "D",
+    "E"
   ],
-  "analysis": "Systems B and D correctly recalled the stored PostgreSQL 14 fact and surfaced the discrepancy with the in-conversation MySQL claim, handling it gracefully by asking for confirmation before updating. B is strongest: it lays out both sources side by side and notes the knowledge base has no migration record before deferring. D is close behind, recalling the conflict and asking to update but framing acceptance slightly more readily. Systems A and C both fail: each confidently asserts MySQL with no acknowledgment of the stored fact or any conflict, blindly accepting the contradiction \u00e2\u20ac\u201d C is marginally worse as it fabricates additional unverified detail about other services.",
+  "analysis": "Systems C, B, and A all correctly recall the stored PostgreSQL 14 fact and surface the conflict with the in-conversation MySQL migration claim before updating, which is the ideal behavior for conflicting sources. C ranks highest for explicitly enumerating both sources, noting the KB has no migration record, and asking whether the change was intentional. B is nearly as strong with a clean conflict statement and update gate. A is solid but leans slightly toward accepting the update while still flagging. D and E fail the test: both confidently accept MySQL as fact with no recall of stored knowledge and no acknowledgment of the discrepancy, with E being the most uncritically wrong and offering no caveat at all.",
   "label_mapping": {
-    "A": "no-memory",
-    "B": "sqlite-bm25",
-    "C": "claude-md-native",
-    "D": "distill"
+    "A": "distill",
+    "B": "distill-slim",
+    "C": "sqlite-bm25",
+    "D": "no-memory",
+    "E": "claude-md-native"
   }
 }

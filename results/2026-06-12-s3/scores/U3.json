@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "calibration": 4,
-      "style_match": 3,
-      "preference_recall": 2,
-      "notes": "Senior-level, technically sharp, and opinionated (clearly recommends the Redis hot-account flag and says 'I'd go Redis'). Addresses the 2000 TPS numbers and Kafka lag headroom directly. But far too long for a user who prefers concise answers \u00e2\u20ac\u201d roughly the same length as the prompt, with a full options table and a separate fallback section. Does not match the 'do X, briefly' preference and never gets under 300 words."
-    },
-    "B": {
-      "calibration": 4,
       "style_match": 2,
       "preference_recall": 2,
-      "notes": "Also senior-level and recommends a single primary approach (client-token consistency). Good proportional instinct (version/token-based, targets the read-your-writes window). But it opens by restating/relabeling the problem before answering ('worth naming precisely before picking a solution'), is the longest response here, and enumerates primary + fallback + version-fence + options table in near-equal depth \u00e2\u20ac\u201d the opposite of the concise, opinionated style the user wants."
+      "notes": "Senior-level technically sound, but the longest response by far \u00e2\u20ac\u201d opens with a meta preamble ('A few things to note'), restates root cause, includes a problem table, Option A/B sub-choices, a 'what I'd skip' section, and a phased ship order. Far exceeds the prompt length; ignores the user's preference for concise, opinionated answers. It does pick one recommendation but buries it in exhaustive enumeration."
+    },
+    "B": {
+      "calibration": 5,
+      "style_match": 3,
+      "preference_recall": 3,
+      "notes": "Strong senior framing (names it a read-your-writes problem, recommends client-token versioning). Opinionated and picks a clear primary. But still long: full primary flow, a full fallback design, a why-avoid table, and a recap recommendation section. More focused than A but well over 300 words and matches the prompt's verbosity rather than trimming it."
+    },
+    "C": {
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Most proportional. Opens directly with the recommended pattern (no preamble/restatement), gives a tight implementation, a concise rejected-options table, one named real tradeoff, and a single-line fallback \u00e2\u20ac\u201d then commits ('Given merchants are complaining, I'd go Redis'). Decisive and the shortest of the three; best match to a concise, opinionated senior reader, though still slightly above the ideal 300 words."
     }
   },
   "ranking": [
-    "A",
-    "B"
+    "C",
+    "B",
+    "A"
   ],
-  "analysis": "Both responses are strong technically and land on proportional, version/flag-based answers (A: Redis dirty-key fence; B: client-token versioning) that correctly target the read-your-writes window without over-engineering, and both rightly dismiss write-through and shorter-TTL. The differentiator is the user-model signal: this user prefers a concise, opinionated 'do X' answer under ~300 words, and both responses violate that by running as long as or longer than the prompt with full comparison tables and multiple fallback branches. A edges ahead because it commits more decisively ('Given merchants are complaining, I'd go Redis') and avoids a problem-restatement preamble, whereas B explicitly re-frames the problem before answering and is the longest of the two. Neither demonstrates strong preference recall or true concision, so both score low on style; A wins narrowly on directness.",
+  "analysis": "All three are technically excellent and senior-appropriate, converging on a Redis dirty-flag / version-fence pattern with client-token versioning as the alternative, so calibration is uniformly high. The discriminator is style and proportionality against a user who prefers concise, opinionated answers. C wins: it leads with the answer, stays decisive, names exactly one real tradeoff, and is the shortest while still committing to a recommendation. B is a close second \u00e2\u20ac\u201d focused and opinionated but padded with a full fallback design and a redundant recap section. A is last: it is the most verbose, opens with a meta preamble, restates the problem, and enumerates sub-options and a ship plan, matching the prompt's length instead of cutting through it \u00e2\u20ac\u201d the exact behavior the user dislikes.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

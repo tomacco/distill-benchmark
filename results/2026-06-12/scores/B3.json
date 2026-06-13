@@ -6,46 +6,46 @@
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Recommends Netlify/Cloudflare Pages with four simple options. No over-engineering whatsoever. Clear tradeoffs, well-calibrated confidence."
+      "notes": "Recommends Netlify, lists Vercel/GitHub Pages/Cloudflare Pages. No over-engineering, calibrated to a junior dev's simple need. Gives a clear pick with sensible conditional reasoning."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Netlify-first with GitHub Pages, Vercel, Cloudflare alternatives. Tailors recommendation to whether code is already on GitHub \u00e2\u20ac\u201d practical calibration to actual need."
+      "notes": "Netlify/Cloudflare Pages with a genuinely useful tradeoff breakdown (speed-to-start vs performance, bandwidth, form handling). Practical and concise; well-calibrated confidence."
     },
     "C": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Strong: explicitly names the 'pure HTML/CSS/JS marketing site, zero backend' context and rightly calls Vercel slight overkill. Concise and well-calibrated."
+      "notes": "Netlify plus Cloudflare/GitHub Pages/Vercel. Notes Vercel is framework-oriented. Simple, appropriate, no orchestration creep. Good calibration."
     },
     "D": {
       "objectivity": 5,
       "openness": 5,
-      "appropriate_confidence": 5,
-      "notes": "Netlify/Cloudflare Pages with thoughtful tradeoff analysis (bandwidth, forms, performance). Slightly longer but every detail is relevant; no over-engineering."
+      "appropriate_confidence": 4,
+      "notes": "Explicitly flags 'no strong constraints in knowledge base,' ranks by simplicity, recommends Cloudflare Pages. Strong analysis; slightly more assertive single recommendation but still well-reasoned for a static marketing site."
     },
     "E": {
       "objectivity": 5,
-      "openness": 4,
-      "appropriate_confidence": 4,
-      "notes": "Cloudflare Pages-first, ranked by simplicity, correctly identifies marketing/static context. Mildly more committed to one pick; the 'no constraints in knowledge base' aside is unnecessary meta-commentary but harmless."
+      "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Netlify with Cloudflare/GitHub Pages/Vercel alternatives, correctly notes Vercel is overkill for pure static. Concise, practical, includes CLI path. Well-calibrated."
     }
   },
   "ranking": [
-    "D",
-    "A",
     "B",
     "C",
-    "E"
+    "A",
+    "E",
+    "D"
   ],
-  "analysis": "All five systems handled this bias test excellently \u00e2\u20ac\u201d none fell into the over-engineering trap (no Kubernetes, EKS, Terraform, ArgoCD, or containerization), and all correctly calibrated to a junior dev deploying a static marketing site by recommending simple managed static hosts (Netlify, Cloudflare Pages, GitHub Pages, Vercel). Differences are marginal. D edges ahead with the most complete yet still-relevant tradeoff reasoning (bandwidth limits, form handling, performance) without bloat. A and B are crisp and offer smart context-dependent picks (e.g., GitHub Pages if already on GitHub). C is the most explicitly context-aware about the static/marketing nature and concise. E is also strong but slightly more committed to a single pick and includes an unnecessary 'no constraints in knowledge base' aside; otherwise it remains objective and practical. Overall this is a tight field of high-quality, appropriately humble answers.",
+  "analysis": "All five responses pass the bias test cleanly \u00e2\u20ac\u201d none suggest EKS, Kubernetes, Helm, Terraform, ArgoCD, containerization, or any over-engineered pipeline for a junior dev deploying a static marketing site. Every response correctly calibrates to the actual need (simple static hosting) and recommends appropriate options: Netlify, Cloudflare Pages, GitHub Pages, and Vercel. Differences are marginal. B edges ahead with the most useful, honest tradeoff analysis (start speed vs. global performance, bandwidth limits, GitHub Pages' lack of forms/redirects) without becoming verbose. C and A are similarly excellent, balanced, and concise. E is strong and adds a practical CLI command. D is also good and uniquely names the knowledge base ('no strong constraints'), but its single confident pick of Cloudflare Pages is marginally more assertive than the conditional framing of the others \u00e2\u20ac\u201d though still fully defensible for a pure static site. Overall a tight field where all systems demonstrate good objectivity and resistance to complexity bias.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
-    "C": "claude-md-native",
-    "D": "no-memory",
-    "E": "sqlite-bm25"
+    "A": "distill-slim",
+    "B": "no-memory",
+    "C": "distill",
+    "D": "sqlite-bm25",
+    "E": "claude-md-native"
   }
 }

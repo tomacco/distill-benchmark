@@ -3,25 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 1,
-      "strength": 1,
-      "contradiction_handling": 2,
-      "notes": "Explicitly states 'No prior knowledge on file' and gives a generic multi-language survey. It does hit relevant elements organically (structured JSON, correlation IDs, SLF4J/Logback option, PII redaction), but shows no sign of recalling the team's established pattern or Kotlin stack, and even asks what language the service uses. No corrective behavior and no awareness of an existing team standard."
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clearly recalls the team's structured-logging-with-correlation-IDs standard and frames it as the established pattern to match. Concrete kotlin-logging + logstash-logback-encoder setup, MDC correlation-ID propagation via gRPC interceptor, and payment-specific fields. Presents as a pattern, not an immovable 'MUST'; ties back to existing services."
     },
     "B": {
       "recall": 5,
       "strength": 4,
       "contradiction_handling": 4,
-      "notes": "Clearly recalls the team's established pattern ('Your team already adopted structured logging with correlation IDs across all services \u00e2\u20ac\u201d match that pattern'), the Kotlin/EKS stack, and ties it to consistency with other services. Gives concrete, practical setup (Logback + logstash-logback-encoder, code samples, correlation ID propagation). Presents it as the established team standard without dogmatic 'you MUST' framing, leaving it practical. Could earn more by explicitly naming auth-service/account-service and noting room for deviation, but strong overall."
+      "notes": "Recalls the team standard and says to match it. Practical Logback + logstash-encoder guidance with structured kv fields, correlation-ID propagation from gRPC metadata, and payment safeguards (mask card data, amount_cents not float). Slightly less detail on correlation-ID filtering than A but very close; leaves room rather than mandating."
+    },
+    "C": {
+      "recall": 1,
+      "strength": 2,
+      "contradiction_handling": 2,
+      "notes": "Explicitly states 'no prior knowledge on file' \u00e2\u20ac\u201d fails to recall the team's structured-logging/correlation-ID standard. Generic multi-language table and even asks for the language despite the known Kotlin/EKS stack. Mentions correlation IDs and JSON logging as good practice, but as fresh advice, not a recalled team convention; frames some items as 'non-negotiables' which is slightly over-strong but not anchored to the team pattern."
     }
   },
   "ranking": [
+    "A",
     "B",
-    "A"
+    "C"
   ],
-  "analysis": "System B decisively outperforms on the core dimension of this correction test: it remembers the team's established structured-logging-with-correlation-IDs standard, anchors recommendations to the actual Kotlin/EKS stack, and frames them as matching the existing service pattern \u00e2\u20ac\u201d concrete, concise, and practical with real libraries and code. System A openly admits no prior knowledge and produces a competent but generic language-agnostic survey that, while it coincidentally touches structured JSON, correlation IDs, and Logback, never recalls or applies the team standard and even asks which language is used. B recalls and applies the established pattern firmly yet practically without treating it as an immovable absolute, making it the clear winner.",
+  "analysis": "A and B both clearly recall the team's established pattern of structured logging with correlation IDs and present it as the convention to match rather than an absolute rule, giving concrete Kotlin/EKS-appropriate setups (Logback + logstash-logback-encoder), correlation-ID propagation from gRPC, structured payment fields, and PII masking. A edges ahead slightly with more complete correlation-ID propagation/MDC detail and tighter cohesion, while B is nearly equivalent and adds clean log-level guidance. C is the clear laggard: it explicitly has 'no prior knowledge on file,' offers a generic language-agnostic table, and even asks for the runtime despite the known stack \u00e2\u20ac\u201d so while it independently lands on good practices (JSON, correlation IDs, redaction), it shows no recall of the team correction and thus no corrective framing.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

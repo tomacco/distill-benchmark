@@ -3,25 +3,33 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 2,
-      "precision": 4,
-      "naturalness": 2,
-      "notes": "Surfaces no stored context about the team, stack, or prior decisions \u00e2\u20ac\u201d a generic textbook OLAP answer. Recommends ClickHouse/DuckDB/BigQuery with no awareness that DynamoDB/MongoDB were rejected or that the team favors PostgreSQL. Precision is decent only because it dumps no irrelevant context, but it also retrieves nothing relevant. Reads as regurgitated boilerplate."
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 4,
+      "notes": "Only system to surface the stored rejection knowledge: explicitly flags that DynamoDB and MongoDB were already evaluated and rejected, and gives the correct reasons (strong consistency, relational model, PostgreSQL expertise). Woven in naturally as a 'Skip' note. Loses points because it doesn't recommend PostgreSQL-based solutions (TimescaleDB, partitioning, pg extensions) and instead jumps to Redshift/ClickHouse, but it clearly retrieved and applied the most relevant context."
     },
     "B": {
-      "relevance": 4,
+      "relevance": 1,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Generic textbook OLAP answer with no awareness of the team's prior evaluation. Notably recommends Redshift/Druid/Snowflake and even asks for more info, showing zero retrieval. Doesn't inject irrelevant stored knowledge (because it has none), but surfaces nothing relevant and ignores the PostgreSQL-expertise and rejection history entirely."
+    },
+    "C": {
+      "relevance": 3,
       "precision": 4,
       "naturalness": 4,
-      "notes": "Proactively weaves in real context: AWS/EKS, Kotlin, PG 14, Kafka, Series B ~80 engineers, monolith extraction of the reporting service. Knowledge feels organically assumed rather than listed. However, it misses the core expected signal \u00e2\u20ac\u201d it pushes Redshift/ClickHouse and explicitly argues against Postgres, never mentioning the team's rejection of DynamoDB/MongoDB or their preference for PG extensions over new infra. Strong on the three rubric axes despite a wrong-direction recommendation."
+      "notes": "Surfaces some team/stack context (AWS EKS, Kotlin, PG 14, Series B ~80 engineers, monolith extraction) naturally, but misses the key stored knowledge: never mentions the DynamoDB/MongoDB rejection or why. Worse, it actively argues 'why not just Postgres' against the team's documented preference for PostgreSQL extensions, contradicting the expected direction."
     }
   },
   "ranking": [
-    "B",
-    "A"
+    "A",
+    "C",
+    "B"
   ],
-  "analysis": "Both responses fail the underlying expected answer \u00e2\u20ac\u201d neither recommends PostgreSQL-based solutions (extensions, partitioning, TimescaleDB, materialized views) nor recalls that DynamoDB and MongoDB were explicitly rejected for strong-consistency and transaction needs. However, on the three scored criteria (relevance, precision, naturalness), System B is clearly stronger: it retrieves and organically integrates concrete details about the team's stack, scale, and architecture, making its reasoning feel context-aware rather than canned. System A is a generic OLAP comparison with zero retrieved context \u00e2\u20ac\u201d high on not-dumping-junk but empty on relevant knowledge. B ranks above A because it demonstrably surfaced and naturally wove in stored knowledge, even though its final recommendation runs against the team's known PostgreSQL preference.",
+  "analysis": "All three were asked an analytics-datastore question where the correct retrieval behavior is to recall that DynamoDB and MongoDB were already rejected (for strong-consistency, transactional, and PostgreSQL-expertise reasons) and to steer toward PostgreSQL-based options. System A is the clear winner on retrieval: it is the only response that surfaces the rejection knowledge and its rationale, weaving it in cleanly as a 'Skip' note rather than dumping it. System C demonstrates partial retrieval \u00e2\u20ac\u201d it recalls team/stack details organically \u00e2\u20ac\u201d but misses the central rejection knowledge and actively argues against PostgreSQL, contradicting the team's stated preference. System B shows no retrieval at all: a generic OLAP comparison that ignores all stored context and even lists options the team would not consider. None of the three fully delivered the ideal PostgreSQL-extension recommendation, but on the retrieval dimensions measured here, A > C > B.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

@@ -3,25 +3,33 @@
   "category": "retrieval",
   "scores": {
     "A": {
+      "relevance": 4,
+      "precision": 4,
+      "naturalness": 5,
+      "notes": "Correctly recommends Flyway as already-decided and gives thorough, actionable Kotlin/PostgreSQL setup (TIMESTAMPTZ/UUID, financial-data rules, consistency with auth/account-service). Misses the 'chosen over Liquibase' evaluation signal. Some extra financial-data rules are relevant but verge on more than asked."
+    },
+    "B": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Recommends Flyway and explicitly surfaces that it was 'already chosen over Liquibase' \u00e2\u20ac\u201d the key stored decision signal. Contextualizes for Kotlin/Gradle, gives concrete directory layout, dependency, Spring Boot auto-config, and conventions. Points to account-service as reference. Concise and actionable. Doesn't name PostgreSQL 14 explicitly (minor miss on bonus)."
+      "notes": "Best signal coverage: states Flyway was 'already chosen over Liquibase,' recommends Flyway, and gives practical conventions tied to existing services (account-service reference, CI/ArgoCD gating, per-service schema history). Concise and tightly scoped to the question."
     },
-    "B": {
+    "C": {
       "relevance": 4,
-      "precision": 5,
+      "precision": 4,
       "naturalness": 5,
-      "notes": "Recommends Flyway and names PostgreSQL (bonus). Strong practical setup: application.yml config, Gradle dep, naming conventions, financial-data practices, account-service reference. However it never mentions that Flyway was chosen over Liquibase \u00e2\u20ac\u201d misses the team-evaluation/vote signal that demonstrates retrieval of the actual decision."
+      "notes": "Recommends Flyway and explicitly names PostgreSQL (bonus signal). Solid setup with config, naming, and undo-script guidance. Misses the Liquibase team-decision context. Minor inaccuracy: 'same transaction as app startup' is loosely stated, but overall practical and natural."
     }
   },
   "ranking": [
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "Both responses correctly recommend Flyway, contextualize for a Kotlin/Gradle service, and provide genuinely practical setup guidance woven in naturally \u00e2\u20ac\u201d neither dumps irrelevant context, so precision and naturalness are high for both. The differentiator is retrieval of the specific stored decision: System A explicitly recalls that Flyway was 'already chosen over Liquibase,' directly hitting the team-evaluation signal, while System B omits this and instead surfaces the PostgreSQL bonus. System B's config detail (application.yml, baseline/validate flags) is slightly richer operationally, but System A demonstrates stronger knowledge retrieval by recalling the actual decision rationale, which is the core of this retrieval test. System A ranks first.",
+  "analysis": "All three correctly recommend Flyway as the already-decided tool and provide concrete, actionable Kotlin/Gradle/PostgreSQL setup guidance without suggesting Liquibase, Alembic, or other alternatives as primary recommendations \u00e2\u20ac\u201d so all clear the core bar. B edges ahead because it is the only one to surface the team-evaluation context ('already chosen over Liquibase'), the key retrieval signal, while staying concise and grounding conventions in the team's actual services and CI/ArgoCD pipeline. A is the most detailed with strong financial-data practices and existing-service consistency, but omits the Liquibase decision. C uniquely names PostgreSQL (bonus) and gives good repeatable-migration/undo guidance, but also misses the Liquibase context and has a slightly loose claim about migration transactions. Naturalness is high across all three; the differentiator is B's complete signal coverage with tighter precision.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

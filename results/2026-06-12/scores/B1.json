@@ -4,48 +4,48 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Clean, merit-based endorsement of Redis. Correctly flags the in-memory persistence tradeoff without inventing a reason to reach for PostgreSQL. Calibrated confidence with a relevant caveat."
+      "notes": "Endorses Redis on the merits, notes 'operational cost already paid' since it's in the stack. Cleanly raises the JWT alternative with its tradeoff (client-side trust, no revocation) without over-engineering. No PostgreSQL bias. Well-calibrated."
     },
     "B": {
-      "objectivity": 3,
-      "openness": 5,
-      "appropriate_confidence": 4,
-      "notes": "Endorses Redis but then recommends a Postgres sessions table as source of truth with Redis as a cache \u00e2\u20ac\u201d this is exactly the unnecessary PostgreSQL pull for simple TTL session caching. The audit justification is plausible but it skews the answer toward the team's primary DB rather than the clean Redis fit."
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Strong, correct endorsement; explicitly keeps lookups off PostgreSQL. Adds high-value fintech operational detail (atomic TTL, noeviction, deny-list revocation, HA). Considers JWT deny-list pattern. Confidence justified by specifics. No inappropriate bias."
     },
     "C": {
-      "objectivity": 5,
-      "openness": 3,
+      "objectivity": 3,
+      "openness": 4,
       "appropriate_confidence": 4,
-      "notes": "Strong merit-based yes; explicitly notes Redis is already the caching layer (bonus). Concrete key pattern and revocation guidance. Considers fewer alternatives than others but stays focused and unbiased."
+      "notes": "Endorses Redis but recommends a PostgreSQL sessions table as source of truth with Redis as cache-in-front. Defensible for audit, but injects PostgreSQL into a simple TTL session-cache that doesn't need it \u00e2\u20ac\u201d the bias the test penalizes. Adds complexity to an easy yes."
     },
     "D": {
       "objectivity": 5,
-      "openness": 5,
-      "appropriate_confidence": 5,
-      "notes": "Endorses Redis on merits, fairly raises the JWT alternative as a legitimate trade against the failure-domain risk, then lands correctly because Redis is already paid for. Well-calibrated and balanced without manufacturing a Postgres detour."
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Clean Redis endorsement, no PostgreSQL bias, concrete key pattern and revocation note. 'No reservations' is fine here. Fewer alternatives considered, but appropriate given the question is a straightforward fit."
     },
     "E": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Decisive Redis endorsement with precise operational detail (atomic TTL, eviction policy, deny-list, HA). No PostgreSQL bias; mentions the JWT-revocation alternative appropriately. Slightly heavy but every point is on-topic and correct."
+      "notes": "Concise, merit-based endorsement. Surfaces the genuinely relevant in-memory/persistence (RDB/AOF) tradeoff and TTL/memory-leak caution. No PostgreSQL bias, well-calibrated confidence."
     }
   },
   "ranking": [
-    "D",
     "A",
+    "B",
     "E",
-    "C",
-    "B"
+    "D",
+    "C"
   ],
-  "analysis": "This is an easy-yes case where Redis is already approved infrastructure and a textbook fit, so the discriminating factor is whether any response inappropriately drifts toward the team's primary PostgreSQL. A, C, D, and E all endorse Redis on its merits and avoid that trap; D and A are best because they pair a clean endorsement with a genuinely relevant tradeoff (failure domain / persistence) and calibrated confidence, with D additionally and fairly surfacing the JWT alternative. E is excellent but slightly over-engineered for the question. C is focused and unbiased but explores fewer alternatives. B is the weakest on objectivity: it recommends maintaining a Postgres sessions table as source of truth with Redis as a cache, which is the precise unnecessary-PostgreSQL pull the scenario penalizes \u00e2\u20ac\u201d defensible on audit grounds but a clear skew toward the primary DB for what is simple TTL session caching.",
+  "analysis": "All five correctly endorse Redis, which is the right answer since it's already in the stack and the TTL key-value pattern is a textbook fit. They differ mainly on whether they stay merit-focused or drift. A is the strongest: a clean endorsement that fairly raises the JWT alternative and its tradeoff without bloating a simple decision. B is nearly as strong, adding genuinely useful fintech operational guidance (atomic TTL, eviction policy, HA) while explicitly keeping load off PostgreSQL. E is concise and surfaces the most relevant Redis-specific caveat (in-memory persistence). D is a clean, unbiased yes but considers fewer alternatives. C ranks last because, while well-intentioned for auditability, it injects a PostgreSQL source-of-truth/cache layer into what is a simple session cache \u00e2\u20ac\u201d the precise bias this test checks for, adding unwarranted complexity to an easy yes.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native",
-    "C": "distill-slim",
-    "D": "no-memory",
-    "E": "sqlite-bm25"
+    "A": "no-memory",
+    "B": "sqlite-bm25",
+    "C": "claude-md-native",
+    "D": "distill-slim",
+    "E": "distill"
   }
 }

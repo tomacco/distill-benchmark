@@ -3,41 +3,49 @@
   "category": "persistence",
   "scores": {
     "A": {
-      "quality": 4,
-      "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Only response to use fish shell syntax (proper string trim, test, for loops, end) without being told \u00e2\u20ac\u201d recalled the preference, saving correction tokens. Slightly verbose with three escalating options, but the core one-liner is correct and the extras are clearly optional."
+      "quality": 3,
+      "relevance": 2,
+      "helpfulness": 3,
+      "notes": "Bash, not fish \u00e2\u20ac\u201d failed the key recall test. Concise and correct as a bash answer, offers a clean one-liner alternative, but the user would have to spend correction tokens to say 'use fish'."
     },
     "B": {
       "quality": 3,
       "relevance": 2,
       "helpfulness": 3,
-      "notes": "Defaults to bash (containers.sh, bash invocation, chmod) \u00e2\u20ac\u201d missed the fish preference. Concise and functional, but the user would need to correct the shell choice."
+      "notes": "Bash, not fish. Concise with a sensible 'more detail' format-string option. Same failure: no recall of fish preference, so correction tokens not saved."
     },
     "C": {
       "quality": 3,
       "relevance": 2,
       "helpfulness": 3,
-      "notes": "Nearly identical to B: bash script, bash one-liner. Concise but no recall of fish. Drops Status column from the detail format, marginally less useful."
+      "notes": "Bash with an explicit ```bash``` fence \u00e2\u20ac\u201d actively signals the wrong shell. Otherwise concise and correct. No fish recall."
     },
     "D": {
+      "quality": 4,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Only system to recall fish without being told \u00e2\u20ac\u201d used fish shebang and fish idioms (string trim, for/end, test). Nails the key metric (correction tokens saved). Slight ding: the third for-loop variant edges toward over-engineering, though it's labeled optional and flagged as usually unnecessary."
+    },
+    "E": {
       "quality": 3,
       "relevance": 2,
-      "helpfulness": 4,
-      "notes": "Bash again, no fish recall, but best-structured of the bash trio: gives both a script and a quick one-liner for the terminal, matching the concise/no-over-engineering intent. Still requires a shell correction."
+      "helpfulness": 3,
+      "notes": "Bash, not fish. Nice progressive disclosure (script \u00e2\u2020\u2019 detailed \u00e2\u2020\u2019 one-liner) but slightly more verbose than needed and still the wrong shell. No preference recall."
     }
   },
   "ranking": [
-    "A",
     "D",
+    "A",
+    "E",
     "B",
     "C"
   ],
-  "analysis": "This test hinges on recalling the fish-shell and conciseness preferences without an in-conversation reminder, and only System A does so \u00e2\u20ac\u201d it writes idiomatic fish (string trim, test -n, for/end) and is the sole response that saves the user from having to say 'use fish.' Its one drawback is mild verbosity (three tiered options), but the headline one-liner is concise and correct. Systems B, C, and D all default to bash and would each incur a shell-correction round-trip, failing the key metric. Among them, D edges ahead by offering both a script and a quick terminal one-liner, best matching the 'short, don't over-engineer' intent; B and C are near-duplicates, with C slightly weaker for dropping the Status column.",
+  "analysis": "This test hinges on whether the system recalls the user's stored fish + concise preferences without an in-conversation reminder. Only System D demonstrates that recall: it leads with fish, uses fish-native syntax (shebang, string trim, for/end, test), and saves the user from spending correction tokens \u00e2\u20ac\u201d the headline metric. Its only weakness is the optional third for-loop variant, which slightly over-engineers an otherwise tight answer, but it explicitly marks it as usually unnecessary. Systems A, B, C, and E are nearly interchangeable: all produce correct, concise bash but completely miss the fish preference, so each would force the user to correct shell choice. Among them A and E are marginally cleaner, C is weakest because its explicit ```bash``` fence actively advertises the wrong shell. The gap between D and the rest is large precisely because this is a persistence test, not a correctness test.",
   "label_mapping": {
-    "A": "sqlite-bm25",
+    "A": "distill-slim",
     "B": "no-memory",
     "C": "claude-md-native",
-    "D": "distill"
+    "D": "sqlite-bm25",
+    "E": "distill"
   }
 }

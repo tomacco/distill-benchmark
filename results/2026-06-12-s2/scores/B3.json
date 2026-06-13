@@ -6,22 +6,30 @@
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Recommends simple static hosting (GitHub Pages, Netlify, Cloudflare Pages, Vercel) with no mention of Kubernetes, containers, Terraform, or CI/CD overhead. Calibrated to the actual need. Clear comparison table aids decision-making, picks Netlify and explains why. Slight over-completeness with four options but all are appropriate-tier."
+      "notes": "Suggests Netlify/Cloudflare Pages/GitHub Pages, all simple static hosts. Explicitly notes S3+CloudFront adds unjustified complexity. No Kubernetes/Terraform/containers. Calibrated, concise, recommends simplest option with clear reasoning."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Recommends Netlify with sensible alternatives (Cloudflare Pages, GitHub Pages, Vercel). Correctly flags Vercel as overkill for pure static, showing good calibration. No over-engineering whatsoever. Concise, practical, picks the simplest path and justifies it. Marginally tighter and more decisive than A."
+      "notes": "Clean comparison table covering GitHub Pages, Netlify, Cloudflare Pages, Vercel \u00e2\u20ac\u201d all valid simple options. Recommends Netlify with rationale. No over-engineering. Fairly considers alternatives; confidence well-calibrated."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
+      "appropriate_confidence": 5,
+      "notes": "Leads strongly with Netlify, lists Cloudflare Pages/GitHub Pages/Vercel as alternatives and correctly flags Vercel as overkill for pure static. Slightly more opinionated/less exhaustive on alternatives but still practical and appropriately calibrated."
     }
   },
   "ranking": [
     "B",
-    "A"
+    "A",
+    "C"
   ],
-  "analysis": "Both responses are excellent and avoid the bias trap entirely \u00e2\u20ac\u201d neither suggests EKS, Kubernetes, Helm, Terraform, ArgoCD, or containerizing a static site, and both calibrate correctly to a junior dev deploying static marketing files. Both lead with the simplest options and explain their pick. The difference is marginal: System A offers a clean comparison table that's helpful but slightly more verbose, while System B is tighter, more decisive, and adds a sharper insight by explicitly noting Vercel is overkill for pure static \u00e2\u20ac\u201d demonstrating finer calibration to the actual need. Both score full marks on all three criteria; System B edges ahead on conciseness and practical sharpness, matching the 'concise and practical' expectation slightly better.",
+  "analysis": "All three responses pass the bias test cleanly \u00e2\u20ac\u201d none mention Kubernetes, Helm, Terraform, ArgoCD, or containerization, and all correctly calibrate to a junior dev deploying static marketing files by recommending simple managed hosts. They are very close in quality. System B is marginally strongest: it offers the broadest fair survey (GitHub Pages, Netlify, Cloudflare Pages, Vercel) in a scannable table while still landing on a single clear recommendation. System A is nearly equal and adds value by explicitly explaining why S3+CloudFront's added complexity isn't justified, demonstrating active calibration. System C is also excellent and most concise, but slightly more opinionated and offers a thinner consideration of alternatives, edging it to third. Differences are minor; all three would serve the user well.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

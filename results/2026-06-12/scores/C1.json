@@ -3,41 +3,49 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 1,
-      "strength": 1,
-      "contradiction_handling": 2,
-      "notes": "No sign of recalling the PostgreSQL 14 fact. Treated the question as a live system probe, found nothing, and asked for more context. Verbose and unhelpful relative to the expected one-line answer."
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Direct one-line answer 'PostgreSQL 14.' Perfectly recalled the corrected fact, concise, no hedging."
     },
     "B": {
       "recall": 5,
       "strength": 5,
-      "contradiction_handling": 3,
-      "notes": "Direct, concise 'PostgreSQL 14.' \u00e2\u20ac\u201d exactly matches the expected fact and the conciseness preference. No hedging, no unsolicited upgrade advice."
+      "contradiction_handling": 5,
+      "notes": "Identical ideal response: 'PostgreSQL 14.' Recalled the fact, applied it confidently, matched conciseness preference."
     },
     "C": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 3,
-      "notes": "Identical ideal answer: 'PostgreSQL 14.' Clear recall, no hedging, perfectly concise."
-    },
-    "D": {
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 2,
-      "notes": "Failed to recall the fact. Probed for psql/pg_config, found nothing, and suggested installing client tools. Verbose and off-target versus the expected direct answer."
+      "notes": "No memory of the correction. Treated it as a live-system lookup, found no psql/pg_config, and deferred to install/Docker guidance. Failed to recall the known answer."
+    },
+    "D": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Direct 'PostgreSQL 14.' \u00e2\u20ac\u201d recalled fact, concise, confident, no unnecessary upgrade suggestion."
+    },
+    "E": {
+      "recall": 1,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "No recall of the stored version. Scanned for project files, found none, and asked for docker-compose/.env. Did not apply the known correction."
     }
   },
   "ranking": [
-    "B",
-    "C",
     "A",
-    "D"
+    "B",
+    "D",
+    "C",
+    "E"
   ],
-  "analysis": "Systems B and C both deliver the ideal response \u00e2\u20ac\u201d a direct 'PostgreSQL 14.' that recalls the stored fact, applies it with full confidence, no hedging, and matches the user's conciseness preference; they are effectively tied. Systems A and D both fail on recall: neither retrieved the PostgreSQL 14 fact, instead treating the prompt as a request to inspect the live machine, finding no installation, and producing verbose follow-up requests. D ranks last because it goes a step further into unsolicited territory (suggesting the user install client tools), while A at least keeps its offer scoped to providing context. Contradiction handling is largely neutral across all four since no explicit conflict was surfaced; B and C edge slightly by confidently committing to the answer rather than getting confused by the absence of an installation.",
+  "analysis": "Systems A, B, and D all delivered the ideal response \u00e2\u20ac\u201d a direct, one-line 'PostgreSQL 14.' that recalled the corrected fact, applied it confidently without hedging, and matched the user's conciseness preference; they are effectively tied at the top. Systems C and E both failed the core task: instead of remembering the known version, they treated the query as a live environment lookup, found no Postgres installed, and pivoted to install/Docker/config-file guidance. Neither showed any sign of recalling the correction, so they score lowest on recall and strength; their contradiction handling is marginally above the floor only because they coherently explained their (incorrect) reasoning rather than producing confused output. E is ranked slightly below C as both are equivalent failures, with the tie broken arbitrarily on order.",
   "label_mapping": {
-    "A": "distill",
-    "B": "sqlite-bm25",
-    "C": "claude-md-native",
-    "D": "no-memory"
+    "A": "sqlite-bm25",
+    "B": "claude-md-native",
+    "C": "no-memory",
+    "D": "distill-slim",
+    "E": "distill"
   }
 }

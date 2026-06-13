@@ -59,7 +59,7 @@ def get_expected_signals(test_id):
     test_file = Path(PROJ_ROOT) / "tests" / category / f"{test_id}.md"
     if not test_file.exists():
         return ""
-    content = test_file.read_text()
+    content = test_file.read_text(encoding="utf-8")
     match = re.search(r'## Expected Signals\n(.*?)(?=\n## |\Z)', content, re.DOTALL)
     return match.group(1).strip() if match else ""
 
@@ -73,7 +73,7 @@ def run_eval(prompt):
     try:
         result = subprocess.run(
             cmd,
-            capture_output=True, text=True, timeout=180,
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180,
             env={**os.environ,
                  "CLAUDE_CONFIG_DIR": os.path.expanduser("~/.claude-personal"),
                  "CLAUDE_CODE_USE_BEDROCK": "0",
@@ -146,7 +146,7 @@ def main():
             label_mapping[label] = comp_id
 
             try:
-                data = json.loads(file_path.read_text())
+                data = json.loads(file_path.read_text(encoding="utf-8"))
                 output = data.get("output", "(no output)")
             except Exception:
                 output = "(error reading output)"

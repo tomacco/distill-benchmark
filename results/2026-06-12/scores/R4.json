@@ -3,41 +3,49 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 5,
-      "precision": 5,
-      "naturalness": 5,
-      "notes": "Only response to retrieve and apply the team's preference for PostgreSQL extensions over new infrastructure. Leads with Postgres-native options (pg_analytics/ParadeDB, TimescaleDB) that stay within Postgres 14, and woves the constraint in naturally. Doesn't explicitly recall the DynamoDB/MongoDB rejection or the reasons, but its recommendation is fully consistent with that knowledge."
-    },
-    "B": {
       "relevance": 3,
       "precision": 4,
       "naturalness": 4,
-      "notes": "Surfaces real context (Kafka events, EKS, Terraform, monolith extraction, Postgres-experienced team) but uses it to justify ClickHouse \u00e2\u20ac\u201d new infrastructure \u00e2\u20ac\u201d directly against the team's stated preference for Postgres extensions. Misses the rejected-options knowledge entirely. Well-structured but pushes the wrong direction."
+      "notes": "Surfaces real stack context (AWS/EKS, PostgreSQL team, monolith extraction plan) and flags the architecture decision well. But recommends new infrastructure (Redshift) and never surfaces the team's stated preference for PostgreSQL extensions over new infra. Misses the core stored knowledge."
+    },
+    "B": {
+      "relevance": 2,
+      "precision": 4,
+      "naturalness": 3,
+      "notes": "Generic textbook comparison with no awareness of the user's stack or preferences. Even mentions TimescaleDB but as a neutral table row, not tied to the team's Postgres preference. Asks basic follow-ups it should already know. No stored knowledge applied."
     },
     "C": {
       "relevance": 1,
       "precision": 4,
-      "naturalness": 4,
-      "notes": "Generic ClickHouse-default answer with a comparison table and follow-up questions. No retrieval of team context, preference, or rejected options. Treats it as a cold question; relegates TimescaleDB to a minor row."
+      "naturalness": 3,
+      "notes": "Explicitly states 'No stored knowledge on this topic' and gives a generic ClickHouse/BigQuery answer. No retrieval of the PostgreSQL-extension preference or any stack context. Concise but ungrounded."
     },
     "D": {
-      "relevance": 1,
+      "relevance": 5,
       "precision": 5,
-      "naturalness": 3,
-      "notes": "Explicitly states 'No stored knowledge on this topic' then gives a generic ClickHouse/BigQuery answer. Honest about lacking context but retrieves nothing relevant; ignores the Postgres-extension preference and rejected alternatives."
+      "naturalness": 5,
+      "notes": "Directly surfaces 'your team prefers PostgreSQL extensions over new infrastructure' and leads with pg_analytics/ParadeDB/TimescaleDB, staying within Postgres 14. Addresses the fast-read requirement within Postgres, then offers ClickHouse only as a scale escape hatch. Best application of stored knowledge, naturally woven."
+    },
+    "E": {
+      "relevance": 3,
+      "precision": 3,
+      "naturalness": 4,
+      "notes": "Richly weaves stack context (Kafka, EKS, Terraform/IaC, monolith extraction) and Postgres team familiarity, but uses that familiarity only as a learning-curve argument for ClickHouse rather than honoring the extension preference. Recommends new infra against the stated bias; some over-listing (Druid)."
     }
   },
   "ranking": [
+    "D",
     "A",
+    "E",
     "B",
-    "C",
-    "D"
+    "C"
   ],
-  "analysis": "System A is the clear winner: it is the only response that retrieves and acts on the team's preference for PostgreSQL extensions over new infrastructure, leading with Postgres-native columnar/time-series options that respect the Postgres 14 constraint \u00e2\u20ac\u201d fully aligned with (though not explicitly citing) the prior rejection of DynamoDB and MongoDB. System B retrieves the most environmental context (Kafka, EKS, Terraform, monolith extraction) but weaponizes it to recommend ClickHouse, i.e., exactly the kind of new infrastructure the team prefers to avoid, and never recalls the rejected options or the reasons. Systems C and D show essentially no retrieval: both default to ClickHouse as a generic best-practice answer, with D being the weakest by openly admitting it has no stored knowledge. None of the four explicitly explained why DynamoDB/MongoDB were rejected, but only A produced a recommendation consistent with that stored decision.",
+  "analysis": "System D is the clear winner: it is the only response to retrieve and apply the key stored knowledge \u00e2\u20ac\u201d the team's explicit preference for PostgreSQL extensions over new infrastructure \u00e2\u20ac\u201d leading with TimescaleDB/pg_analytics within Postgres 14 and addressing fast reads inside acceptable options before offering ClickHouse as a scale fallback. A and E both demonstrate genuine context awareness (AWS/EKS, Kafka, monolith extraction, Postgres team), but both ultimately push new OLAP infrastructure (Redshift/ClickHouse) and miss the extension-first preference; A edges out E by raising the extraction decision point and treating team expertise as a friction argument rather than leveraging it to justify net-new infra. B and C are generic, ungrounded textbook answers with no retrieval \u00e2\u20ac\u201d C even admits it has no stored knowledge \u00e2\u20ac\u201d making them the weakest on relevance despite being precise in not dumping unrelated context.",
   "label_mapping": {
-    "A": "sqlite-bm25",
-    "B": "claude-md-native",
-    "C": "no-memory",
-    "D": "distill"
+    "A": "distill-slim",
+    "B": "no-memory",
+    "C": "distill",
+    "D": "sqlite-bm25",
+    "E": "claude-md-native"
   }
 }

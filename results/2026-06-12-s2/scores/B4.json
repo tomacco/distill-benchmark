@@ -4,24 +4,32 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Goes straight to a proportional solution (Redis-cached polling endpoint + 30s React poll), explicitly justifies why not SSE/WebSocket/Kafka, and ties Kafka to a future post-demo evolution. Considers alternatives but briefly, since it has already settled on the right one. Confidence is well-calibrated and it asks clarifying implementation questions."
+      "notes": "Lays out both a quick polling path and a proper Kafka/WebSocket path, then explicitly recommends the simple option now with a clean migration path later. Names the investor-demo context ('dashboard, not a production SLA') and flags the scale risk without over-engineering. Strongest on the 'simple now, scale later' iterative framing."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
+      "appropriate_confidence": 5,
+      "notes": "Recommends Redis-cached polling and explicitly reasons through why NOT SSE/WebSockets ('overkill for 30s') and why NOT a Kafka consumer (no extracted stream yet, post-demo). Defers event-driven approach to after extraction. Well-calibrated, asks clarifying questions, proportional to a demo."
+    },
+    "C": {
+      "objectivity": 5,
+      "openness": 4,
       "appropriate_confidence": 4,
-      "notes": "Lays out two clearly-framed paths (quick polling vs full Kafka->aggregation->WebSocket) and correctly recommends the simple option for a demo, noting 'it's a dashboard, not a production SLA.' Gives Kafka heavier billing as 'Proper' and assumes a Kafka stream exists, which slightly over-weights the heavy path, but the final recommendation and iterative 'simple now, swap later' reasoning are sound."
+      "notes": "Correctly picks 30s polling via React Query and resists WebSockets/SSE; flags the monolith transactions table and offers a partial index/materialized view only if needed ('start simple, see if it needs it'). Considers alternatives more briefly than A/B and is more implementation-heavy, but stays proportional and asks about the time window."
     }
   },
   "ranking": [
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "Both responses resist the bias trap and land on a proportional polling-based solution rather than defaulting to a full Kafka streaming pipeline, and both acknowledge the demo context and time constraint. System B is admirably balanced in explicitly presenting both a quick and a 'proper' path and recommending simple-now/scale-later, which maximizes openness; however, it frames the Kafka pipeline as the 'Proper' architecture and assumes transactions already stream through Kafka, giving the over-engineered path more prominence than the demo warrants. System A is tighter and more proportional: it leads with the simple solution, preemptively dismisses SSE/WebSocket/Kafka with concrete reasons (transactions not yet extracted, 30s granularity), and confines Kafka to a clearly-labeled future evolution. Both are objective and well-calibrated; A edges ahead by demonstrating the proportionality instinct more decisively without inflating the heavyweight option.",
+  "analysis": "All three avoid the bias trap entirely \u00e2\u20ac\u201d none defaults to a Kafka Streams + materialized-view pipeline for a one-week investor demo, and all correctly land on simple polling with a cached REST endpoint. A edges ahead by explicitly presenting both the quick and the 'proper' path, recommending the simple one now while keeping the endpoint shape stable for a later swap, and by naming the investor-demo reliability context directly. B is nearly as strong: it actively justifies rejecting WebSockets/SSE and Kafka and frames event-driven as a post-extraction evolution, with good clarifying questions. C is solid and proportional \u00e2\u20ac\u201d it resists WebSockets and defers indexing/materialized views until proven necessary \u00e2\u20ac\u201d but considers alternatives somewhat more briefly and leans more into implementation detail, so it ranks slightly behind on openness and calibration. The differences are small; this is a tight field of well-calibrated, unbiased answers.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill",
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

@@ -2,15 +2,15 @@
   "test_id": "P2",
   "competitor_id": "distill-slim",
   "prompt": "Add a health check endpoint to auth-service. The load balancer needs it.",
-  "output": "",
-  "timestamp": "2026-06-12T23:38:15Z",
-  "latency_ms": 120113,
-  "exit_code": 143,
-  "output_length_chars": 0,
-  "output_length_tokens_approx": 0,
+  "output": "There's no auth-service code in the current workspace. Auth-service is Kotlin, so I'll write the implementation — but I need to know: does the project use **Spring Boot** or **Ktor**?\n\nIn the meantime, here's the most likely case (Spring Boot). If you point me to the repo/file, I can drop it in directly.\n\nFor **Spring Boot** (minimal approach — no Actuator needed):\n\n```kotlin\n// src/main/kotlin/com/helios/auth/HealthController.kt\npackage com.helios.auth\n\nimport org.springframework.http.ResponseEntity\nimport org.springframework.web.bind.annotation.GetMapping\nimport org.springframework.web.bind.annotation.RestController\n\n@RestController\nclass HealthController {\n\n    @GetMapping(\"/health\")\n    fun health(): ResponseEntity<Map<String, String>> =\n        ResponseEntity.ok(mapOf(\"status\" to \"ok\"))\n}\n```\n\nFor **Ktor**:\n\n```kotlin\n// in your routing block\nget(\"/health\") {\n    call.respond(mapOf(\"status\" to \"ok\"))\n}\n```\n\nThe load balancer expects a `200 OK` — both return that. The Spring Boot version includes a JSON body (`{\"status\":\"ok\"}`) which is standard, but if your LB only checks the status code you can simplify to `ResponseEntity.ok().build()`.\n\nPoint me to the auth-service source and I'll add it directly. What's the path?",
+  "timestamp": "2026-06-13T07:34:51Z",
+  "latency_ms": 31058,
+  "exit_code": 0,
+  "output_length_chars": 1246,
+  "output_length_tokens_approx": 311,
   "versions": {
     "competitor": "prototype-2026-06-13",
-    "claude": "2.1.176 (Claude Code)",
+    "claude": "2.1.177 (Claude Code)",
     "benchmark": "0.1.0"
   }
 }
