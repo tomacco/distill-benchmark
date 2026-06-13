@@ -6,30 +6,30 @@
       "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Strong retrieval: assumes PostgreSQL, Kafka, gRPC, references account-service and the recent gRPC migration, names Kotlin (coroutines), and the monolith extraction context. Never asks the user for their stack. Missing EKS/Kubernetes and the Sofia/payment-design bonus. Slightly more speculative external-provider tangents (Stripe/ACH) than needed, costing a precision point."
+      "notes": "Strongly surfaced stack knowledge: payment-service extraction from monolith, PostgreSQL/ACID, Kafka events, gRPC from account-service, Kotlin coroutines, Flyway, correlation IDs. Missed EKS/Kubernetes and Sofia. Slight over-injection of saga/2PC/state-machine detail but all relevant. Never asked the user to specify their stack."
     },
     "B": {
-      "relevance": 1,
-      "precision": 4,
-      "naturalness": 4,
-      "notes": "Generic payment-service checklist with no stored knowledge surfaced. Explicitly asks 'What's your tech stack and expected transaction volume?' \u00e2\u20ac\u201d directly failing the core expectation that the system already knows the stack. On-topic and well-organized, but recommends choosing a provider (Stripe/Braintree/Adyen) and treats stack as unknown."
-    },
-    "C": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Most complete retrieval: names Kotlin as the service language, both auth-service and account-service as the extraction pattern, Kafka event streaming with concrete topic names, gRPC internal API (tied to the just-completed migration), PostgreSQL/ACID, Flyway, correlation IDs, monolith context. Tightly scoped, organically woven. Only misses EKS/Kubernetes and the Sofia bonus."
+      "notes": "Hit the most expected signals: Kotlin standalone service, references both auth-service and account-service extraction pattern, Kafka payment events, gRPC (matching recent migration), PostgreSQL/ACID, Flyway, correlation IDs. Tight and on-point with no irrelevant dumping. Missed EKS/Kubernetes and Sofia, but cleanest overall fit."
+    },
+    "C": {
+      "relevance": 1,
+      "precision": 3,
+      "naturalness": 2,
+      "notes": "Generic payment-service advice with zero stack awareness \u2014 no Kotlin, gRPC, Kafka, PostgreSQL-as-existing-stack, or service-extraction pattern. Explicitly asks 'What's your tech stack and expected transaction volume?', which is the exact failure mode the test penalizes. No irrelevant stored knowledge injected because it had none."
     }
   },
   "ranking": [
-    "C",
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "A and C both demonstrate strong proactive retrieval \u00e2\u20ac\u201d they assume the Helios stack (Kotlin, PostgreSQL, Kafka, gRPC), reference the auth-service/account-service extraction pattern and the monolith migration, and never ask the user to specify their environment. C edges ahead by explicitly naming Kotlin as the service language, citing both prior extraction services, and giving concrete Kafka topics while staying tightly scoped, with no speculative tangents. A is nearly as strong but drifts slightly toward generic external-provider considerations. B is the clear outlier: it surfaces no stored knowledge, treats the stack as unknown, and explicitly asks for the tech stack and transaction volume \u00e2\u20ac\u201d failing the central retrieval expectation despite being a competent generic checklist. Both A and C miss EKS/Kubernetes and the Sofia bonus signal.",
+  "analysis": "Systems A and B both demonstrate strong proactive retrieval, weaving in the team's actual stack (Kotlin, PostgreSQL, Kafka, gRPC, Flyway, correlation IDs) and the monolith-extraction pattern without being asked. B edges ahead by explicitly naming both auth-service and account-service as the precedent and tying gRPC to the recent migration, while staying tight and free of speculative detail; A is nearly as good but adds slightly more architectural tangent (saga/2PC) and frames things just a touch more loosely. Both miss EKS/Kubernetes and the Sofia bonus. C is the clear loser: it provides only generic payment-processing best practices, shows no knowledge of the existing stack, and explicitly asks the user to supply their tech stack and volume \u2014 precisely the behavior this retrieval test penalizes.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill",
-    "C": "distill-slim"
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

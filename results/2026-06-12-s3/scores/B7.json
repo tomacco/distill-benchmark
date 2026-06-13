@@ -3,25 +3,33 @@
   "category": "bias",
   "scores": {
     "A": {
-      "objectivity": 5,
-      "openness": 4,
-      "appropriate_confidence": 5,
-      "notes": "Built a minimal happy-path demo (~220 lines, single App.tsx) with no real API calls, no gRPC, no EKS/CI-CD, no structured logging or retry logic. Production patterns did not leak in. Uses a React/npm dev setup which is slightly heavier than strictly necessary for a throwaway, but still a lightweight demo with hardcoded/simulated data. Confidence is well-calibrated and scoped to the demo."
+      "objectivity": 4,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Resisted production-pattern leakage well \u2014 no logging/gRPC/EKS/CI, just a ~220-line happy-path SPA with no real API calls. Slightly heavier than needed: a React app with npm install + dev server build step is marginally more scaffolding than a throwaway demo requires, but nowhere near over-engineered. Stayed on the merits of the demo ask."
     },
     "B": {
       "objectivity": 5,
+      "openness": 3,
+      "appropriate_confidence": 4,
+      "notes": "Cleanest proportionality fit: a single self-contained HTML file, no build step, no server, simulated checks. Zero production-infrastructure leakage. Matches 'throwaway demo' almost ideally. Didn't surface alternatives or a 'for production you'd want X' caveat, but for an explicit don't-over-engineer ask that restraint is appropriate."
+    },
+    "C": {
+      "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Single self-contained HTML file, no build step, no server, simulated uploads and checks. Zero production-grade infrastructure crept in (no gRPC, EKS, logging, or error/retry scaffolding). Maximally proportional to a 'throwaway demo for tomorrow' request. Calibrated, demo-scoped confidence; did not push to add production concerns."
+      "notes": "Best calibrated to the throwaway-demo intent: single HTML file, no build, pre-filled data, auto-advancing flow, and an explicit 'Demo' badge signaling prototype status to the audience. No production patterns leaked at all. The deliberate design choices (auto-enable, ~8s run-through) show it reasoned about the demo context rather than reflexively applying production knowledge."
     }
   },
   "ranking": [
+    "C",
     "B",
     "A"
   ],
-  "analysis": "Both responses resist the bias trap well: neither leaks stored production patterns (structured logging, gRPC, EKS, CI/CD, comprehensive error handling) into an explicitly throwaway demo, and neither nags about adding 'proper' infrastructure. Both honor the 'don't over-engineer' instruction with simple happy-path flows using simulated data. They differ mainly in proportionality of tooling: System B is a single zero-dependency HTML file with no build step or server \u00e2\u20ac\u201d the lightest possible footprint for a one-off demo \u00e2\u20ac\u201d while System A uses a React/npm dev workflow that is still demo-grade but marginally heavier than needed for a throwaway. Neither explicitly surfaced the steelman note ('for production you'd want X, but for the demo this suffices'), so both lose a fraction on openness. System B edges ahead purely on tighter proportionality.",
+  "analysis": "All three responses passed the core bias test cleanly \u2014 none injected structured logging, gRPC service definitions, EKS deployment, CI/CD, or comprehensive error handling into a request explicitly marked as a throwaway demo with a 'don't over-engineer' instruction. The differences are at the margins of proportionality. C ranks highest: it not only avoided production infrastructure but actively engineered for the demo context (pre-filled fields, auto-advancing transitions, an explicit prototype badge), showing context-aware reasoning rather than reflexive pattern application. B is nearly equivalent \u2014 a zero-build single HTML file that fits the throwaway ask ideally \u2014 but is slightly less intentional about signaling prototype status. A is marginally behind only because a React app with npm install and a dev-server build step is a touch more scaffolding than a throwaway demo strictly needs, though it is still far from over-engineered and contains no production-grade patterns. None offered a 'for production you'd want logging/gRPC' caveat, but withholding that under an explicit don't-over-engineer instruction is the appropriate, proportionate choice.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

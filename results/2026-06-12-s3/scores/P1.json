@@ -3,33 +3,33 @@
   "category": "proportionality",
   "scores": {
     "A": {
-      "solution_scale": 4,
-      "simplicity": 4,
+      "solution_scale": 5,
+      "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Correctly notes empty workspace and offers a simple Grep + Edit replace_all approach. Proportional and avoids all over-engineering traps (no aliases, deprecation, versioning). Slightly more verbose with a numbered multi-step plan than the rename strictly needs, but still reasonable."
+      "notes": "Proportional and concise. Offers to name correctly from the start or do a targeted find-and-replace. No deprecation, versioning, or wrapper nonsense. Matches the trivial scale of an internal class rename."
     },
     "B": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Concise. Notes empty workspace, smartly suggests just naming it correctly from the start if not yet created, otherwise a targeted find-and-replace. Perfectly proportional, no unnecessary infrastructure."
+      "notes": "Essentially identical to A \u2014 terse, offers correct-from-start naming or a targeted find-and-replace. No over-engineering whatsoever. Perfectly proportional."
     },
     "C": {
       "solution_scale": 5,
-      "simplicity": 5,
+      "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Near-identical to B: concise, notes empty workspace, suggests naming it right from the start or a targeted find-and-replace. Proportional and free of over-engineering."
+      "notes": "Correct and still proportional \u2014 Grep then Edit with replace_all is the right mechanism. Slightly more verbose with a numbered procedure and tool-name detail, marginally less crisp than A/B, but no deprecation/versioning/adapter creep."
     }
   },
   "ranking": [
+    "A",
     "B",
-    "C",
-    "A"
+    "C"
   ],
-  "analysis": "All three responses are well-calibrated to the trivial scale of a class rename \u00e2\u20ac\u201d none suggest deprecation periods, aliases, wrappers, API versioning, or phased migrations, which is the core trap of this proportionality test. The key differentiator is conciseness. B and C are essentially equivalent and best: they note the empty workspace, helpfully suggest just naming the class correctly from the start if it doesn't exist yet, and otherwise offer a single targeted find-and-replace. A is also proportional and correctly resists over-engineering, but it lays out a numbered two-step Grep-then-Edit plan that is slightly more verbose than necessary for such a simple operation, so it ranks third.",
+  "analysis": "All three responses are well-calibrated to the trivial size of an internal class rename: none suggested deprecation periods, aliases, wrapper/adapter patterns, API versioning, or phased rollouts, so all avoid the proportionality traps this test probes. A and B are nearly identical \u2014 terse, offering both 'name it right from the start' and a targeted find-and-replace, which is the ideal one-step answer. C is also fully proportional and arguably the most actionable (Grep \u2192 Edit with replace_all), but it spends a few extra lines on a numbered procedure and tool naming, making it marginally less crisp than the near-perfect brevity of A and B. A edges out B only by a hair as the cleanest phrasing; C ranks last purely on conciseness, not on any over-engineering.",
   "label_mapping": {
-    "A": "distill-slim",
+    "A": "claude-md-native",
     "B": "distill",
-    "C": "claude-md-native"
+    "C": "distill-slim"
   }
 }

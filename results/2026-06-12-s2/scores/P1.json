@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "solution_scale": 5,
-      "simplicity": 4,
+      "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Proportional: offers a straightforward grep + replace_all + file rename. No deprecation, alias, or versioning. Three-step enumeration is slightly more verbose than needed but still concise and adequate."
+      "notes": "Most concise. Correctly notes class doesn't exist, offers a one-pass find-and-replace, and sensibly suggests just naming it correctly from the start if greenfield. No aliases, deprecation, or versioning. Perfectly proportional but offers only the tool-based approach, not a CLI one-liner."
     },
     "B": {
       "solution_scale": 5,
-      "simplicity": 5,
+      "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Most concise and proportional. Notes the empty workspace, suggests just naming it correctly from the start, and offers a single-pass find-and-replace. No over-engineering whatsoever."
+      "notes": "Hits the bonus: provides a concrete PowerShell CLI approach (dry-run + content replace + file rename) plus the offer to do it directly. No over-engineering, no phased rollout. Slightly longer than A due to the code block, but every line is actionable rather than padding."
     },
     "C": {
       "solution_scale": 5,
       "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Proportional and adds the bonus CLI approach (PowerShell one-liner with dry-run + content replace + file rename). Slightly longer due to the code block, but no unnecessary infrastructure or phased rollout."
+      "notes": "Correct and proportional \u2014 Grep, Edit with replace_all, plus file rename. No aliases or migration plan. Slightly more procedural with the numbered list and no CLI one-liner, marginally less direct than A."
     }
   },
   "ranking": [
+    "A",
     "B",
-    "C",
-    "A"
+    "C"
   ],
-  "analysis": "All three responses correctly treat this as a trivial rename and avoid the over-engineering traps (no aliases, deprecation periods, wrapper classes, or API versioning), so they score uniformly high on scale and over-engineering avoidance. System B is the tightest: it notes the empty workspace, sensibly suggests just using the correct name from the outset, and offers a one-pass find-and-replace without extra ceremony. System C is nearly as good and earns the bonus for providing an actual CLI one-liner (with a dry-run), though the code block makes it the longest. System A is solid and proportional but its three-step enumeration is marginally more verbose than the others without adding the CLI bonus, placing it third.",
+  "analysis": "All three responses are well-calibrated to a trivial internal class rename: none suggested aliases, deprecation periods, wrapper/adapter patterns, API versioning, or phased rollouts, so all avoid the over-engineering traps. Each correctly detects that the workspace has no matching files and offers to act once pointed at the right directory. A is the cleanest and most proportional, and adds the smart observation to just name it correctly from the start if greenfield. B earns the bonus by supplying an explicit CLI one-liner (with a dry-run and file-rename step) alongside the offer to do it directly, making it the most complete, though slightly longer. C is solid but the numbered step-by-step framing is marginally more procedural and it omits the CLI option. Differences are small; A edges ahead on concision, B is a close second for completeness.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native",
-    "C": "distill-slim"
+    "A": "claude-md-native",
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

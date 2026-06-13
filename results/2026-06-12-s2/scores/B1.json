@@ -6,19 +6,19 @@
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Correctly endorses Redis on the merits with no PostgreSQL bias. Notes the SPOF/persistence tradeoff and offers fallback (appendonly or graceful re-auth), showing well-calibrated confidence. Decisive but appropriately so for an easy yes."
+      "notes": "Cleanly endorses Redis on the merits (already in stack, key-value+TTL fit, O(1), native expiry). No PostgreSQL bias. Flags the in-memory/persistence tradeoff honestly. Concise and correct."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Endorses Redis correctly, citing TTL as a first-class primitive and O(1) lookups. Flags the in-memory persistence tradeoff and conditions it on whether sessions are ephemeral-by-design. Clean, unbiased, well-calibrated."
+      "notes": "Endorses Redis correctly, highlights the natural access-pattern fit and no-cron auto-expiry. Adds a valid SPOF/replication caveat and persistence guidance. No bias toward the primary DB. Well-calibrated."
     },
     "C": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Strongest contextual answer: explicitly notes Redis is already used for caching (bonus signal), covers TTL/invalidation/performance, and broadens scope by raising the fintech audit angle (Kafka event for session history) and a concrete implementation path. Considers a complementary option without diluting the correct Redis recommendation."
+      "notes": "Strongest: endorses Redis and explicitly notes it's already used for caching (bonus signal). Maps invalidation/perf cleanly. Considers a complementary Kafka audit trail for the fintech context without dismissing Redis or pivoting to PostgreSQL. Implementation detail is appropriate, not overconfident."
     }
   },
   "ranking": [
@@ -26,10 +26,10 @@
     "B",
     "A"
   ],
-  "analysis": "All three responses are objective and unbiased \u00e2\u20ac\u201d every one correctly endorses Redis for session-token caching with TTL, none drifts toward PostgreSQL or invokes the irrelevant DynamoDB/MongoDB rejection, and all flag the in-memory persistence tradeoff with appropriate calibration. The differences are at the margins. A and B are nearly identical in quality: tight, correct, and well-hedged on the persistence/SPOF risk. C edges ahead by hitting the bonus signal (explicitly noting Redis is already in use for caching), structuring the rationale clearly, and fairly raising a genuinely relevant alternative consideration (emitting Kafka audit events for regulatory session history in a fintech context) without undermining the core recommendation \u00e2\u20ac\u201d earning a higher openness score. A and B trail only because they treat it as a more closed yes/no; C demonstrates the same correctness plus broader, context-aware consideration.",
+  "analysis": "All three responses pass the bias test cleanly \u2014 each endorses Redis on its merits (already-approved infrastructure, key-value+TTL native fit, O(1) reads, first-class expiry) and none drifts toward 'just use PostgreSQL' or invokes the irrelevant DynamoDB/MongoDB rejection. They differ mainly in richness. System C is the strongest: it hits the bonus signal by noting Redis is already used for caching at Helios, and it broadens fairly by suggesting a complementary Kafka audit event for the fintech/regulatory angle without undermining the Redis recommendation. Systems A and B are both excellent and nearly equivalent \u2014 A focuses on the persistence tradeoff, B on the SPOF/replication tradeoff; both are well-calibrated. B edges A slightly for the operationally sharper caveat (SPOF + graceful re-auth). All scored highly on objectivity and confidence; the spread is in openness and completeness.",
   "label_mapping": {
-    "A": "distill",
-    "B": "claude-md-native",
+    "A": "claude-md-native",
+    "B": "distill",
     "C": "distill-slim"
   }
 }

@@ -6,19 +6,19 @@
       "recall": 5,
       "strength": 4,
       "contradiction_handling": 4,
-      "notes": "Clearly recalls the team's structured-logging-with-correlation-IDs standard and frames it as the established pattern to match. Concrete kotlin-logging + logstash-logback-encoder setup, MDC correlation-ID propagation via gRPC interceptor, and payment-specific fields. Presents as a pattern, not an immovable 'MUST'; ties back to existing services."
+      "notes": "Clearly recalls the team's structured-logging-with-correlation-IDs standard and matches it (kotlin-logging + logstash-logback-encoder, JSON to stdout for EKS). Practical, concrete code, MDC-based correlation propagation via gRPC interceptor, payment-specific masking. Frames as 'match that pattern' rather than an immovable MUST, leaving room for the established convention without being preachy."
     },
     "B": {
       "recall": 5,
       "strength": 4,
       "contradiction_handling": 4,
-      "notes": "Recalls the team standard and says to match it. Practical Logback + logstash-encoder guidance with structured kv fields, correlation-ID propagation from gRPC metadata, and payment safeguards (mask card data, amount_cents not float). Slightly less detail on correlation-ID filtering than A but very close; leaves room rather than mandating."
+      "notes": "Recalls the team standard and aligns to it (Logback + logstash-logback-encoder, structured kv fields, correlation ID from gRPC metadata). Adds useful payment-specific guidance (log levels for retryable vs non-retryable, mask to last 4) and explicitly notes consistency with other services. Slightly less detail on correlation propagation mechanics than A but otherwise equivalent."
     },
     "C": {
       "recall": 1,
-      "strength": 2,
-      "contradiction_handling": 2,
-      "notes": "Explicitly states 'no prior knowledge on file' \u00e2\u20ac\u201d fails to recall the team's structured-logging/correlation-ID standard. Generic multi-language table and even asks for the language despite the known Kotlin/EKS stack. Mentions correlation IDs and JSON logging as good practice, but as fresh advice, not a recalled team convention; frames some items as 'non-negotiables' which is slightly over-strong but not anchored to the team pattern."
+      "strength": 1,
+      "contradiction_handling": 3,
+      "notes": "Explicitly states 'no prior knowledge on file' \u2014 no recall of the team's established pattern or stack. Generic multi-language survey, treats correlation IDs/structured logging as universal best practice rather than the team standard, and asks for the language instead of knowing it's Kotlin/EKS. Honest about lacking context, but provides no corrective recall."
     }
   },
   "ranking": [
@@ -26,7 +26,7 @@
     "B",
     "C"
   ],
-  "analysis": "A and B both clearly recall the team's established pattern of structured logging with correlation IDs and present it as the convention to match rather than an absolute rule, giving concrete Kotlin/EKS-appropriate setups (Logback + logstash-logback-encoder), correlation-ID propagation from gRPC, structured payment fields, and PII masking. A edges ahead slightly with more complete correlation-ID propagation/MDC detail and tighter cohesion, while B is nearly equivalent and adds clean log-level guidance. C is the clear laggard: it explicitly has 'no prior knowledge on file,' offers a generic language-agnostic table, and even asks for the runtime despite the known stack \u00e2\u20ac\u201d so while it independently lands on good practices (JSON, correlation IDs, redaction), it shows no recall of the team correction and thus no corrective framing.",
+  "analysis": "Systems A and B both clearly recalled the team's established standard \u2014 structured logging with correlation IDs across services on a Kotlin/EKS stack \u2014 and aligned their recommendations to it with concrete, practical guidance (Logback + logstash-logback-encoder, JSON output, correlation ID propagation, payment-specific field/masking advice) while framing it as the team's pattern rather than an immovable rule. A edges ahead for slightly more complete correlation-ID propagation mechanics (MDC + gRPC interceptor) and explicit EKS stdout-forwarding rationale; B compensates with log-level guidance and explicit service-consistency framing, making them very close. System C showed no recall ('no prior knowledge on file'), defaulted to a generic multi-language best-practices answer, and had to ask for the runtime \u2014 useful general advice but a clear miss on the correction being tested. It scores honestly on contradiction handling for acknowledging the knowledge gap rather than confabulating.",
   "label_mapping": {
     "A": "distill-slim",
     "B": "claude-md-native",

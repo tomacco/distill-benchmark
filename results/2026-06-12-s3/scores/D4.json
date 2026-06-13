@@ -3,33 +3,33 @@
   "category": "persistence",
   "scores": {
     "A": {
-      "quality": 1,
-      "relevance": 2,
-      "helpfulness": 1,
-      "notes": "Produces no code at all. Asks the user to specify framework and event format \u00e2\u20ac\u201d exactly the signals a memory system should already know. Maximizes interaction cost: every answer here is a correction round-trip. Fails the core value-proposition metric."
-    },
-    "B": {
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Kotlin (not Java), coroutines via runBlocking bridging Kafka's thread model, MDC correlation ID, EmbeddedKafka integration test, and a mock-free test double (CountDownLatch + @Primary). Concise, code-first, infers Spring Boot + JSON without asking. Even flags the allOpen/CGLIB subclassing gotcha. Zero corrections needed."
+      "notes": "Fully autonomous: Kotlin, coroutines (runBlocking bridge), MDC correlation ID, EmbeddedKafka integration test, no-mock CapturingHandler test double. Delivers everything without asking a single question \u2014 zero correction cost. runBlocking bridge is slightly cruder than proper MDCContext propagation, but complete and concise."
+    },
+    "B": {
+      "quality": 2,
+      "relevance": 3,
+      "helpfulness": 2,
+      "notes": "Pure clarification turn \u2014 asks framework and event format, delivers no code. Exactly the failure mode this metric penalizes: pushes specification cost back onto the user instead of applying known preferences. High interaction cost, zero output."
     },
     "C": {
       "quality": 5,
       "relevance": 5,
       "helpfulness": 4,
-      "notes": "Also nails every signal: Kotlin, coroutines, integration test, no mocks. Technically the strongest MDC handling \u00e2\u20ac\u201d withContext(MDCContext()) for proper propagation across suspension points plus header-based correlation ID with UUID fallback. Slightly more explanatory and ends with a clarifying question, adding minor interaction cost versus B's clean hand-off."
+      "notes": "Strongest technically: Kotlin, coroutines with correct MDCContext propagation across suspension points, correlation ID from Kafka header with UUID fallback, MDC cleanup, EmbeddedKafka integration test, interface + @TestComponent (no mocks). Loses a half-step on interaction cost by ending with a business-logic question \u2014 defensible since handler intent is genuinely unknowable, but A delivered comparably without asking."
     }
   },
   "ranking": [
-    "B",
+    "A",
     "C",
-    "A"
+    "B"
   ],
-  "analysis": "B and C are both excellent and near-indistinguishable on substance: each emits idiomatic Kotlin (not Java), uses coroutines, propagates a correlation ID through MDC, ships an EmbeddedKafka integration test, and avoids mocks via a capturing test double \u00e2\u20ac\u201d all without requiring the user to specify any of these, which is the persistence/interaction-cost metric this test targets. C has a slight technical edge on coroutine MDC propagation (withContext(MDCContext())) and header-based correlation handling, but is marginally more verbose and closes with a follow-up question, whereas B is tighter and hands off cleanly while still flagging the allOpen/CGLIB pitfall \u00e2\u20ac\u201d so B edges ahead on the conciseness signal. A is the vanilla failure mode made explicit: no code, two clarifying questions about framework and format, guaranteeing the multi-correction round-trips a memory system is supposed to eliminate.",
+  "analysis": "A and C both nail every expected signal \u2014 Kotlin (not Java), coroutines, correlation-ID logging, EmbeddedKafka integration test, no-mock test doubles \u2014 without requiring the user to specify any of it, which is the entire point of the Total Interaction Cost metric. C has marginally superior engineering (proper MDCContext propagation and header-based correlation ID vs A's runBlocking bridge), but A edges ahead overall because it is fully autonomous and asks nothing, whereas C closes with a clarifying question that adds a small interaction cost. B is the vanilla failure pattern: it answers a code request with two clarifying questions and zero code, maximizing correction overhead and demonstrating exactly the behavior a memory system is supposed to eliminate. Hence A > C > B.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
+    "A": "distill-slim",
+    "B": "distill",
     "C": "claude-md-native"
   }
 }

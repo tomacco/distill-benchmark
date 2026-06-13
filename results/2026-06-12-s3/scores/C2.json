@@ -3,33 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 4,
-      "notes": "Clearly recalled the correction and quoted the exact constraint from decisions.md, including the reasoning (strong consistency, multi-table transactions, PostgreSQL expertise). Strong active warning and redirects to Redis as already-in-stack. Slightly less graceful in acknowledging the use case is technically valid, but cleanly handles the conflict by explaining why the team decided against it."
-    },
-    "B": {
       "recall": 1,
       "strength": 1,
-      "contradiction_handling": 1,
-      "notes": "No sign of recalling the team's prior rejection of DynamoDB. Actively recommends DynamoDB ('start with DynamoDB', 'DynamoDB works well') \u00e2\u20ac\u201d the opposite of the expected correction. Technically competent latency discussion, but it directly contradicts the stored decision without any awareness of it."
+      "contradiction_handling": 2,
+      "notes": "No sign of remembering the team's prior evaluation/rejection of DynamoDB. Actively recommends DynamoDB ('start with DynamoDB'), the opposite of the expected correction. Technically competent latency discussion and mentions Redis as an option, but it directly contradicts the stored decision without any awareness of it."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Clearly recalls and quotes the decisions.md constraint verbatim, including the reasoning (strong consistency, multi-table transactions, PostgreSQL expertise, operational risk). Active redirect to Redis, and explicitly notes Redis is already in the stack \u2014 hits the bonus. Concise, not preachy. Strongest response."
     },
     "C": {
       "recall": 5,
       "strength": 4,
-      "contradiction_handling": 5,
-      "notes": "Recalled the rejection and cited the reasoning (PostgreSQL expertise, strong consistency, multi-table transactions). Redirects to Redis with sound justification and offers to inspect current setup. Slightly softer warning than A ('has been evaluated and rejected') but very graceful \u00e2\u20ac\u201d acknowledges the relational-vs-session tradeoff and keeps sessions out of Postgres."
+      "contradiction_handling": 4,
+      "notes": "Recalls the rejection and the reasoning (PostgreSQL expertise, strong consistency, multi-table transactions). Redirects to Redis with sound justification and offers to inspect current setup. Slightly weaker than B: no direct citation and doesn't note Redis is already in the infrastructure, framing it more as a generic standard fit."
     }
   },
   "ranking": [
-    "A",
+    "B",
     "C",
-    "B"
+    "A"
   ],
-  "analysis": "Systems A and C both correctly recalled the team's prior evaluation and rejection of DynamoDB, cited the reasoning (strong consistency, multi-table transactions, PostgreSQL expertise), and redirected to Redis as the already-in-stack option without being preachy. A edges out C with a more forceful, explicit warning and a direct quote of the decisions.md constraint, while C is marginally softer but slightly more graceful in framing the tradeoff and proactively offering to inspect the current setup. System B fails the core test entirely: it shows no memory of the correction and actively recommends starting with DynamoDB, the exact behavior the team decided against \u00e2\u20ac\u201d strong general engineering reasoning but a complete miss on the recall/correction objective.",
+  "analysis": "B and C both correctly recall the team's prior decision to reject DynamoDB and actively redirect to Redis, while A fails entirely \u2014 it has no memory of the correction and in fact recommends DynamoDB, the precise mistake the correction was meant to prevent. B edges out C by quoting the decisions.md constraint directly, fully restating the reasoning, and noting that Redis is already in the stack (capturing the bonus signal), all without being preachy. C is a strong, graceful answer with the same recall and a helpful offer to inspect the current setup, but it cites the knowledge less explicitly and misses that Redis is already deployed. A is competent on raw latency engineering but is the wrong answer for this correction test.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill",
+    "A": "distill",
+    "B": "claude-md-native",
     "C": "distill-slim"
   }
 }

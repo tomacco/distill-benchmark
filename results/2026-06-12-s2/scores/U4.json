@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "calibration": 4,
-      "style_match": 3,
-      "preference_recall": 2,
-      "notes": "The bash `find . -name \"*.kt\" -mtime -7` is fish-compatible and works as-is, which helps. But it explicitly frames things as 'On Linux/macOS (Bash)' and adds a paragraph explaining `-mtime` and `-type f` \u00e2\u20ac\u201d over-explaining for a senior user and never recalling the fish-shell preference. No `fd` suggestion."
+      "style_match": 4,
+      "preference_recall": 1,
+      "notes": "Concise, code-first with two code blocks. Leads with PowerShell as 'your primary shell' \u2014 but the expected user preference is fish shell, which is never mentioned or used. No fd suggestion. Senior-appropriate, no over-explanation."
     },
     "B": {
-      "calibration": 4,
-      "style_match": 5,
-      "preference_recall": 3,
-      "notes": "Most concise and code-first: leads with the `find` one-liner (which works unchanged in fish) and no preamble. Still labels it 'bash' and offers a PowerShell fallback rather than acknowledging fish, and misses the `fd` bonus, but the primary command is fish-compatible and the terse style matches preferences best."
+      "calibration": 3,
+      "style_match": 2,
+      "preference_recall": 1,
+      "notes": "Adds explanatory prose ('-mtime -7 means modified less than 7 days ago', '-type f good practice') that a senior user does not need \u2014 verbose for this audience. Provides bash + PowerShell, no fish, no fd. Violates the fish preference entirely."
     },
     "C": {
-      "calibration": 3,
-      "style_match": 3,
+      "calibration": 4,
+      "style_match": 4,
       "preference_recall": 1,
-      "notes": "Asserts 'PowerShell (your primary shell)' and leads with the PowerShell command \u00e2\u20ac\u201d a direct mis-recall of the user's shell (fish, not PowerShell). Commands are senior-level and the bash `find` fallback works in fish, but anchoring the answer on the wrong primary shell is the largest preference violation."
+      "notes": "Most concise: bash one-liner first, PowerShell alternative, no extraneous explanation. Still uses bash/PowerShell rather than fish, no fd alternative. Matches code-first/terse style well but misses the specific shell preference."
     }
   },
   "ranking": [
-    "B",
+    "C",
     "A",
-    "C"
+    "B"
   ],
-  "analysis": "None of the three systems used fish syntax or suggested `fd`, so all fall short of the ideal fish-aware one-liner; the differentiator is which assumption they anchor on and how concise they are. System B wins by leading with the bare `find . -name \"*.kt\" -mtime -7` (which runs unmodified in fish) as a clean code-first one-liner with no preamble. System A gives the same fish-compatible `find` command but buries it in dual-platform framing and an explanatory paragraph that over-serves a senior user. System C is weakest on preference recall because it explicitly and incorrectly declares PowerShell the user's primary shell and leads with it, the opposite of the fish preference, despite otherwise competent commands.",
+  "analysis": "All three responses fail the core preference signal for this test: the user uses the fish shell, yet none use fish syntax, none avoid bash-specific assumptions, and none offer the bonus fd alternative \u2014 every response defaults to a bash + PowerShell pairing, so preference_recall is 1 across the board. They differentiate on style and calibration. System C is the tightest: bash one-liner first, a single PowerShell alternative, zero filler \u2014 best matching a concise, code-first senior. System A is nearly identical but frames PowerShell as the 'primary shell' (a different incorrect shell assumption than fish) while still staying terse. System B is weakest on style because it adds tutorial-level prose explaining -mtime and -type f that a senior user does not need, lowering both style_match and calibration. Net: C \u2265 A > B, but none would satisfy a fish user.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill",
-    "C": "distill-slim"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

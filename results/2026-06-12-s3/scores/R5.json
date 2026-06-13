@@ -6,30 +6,30 @@
       "relevance": 4,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Clean, focused Python Dockerfile answer covering multi-stage build, non-root user, env vars, and run instructions. No irrelevant context (no Kotlin/Kafka/EKS bleed). Slightly less depth than the others \u00e2\u20ac\u201d doesn't mention base image choice or healthcheck \u00e2\u20ac\u201d but practical and on-point."
+      "notes": "Clean, focused Python Dockerfile with sensible defaults (multi-stage, non-root, env flags, workers). No Kotlin/EKS/Kafka bleed. Slightly thinner than the others \u2014 no file layout or test command \u2014 but entirely on-target."
     },
     "B": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Strong focused answer. Adds layer caching rationale, HEALTHCHECK, project layout, and runtime model mounting. Entirely relevant to the Python service request with zero unrelated knowledge injection. Practical and well-scoped."
+      "notes": "Most complete: explicit file layout, a decisions table with reasons (e.g. slim over Alpine for numpy/scipy wheels), read-only model mount, and a working curl test. Stays strictly on the Python Docker request with zero irrelevant infrastructure injection."
     },
     "C": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Richest answer with a clear decision table, justified base-image choice (python:3.11-slim over Alpine for numpy/scipy wheels), non-root hardening, and a complete build/run/test workflow including a real curl example. All detail is relevant; no extraneous infra opinions or language-context bleed."
+      "notes": "Strong: adds HEALTHCHECK and explicit layer-caching rationale (requirements before app code), plus both bake-in and mount run options. Focused, practical, no unrelated stored context."
     }
   },
   "ranking": [
-    "C",
     "B",
+    "C",
     "A"
   ],
-  "analysis": "All three responses pass the precision test cleanly \u00e2\u20ac\u201d none inject Kotlin, Kafka, gRPC, or unsolicited EKS/infrastructure context, and each stays tightly focused on producing a practical Python Dockerfile for the fraud-scoring service. Differences are marginal and come down to depth of relevant detail. C edges ahead by justifying its base-image choice (slim vs Alpine musl issues with numpy/scipy), presenting decisions in a scannable table, and including a full build/run/test workflow with a concrete curl example. B is nearly as strong, distinguished by its HEALTHCHECK and explicit layer-caching rationale. A is the leanest \u00e2\u20ac\u201d fully correct and well-targeted but with slightly less surrounding justification. All three weave their assumptions in naturally rather than regurgitating stored context.",
+  "analysis": "All three responses pass the precision test cleanly \u2014 none inject Kotlin, EKS, Kafka, or gRPC context, and all stay tightly focused on the actual request for a Python fraud-scoring Dockerfile, sharing the same solid fundamentals (multi-stage build, non-root user, PYTHONDONTWRITEBYTECODE/UNBUFFERED, runtime model override). They differ only in thoroughness. System B edges ahead with an explicit file layout, a decisions table giving rationale (notably choosing slim over Alpine to avoid musl/numpy wheel issues), a read-only model mount, and a ready-to-run curl test. System C is nearly as strong, distinguished by a HEALTHCHECK and an explicit layer-caching explanation. System A is correct and well-reasoned but slightly less complete, omitting a file layout and test invocation. Naturalness is high across the board; the knowledge feels like organic engineering judgment rather than regurgitated stored context.",
   "label_mapping": {
     "A": "distill",
-    "B": "distill-slim",
-    "C": "claude-md-native"
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

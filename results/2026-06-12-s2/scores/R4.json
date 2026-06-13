@@ -3,33 +3,33 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 4,
-      "precision": 5,
-      "naturalness": 4,
-      "notes": "Only system to surface the stored rejection knowledge: explicitly flags that DynamoDB and MongoDB were already evaluated and rejected, and gives the correct reasons (strong consistency, relational model, PostgreSQL expertise). Woven in naturally as a 'Skip' note. Loses points because it doesn't recommend PostgreSQL-based solutions (TimescaleDB, partitioning, pg extensions) and instead jumps to Redshift/ClickHouse, but it clearly retrieved and applied the most relevant context."
-    },
-    "B": {
-      "relevance": 1,
-      "precision": 4,
-      "naturalness": 3,
-      "notes": "Generic textbook OLAP answer with no awareness of the team's prior evaluation. Notably recommends Redshift/Druid/Snowflake and even asks for more info, showing zero retrieval. Doesn't inject irrelevant stored knowledge (because it has none), but surfaces nothing relevant and ignores the PostgreSQL-expertise and rejection history entirely."
-    },
-    "C": {
       "relevance": 3,
       "precision": 4,
       "naturalness": 4,
-      "notes": "Surfaces some team/stack context (AWS EKS, Kotlin, PG 14, Series B ~80 engineers, monolith extraction) naturally, but misses the key stored knowledge: never mentions the DynamoDB/MongoDB rejection or why. Worse, it actively argues 'why not just Postgres' against the team's documented preference for PostgreSQL extensions, contradicting the expected direction."
+      "notes": "Only response to recall the prior DynamoDB/MongoDB rejection AND the reason (strong consistency, relational model, PostgreSQL expertise), weaving it in naturally. However, it ignores the team's PostgreSQL-extension preference and recommends new infra (Redshift/ClickHouse) rather than PostgreSQL-based solutions (partitioning, TimescaleDB, materialized views), so it only partially surfaces the relevant knowledge."
+    },
+    "B": {
+      "relevance": 2,
+      "precision": 3,
+      "naturalness": 3,
+      "notes": "No recall of the DynamoDB/MongoDB rejection. Worse, it actively argues against PostgreSQL ('wrong for OLAP', 'Postgres will struggle') \u2014 the opposite of the team's known preference for PostgreSQL extensions over new infrastructure. Sound generic analytics advice but contradicts stored context."
+    },
+    "C": {
+      "relevance": 1,
+      "precision": 2,
+      "naturalness": 2,
+      "notes": "Pure generic OLAP advice with no awareness of any stored context. Asks for write patterns/volume/infra it should already know, and its options table even surfaces managed stores without acknowledging the prior rejections or the PostgreSQL preference. Reads as regurgitated boilerplate."
     }
   },
   "ranking": [
     "A",
-    "C",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "All three were asked an analytics-datastore question where the correct retrieval behavior is to recall that DynamoDB and MongoDB were already rejected (for strong-consistency, transactional, and PostgreSQL-expertise reasons) and to steer toward PostgreSQL-based options. System A is the clear winner on retrieval: it is the only response that surfaces the rejection knowledge and its rationale, weaving it in cleanly as a 'Skip' note rather than dumping it. System C demonstrates partial retrieval \u00e2\u20ac\u201d it recalls team/stack details organically \u00e2\u20ac\u201d but misses the central rejection knowledge and actively argues against PostgreSQL, contradicting the team's stated preference. System B shows no retrieval at all: a generic OLAP comparison that ignores all stored context and even lists options the team would not consider. None of the three fully delivered the ideal PostgreSQL-extension recommendation, but on the retrieval dimensions measured here, A > C > B.",
+  "analysis": "All three default toward Redshift/ClickHouse and none fully honor the expected answer of PostgreSQL-based solutions plus the team's preference for PG extensions over new infra. System A is clearly strongest on retrieval: it alone recalls that DynamoDB and MongoDB were already evaluated and rejected, and correctly cites the reasons (strong consistency, relational model, PostgreSQL expertise), woven in naturally \u2014 though it still steers toward new infrastructure rather than PostgreSQL options. System B gives competent generic analytics advice but shows no memory of the rejection and directly argues against PostgreSQL, contradicting the team's known stance. System C is the weakest: entirely context-free boilerplate that even asks for details it should already know and never references the prior decisions. Ranking: A > B > C.",
   "label_mapping": {
     "A": "distill-slim",
-    "B": "distill",
-    "C": "claude-md-native"
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

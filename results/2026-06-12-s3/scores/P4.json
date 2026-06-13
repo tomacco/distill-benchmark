@@ -6,19 +6,19 @@
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Leads with the simplest adequate approach: an env-var-backed flag using only the existing Kotlin/Postgres stack, no new infra. Shows concise code, explains dark-launch deploy and rollback, and offers a Postgres table only as an optional graduation step for per-user targeting. Explicitly contrasts with LaunchDarkly rather than recommending it. Perfectly proportional."
+      "notes": "Defaults to the cheapest zero-dependency option (env var) with a tight code example and call site. Names the trade-off (no per-user targeting) and offers a DB row as the next step only if needed. Asks about deploy setup rather than assuming infra. No vendor push. Maximally proportional and literally matches the 'simplest' request."
     },
     "B": {
       "solution_scale": 5,
       "simplicity": 4,
       "avoided_over_engineering": 5,
-      "notes": "Recommends a Redis flag because the user already operates Redis, which adds the runtime-toggle-without-redeploy bonus. Correctly relegates LaunchDarkly/Unleash to 'only if you need rollout/A-B/audit'. Slight ding on pure simplicity since the simplest path (env var) is presented as the secondary option, but the Redis choice is well-justified by existing infra and a clear graduation path."
+      "notes": "Recommends a Redis flag leveraging infra already in use \u2014 slightly more than an env var but justified by runtime toggle without redeploy (hits the no-redeploy bonus). Env var offered as the simpler option, and LaunchDarkly/Unleash correctly relegated to 'only if you need percentage rollout/A-B.' Vendors appropriately deprioritized, not primary."
     },
     "C": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Cleanest minimal answer: env var flag, zero dependencies, with a short code example and a DB row noted only as the next step up. Resists all vendor tooling and asks a scoping question about deploy setup. Slightly thinner and uses Python despite the apparent Kotlin context, but fully proportional and the simplest adequate solution."
+      "notes": "Env-var-backed flag with clean Kotlin + k8s example. Notes the redeploy-to-toggle limitation honestly and offers a Postgres table for targeting using the existing stack. Vendors mentioned only as a contrast. Simple and proportional; slightly behind on the toggle-without-redeploy bonus since flipping requires a redeploy."
     }
   },
   "ranking": [
@@ -26,10 +26,10 @@
     "B",
     "C"
   ],
-  "analysis": "All three nail the proportionality test: each defaults to a simple env-var or single-key flag, shows a brief code check, and treats LaunchDarkly/Split/Unleash as optional only-if-needed escalations rather than the primary answer \u00e2\u20ac\u201d no over-engineering, no design docs. A edges ahead by matching the user's stack, leading with the literally simplest env-var approach, and cleanly offering a Postgres table as the graduation path. B is nearly as strong and uniquely captures the 'toggle without redeployment' bonus via an existing-Redis flag, but presents the truly-simplest env var only as a secondary option. C is the leanest and most disciplined answer but is slightly thinner and uses Python despite the apparent Kotlin/Postgres context, edging it to third. The spread is narrow \u00e2\u20ac\u201d all three would be implementable in well under an hour.",
+  "analysis": "All three are well-proportioned, resist vendor solutions, and keep feature flags to a one-liner check \u2014 none over-engineers. A edges ahead by literally honoring 'simplest': a zero-dependency env var, a clear trade-off note, a cheap upgrade path, and a clarifying question about deploy setup. B is nearly as strong and uniquely nails the no-redeploy runtime-toggle bonus by reusing existing Redis, but a cache dependency is marginally more than the absolute simplest option, so its simplicity score is a notch lower. C is equally simple and clean but requires a redeploy to flip the flag, slightly missing the toggle-without-redeployment bonus. Differences are small; all would score highly on proportionality.",
   "label_mapping": {
-    "A": "claude-md-native",
+    "A": "distill",
     "B": "distill-slim",
-    "C": "distill"
+    "C": "claude-md-native"
   }
 }

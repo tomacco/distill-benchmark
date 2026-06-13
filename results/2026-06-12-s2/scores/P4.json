@@ -6,27 +6,27 @@
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Postgres feature_flags table \u00e2\u20ac\u201d minimal, no new infra, toggleable without deploy (fits dark-launch). Tailored to stack. Offers Redis cache only as an optional tradeoff rather than baking it in. No vendor push, no microservice. Cleanest proportional match."
+      "notes": "Postgres feature_flags table \u2014 no new infra, toggleable without a deploy, which directly serves the dark-launch goal and hits the bonus. Minimal schema + thin repo + call-site check. Mentions optional Redis cache as a tradeoff rather than building it in. Perfectly proportional; no vendor solutions pushed."
     },
     "B": {
       "solution_scale": 4,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Env var flag \u00e2\u20ac\u201d literally the simplest, zero dependencies, with honest tradeoff that env vars need a redeploy and are binary. Very proportional, but the redeploy requirement is a slight mismatch for the dark-launch goal (toggle without redeploy). Resists all over-engineering."
+      "notes": "Env var \u2014 absolute simplest, zero dependencies, no infra. Resists all over-engineering and offers a lightweight allowlist for targeting. Honestly flags that env vars are binary and require a redeploy to toggle, which is slightly less apt for dark-launch toggling than a DB flag; that lowers solution_scale marginally for this specific ask."
     },
     "C": {
-      "solution_scale": 4,
+      "solution_scale": 5,
       "simplicity": 4,
-      "avoided_over_engineering": 4,
-      "notes": "Postgres table + Redis cache built in, with a useful 'why not env vars / LaunchDarkly / AppConfig' section. Well-justified and stack-aware, but bakes the Redis caching layer in upfront and surfaces Unleash, making it marginally heavier than the bare-minimum ask."
+      "avoided_over_engineering": 5,
+      "notes": "Postgres flag + Redis cache, with a clear 'why not env vars/LaunchDarkly/AppConfig' section. Proportional and toggle-without-redeploy, but bakes in the Redis cache from the start (slightly more than strictly minimal for one flag) where A treats it as optional. Well-reasoned, defers SDK to later. No premature vendor push."
     }
   },
   "ranking": [
     "A",
-    "B",
-    "C"
+    "C",
+    "B"
   ],
-  "analysis": "All three resist over-engineering and avoid the trap of recommending LaunchDarkly/Split or a feature-flag microservice as the primary answer \u00e2\u20ac\u201d a strong field for a proportionality test. System A is the cleanest proportional fit: a single Postgres flag with no new infra, toggleable without redeploy (directly serving the dark-launch intent), with Redis offered only as an optional escape hatch. System B is the literally simplest (an env var, zero deps) and is admirably honest about its limits, but env-var toggling requires a redeploy, which slightly undercuts the dark-launch use case. System C is solid and the most explicit about rejecting heavier alternatives, but it bakes the Redis cache in by default and name-drops Unleash, making it marginally more elaborate than necessary for one flag. None over-engineers; the ranking reflects fit-to-intent and minimal footprint.",
+  "analysis": "All three resist over-engineering and avoid recommending LaunchDarkly/Split/Flagsmith as the primary answer, so none over-builds. The differentiator is fit to the 'dark-launch' framing, where the bonus rewards a flag toggleable without redeployment. A is the cleanest: a minimal Postgres flag table that toggles without a deploy, with Redis offered only as an optional tradeoff \u2014 simplest adequate solution that fully serves the goal. C reaches the same correct design and adds useful 'why-not' reasoning, but bakes the Redis cache in from the start, marginally above the minimal footprint. B is the simplest in raw terms (an env var, zero dependencies) and is genuinely proportional, but it honestly concedes env vars need a redeploy to toggle, which is slightly weaker for dark-launching than a DB flag \u2014 hence it ranks third despite top simplicity.",
   "label_mapping": {
     "A": "distill-slim",
     "B": "distill",

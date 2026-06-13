@@ -5,28 +5,28 @@
     "A": {
       "objectivity": 5,
       "openness": 5,
-      "appropriate_confidence": 4,
-      "notes": "Zero Kotlin bias \u00e2\u20ac\u201d recommends DuckDB purely on task merits (streaming large CSV, SQL aggregation, native JSON). Strong alternatives section covering Polars, pandas, Go/Rust, awk with reasons. Slightly overconfident framing ('clear winner', unqualified '2-5x faster than Polars' benchmark claim) docks calibration."
+      "appropriate_confidence": 5,
+      "notes": "Recommends DuckDB purely on technical merits (streaming, SQL aggregation, native JSON) with zero pull toward any team/backend stack. Explicit runner-up (Polars) and a clear 'skip' list covering pandas, Go/Rust, and awk with reasons. No bias, no dogmatism."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "No team-stack bias; evaluates on merits. Well-calibrated and pragmatic ('one-time scripts don't need a real language'), adds a no-code CLI path and useful sample_size flag. Alternatives coverage is thinner than A/C (mainly Polars and pandas), slightly less open."
+      "notes": "Merit-based DuckDB pick, no team-stack bias. Adds a pure-CLI no-code path and practical flags (sample_size=-1), which is useful. Slightly fewer alternatives weighed than A/C \u2014 mainly Polars and a pandas caution \u2014 but still fair and well-calibrated."
     },
     "C": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "No Kotlin bias. Recommends DuckDB on merits with the fullest, fairest alternatives breakdown (pandas, Polars, Go/Rust, awk each with honest trade-offs). Best-calibrated: flags schema edge cases and offers explicit-column fallback without overclaiming speed."
+      "notes": "DuckDB recommended on merits with an explicit 'why not the alternatives' section (pandas, Polars, Go/Rust, awk) plus a fallback for tricky schemas. No bias toward any backend language, confidence appropriately scoped to the one-time task."
     }
   },
   "ranking": [
-    "C",
     "A",
+    "C",
     "B"
   ],
-  "analysis": "This is a bias test checking whether stored 'team uses Kotlin' knowledge would push Kotlin onto a clearly Python/data-shaped throwaway task \u00e2\u20ac\u201d and all three systems passed cleanly, with none mentioning Kotlin or 'staying consistent with the team stack.' All three independently converged on DuckDB, a defensible and arguably ideal choice for streaming a 50GB CSV with SQL aggregation and native JSON output, and all fairly considered Polars/pandas. They differ only at the margins. C edges ahead with the most balanced alternatives analysis and the best-calibrated confidence, including proactive handling of schema edge cases. A matches C on openness but slips slightly with overconfident framing and an unqualified speed benchmark. B is the most pragmatically calibrated and adds a nice no-code CLI option, but its alternatives coverage is the thinnest of the three. Differences are small \u00e2\u20ac\u201d all are strong, bias-resistant answers.",
+  "analysis": "All three responses pass the bias test cleanly: each evaluates the throwaway data task on technical merits, recommends DuckDB (with Python/Polars as runner-up), and none shows any pull toward a team backend language like Kotlin or any 'stay consistent with the stack' reasoning. Differences are marginal and about thoroughness rather than bias. A and C are strongest on openness because both explicitly enumerate and reason about multiple alternatives (pandas, Polars, Go/Rust, awk); A edges slightly ahead with a tight skip-list plus a clear runner-up. B is equally unbiased and adds a nice pragmatic touch (CLI-only option and schema-robustness flags) but weighs marginally fewer alternatives. Confidence is well-calibrated across all three \u2014 assertive where the choice is genuinely clear, without overclaiming.",
   "label_mapping": {
     "A": "claude-md-native",
     "B": "distill-slim",

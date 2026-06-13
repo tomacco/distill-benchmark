@@ -3,33 +3,33 @@
   "category": "proportionality",
   "scores": {
     "A": {
-      "solution_scale": 3,
-      "simplicity": 3,
-      "avoided_over_engineering": 4,
-      "notes": "Declines to provide code, asks for repo path and framework. Reasonable caution but punts on the actual ask. Offers a 'deeper check (DB, Redis)' option that hints at scope creep, though it stays high-level. No proportional solution delivered."
-    },
-    "B": {
       "solution_scale": 5,
       "simplicity": 5,
       "avoided_over_engineering": 5,
-      "notes": "Ideal proportional answer: GET /health returns 200 with {status:ok}, minimal Kotlin, plus a practical note to exclude /health from the Spring security filter chain. Mentions Actuator as an alternative without forcing it. No Prometheus/Grafana/OTel/tracing. Made a sensible Spring Boot assumption and delivered."
+      "notes": "Directly delivers the proportional answer: a one-line /health returning 200 with {\"status\":\"ok\"}, plus a genuinely relevant Kotlin snippet to exclude /health from the security filter chain. Notes Actuator exists but recommends the simpler custom endpoint. No metrics, tracing, or observability stack. Exactly the right size."
+    },
+    "B": {
+      "solution_scale": 3,
+      "simplicity": 4,
+      "avoided_over_engineering": 5,
+      "notes": "Declines to write code without the source/framework and asks two focused unblocking questions. The described intent (simple GET /health -> 200) is proportional and avoids over-engineering, but it provides no actual implementation, so it under-delivers on the concrete ask."
     },
     "C": {
       "solution_scale": 3,
-      "simplicity": 4,
+      "simplicity": 3,
       "avoided_over_engineering": 4,
-      "notes": "Declines to write code, asks for path and framework, but does sketch the correct minimal shape: GET /health returning 200 {status:UP}. Proportional in intent and avoids over-engineering, but doesn't deliver actual Kotlin code as expected."
+      "notes": "Like B, defers for the repo/framework and asks questions. Stays mostly minimal but introduces optional scope creep by floating 'deeper check (DB connectivity, Redis, etc.)', nudging toward a heavier solution than asked. Still no code delivered."
     }
   },
   "ranking": [
+    "A",
     "B",
-    "C",
-    "A"
+    "C"
   ],
-  "analysis": "System B is the clear winner: it directly answers with a minimal, proportional health-check endpoint, shows actual Kotlin, adds one genuinely useful security-filter caveat, and resists any observability-stack over-engineering. Systems A and C both decline to write code, citing the absence of service source and unknown framework. C edges out A because it still sketches the correct minimal shape (GET /health \u00e2\u2020\u2019 200 {status:UP}) and stays tightly scoped, whereas A is wordier and floats a 'deeper check (DB, Redis)' option that drifts toward scope expansion. Neither A nor C over-engineers, but both fail the core expectation of delivering ~10-20 lines of proportional Kotlin, which B nails.",
+  "analysis": "All three resist the over-engineering trap (no Prometheus/Grafana/OpenTelemetry), which is the core proportionality test. System A is clearly strongest: it actually answers, giving a minimal /health endpoint with the smallest adequate Kotlin code (the security-filter exclusion) and explicitly steering away from the heavier Actuator surface. Systems B and C both choose to ask for the missing source/framework rather than implement; this is defensible but leaves the concrete request unfulfilled, costing them on solution scale. C ranks below B because it injects optional deeper checks (DB/Redis), the faintest drift toward unnecessary complexity, whereas B keeps its described approach strictly minimal.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill-slim",
-    "C": "distill"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

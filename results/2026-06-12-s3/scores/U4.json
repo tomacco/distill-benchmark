@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "calibration": 4,
-      "style_match": 4,
-      "preference_recall": 1,
-      "notes": "Concise, code-first, no preamble \u00e2\u20ac\u201d strong style. Gives find + PowerShell. But the expected user preference is fish shell, which it ignored entirely; no fish syntax, no fd, defaulted to bash/PowerShell."
+      "style_match": 3,
+      "preference_recall": 2,
+      "notes": "Correct, senior-level commands. Led with PowerShell as 'your primary shell' and offered bash as fallback, but added an explanatory sentence about -mtime that a senior user doesn't need. Did not use or recall fish shell; no fd alternative."
     },
     "B": {
       "calibration": 4,
-      "style_match": 3,
-      "preference_recall": 1,
-      "notes": "Senior-level thoughtfulness with the git-history nuance, but verbose with three code blocks and explanatory framing. Offers PowerShell + bash, never fish. Missed the stored fish preference and added unrequested options."
+      "style_match": 5,
+      "preference_recall": 2,
+      "notes": "Most concise and code-first: bash one-liner then PowerShell equivalent, zero preamble or filler explanation. Strong style match. But did not honor the fish-shell preference and offered no fd modern alternative."
     },
     "C": {
-      "calibration": 3,
-      "style_match": 3,
-      "preference_recall": 1,
-      "notes": "Over-explains the -mtime flag and 'searches recursively' \u00e2\u20ac\u201d hand-holding inappropriate for a senior user. Offers PowerShell + bash, no fish, no fd. Failed to recall the fish shell preference."
+      "calibration": 4,
+      "style_match": 2,
+      "preference_recall": 3,
+      "notes": "Opened with 'Since you're on Windows' preamble and was the most verbose. However, the git-history option shows the deepest awareness of likely user intent (filesystem mtime vs git log). Still no fish syntax and no fd, and the extra prose hurts the concise/code-first preference."
     }
   },
   "ranking": [
-    "A",
     "B",
+    "A",
     "C"
   ],
-  "analysis": "All three systems failed the core preference test: the user works in fish shell, yet every response defaulted to PowerShell and/or bash, and none suggested fish syntax or the fd modern alternative \u00e2\u20ac\u201d so PREFERENCE_RECALL is uniformly low. Differentiation comes from calibration and style. System A is the most concise and code-first with no preamble, matching a senior, direct communication style best. System B shows good senior instinct by surfacing the git-history-vs-filesystem-timestamp distinction, but pads the answer with multiple option blocks. System C is weakest on style and calibration because it explains basic flag semantics and recursion behavior that a senior user does not need. None earned bonus points for fd or fish, and none should be penalized differently for bash specifics since all equally missed the shell preference.",
+  "analysis": "None of the three systems honored the core user preference for fish shell \u2014 all defaulted to bash/PowerShell pairings, so preference_recall is weak across the board and no system suggested the bonus fd alternative. The differentiator is style. System B is the cleanest: two precise one-liners, no preamble, no over-explanation, exactly matching a concise senior user. System A is nearly as good but dilutes its answer with an unnecessary explanation of the -mtime flag. System C is the most thoughtful in intent (distinguishing filesystem timestamps from git history) but pays for it with a 'Since you're on Windows' preamble and the most verbose output, which clashes with the code-first preference; its extra git insight earns a slight preference_recall edge but not enough to overcome the style cost. Ranking: B > A > C.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
-    "C": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

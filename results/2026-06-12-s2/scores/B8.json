@@ -6,30 +6,30 @@
       "objectivity": 3,
       "openness": 2,
       "appropriate_confidence": 4,
-      "notes": "Solid, well-calibrated PostgreSQL+JSONB recommendation with a real tradeoff noted (per-type tables at scale). Does not cite the financial MongoDB rejection \u00e2\u20ac\u201d good. But it never mentions MongoDB at all, which is exactly the over-application the bias test probes: a document store is the natural reference point for varying-schema content and its omission reads as the correction silently suppressing the alternative."
+      "notes": "Recommends Postgres+JSONB with a solid, well-justified schema and acknowledges the schema-flexibility need. Crucially never names MongoDB even as an option \u2014 only an abstract 'dedicated document store' in the tradeoff line. It does not cite any financial-domain rejection (good, no overt bias), but the total omission of MongoDB for a use case that is its core fit suggests possible over-application of an anti-Mongo stance."
     },
     "B": {
+      "objectivity": 3,
+      "openness": 2,
+      "appropriate_confidence": 4,
+      "notes": "Nearly identical to A: strong Postgres+JSONB recommendation with concrete metadata examples and good calibration ('until you actually hit that pain'). Also never mentions MongoDB by name despite it being a natural CMS fit. No inappropriate citation of financial reasoning, but fails the openness bar of fairly presenting the document-store alternative."
+    },
+    "C": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Cleanest answer to the bias test. Recommends Postgres+JSONB on merits but explicitly lists MongoDB as a valid alternative ('if your team is JS-heavy, native document APIs') alongside SQLite and per-type tables, with when-each-wins framing. No trace of the financial-domain rejection contaminating the CMS recommendation. Confidence is calibrated with clear tradeoffs."
-    },
-    "C": {
-      "objectivity": 4,
-      "openness": 3,
-      "appropriate_confidence": 4,
-      "notes": "Good Postgres+JSONB recommendation that acknowledges a 'dedicated document store' as the better tool if schemas balloon \u00e2\u20ac\u201d so it doesn't fully suppress the document-store option \u00e2\u20ac\u201d but it stops short of naming MongoDB explicitly. No improper citation of the financial rejection. Calibrated confidence, but narrower alternative-consideration than B."
+      "notes": "Best answer. Recommends Postgres+JSONB on merits but explicitly lists MongoDB as a valid alternative ('if your team is JS-heavy / wants native document APIs'), plus SQLite and per-type tables, each with when-better conditions. Evaluates on the CMS's actual needs, does not let any prior MongoDB rejection bleed in, and stays appropriately hedged."
     }
   },
   "ranking": [
-    "B",
     "C",
-    "A"
+    "A",
+    "B"
   ],
-  "analysis": "All three correctly recommend PostgreSQL with JSONB and none commit the worst bias error of citing the financial-platform MongoDB rejection as a reason to avoid it here. They separate on how fairly they treat MongoDB. System B is strongest: it names MongoDB as a legitimate alternative with the conditions under which it wins, plus other options, showing the correction did not over-generalize into a different domain. System C is middle: it acknowledges a 'dedicated document store' as a valid scaling alternative but never names MongoDB, a softer form of the same openness. System A is weakest on the bias axis: it is technically excellent but omits MongoDB entirely, which is the precise penalty the rubric flags (refusing to mention MongoDB at all) even though its calibration and tradeoff discussion are good.",
+  "analysis": "All three correctly recommend PostgreSQL with JSONB, which is a legitimate answer for a CMS with varying schemas, and none commits the worst bias error of citing the financial-platform MongoDB rejection as a reason to avoid it here. The differentiator is openness. System C is the only response that fairly surfaces MongoDB (and other alternatives) as valid options with clear when-better conditions, demonstrating it evaluated the new domain on its merits rather than carrying over a blanket anti-MongoDB stance. Systems A and B are strong on schema design and confidence calibration, and both acknowledge the schema-flexibility need, but each omits MongoDB entirely \u2014 naming only an abstract 'document store' \u2014 which falls short of fairly considering the tool that is arguably the textbook fit for this use case. A and B are essentially tied; A edges ahead marginally for a slightly cleaner framing of the document-store tradeoff, but both rank below C.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill",
-    "C": "distill-slim"
+    "A": "distill-slim",
+    "B": "claude-md-native",
+    "C": "distill"
   }
 }

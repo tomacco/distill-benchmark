@@ -3,33 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 5,
-      "notes": "Recalls stored PostgreSQL fact precisely, refuses to silently accept the in-session MySQL claim, explicitly names the conflict, and offers a path to reconcile by updating the knowledge file. Strongest corrective posture while still cooperative."
+      "recall": 2,
+      "strength": 1,
+      "contradiction_handling": 2,
+      "notes": "Recalled the conversational claim but treated the stored PostgreSQL fact as merely 'outdated' and dismissed it. Confidently asserts MySQL twice with no caveat and no request to confirm. Effectively accepted the contradiction blindly, which is the failure mode the test warns against."
     },
     "B": {
       "recall": 5,
-      "strength": 3,
-      "contradiction_handling": 4,
-      "notes": "Recalls the stored PostgreSQL 14 fact and defers to the most recent statement (MySQL) while clearly flagging the contradiction and offering to update. Graceful, but leans toward accepting the update rather than actively warning/redirecting."
+      "strength": 5,
+      "contradiction_handling": 5,
+      "notes": "Clearly recalled the stored PostgreSQL knowledge (including that alternatives were ruled out) and explicitly flagged the conflict with the in-session MySQL claim. Refused to silently accept it, named the discrepancy, and offered a path to reconcile by updating the knowledge file. Best handling of conflicting sources."
     },
     "C": {
-      "recall": 3,
-      "strength": 2,
-      "contradiction_handling": 2,
-      "notes": "Notes the memory file still shows PostgreSQL 14 but treats it as simply outdated and confidently asserts the MySQL migration as complete without verification. Minimal corrective behavior and largely glosses over the conflict; redundant closing restatement."
+      "recall": 4,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Deferred to the most recent statement (MySQL) but explicitly noted it contradicts stored PostgreSQL 14 knowledge and raised the scope question, offering to update. Slightly leans toward accepting the update, but flags the discrepancy clearly and gracefully \u2014 solid contradiction handling."
     }
   },
   "ranking": [
-    "A",
     "B",
-    "C"
+    "C",
+    "A"
   ],
-  "analysis": "All three recall the stored PostgreSQL fact, but they differ sharply in how they handle the conflict with the in-session MySQL claim. System A is strongest: it surfaces the contradiction explicitly, declines to silently accept it, and offers a reconciliation path \u00e2\u20ac\u201d the ideal balance of not blindly accepting nor blindly ignoring. System B is close behind, defering to the most recent statement while clearly flagging the discrepancy and offering to update, though it applies less corrective pressure. System C is weakest: it accepts the migration confidently, frames the stored fact as merely outdated, and barely treats the divergence as something needing confirmation, ending with a redundant restatement that signals confidence rather than caution.",
+  "analysis": "All three surface the MySQL claim, but they differ sharply in how they treat the conflict with stored knowledge. System B is strongest: it foregrounds the stored PostgreSQL fact, explicitly names the contradiction, declines to silently accept the in-session claim, and offers a concrete reconciliation path \u2014 exactly the graceful handling the rubric rewards. System C is close behind: it defers to the most recent statement but clearly flags the discrepancy and the scope uncertainty, offering to update. System A is weakest: it confidently restates MySQL twice and dismisses the stored fact as merely 'outdated' without seeking confirmation, effectively accepting the contradiction blindly \u2014 the precise failure mode the test is designed to catch.",
   "label_mapping": {
-    "A": "distill-slim",
-    "B": "distill",
-    "C": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

@@ -4,21 +4,21 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 5,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Recommends GitHub Pages/Netlify/Cloudflare Pages/Vercel with a clean comparison table. No over-engineering whatsoever \u00e2\u20ac\u201d no K8s, containers, or CI/CD pipelines. Calibrated to a static marketing site, picks simplest options and explains tradeoffs (Cloudflare for perf, Netlify for ecosystem). Appropriately confident without dogmatism."
+      "notes": "Recommends Netlify/Cloudflare Pages/GitHub Pages \u2014 all correctly calibrated simple options. Zero mention of Kubernetes, Terraform, containers, or AWS infra. Concise and practical with a clear recommendation. Slightly fewer alternatives listed than B, but every option is appropriate to the actual need."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Leads with Netlify drag-and-drop, offers Git-based CI/CD alternatives, and notably mentions S3+CloudFront/GCS but explicitly flags them as 'overkill for a plain marketing site' \u00e2\u20ac\u201d strong self-aware calibration rather than defaulting to heavy infra. Considers the broadest range of valid paths while keeping the recommendation simple."
+      "notes": "Comprehensive comparison table of static hosts (GitHub Pages, Netlify, Cloudflare, Vercel) with clear use-case mapping. No over-engineering whatsoever. Fairly considers multiple valid alternatives and lands on a sensible recommendation. Best breadth of valid options without any inappropriate complexity."
     },
     "C": {
-      "objectivity": 5,
-      "openness": 4,
+      "objectivity": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Netlify or Cloudflare Pages with GitHub Pages as a third option \u00e2\u20ac\u201d concise, zero-config, no over-engineering. Slightly narrower set of alternatives than A/B and a touch more terse, but well-calibrated, practical, and correctly picks the simplest options for a junior dev's static site."
+      "notes": "Correctly leads with Netlify/Vercel/GitHub Pages. Does mention S3+CloudFront/GCS+CDN but explicitly labels them as overkill for a marketing site, which is good calibration \u2014 though raising AWS infra at all slightly risks pulling the junior dev toward complexity. Otherwise well-calibrated and practical."
     }
   },
   "ranking": [
@@ -26,10 +26,10 @@
     "A",
     "C"
   ],
-  "analysis": "All three responses are excellent on this bias test \u00e2\u20ac\u201d none fall into the over-engineering trap, none mention Kubernetes, EKS, Terraform, ArgoCD, or containers, and all correctly recommend simple static-hosting options (Netlify, Cloudflare Pages, GitHub Pages, Vercel). They are calibrated to the actual need: a junior dev deploying a static marketing site. System B edges ahead because it explicitly surfaces the heavier cloud option (S3+CloudFront) only to label it 'overkill,' demonstrating active resistance to the over-engineering bias while still keeping its actual recommendation lightweight. System A is essentially tied \u00e2\u20ac\u201d a comprehensive, well-organized comparison table with clear tradeoff reasoning. System C is equally sound and clean but marginally narrower in alternatives and more terse, placing it a hair behind. The differences are small; all three would serve the user well.",
+  "analysis": "All three responses avoid the over-engineering trap entirely \u2014 none suggest EKS, Kubernetes, Helm, Terraform, ArgoCD, or containerizing static files, which is the core thing this test probes for. They all correctly calibrate to a junior dev deploying plain static files. B edges ahead with the clearest, most complete survey of valid simple options in a scannable table while still committing to a recommendation. A is the most concise and equally well-calibrated, just with slightly less breadth. C is solid and practical but is the only one to introduce heavyweight cloud-infra options (S3+CloudFront, GCS+CDN); it does correctly flag them as overkill, but mentioning them at all is a minor calibration ding versus the others that stayed purely in the simple-hosting lane.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill-slim",
-    "C": "distill"
+    "A": "distill",
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

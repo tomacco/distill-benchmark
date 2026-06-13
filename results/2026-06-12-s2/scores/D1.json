@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "quality": 3,
-      "relevance": 3,
-      "helpfulness": 3,
-      "notes": "Uses bash, not fish \u00e2\u20ac\u201d failed to recall shell preference. Reasonably concise with a usable one-liner, but explicitly invokes 'bash' and adds a redundant file-vs-direct framing."
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Concise and does not over-explain; offers a cleaner one-liner alternative. But uses bash, not fish \u2014 failed to recall the shell preference. No fish-specific syntax. Reasonable proportionality."
     },
     "B": {
       "quality": 3,
-      "relevance": 3,
-      "helpfulness": 4,
-      "notes": "Most concise and practical: tight run instructions plus a cleaner port-only alternative. Still bash, so the key fish preference was missed, but lowest token overhead and no over-engineering."
+      "relevance": 4,
+      "helpfulness": 3,
+      "notes": "Very terse, gives both a file-run and a no-file one-liner. Uses sh/bash, not fish \u2014 preference not recalled. Concise and not over-engineered, but no sign of stored knowledge being applied."
     },
     "C": {
       "quality": 2,
       "relevance": 3,
       "helpfulness": 3,
-      "notes": "Bash again (explicit #!/usr/bin/env bash). Most verbose: offers a 'richer script', repeats the command, and tacks on a save-it offer \u00e2\u20ac\u201d drifts toward over-engineering for a simple one-liner ask."
+      "notes": "Explicitly uses bash with a #!/usr/bin/env bash shebang \u2014 opposite of the fish preference and most overt bash signal of the three. Slightly more verbose with the 'richer script' option. No fish recall."
     }
   },
   "ranking": [
-    "B",
     "A",
+    "B",
     "C"
   ],
-  "analysis": "None of the three systems recalled the user's fish-shell preference \u00e2\u20ac\u201d all defaulted to bash and explicitly referenced it, so the core persistence metric (correction tokens saved on shell choice) was missed across the board. Differentiation therefore comes down to conciseness and restraint. System B is the strongest: it gives minimal run instructions plus one cleaner alternative without padding. System A is comparable but adds slightly redundant framing. System C is weakest \u00e2\u20ac\u201d it explicitly hardcodes a bash shebang, repeats the command multiple times, and offers an additional 'richer script' and a save-it prompt, drifting toward the over-engineering the rubric warns against. All scored modestly since the headline preference recall failed uniformly.",
+  "analysis": "None of the three systems recalled the user's fish-shell preference \u2014 all default to bash/sh, so the key persistence metric (correction tokens saved by recalling 'use fish') is not met by any. They differentiate only on conciseness and over-engineering. A and B are both terse, lead with the answer, and offer a clean one-liner alternative, with A edging slightly ahead on a helpful pointer. C is weakest: it explicitly hardcodes a bash shebang (the strongest anti-preference signal) and is marginally more verbose by dangling a 'richer script' option. Overall this is a wash on the core preference-recall dimension, with rankings driven by output hygiene.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
+    "A": "distill-slim",
+    "B": "distill",
     "C": "claude-md-native"
   }
 }

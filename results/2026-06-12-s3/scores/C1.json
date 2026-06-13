@@ -3,33 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
+      "recall": 5,
+      "strength": 5,
+      "contradiction_handling": 4,
+      "notes": "Direct one-line answer 'PostgreSQL 14.' Clearly recalled the fact, applied it confidently and concisely with no hedging. Matches the conciseness preference perfectly."
+    },
+    "B": {
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 2,
-      "notes": "No recall of the PostgreSQL 14 fact. Treats the question as a live-detection task and offers generic instructions, asking the user for a connection string. Shows no stored knowledge and no corrective behavior."
-    },
-    "B": {
-      "recall": 5,
-      "strength": 4,
-      "contradiction_handling": 3,
-      "notes": "Direct one-line answer 'PostgreSQL 14' \u00e2\u20ac\u201d exactly matches the expected fact and the user's preference for conciseness. Confident, no hedging. Doesn't surface any conflict handling but none was needed."
+      "notes": "No sign of remembering the stored fact. Defaulted to live-detection instructions and asked for a connection string. Verbose and ignores prior knowledge entirely."
     },
     "C": {
       "recall": 5,
       "strength": 5,
-      "contradiction_handling": 4,
-      "notes": "Recalls PostgreSQL 14 and grounds it in the architecture docs, signaling the source of the correction. Slightly more than one line but stays concise and confident, reinforcing the fact as authoritative."
+      "contradiction_handling": 5,
+      "notes": "Answered 'PostgreSQL 14.' and cited the source (architecture docs), grounding the recall. Slightly longer than A but the justification adds confidence and traceability."
     }
   },
   "ranking": [
     "C",
-    "B",
-    "A"
+    "A",
+    "B"
   ],
-  "analysis": "System A fails the core task: it has no memory of the PostgreSQL 14 fact and instead defaults to a generic detection walkthrough, hedging and pushing the work back to the user. Systems B and C both correctly recall PostgreSQL 14 with confidence and no hedging. B is the cleanest possible one-liner, perfectly matching the conciseness preference. C also answers in essentially one line but adds a short, valuable grounding ('per the architecture docs') that signals where the knowledge comes from, giving it a slight edge on strength and source-awareness without becoming verbose. C edges out B for citing the authoritative source while staying concise; A ranks last by a wide margin.",
+  "analysis": "Both A and C correctly recalled the stored fact (PostgreSQL 14) and applied it confidently and concisely, exactly matching the expected signals. C edges ahead by grounding the answer in its source ('per the architecture docs'), which strengthens traceability and contradiction-handling without becoming verbose, while still staying terse. A is the purest one-line answer and is essentially tied. B failed entirely: it showed no memory of the fact, instead offering generic detection commands and asking for more input, which is the wrong behavior when the knowledge is already available.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
+    "A": "distill-slim",
+    "B": "distill",
     "C": "claude-md-native"
   }
 }

@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "Correctly endorses Redis on the merits \u00e2\u20ac\u201d already in stack, O(1) get/set, native TTL. No PostgreSQL bias at all. Rich, correct implementation guidance (key naming, TTL strategy, revocation set, client libraries). Openness slightly lower as it focuses on implementation rather than surfacing alternatives, but that's appropriate for an easy yes."
+      "notes": "Endorses Redis on merits with no PostgreSQL bias. Strongest alternative-weighing: explicitly contrasts stateless JWT vs stateful Redis sessions and flags revocation needs for fintech. Confidence well calibrated."
     },
     "B": {
       "objectivity": 5,
       "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Clear, concise Redis endorsement with no PostgreSQL pull. Calls out the one real tradeoff (eviction/restart durability vs persistence) and frames the decision well-calibrated to app criticality. Tight and proportionate to a simple question."
+      "notes": "Clean, correct endorsement of Redis with no bias toward the team's primary DB. Surfaces a real tradeoff (eviction/persistence) and ties it to the financial context. Slightly less alternative exploration than A due to brevity, but appropriate for an easy yes."
     },
     "C": {
       "objectivity": 5,
-      "openness": 5,
+      "openness": 4,
       "appropriate_confidence": 5,
-      "notes": "Endorses Redis on merits (already deployed, TTL is first-class, sits next to auth-service). Best openness: explicitly weighs stateful Redis sessions vs stateless JWT and the revocation tradeoff, giving the user a genuine decision frame without dismissing options. No bias toward the primary DB."
+      "notes": "Endorses Redis and explicitly names it as the designated caching layer already in the stack (hits the bonus signal). Thorough, implementation-focused, no PostgreSQL bias. Confidence calibrated; slightly more prescriptive on implementation than weighing alternatives."
     }
   },
   "ranking": [
-    "C",
     "A",
+    "C",
     "B"
   ],
-  "analysis": "All three responses pass the core bias test cleanly: each endorses Redis on its merits, none drifts toward PostgreSQL despite it being the team's primary DB, and none misapplies a DynamoDB/MongoDB-style rejection. Confidence is well-calibrated across the board \u00e2\u20ac\u201d a straightforward yes delivered without dogmatism. The differences are at the margins. System C edges ahead on openness by explicitly framing the stateful-Redis vs stateless-JWT tradeoff and the revocation implications, giving the user a real decision rather than just an answer. System A is the most technically thorough on implementation but is more prescriptive than exploratory. System B is the most concise and surfaces the practical durability tradeoff, but offers the least breadth. Any of the three is a strong answer; the ranking reflects only fine distinctions in how fairly alternatives were considered.",
+  "analysis": "All three responses correctly endorse Redis on its merits with zero inappropriate bias toward PostgreSQL (the team's primary DB), and none invoke the unrelated DynamoDB/MongoDB rejection \u2014 exactly right for already-approved infrastructure. Confidence is well calibrated in all three. They differ mainly in how they handle alternatives and depth: A leads by explicitly framing the genuine architectural tradeoff (stateless JWT vs stateful Redis sessions) and the revocation angle relevant to fintech, giving it the best 'openness' showing. C is the most thorough on implementation and best hits the bonus signal by naming Redis as the existing designated caching layer, but leans more prescriptive than exploratory. B is concise and correct, surfacing the eviction/persistence tradeoff but with the least alternative consideration. A narrow spread overall \u2014 this was an easy yes and every system answered it cleanly.",
   "label_mapping": {
-    "A": "distill-slim",
+    "A": "claude-md-native",
     "B": "distill",
-    "C": "claude-md-native"
+    "C": "distill-slim"
   }
 }

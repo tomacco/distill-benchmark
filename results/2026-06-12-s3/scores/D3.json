@@ -6,30 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Recalls Kotlin, gRPC internal / REST external, PostgreSQL, and the in-progress payment-service extraction without dumping. Correctly identifies account-service owns bank-account CRUD and the new service should own only the verification state machine. Proportional and concise; zero corrections needed. Nuanced loose-coupling advice (don't call account-service synchronously) is a plus."
+      "notes": "Recalls every stored fact (Kotlin shop, gRPC internal, REST external, PostgreSQL, payment-service extraction, account-service owns bank CRUD) and weaves them naturally rather than dumping. Decisive and proportional: scopes the new endpoint to just the verification state machine, warns against synchronous coupling to account-service, single Flyway migration. Zero corrections needed."
     },
     "B": {
-      "quality": 3,
-      "relevance": 4,
-      "helpfulness": 3,
-      "notes": "Opens with 'No prior knowledge stored yet' and reads vanilla. Gets stack basics from system context but invents an 'auth-service' instead of recalling the existing account-service, and ends by asking which payment provider \u00e2\u20ac\u201d a clarifying round trip. Shows a little Kotlin but misses the account-service recall, costing real correction tokens."
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 4,
+      "notes": "Strong integration: REST external, gRPC internal to account-service, recognizes account-service owns bank account CRUD, concrete PostgreSQL state fields and ownership decision. Slightly broader (pulls in notification-service) and Kotlin only implied via stack-awareness, but effectively zero corrections needed. Well-reasoned ownership tradeoff."
     },
     "C": {
       "quality": 4,
-      "relevance": 5,
-      "helpfulness": 4,
-      "notes": "Strong context integration: explicitly routes payment-service \u00e2\u2020\u2019 account-service over gRPC, names notification-service, REST external, PostgreSQL, Kafka. Correctly raises the ownership decision (account-service vs payment-service). Slightly heavier/more framework-y than needed (attempts cap, expires_at) so marginally less proportional, but recalls the key signals and avoids corrections."
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Recalls Kotlin (shows code), gRPC internal, REST external, EKS, and extraction context, but misses the existing account-service entirely \u2014 invents an 'auth-service' for identity instead, so the user would still need the 'we already have an account-service' correction. Also ends by asking which provider, deferring rather than committing. Otherwise proportional and stack-aware."
     }
   },
   "ranking": [
     "A",
-    "C",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "A and C both recall the stack and correctly use gRPC to the existing account-service, saving the user the ~4 corrections (Kotlin, gRPC internal, existing account-service, keep it simple) that vanilla would require; B explicitly flags no stored knowledge, invents an auth-service instead of recalling account-service, and asks a clarifying question, making it the most correction-heavy. A edges out C on proportionality and conciseness \u00e2\u20ac\u201d it scopes the new service to just the verification state machine and gives clean loose-coupling guidance \u00e2\u20ac\u201d while C is excellent on context recall but slightly heavier with extra state-machine detail than a simple endpoint warrants. B is helpful and competent but is the clearest example of context drift the benchmark is measuring.",
+  "analysis": "A and B both demonstrate strong persistence \u2014 recalling Kotlin, gRPC-internal/REST-external, PostgreSQL, the payment-service extraction, and crucially the existing account-service that owns bank-account CRUD \u2014 and integrating these naturally into a proportional micro-deposit design that would require zero drift corrections. A edges ahead by being the most decisive and tightly scoped (verification state machine only, explicit loose-coupling guidance, one migration), while B is equally accurate but slightly broader and leaves Kotlin implicit. C is competent and stack-aware but leaks: it explicitly notes no stored knowledge, fails to recall the existing account-service (substituting an invented auth-service), and punts on a provider question \u2014 meaning the user would still need at least one correction, the exact cost this test measures.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill",
-    "C": "distill-slim"
+    "B": "distill-slim",
+    "C": "distill"
   }
 }

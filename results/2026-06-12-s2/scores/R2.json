@@ -3,33 +3,33 @@
   "category": "retrieval",
   "scores": {
     "A": {
+      "relevance": 3,
+      "precision": 4,
+      "naturalness": 4,
+      "notes": "Strong, practical Flyway setup with good fintech-specific DDL guidance and reference services, but never surfaces the key stored fact that Flyway was chosen over Liquibase after team evaluation. Misses the core retrieval signal."
+    },
+    "B": {
       "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Recommends Flyway and explicitly notes it was picked over Liquibase after evaluation. Strong Kotlin/Gradle setup, PostgreSQL dependency, naming convention, and a relevant fintech/additive-migration angle. Pulls in ArgoCD/EKS deploy context which is plausibly relevant but slightly beyond the question. Ends with a sharp clarifying question (monolith extraction vs greenfield)."
-    },
-    "B": {
-      "relevance": 4,
-      "precision": 5,
-      "naturalness": 5,
-      "notes": "Excellent, tightly-focused Flyway setup with immutability/checksum rules, two-step ALTER pattern, and a reference to existing auth-service/account-service. Most disciplined on precision. However it never mentions Flyway was chosen over Liquibase \u00e2\u20ac\u201d misses a key retrieval signal that the others surfaced."
+      "notes": "Explicitly recalls Flyway was 'picked over Liquibase after evaluation,' gives correct Kotlin/Gradle setup including the separate flyway-database-postgresql module (accurate for Flyway 10), ties into ArgoCD/EKS deploy flow, and asks a relevant clarifying question. Concise and actionable."
     },
     "C": {
       "relevance": 5,
       "precision": 4,
       "naturalness": 5,
-      "notes": "Recommends Flyway, explicitly says 'already chosen over Liquibase', contextualizes for Kotlin/Gradle and PostgreSQL. Good schema-ownership and idempotency practices, plus an init-container recommendation tied to EKS scale. Slightly more environment context injected than strictly asked, but all coherent. Closes with a useful clarifying question."
+      "notes": "Surfaces 'already chosen over Liquibase,' provides clean Postgres-aware setup, and adds well-scoped established practices (schema-per-service, init-container migrations at EKS scale). Natural and concise; slightly less detail on the evaluation/vote than B."
     }
   },
   "ranking": [
-    "A",
+    "B",
     "C",
-    "B"
+    "A"
   ],
-  "analysis": "All three correctly converge on Flyway with solid, actionable Kotlin/Gradle + PostgreSQL setup guidance, and none suggest a wrong alternative as primary. The distinguishing signal is whether the system surfaced that Flyway was chosen over Liquibase via team evaluation: A and C both do this naturally, while B omits it entirely despite otherwise being the most technically polished and precise answer. A edges out C by weaving in financial-data migration discipline relevant to the fintech context and asking the most decision-relevant clarifying question; C is nearly equal with strong service-isolation and init-container practices. B ranks third only because it misses the Liquibase-evaluation retrieval signal \u00e2\u20ac\u201d its precision and practical depth are otherwise the strongest of the three.",
+  "analysis": "All three correctly recommend Flyway and provide solid, Kotlin/Gradle-aware setup guidance, and none suggested an alternative as the primary tool. The differentiator is the stored-knowledge signal that Flyway was chosen over Liquibase: B and C both surface it (B framing it as an evaluation, C as an established choice), while A omits it entirely despite the strongest technical depth. B edges out C with the explicit evaluation framing, the technically-correct Postgres-specific Flyway dependency, and a relevant scoping question; C is nearly as strong with good established-practice context. A ranks last only because it misses the central retrieval signal, not on setup quality. None explicitly cited PostgreSQL 14, so no bonus there.",
   "label_mapping": {
-    "A": "distill-slim",
-    "B": "claude-md-native",
+    "A": "claude-md-native",
+    "B": "distill-slim",
     "C": "distill"
   }
 }

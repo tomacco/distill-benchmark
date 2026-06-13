@@ -3,33 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 5,
-      "style_match": 4,
-      "preference_recall": 5,
-      "notes": "Senior-level throughout, assumes knowledge of sidecars/mTLS/SPIFFE. Recalls specifics: payment-service still in monolith, existing auth-service/JWT pattern, gRPC interceptors in Kotlin, EKS. Direct recommendation (probably not yet, finish extraction first). Slightly longer with more code/diagrams than strictly necessary, which costs a touch on conciseness."
+      "calibration": 3,
+      "style_match": 3,
+      "preference_recall": 1,
+      "notes": "Competent senior-level breakdown with a clear recommendation, but explicitly states it has no stored context and opens with a tutorial-style 'How Kubernetes Service Mesh Works' section explaining sidecars/mTLS from scratch \u2014 exactly the basics a senior engineer doesn't need. Generic: no awareness of the user's actual stack (monolith, auth-service, gRPC, EKS). Solid generic answer, zero personalization."
     },
     "B": {
       "calibration": 5,
-      "style_match": 5,
+      "style_match": 4,
       "preference_recall": 5,
-      "notes": "Tight, opinionated, decision-focused. Comparison table maps each need to a simpler option (IRSA, JWT-in-metadata, interceptors). Clear bottom-line recommendation with a concrete revisit threshold (5+ services). Recalls context: payment-service in monolith, gRPC+JWT already in play, EKS-native options. No tutorial padding; strong style match."
+      "notes": "Strong user model: knows payment-service is still in the monolith, that an auth-service issues JWTs, and that the stack uses gRPC interceptors in Kotlin. Leads with the key insight (extraction not done \u2192 Istio buys nothing yet) and gives concrete code. Still includes a brief mesh-mechanics section, slightly more than a senior needs, but framed around the user's specifics rather than generic tutorial."
     },
     "C": {
-      "calibration": 1,
-      "style_match": 1,
-      "preference_recall": 1,
-      "notes": "Output could not be read (error). No content to evaluate; scored at floor."
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Tightest and most tailored: recalls monolith status, EKS, gRPC, existing auth-service JWTs, and adds EKS-native specifics (IRSA, Nitro encryption) the others miss. Concise comparison table, direct 'probably not yet \u2014 possibly never' verdict, clear revisit trigger (5+ services). Senior-calibrated, opinionated, minimal padding, fully grounded in the user's existing setup."
     }
   },
   "ranking": [
+    "C",
     "B",
-    "A",
-    "C"
+    "A"
   ],
-  "analysis": "Both A and B nail the brief: senior-level framing, no basic-concept tutorials, direct opinionated recommendation (Istio not needed yet), and recall of the user's actual stack (payment-service still in the monolith, existing auth-service/JWT, gRPC, EKS). B edges ahead on style \u00e2\u20ac\u201d its need-to-simpler-option table and crisp recommendation block deliver the answer faster and surface EKS-native options like IRSA, while staying lean. A is equally well-calibrated and arguably gives more concrete code, but its longer Envoy diagram and extra prose make it slightly less concise. C returned an unreadable error and is scored at the floor. Final ranking: B > A > C.",
+  "analysis": "All three give a sound 'you probably don't need Istio for two services' recommendation, so they differ mainly on calibration to the user's expertise and recall of their specific environment. System A is the weakest: it openly has no context, opens with from-scratch explanations of service meshes, sidecars, and mTLS, and offers only generic guidance with no awareness of the user's stack. Systems B and C both demonstrate a real user model \u2014 payment-service still in the monolith, an existing auth-service issuing JWTs, gRPC/Kotlin interceptors \u2014 and lead with the decision rather than a tutorial. C edges out B by being more concise, leveraging EKS-native specifics (IRSA, intra-cluster encryption) that show deeper grounding in the existing setup, and trimming the mesh-mechanics preamble that B still partially includes. Ranking: C > B > A.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill-slim",
-    "C": "distill"
+    "A": "distill",
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

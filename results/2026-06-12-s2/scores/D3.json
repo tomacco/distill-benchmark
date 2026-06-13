@@ -6,30 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Integrates Kotlin, gRPC, account-service, Kafka, and notification-service naturally without dumping. Proportional (micro-deposit, no over-engineering), concise, and loops in Sofia. Zero obvious corrections needed."
+      "notes": "Strong context integration with zero corrections needed: Kotlin stack, gRPC to account-service, recalls account-service owns bank account state, notification-service already exists, Kafka events, names Sofia and ties to Q3 due-diligence timeline. Proportional (micro-deposit, no full framework) and concise. Doesn't write literal Kotlin code but clearly assumes the team standard."
     },
     "B": {
-      "quality": 5,
-      "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Strong context integration (Kotlin, gRPC, account-service, Kafka, Postgres, Helios, Sofia). Clear recommendation with trade-offs and effort estimate. Slightly more verbose than A but well-organized and proportional."
+      "quality": 4,
+      "relevance": 4,
+      "helpfulness": 4,
+      "notes": "Explicitly admits 'no stored knowledge \u2014 fresh session' and reconstructs context from clues. This is the vanilla baseline behavior: it guesses Kotlin/gRPC correctly but would still need user corrections (it doesn't know account-service already owns bank account data, and even advises against putting state there). Best Kotlin code sample of the three, but persistence is exactly what it fails on."
     },
     "C": {
       "quality": 4,
-      "relevance": 4,
-      "helpfulness": 3,
-      "notes": "Explicitly a fresh session with no stored knowledge; infers Kotlin and gRPC/REST from context clues only. Solid technical answer with Kotlin sketch, but misses team context (Helios, Sofia, Kafka, existing notification-service) \u00e2\u20ac\u201d would require several 'actually we use...' corrections."
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Excellent context recall: Kotlin, gRPC internal/REST external, Kafka, account-service handling bank account CRUD, names Helios and Sofia. Proportional with a clear recommendation and effort estimate. Respects service boundaries (verification state in payment service schema). No literal Kotlin code; slightly leans toward presenting the vendor alternative, but well balanced."
     }
   },
   "ranking": [
-    "B",
     "A",
-    "C"
+    "C",
+    "B"
   ],
-  "analysis": "A and B are both excellent: each recalls the stack (Kotlin, gRPC internal/REST external, existing account-service, Kafka) and weaves it in naturally rather than dumping, stays proportional to a simple endpoint, and surfaces the relevant person (Sofia). B edges ahead slightly by giving an explicit recommendation with effort estimate and trade-offs while still integrating one or two more concrete infra pieces (Postgres schema placement, Kafka event) cleanly; A is marginally more concise but essentially equal in quality. C is the clear outlier \u00e2\u20ac\u201d it openly operates as a fresh session, inferring only what context clues reveal, and produces a competent provider-first answer but omits the team context (company name, Kafka events, existing notification-service, Sofia), meaning the user would need to supply multiple 'actually we use...' corrections that A and B already avoid.",
+  "analysis": "A and C are nearly tied and both demonstrate the persistence win this test measures: they integrate Kotlin, gRPC-to-account-service, Kafka, Helios specifics (Sofia, account-service ownership) naturally without dumping, requiring effectively zero 'actually, we use...' corrections. A edges ahead on richness of recalled context (notification-service already exists, Q3 timeline pressure) and concrete gRPC wiring, while C offers the clearest single recommendation and best respects the payment-service extraction boundary by keeping verification state in its own schema. B is the clear baseline: it openly states it has no stored knowledge and reconstructs context from clues, getting Kotlin/gRPC right by inference but missing that account-service already owns bank account data\u2014exactly the kind of drift that would cost the user multiple corrections each session, even though it produced the strongest literal Kotlin code sample.",
   "label_mapping": {
     "A": "claude-md-native",
-    "B": "distill-slim",
-    "C": "distill"
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

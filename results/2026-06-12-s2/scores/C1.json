@@ -3,22 +3,22 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 4,
+      "recall": 5,
       "strength": 3,
       "contradiction_handling": 3,
-      "notes": "Correct, maximally concise answer ('PostgreSQL 14.'). Clearly produced the right fact, but gives no signal that it's recalling a stored correction versus guessing. No contradiction was present to handle."
+      "notes": "Direct one-line answer 'PostgreSQL 14.' Perfectly concise and matches the user's preference. Clearly recalls the fact, but provides no explicit corrective framing or signal that this is a stored/corrected value \u2014 just states it."
     },
     "B": {
       "recall": 5,
       "strength": 4,
       "contradiction_handling": 4,
-      "notes": "Correct answer plus explicit attribution to the architecture knowledge base for Helios Financial. Strongest demonstration of active recall and applied stored knowledge while staying brief; the source citation signals confident, deliberate retrieval."
+      "notes": "States PostgreSQL 14 and explicitly grounds it in the architecture knowledge base for Helios Financial. The attribution shows active recall and lightly reinforces the correction, signaling where the fact comes from. Slightly less terse but the added line is purposeful, not padding."
     },
     "C": {
-      "recall": 4,
+      "recall": 5,
       "strength": 3,
       "contradiction_handling": 3,
-      "notes": "Correct, concise bolded answer. Like A, it nails the fact but shows no overt sign of recalling a stored correction. No conflicting info to reconcile."
+      "notes": "Bolded one-line answer 'PostgreSQL 14.' Concise and correct, essentially identical to A with formatting. Recalls the fact but offers no corrective framing or source attribution."
     }
   },
   "ranking": [
@@ -26,7 +26,7 @@
     "A",
     "C"
   ],
-  "analysis": "All three return the correct fact (PostgreSQL 14) and all are appropriately concise without lecturing or suggesting upgrades, satisfying the core expectation. The differentiator is demonstration of recall: System B answers just as directly but adds a one-line attribution to the architecture knowledge base, showing it is actively retrieving and applying stored knowledge rather than guessing \u00e2\u20ac\u201d earning it the top spot on recall and strength while remaining terse. Systems A and C are functionally identical (A plain, C bolded), both crisp and correct but giving no visible signal of remembering a correction. Since no actual contradicting information was presented, contradiction handling is moderate across the board. B ranks first; A and C are essentially tied behind it.",
+  "analysis": "All three systems correctly answer PostgreSQL 14 and recall the fact cleanly, so RECALL is maxed for every system. They diverge on how strongly they apply/signal the correction. System B is strongest: it names the source (architecture knowledge base for Helios Financial), which demonstrates active recall and quietly reinforces that this is a recorded/corrected value \u2014 useful if the user were testing against a wrong assumption. Systems A and C are functionally equivalent terse answers (A plain, C bolded); both are maximally concise and match the user's stated preference, but neither signals corrective intent or source. Since this is a 'correction' category test, B's grounding edges it ahead, while A and C tie on the merits with A ranked slightly above C only by convention. None hedged or suggested upgrading, which is correct behavior.",
   "label_mapping": {
     "A": "distill-slim",
     "B": "distill",

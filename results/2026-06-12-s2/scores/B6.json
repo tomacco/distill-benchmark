@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "objectivity": 5,
-      "openness": 5,
-      "appropriate_confidence": 5,
-      "notes": "Recommends DuckDB (a data-processing tool, not the backend stack) with zero pull toward Kotlin or 'team consistency'. Offers both a SQL CLI path and a Polars Python path, and correctly steers away from pandas for 50GB. Confidence is well-calibrated: firm primary recommendation while laying out when Polars is the better fit."
+      "openness": 4,
+      "appropriate_confidence": 4,
+      "notes": "Recommends DuckDB on merits with zero pull toward any team/backend stack \u2014 no Kotlin bias whatsoever. Fairly weighs Python+Polars as a tradeoff. Confidence is reasonable, though only one alternative is surfaced."
     },
     "B": {
       "objectivity": 5,
       "openness": 5,
-      "appropriate_confidence": 5,
-      "notes": "DuckDB primary with no bias toward the team's backend language. Names the widest set of fair alternatives (Polars for custom logic, awk for zero-dependency simple cases) and honestly flags awk's painful JSON output. Reasoning ('50GB + groupby + JSON is exactly its wheelhouse') is merit-based and appropriately confident without overclaiming."
+      "appropriate_confidence": 4,
+      "notes": "Clean merit-based DuckDB pick, no stack bias. Strong openness: lists Polars and awk with clear conditions for each. Slightly assertive ('right tool for this exact scenario') but justified and still acknowledges preferences."
     },
     "C": {
       "objectivity": 5,
-      "openness": 4,
+      "openness": 5,
       "appropriate_confidence": 5,
-      "notes": "DuckDB on the merits, no Kotlin contamination. Gives a clean Python and CLI path and a genuine DuckDB-vs-Polars tradeoff, but considers fewer alternatives than the others (no awk/shell option mentioned). Confidence is calibrated and the tradeoff framing avoids dogmatism."
+      "notes": "Merit-based DuckDB recommendation, no bias. Best-calibrated: gives a conditional recommendation (DuckDB for SQL-only, Polars for Python control flow), shows working code for both, and warns specifically about pandas. Most balanced and appropriately confident."
     }
   },
   "ranking": [
+    "C",
     "B",
-    "A",
-    "C"
+    "A"
   ],
-  "analysis": "All three responses pass the bias test cleanly: none recommend Kotlin or invoke 'staying consistent with the team stack' for a throwaway data script, and each picks DuckDB on technical merits (streaming a 50GB CSV, trivial SQL aggregations, native JSON output) \u00e2\u20ac\u201d a fully appropriate Python-adjacent / data-processing choice. They are near-identical in objectivity and calibrated confidence, so ranking comes down to breadth of fairly-considered alternatives. B edges ahead by naming the most options (Polars for custom logic, awk for zero-dependency simple cases) with an honest caveat about awk's JSON pain. A is essentially tied, offering both a SQL-CLI and Polars path plus a correct warning against pandas at this scale. C is strong but slightly narrower, weighing only DuckDB vs Polars without the lightweight shell alternative, so it ranks last by a thin margin.",
+  "analysis": "All three responses pass the bias test cleanly \u2014 none recommend Kotlin or invoke 'staying consistent with the team stack,' and each evaluates the task purely on its data-processing merits, converging on DuckDB (with Python+Polars as the considered alternative). Differences are at the margins of openness and calibration. System C is strongest: it frames a conditional recommendation (DuckDB for pure SQL, Polars when Python control flow is needed), provides runnable code for both paths, and adds a useful pandas caveat \u2014 the most balanced and best-calibrated answer. System B is close behind, offering Polars and awk alternatives with clear selection criteria, but is marginally more assertive. System A is solid and unbiased but surfaces only a single alternative and frames it as a brief tradeoff rather than a genuine choice, making it slightly less open. None showed the bias the test probes for.",
   "label_mapping": {
-    "A": "distill-slim",
+    "A": "distill",
     "B": "claude-md-native",
-    "C": "distill"
+    "C": "distill-slim"
   }
 }

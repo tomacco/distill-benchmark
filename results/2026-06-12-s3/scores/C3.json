@@ -4,32 +4,32 @@
   "scores": {
     "A": {
       "recall": 5,
-      "strength": 4,
-      "contradiction_handling": 5,
-      "notes": "Recalls the conversational update (MySQL) and explicitly flags it contradicts stored PostgreSQL 14 knowledge. Defers to the recent statement while offering to reconcile the discrepancy. Graceful and clear."
+      "strength": 3,
+      "contradiction_handling": 3,
+      "notes": "Recalled the stored PostgreSQL 14 fact and noted the doc still shows it, but framed the situation as a settled migration to be recorded rather than an active conflict. Accepts the switch fairly confidently with only mild acknowledgment of the discrepancy."
     },
     "B": {
       "recall": 5,
       "strength": 4,
-      "contradiction_handling": 5,
-      "notes": "Most explicit framing of the conflict: names both sources (knowledge base = PostgreSQL 14, conversation = MySQL), states which it trusts and why, and offers to update. Transparent and well-balanced."
+      "contradiction_handling": 4,
+      "notes": "Explicitly states 'This contradicts my stored knowledge (PostgreSQL 14)' and offers to reconcile. Clear conflict acknowledgment and defers to the recent statement while flagging the divergence; slightly less reasoning shown about the trust decision than C."
     },
     "C": {
       "recall": 5,
       "strength": 4,
-      "contradiction_handling": 4,
-      "notes": "Recalls MySQL and notes the stored doc still shows PostgreSQL 14, offering a concrete update. Slightly more confident in asserting the change as settled fact rather than foregrounding the conflict, but still acknowledges the discrepancy."
+      "contradiction_handling": 5,
+      "notes": "Opens with 'There's a conflict here', names both sources, and explicitly chooses to trust the recent statement (MySQL) while recommending an update so future lookups aren't misled. Most graceful, transparent handling of the conflicting sources."
     }
   },
   "ranking": [
+    "C",
     "B",
-    "A",
-    "C"
+    "A"
   ],
-  "analysis": "All three responses handle the conflict well: each recalls the conversational correction (MySQL), avoids blindly ignoring stored knowledge, and surfaces the discrepancy with PostgreSQL 14 rather than confidently asserting wrong information. B edges ahead by most explicitly labeling the two competing sources and stating which it trusts and why, making the contradiction fully transparent. A is nearly identical in quality, clearly flagging the contradiction and offering to update going forward. C is strong but frames the migration slightly more as an accepted fact and less as an open conflict, giving it marginally weaker contradiction handling, though it compensates with a concrete file-level update proposal. Differences are small; none got confused or accepted the change uncritically.",
+  "analysis": "All three responses correctly recalled the stored PostgreSQL 14 fact and none blindly ignored the conversation context, so recall is uniformly strong. They differ in how explicitly they surface the conflict. System C is best: it names the conflict outright, states which source it trusts and why, and offers a corrective update \u2014 the most transparent contradiction handling. System B is close behind, explicitly flagging that the new info contradicts stored knowledge and offering to reconcile, but with slightly less articulated reasoning. System A is weakest: it treats the migration as an accepted fact and the stored doc as merely outdated, acknowledging the discrepancy only mildly rather than flagging it as a genuine conflict, which risks confidently propagating an unverified change.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
-    "C": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

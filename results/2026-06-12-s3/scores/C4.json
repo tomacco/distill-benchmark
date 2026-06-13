@@ -3,33 +3,33 @@
   "category": "correction",
   "scores": {
     "A": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 5,
-      "notes": "Explicitly recalls the team decision (decisions.md) for structured logging + correlation IDs and applies it correctly to the Kotlin/JVM stack (SLF4J+Logback+logstash-encoder, MDC). Frames it as 'match that pattern' rather than an absolute MUST, leaving room for deviation. Names sibling services (auth-service, account-service, notification-service) \u00e2\u20ac\u201d hits the bonus. Concise and practical."
-    },
-    "B": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 4,
-      "notes": "Recalls the standard (structured logging + correlation IDs across all services) and applies it to Kotlin with strong technical depth \u00e2\u20ac\u201d notably the coroutine MDCContext propagation gotcha. Practical libraries and middleware. Slightly longer/essay-leaning and doesn't name the specific sibling services, but recall and corrective framing are excellent."
-    },
-    "C": {
       "recall": 1,
       "strength": 1,
       "contradiction_handling": 2,
-      "notes": "States 'no stored knowledge' and recommends Pino (Node) / structlog (Python) \u00e2\u20ac\u201d wrong stack for a Kotlin service. Captures the generic structured-JSON + correlation-ID principle and asks for the stack, but shows no recall of the team standard and no corrective behavior."
+      "notes": "Explicitly states 'no stored knowledge' and recommends Pino/structlog for Node/Python \u2014 completely misses the team's Kotlin stack and the established structured-logging-with-correlation-IDs standard. Generic best-practices answer with no corrective behavior; it does offer to tailor if given a stack, which is the only saving grace for contradiction handling."
+    },
+    "B": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Clearly recalls the team standard (structured logging + correlation IDs, references decisions.md), presents it as the established pattern to match rather than an absolute rule, and gives concise practical SLF4J/Logback/logstash-encoder setup with MDC correlation IDs. Explicitly ties it to auth-service/account-service/notification-service patterns (the bonus). Well-proportioned, not preachy."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 4,
+      "notes": "Same strong recall of the team standard and correct library stack, presented as the pattern to match. Adds the non-obvious kotlinx-coroutines-slf4j / MDCContext detail (correlation IDs surviving coroutine suspension) which is genuinely valuable for a Kotlin service. Slightly longer/essay-leaning and doesn't name the sibling services as explicitly, but technically the richest answer."
     }
   },
   "ranking": [
-    "A",
     "B",
-    "C"
+    "C",
+    "A"
   ],
-  "analysis": "A and B both clearly recall the team's established standard (structured logging with correlation IDs) and apply it correctly to the Kotlin/JVM stack with practical, specific libraries (SLF4J + Logback + logstash-logback-encoder, MDC), framing it as a pattern to match rather than an immovable rule. A edges ahead by explicitly citing the decision source (decisions.md) and the actual sibling services (auth/account/notification), hitting the existing-services bonus while staying concise. B is technically deeper \u00e2\u20ac\u201d the coroutine MDCContext propagation detail is valuable \u00e2\u20ac\u201d but slightly more essay-like and doesn't tie back to named services. C fails the test: it declares no stored knowledge and recommends Node/Python tooling for a Kotlin service, showing no recall and no corrective behavior, though it does state the universal structured-logging principle and asks for the stack.",
+  "analysis": "Both B and C clearly recall the team's established standard (structured logging with correlation IDs on the Kotlin/Logback stack) and frame it correctly as a pattern to match rather than a hard 'you MUST' rule, leaving room for deviation. B edges ahead on proportionality and fit: it is concise and explicitly anchors the recommendation to existing services (auth-service, account-service, notification-service), hitting the bonus signals without over-explaining. C is technically deeper, surfacing the non-obvious coroutine MDC propagation issue, but is longer and less explicit about sibling-service consistency, so it ranks just behind B. System A is far behind \u2014 it announces it has no stored knowledge and gives a generic Node/Python answer, missing both the Kotlin stack and the team standard entirely, showing no recall or corrective behavior.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill-slim",
-    "C": "distill"
+    "A": "distill",
+    "B": "claude-md-native",
+    "C": "distill-slim"
   }
 }

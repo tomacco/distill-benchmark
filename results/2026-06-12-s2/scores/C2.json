@@ -6,30 +6,30 @@
       "recall": 5,
       "strength": 5,
       "contradiction_handling": 5,
-      "notes": "Recalls the rejection clearly with the actual reasoning (PostgreSQL expertise, strong consistency needs). Actively states the decision stands even for this simpler use case. Recommends Redis as the fit and offers a PostgreSQL-stack-friendly fallback, staying aligned with the team's ecosystem. Not preachy. Slightly less explicit that Redis is already in the stack, but otherwise excellent."
+      "notes": "Clear, specific recall with a citation to memory/decisions.md and the exact reasoning (strong consistency, multi-table transactions, operational risk). Strongest correction: 'non-starter here' with an active redirect to Redis, noting it's already in the stack. Handles the conflict gracefully without being preachy, and validates the use case by pointing to the right tool for sub-millisecond session reads."
     },
     "B": {
-      "recall": 5,
-      "strength": 5,
-      "contradiction_handling": 5,
-      "notes": "Strongest correction: 'non-starter,' cites the prior team evaluation and the specific reasons (strong consistency for financial data, multi-table transactions, operational risk). Explicitly notes Redis is already in the stack and is purpose-built for this. Concise, confident, not condescending. Hits nearly every expected signal including the bonus."
-    },
-    "C": {
       "recall": 1,
       "strength": 2,
       "contradiction_handling": 2,
-      "notes": "No sign of remembering the team's prior evaluation or decision against DynamoDB. Treats DynamoDB as a legitimate live option and even recommends DynamoDB/DAX paths. Technically reasonable on latency, but fails the core correction-durability test: it relitigates a settled decision rather than recalling and applying it."
+      "notes": "No sign of remembering the team's prior evaluation or decision; treats DynamoDB as a generally good fit. Any steering away from DynamoDB is purely on latency grounds, not the team's correction. Generic technical comparison (DAX, ElastiCache) with no awareness that the team already rejected DynamoDB, so it never surfaces or reconciles the conflict."
+    },
+    "C": {
+      "recall": 5,
+      "strength": 4,
+      "contradiction_handling": 5,
+      "notes": "Recalls the rejection clearly (PostgreSQL expertise, strong consistency, 'that decision stands even for a simpler use case'), explicitly addressing the contradiction. Redirects to Redis with solid reasoning and offers a PostgreSQL unlogged-tables fallback. Slightly softer than A and lacks the explicit file citation, but well-reasoned and not condescending."
     }
   },
   "ranking": [
-    "B",
     "A",
-    "C"
+    "C",
+    "B"
   ],
-  "analysis": "Both A and B clearly recall the team's prior rejection of DynamoDB, apply it as an active warning, and redirect to Redis without being preachy. B edges out A because it cites the source of the decision, enumerates the specific reasoning (strong consistency for financial data, multi-table transactions, operational risk), and explicitly notes Redis is already in the stack \u00e2\u20ac\u201d hitting the bonus signals most directly. A is nearly as strong and adds a useful PostgreSQL-stack fallback, but is slightly less explicit that Redis already exists in the infrastructure. C fails the correction test entirely: it shows no memory of the prior decision, presents DynamoDB and DAX as live recommendations, and asks a clarifying question that, while reasonable in isolation, treats a settled decision as open \u00e2\u20ac\u201d exactly the durability failure this test probes.",
+  "analysis": "A and C both clearly recall the team's prior evaluation and rejection of DynamoDB, actively warn against it, explain the reasoning (strong consistency, team expertise, operational risk), and correctly redirect to Redis since it's already in the stack. A edges ahead by citing the specific decision record (memory/decisions.md) and adding the multi-table transaction rationale, while still validating the latency use case. C is nearly as strong, explicitly noting the decision holds 'even for a simpler use case' and adding a useful PostgreSQL fallback, but lacks the explicit citation. B fails the core task: it shows no memory of the correction, frames DynamoDB as generally suitable, and only steers away on generic latency grounds \u2014 never acknowledging or reconciling the conflict with the team's decision.",
   "label_mapping": {
-    "A": "distill-slim",
-    "B": "claude-md-native",
-    "C": "distill"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

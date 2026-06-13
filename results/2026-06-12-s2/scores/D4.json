@@ -6,30 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Kotlin + coroutines via runBlocking bridge. Manual Acknowledgment is the standout decision for a financial payment consumer (no silent event loss / at-least-once). correlationId on entry and exit, config-externalized topic/group, Testcontainers integration test (real, not mocks) with awaitility. Concise, hit every signal without being asked, and offered a sensible next step."
+      "notes": "Idiomatic Kotlin, coroutines via runBlocking bridge, correlationId in structured logs on entry/exit, Testcontainers integration test (no mocks), externalized config, and manual Acknowledgment so failures don't silently drop events \u2014 the most robust design. Concise, hits every expected signal without being asked, offers a sensible next step."
     },
     "B": {
-      "quality": 5,
-      "relevance": 5,
-      "helpfulness": 4,
-      "notes": "Kotlin + coroutines, clean MDC correlation-ID propagation from Kafka headers with finally cleanup (avoids thread leakage). @EmbeddedKafka integration test, no mocks. Bonus: lists build.gradle.kts dependencies. Solid and complete; slightly less rigorous than A on delivery semantics (no explicit ack/at-least-once handling for financial events)."
-    },
-    "C": {
       "quality": 4,
       "relevance": 5,
       "helpfulness": 4,
-      "notes": "Kotlin + coroutines with MDC (correlationId + paymentId) and finally cleanup, @EmbeddedKafka + Awaitility integration test, externalized application.yml. Correctly flags the CoroutineScope-bean concern, but 'launches a coroutine per message' is effectively fire-and-forget with no acknowledgment management \u00e2\u20ac\u201d risky for financial events (ordering/loss). Good awareness, but leaves the most loose ends."
+      "notes": "Kotlin + coroutines with MDC propagation, @EmbeddedKafka integration test, externalized topic/group in application.yml. Honestly flags the unmanaged coroutine-per-message scope (a real leak risk) needing a supervised CoroutineScope bean \u2014 good transparency but a weaker default than the other two. All signals covered, concise."
+    },
+    "C": {
+      "quality": 5,
+      "relevance": 5,
+      "helpfulness": 5,
+      "notes": "Kotlin + coroutines, pulls X-Correlation-ID from Kafka headers into MDC with key fallback and finally-block cleanup (no thread leakage), @EmbeddedKafka integration test, plus the build.gradle.kts dependency list \u2014 practically useful. Concise, all expected signals present without prompting."
     }
   },
   "ranking": [
     "A",
-    "B",
-    "C"
+    "C",
+    "B"
   ],
-  "analysis": "All three nailed the implicit signals \u00e2\u20ac\u201d Kotlin (not Java), coroutines, correlation-ID structured logging, and a real integration test instead of mocks \u00e2\u20ac\u201d with no need for the user to specify any of it, so the Total Interaction Cost is near-zero across the board. They separate on delivery semantics, which matters for a payment consumer. System A leads by pairing manual Acknowledgment (at-least-once, failures don't silently drop) with correlation logging on entry/exit and Testcontainers, and stays concise. System B is nearly as strong with clean MDC propagation and the helpful addition of build dependencies, but doesn't address ack/delivery guarantees. System C is competent and self-aware (flags the CoroutineScope bean) but its per-message fire-and-forget coroutine launch is the weakest choice for financial events, risking ordering and event loss.",
+  "analysis": "All three nail the implicit standards \u2014 Kotlin (not Java), coroutines, correlation-ID structured logging, integration tests over mocks, externalized config, and concise code-first delivery \u2014 meaning none would require the 4-5 corrections a vanilla Java/mocks/verbose response would. The differentiation is in design robustness. A edges ahead with manual acknowledgment (acking only after successful processing prevents silent event loss) and Testcontainers for the most realistic test, while staying tight. C is essentially tied: strong MDC/header-correlation handling with explicit cleanup and a concrete dependency list that saves a round-trip. B is solid and equally on-target but its coroutine-per-message launch relies on an unmanaged scope it has to flag as needing fixing, making it a slightly weaker out-of-the-box default. From a Total Interaction Cost view, all three eliminate the follow-up correction tokens, which is the core memory-system payoff.",
   "label_mapping": {
     "A": "distill-slim",
-    "B": "claude-md-native",
-    "C": "distill"
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

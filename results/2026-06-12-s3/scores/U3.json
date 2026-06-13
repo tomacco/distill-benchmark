@@ -5,31 +5,31 @@
     "A": {
       "calibration": 4,
       "style_match": 2,
-      "preference_recall": 2,
-      "notes": "Senior-level technically sound, but the longest response by far \u00e2\u20ac\u201d opens with a meta preamble ('A few things to note'), restates root cause, includes a problem table, Option A/B sub-choices, a 'what I'd skip' section, and a phased ship order. Far exceeds the prompt length; ignores the user's preference for concise, opinionated answers. It does pick one recommendation but buries it in exhaustive enumeration."
+      "preference_recall": 3,
+      "notes": "Senior-level and technically sound, but the longest and least concise of the three. Presents two full approaches plus a dedicated 'why to avoid the other options' table and a separate recommendation section \u2014 enumerates rather than committing tightly. Well over the input length; violates the conciseness preference most."
     },
     "B": {
       "calibration": 5,
-      "style_match": 3,
-      "preference_recall": 3,
-      "notes": "Strong senior framing (names it a read-your-writes problem, recommends client-token versioning). Opinionated and picks a clear primary. But still long: full primary flow, a full fallback design, a why-avoid table, and a recap recommendation section. More focused than A but well over 300 words and matches the prompt's verbosity rather than trimming it."
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Most opinionated and focused: leads with one clear recommendation (Redis dirty-flag), addresses the 2000 TPS / EDA / don't-over-engineer constraints directly, calls out one real tradeoff, and ends decisively ('Given merchants are complaining, I'd go Redis'). Still longer than ideal but tightest of the three; no problem-restating preamble."
     },
     "C": {
       "calibration": 5,
-      "style_match": 4,
+      "style_match": 3,
       "preference_recall": 4,
-      "notes": "Most proportional. Opens directly with the recommended pattern (no preamble/restatement), gives a tight implementation, a concise rejected-options table, one named real tradeoff, and a single-line fallback \u00e2\u20ac\u201d then commits ('Given merchants are complaining, I'd go Redis'). Decisive and the shortest of the three; best match to a concise, opinionated senior reader, though still slightly above the ideal 300 words."
+      "notes": "Strong calibration \u2014 exploits the stated architecture context (Redis already in stack, monolith extraction) and gives a concrete ship order. Opinionated with a clear pick. Slightly verbose with code blocks and an A/B coupling sub-discussion; brief context-restating intro is a minor penalty."
     }
   },
   "ranking": [
-    "C",
     "B",
+    "C",
     "A"
   ],
-  "analysis": "All three are technically excellent and senior-appropriate, converging on a Redis dirty-flag / version-fence pattern with client-token versioning as the alternative, so calibration is uniformly high. The discriminator is style and proportionality against a user who prefers concise, opinionated answers. C wins: it leads with the answer, stays decisive, names exactly one real tradeoff, and is the shortest while still committing to a recommendation. B is a close second \u00e2\u20ac\u201d focused and opinionated but padded with a full fallback design and a redundant recap section. A is last: it is the most verbose, opens with a meta preamble, restates the problem, and enumerates sub-options and a ship plan, matching the prompt's length instead of cutting through it \u00e2\u20ac\u201d the exact behavior the user dislikes.",
+  "analysis": "All three are senior-level, opinionated, and correctly converge on a fast side-channel (Redis dirty-flag or client token) over write-through coupling or shorter TTL, addressing the EDA and throughput constraints. The differentiator is the user's preference for a concise, committed answer rather than an enumerated survey. B wins by being the tightest and most decisive: one recommendation, one tradeoff, a clear final call, minimal hedging. C is nearly as good and edges ahead on calibration by leveraging the given architecture context (Redis present, monolith), but it is longer with code and a coupling sub-debate. A is the weakest on style: technically excellent but the most verbose, presenting two full approaches and a dedicated 'avoid these' table, which reads as enumeration and runs well past the prompt length, contradicting the conciseness preference. None lands under 300 words, but B is closest to the proportional, do-X-not-here-are-7-options ideal.",
   "label_mapping": {
-    "A": "distill-slim",
-    "B": "claude-md-native",
-    "C": "distill"
+    "A": "claude-md-native",
+    "B": "distill",
+    "C": "distill-slim"
   }
 }

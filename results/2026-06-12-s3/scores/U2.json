@@ -3,33 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 4,
-      "style_match": 3,
-      "preference_recall": 3,
-      "notes": "Solid senior-level subject line under 72 chars. Body drifts into prose ('are no longer needed now that... Also removes...') rather than terse bullets, making it the most verbose of the three. Captures the full change accurately."
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 4,
+      "notes": "Clean conventional-commit subject (~56 chars), terse two-line body covering the three changes. Minimal meta-commentary ('If you want a one-liner instead') with a usable alternative. Least filler of the three; reads as written for a senior dev."
     },
     "B": {
       "calibration": 5,
-      "style_match": 5,
+      "style_match": 4,
       "preference_recall": 4,
-      "notes": "Tight subject + compact two-line body listing the three changes. Offers a one-liner alternative, showing awareness of preference for brevity. Clean, code-first, no filler."
+      "notes": "Solid subject (~54 chars) and terse body. Loses a little for the trailing explanatory paragraph rationalizing the subject line and ticket-reference advice \u2014 useful but slightly over-explained for someone who knows commit conventions."
     },
     "C": {
-      "calibration": 5,
-      "style_match": 5,
+      "calibration": 4,
+      "style_match": 3,
       "preference_recall": 4,
-      "notes": "Shortest subject (~54 chars), terse body covering the three changes without restating the diff. Helpful note about appending a tracking ticket. Conventional, direct, no flowery language."
+      "notes": "Good subject (~58 chars), but the body is the most prose-like (three full sentences restating the diff) plus an explanatory paragraph. Most verbose of the set; drifts from the concise, code-first style expected."
     }
   },
   "ranking": [
-    "C",
+    "A",
     "B",
-    "A"
+    "C"
   ],
-  "analysis": "All three produce concise, senior-appropriate commit messages with subject lines under 72 characters that capture the essence (removing deprecated REST internals post-gRPC migration). C and B are nearly identical in quality: both lead with a clean what-and-why subject and a terse body enumerating the three changes (handlers, OpenAPI specs, CI stub generation). C edges ahead with the most compact subject and a practical aside about referencing a tracking ticket; B matches it closely and adds a useful one-liner variant. A is still strong but its body reads as connected prose rather than terse enumeration, making it marginally more verbose and slightly less aligned with a concise, code-first style. None include 'Great question!' filler or multi-paragraph over-explanation, so differences are fine-grained matters of terseness.",
+  "analysis": "All three produce competent, conventional-commits-style messages with accurate subject lines under 72 characters and capture the essence (removing deprecated REST internals after the gRPC migration). They separate on verbosity. System A is the tightest: a clean subject, a two-line terse body, and only a brief, genuinely useful one-liner alternative \u2014 best matching a senior dev's concise, no-filler preference. System B is nearly as good but appends an explanatory paragraph rationalizing its own subject line and offering ticket-reference tips, adding mild over-explanation. System C has a fine subject but the most prose-heavy body (three sentences restating what the diff already shows) plus a meta paragraph, making it the most verbose and least style-matched. Hence A > B > C.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill",
-    "C": "distill-slim"
+    "A": "distill",
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

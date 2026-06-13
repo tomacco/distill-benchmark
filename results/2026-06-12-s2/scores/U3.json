@@ -3,33 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 1,
-      "style_match": 1,
-      "preference_recall": 1,
-      "notes": "No output produced (error reading output). Cannot evaluate; scored at floor."
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Opinionated single recommendation (Redis dirty-bit), no problem-restatement preamble, leads with the key insight. Strong user-model awareness: flags the monolith-vs-payment-service blocker and asks the one right question. Moderately long but stays focused and proportional; doesn't enumerate all options in equal detail (uses a compact dismissal table)."
     },
     "B": {
       "calibration": 5,
-      "style_match": 3,
-      "preference_recall": 4,
-      "notes": "Strongly opinionated single recommendation (Redis dirty bit) with code, senior-level framing, and a sharp architectural flag (monolith Redis client). Addresses the 2000 tx/s and Kafka-lag constraints directly. But well over the ~300-word target with a table and a second fallback \u00e2\u20ac\u201d does not honor the conciseness preference implied by the long input. No problem-restating preamble, which is good."
+      "style_match": 2,
+      "preference_recall": 2,
+      "notes": "Senior-level and technically excellent, but the longest response by far \u2014 longer than the prompt itself. Opens by restating the problem ('This is a classic read-your-writes consistency problem'), enumerates every option in detail, then gives a two-phase plan plus a CQRS aside. Violates the concise preference; matches the prompt's verbosity rather than countering it."
     },
     "C": {
       "calibration": 5,
-      "style_match": 3,
-      "preference_recall": 3,
-      "notes": "Also opinionated and senior-calibrated, same dirty-flag recommendation with concrete numbers and good reasoning about coupling-vs-contract. However it is the longest response, enumerates more (L1/L2 tier, pub/sub variant) and matches the prompt's verbosity rather than trimming it \u00e2\u20ac\u201d directly against the conciseness signal. Strong technical content but least proportional."
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Opinionated single recommendation (Redis dirty flag / fence token), tight and direct, leads with the key insight. Dismisses alternatives compactly, gives concrete numbers, offers exactly one alternative. Proportional and concise without matching prompt verbosity; slightly less user-context flagging than A but very clean."
     }
   },
   "ranking": [
-    "B",
+    "A",
     "C",
-    "A"
+    "B"
   ],
-  "analysis": "Systems B and C are nearly equivalent in technical quality: both correctly leverage the existing Redis in the stack, both land on a synchronous dirty-bit/fence-token pattern as the most proportional fix, both rebut the user's other options crisply, and both speak at the right senior level with code and concrete throughput math. Neither restates the problem before answering. The decisive difference is proportionality: the user clearly prefers concise, opinionated answers, and both responses run long, but B is tighter \u00e2\u20ac\u201d one recommendation, one fallback, one practical flag \u00e2\u20ac\u201d while C piles on additional alternatives (two-tier L1/L2, pub/sub variant) and matches the prompt's verbosity, which the rubric penalizes. B edges ahead on style/preference fit. A produced no output and is scored at the floor.",
+  "analysis": "All three are clearly senior-level and technically sound, converging on a Redis dirty-bit/fence approach as the most proportional fix. The differentiator for this user-model test is conciseness and opinionation. A and C both lead with a single recommendation, avoid restating the problem, and dismiss alternatives in compact form rather than enumerating them in equal detail \u2014 exactly the directive, concise behavior the user prefers. A edges ahead for stronger user-context awareness (flagging that payment processing is still in the monolith and surfacing the real blocker) while C is marginally tighter. B is the strongest on raw engineering depth but fails the style and proportionality signals: it is longer than the 400+ word prompt, opens with a problem-restatement preamble, and walks through every option plus a two-phase plan and a CQRS aside, matching the prompt's verbosity instead of countering it.",
   "label_mapping": {
-    "A": "distill",
-    "B": "distill-slim",
+    "A": "distill-slim",
+    "B": "distill",
     "C": "claude-md-native"
   }
 }

@@ -3,33 +3,33 @@
   "category": "user-model",
   "scores": {
     "A": {
-      "calibration": 3,
-      "style_match": 3,
+      "calibration": 5,
+      "style_match": 4,
       "preference_recall": 4,
-      "notes": "Strong on the decision itself: direct recommendation (NetworkPolicy + JWT now, revisit Istio/Linkerd later), good use of context (payment-service still in monolith, gRPC internal, EKS, auth-service issues JWTs). However it opens with a full 'How a Service Mesh Works' tutorial explaining sidecars, mTLS, control plane \u00e2\u20ac\u201d exactly the basics a senior engineer doesn't need, which the rubric explicitly penalizes. Calibration and style are dragged down by that padding, but preference recall is good (it remembered specific stack facts)."
+      "notes": "Senior-level throughout (SPIFFE, istiod, double-hop proxies). Good monolith-context framing and direct 'probably not yet' recommendation. Considers existing JWT/gRPC/App Mesh. Minor polish issue: duplicate '3.' numbering. Slightly more generic than C on the EKS-specific alternatives."
     },
     "B": {
-      "calibration": 1,
-      "style_match": 1,
-      "preference_recall": 1,
-      "notes": "No output produced (error reading output). Cannot evaluate; scored at floor."
+      "calibration": 5,
+      "style_match": 4,
+      "preference_recall": 4,
+      "notes": "Pitched correctly for a senior engineer, concise option table, direct recommendation. Strong gRPC focus and the Linkerd suggestion is a relevant, well-targeted lighter alternative. client_credentials flow detail fits their existing auth-service. Slightly less tailored to the AWS/EKS-native angle than C."
     },
     "C": {
-      "calibration": 1,
-      "style_match": 1,
-      "preference_recall": 1,
-      "notes": "No output produced (error reading output). Cannot evaluate; scored at floor."
+      "calibration": 5,
+      "style_match": 5,
+      "preference_recall": 5,
+      "notes": "Most tailored to the actual stack: leverages EKS-native options (IRSA/Pod Identity, WireGuard), notes ~50 lines of Kotlin (recalls their language), separates service-account JWTs from user JWTs. Clean comparison table, opinionated bottom line. Best use of existing-setup context without tutorial padding."
     }
   },
   "ranking": [
-    "A",
+    "C",
     "B",
-    "C"
+    "A"
   ],
-  "analysis": "Only System A produced a usable response; B and C both errored and are scored at the floor. System A is genuinely useful on the substance \u00e2\u20ac\u201d it recalls the user's specific context (payment-service in the monolith, gRPC internal, EKS, existing auth-service JWTs) and delivers an opinionated, direct recommendation with a clear now-vs-later split, even suggesting Linkerd as a lighter alternative. Its weakness is calibration and style: it leads with a tutorial-level 'How a Service Mesh Works' section explaining sidecars, mTLS, and control planes, which the rubric explicitly penalizes for a senior audience. That padding keeps its calibration and style scores at a 3 rather than higher, but it clearly wins by default and on merit over the two non-responses.",
+  "analysis": "All three responses are well-calibrated to a senior engineer, skip true basics, and land the key decision ('probably not yet \u2014 extract first, use JWT + NetworkPolicy'), so they cluster closely. The differentiator is how deeply each leans on the user's specific context. C is strongest: it exploits EKS-native alternatives (IRSA/Pod Identity, WireGuard), references their Kotlin stack and existing auth-service concretely, and closes with a crisp 'one service extraction away from the problem being real' bottom line. B is a close second \u2014 clean option table, good gRPC framing, and a genuinely useful Linkerd recommendation as a lighter mesh. A is solid and well-structured with the App Mesh nod, but is marginally more generic and carries a small polish glitch (duplicated '3.' heading). None recalled shell/tooling micro-preferences, but C applied the most relevant user-model knowledge.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill-slim",
+    "A": "distill-slim",
+    "B": "claude-md-native",
     "C": "distill"
   }
 }

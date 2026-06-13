@@ -6,22 +6,30 @@
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Surfaces the most stack signals: explicitly names Kotlin (standalone Kotlin microservice, Resilience4j + coroutines), gRPC for internal comms, Kafka domain events, PostgreSQL with the recalled rejection of DynamoDB/MongoDB for strong consistency, the auth-service/account-service extraction pattern, Flyway standard, and the monolith-extraction context. Only gap vs expected signals is no EKS/Kubernetes mention and no Sofia. Knowledge is woven in as natural assumptions, not dumped."
+      "notes": "Surfaces Kotlin, gRPC, Kafka, PostgreSQL, the monolith-extraction context, and the auth-service/account-service pattern explicitly. Weaves Flyway and correlation-log conventions in naturally as 'already your standard.' Misses EKS/Kubernetes and the Sofia bonus, but otherwise comprehensive and stack-aware without asking the user to specify anything."
     },
     "B": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Only response to explicitly enumerate the full stack including EKS up front (Kotlin, PostgreSQL, Kafka, gRPC, EKS). References existing services, the recent gRPC migration, parallel transaction-history extraction, and Flyway. Knowledge feels organically applied. Misses only the Sofia bonus. Most complete on the expected technical signals."
+    },
+    "C": {
       "relevance": 4,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Strong and well-targeted: gRPC contract-first, PostgreSQL with SELECT FOR UPDATE, Kafka outbox/DLQ, account-service via events, monolith-extraction roadmap context, Flyway. However it never explicitly states the language (Kotlin), which is a core expected signal, and omits EKS/Kubernetes and Sofia. No irrelevant knowledge injected; assumptions feel organic."
+      "notes": "Strong on the monolith-extraction roadmap framing, gRPC, Kafka, PostgreSQL, account-service single-writer design, and Flyway. Well-targeted and idiomatic. However it never names Kotlin as the language and omits EKS/Kubernetes, leaving two core expected signals uncovered. No irrelevant dumping."
     }
   },
   "ranking": [
+    "B",
     "A",
-    "B"
+    "C"
   ],
-  "analysis": "Both responses are tight, stack-aware, and avoid requiring the user to specify their environment, with no irrelevant context dumped (high precision for both) and knowledge organically embedded (high naturalness). The differentiator is breadth of correctly recalled signals: System A explicitly surfaces Kotlin as the language, the PostgreSQL-over-DynamoDB/MongoDB consistency decision, the auth-service/account-service extraction pattern, Kafka, gRPC, Flyway, and the monolith migration context. System B hits most of the same architectural points but never names the language (Kotlin), missing a core expected signal. Neither mentions EKS/Kubernetes or Sofia. System A edges out System B on relevance/completeness while tying on precision and naturalness.",
+  "analysis": "All three responses retrieve the stack proactively without asking the user to specify it, and all stay tightly on-topic (high precision) with naturally woven-in conventions like Flyway, correlation IDs, and the service-extraction pattern. The differentiator is coverage of expected signals: System B is the strongest because it alone explicitly names the entire stack including EKS and Kotlin, plus the monolith and parallel-extraction context. System A is nearly as strong and arguably the richest in domain depth (outbox, idempotency, reconciliation) but omits EKS. System C is excellent in design reasoning but drops two core signals \u2014 it never states Kotlin and never mentions EKS/Kubernetes \u2014 so it ranks third. None of the three captured the Sofia bonus.",
   "label_mapping": {
     "A": "distill",
-    "B": "claude-md-native"
+    "B": "distill-slim",
+    "C": "claude-md-native"
   }
 }

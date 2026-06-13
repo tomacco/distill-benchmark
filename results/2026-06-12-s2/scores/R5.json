@@ -3,25 +3,33 @@
   "category": "retrieval",
   "scores": {
     "A": {
-      "relevance": 1,
-      "precision": 1,
-      "naturalness": 1,
-      "notes": "No output could be read (error). Nothing to evaluate, so scored at floor across all criteria."
+      "relevance": 4,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Clean, focused Python/sklearn Dockerfile answer: layout, build/run, and a design-choices table (multi-stage, slim, non-root, lifespan, workers). No Kotlin, EKS, or extraneous infra bleed. Slightly less complete than B/C because it describes choices but never shows the actual Dockerfile content; mention of mounting the model artifact is a nice practical touch."
     },
     "B": {
       "relevance": 5,
       "precision": 5,
       "naturalness": 5,
-      "notes": "Clean, idiomatic multi-stage Python Dockerfile (FROM python:3.11-slim, pip install, non-root user, healthcheck). Correctly inferred a fraud-scoring ML service context (FastAPI + joblib model) from minimal cues and wove it in naturally without forcing it. Zero Kotlin bleed, no rewrite suggestions, no Kafka/gRPC/EKS digressions. Brief, relevant build/run notes only. Slightly expansive in providing requirements.txt and main.py, but all directly supports the request rather than dumping unrelated stored context."
+      "notes": "Most complete: full multi-stage Dockerfile, matching requirements.txt, and a working main.py with lifespan model loading and health endpoint. Every detail (PYTHONDONTWRITEBYTECODE, healthcheck, worker tuning, GPU note) is directly relevant to a Python ML scoring service. Zero irrelevant stored context injected; assumptions feel organic and practical."
+    },
+    "C": {
+      "relevance": 5,
+      "precision": 5,
+      "naturalness": 5,
+      "notes": "Focused and practical: structure, build/run, and a strong design-choices table. The libgomp1/OpenMP runtime dependency for sklearn tree ensembles and the stdlib-urllib healthcheck are genuinely useful, domain-accurate details. No Kotlin/EKS/Kafka contamination; knowledge woven in naturally."
     }
   },
   "ranking": [
     "B",
+    "C",
     "A"
   ],
-  "analysis": "System A produced no readable output and cannot be assessed, so it scores at the floor. System B delivers exactly what the task tests for: a practical, focused Python Dockerfile with sensible production touches (multi-stage build, non-root user, env hygiene, healthcheck) and no contamination from unrelated accumulated knowledge \u00e2\u20ac\u201d no Kotlin context, no rewrite pitches, no unsolicited infrastructure opinions about EKS/Kafka/gRPC. Its inference of an ML fraud-scoring service feels organic rather than regurgitated, and the supplementary files stay tightly scoped to the request. System B wins decisively on precision, which is the core signal under test.",
+  "analysis": "All three responses pass the precision test cleanly \u2014 none injected Kotlin, EKS cluster detail, Kafka, gRPC, or any rewrite suggestion, staying tightly scoped to the actual Python Dockerfile request. They are nearly indistinguishable on precision and naturalness. The separation is on completeness and depth of relevant detail. System B is strongest because it delivers a complete, runnable package (actual multi-stage Dockerfile + requirements.txt + main.py) with well-justified, relevant design decisions. System C is close behind, with the most domain-savvy single insight (libgomp1/OpenMP for sklearn ensembles) and a tight table, though it describes rather than fully shows the Dockerfile. System A is also solid and focused but is the least complete, presenting design rationale without the concrete Dockerfile contents, edging it just below the others.",
   "label_mapping": {
-    "A": "claude-md-native",
-    "B": "distill"
+    "A": "distill-slim",
+    "B": "distill",
+    "C": "claude-md-native"
   }
 }

@@ -6,30 +6,30 @@
       "quality": 5,
       "relevance": 5,
       "helpfulness": 5,
-      "notes": "Recommends PostgreSQL decisively, references existing expertise and zero new infra, never surfaces the rejected DynamoDB/MongoDB. Strong practical detail (read replicas, materialized views, pg_partman). Treats Postgres as the settled default without re-litigating, which is exactly the persistence behavior wanted."
+      "notes": "Recommends PostgreSQL and explicitly recalls that the team already evaluated and rejected DynamoDB and MongoDB for this use case \u2014 zero correction tokens needed. References existing primary DB and team expertise. Bonus: TimescaleDB extension and concrete read-replica/materialized-view scaling path tied to the monolith-extraction context."
     },
     "B": {
-      "quality": 4,
-      "relevance": 4,
-      "helpfulness": 3,
-      "notes": "Good standalone answer and lands on PostgreSQL, but explicitly says 'no stored knowledge found' and re-derives from scratch, spending tokens rejecting DynamoDB/MongoDB and floating ClickHouse. The user would have to re-confirm the prior rejections. Demonstrates weak correction durability despite reaching the right conclusion."
-    },
-    "C": {
       "quality": 5,
       "relevance": 5,
-      "helpfulness": 5,
-      "notes": "Best on the key metric: recalls unprompted that the team already evaluated and rejected DynamoDB and MongoDB for this exact use case, references team expertise and the monolith-extraction context. Recommends PostgreSQL with concrete read-scaling levers (replica, matviews, TimescaleDB). No correction tokens needed from the user."
+      "helpfulness": 4,
+      "notes": "Recommends PostgreSQL, leans on primary-DB status, team expertise, and zero new infra. Cleanly avoids ever surfacing DynamoDB/MongoDB. Bonus: pg_partman extension and Flyway-workflow continuity. Slightly weaker than A because it never explicitly anchors to the prior rejection, but durability is intact \u2014 no re-prompting required."
+    },
+    "C": {
+      "quality": 4,
+      "relevance": 3,
+      "helpfulness": 3,
+      "notes": "Opens with 'No stored knowledge found, so I'll answer fresh' and re-litigates MongoDB and DynamoDB in a 'what I'd avoid' section \u2014 exactly the correction tokens the user already spent. Lands on PostgreSQL with solid technical reasoning, but offers ClickHouse sidecar and asks for data volume, signaling no memory of the prior decision."
     }
   },
   "ranking": [
-    "C",
     "A",
-    "B"
+    "B",
+    "C"
   ],
-  "analysis": "All three correctly recommend PostgreSQL, but they differ sharply on correction durability \u00e2\u20ac\u201d the point of this test. System C wins by explicitly recalling, without any prompting, that DynamoDB and MongoDB were already rejected for this use case and by grounding the answer in team expertise and the planned reporting-service extraction. System A is nearly as strong: it commits to Postgres as the settled default, cites existing expertise and zero new infra, and never resurrects the rejected options \u00e2\u20ac\u201d solid implicit persistence. System B produces a competent fresh answer but signals the opposite of persistence: it announces 'no stored knowledge found,' re-derives, spends effort relitigating why DynamoDB/MongoDB are bad, and even suggests a ClickHouse sidecar, meaning the user would have to re-spend correction tokens. C and A demonstrate retained corrections; B re-derives them, so it ranks last.",
+  "analysis": "All three converge on PostgreSQL with technically sound justification (CTEs, window functions, ACID consistency, read replicas, materialized views), so quality is high across the board. The differentiator is correction durability. System A is strongest: it proactively recalls that DynamoDB and MongoDB were already evaluated and rejected, cites the team's existing PostgreSQL expertise and primary-DB status, and adds extension-based scaling (TimescaleDB) \u2014 answering as if the prior corrections persisted. System B is nearly as good operationally and never resurfaces the rejected options, but doesn't explicitly anchor to the past decision. System C explicitly states it has no stored knowledge and then re-debates MongoDB/DynamoDB and floats a ClickHouse sidecar \u2014 the classic vanilla pattern that forces the user to re-spend correction tokens, so it ranks last despite a competent final recommendation.",
   "label_mapping": {
-    "A": "distill-slim",
-    "B": "distill",
-    "C": "claude-md-native"
+    "A": "claude-md-native",
+    "B": "distill-slim",
+    "C": "distill"
   }
 }
