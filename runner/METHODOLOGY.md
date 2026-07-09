@@ -145,3 +145,13 @@ For competitive benchmarks, the evaluator sub-agent receives:
 - It scores both without knowing which is distill vs competitor
 
 This eliminates experimenter bias in evaluation.
+
+
+## Token telemetry (capture v2, 2026-07-09)
+
+collect.sh runs with `--output-format json` and records REAL per-run usage (input, cache
+read/write, output tokens), `total_cost_usd`, `num_turns`, plus `arm_injection` (the arm's
+merged system-prompt size — the arm's own recurring overhead, measured identically for
+every arm; netting it out is required before any "arm X saves tokens" claim). Fields are
+absent in pre-v2 result files: NEVER compare token metrics across capture versions.
+Tokens-to-outcome = quality score per net token; see aura-distill issue #34.

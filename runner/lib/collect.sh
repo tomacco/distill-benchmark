@@ -32,9 +32,12 @@ collect_run() {
     output_file=$(mktemp /tmp/benchmark-out.XXXXXXXXXX)
     local start_time end_time latency_ms exit_code=0
 
-    # Build command
+    # Build command. --output-format json gives REAL token usage per run (issue
+    # aura-distill#34: tokens-to-outcome). Runs from earlier campaigns lack these
+    # fields — never compare token metrics across capture versions.
     local cmd_args=(
         --dangerously-skip-permissions
+        --output-format json
         -p "$prompt"
     )
     # Merge the arm's instruction payload (written by inject.sh; absent for no-memory)
@@ -93,14 +96,34 @@ collect_run() {
     end_time=$($PYTHON_BIN -c 'import time; print(int(time.time()*1000))')
     latency_ms=$((end_time - start_time))
 
-    # Read output
+    # Read output. With --output-format json the file holds an envelope
+    # {result, usage, total_cost_usd, num_turns, subtype...}; extract the text and the
+    # REAL usage. Fallback to raw text if parsing fails (timeout/partial writes).
     local output_text=""
+    local usage_json="null" cost_usd="null" num_turns="null" run_subtype=""
     if [ -s "$output_file" ]; then
-        output_text=$(cat "$output_file")
+        if jq -e '.result != null' "$output_file" >/dev/null 2>&1; then
+            output_text=$(jq -r '.result' "$output_file")
+            usage_json=$(jq -c '.usage // null' "$output_file")
+            cost_usd=$(jq -c '.total_cost_usd // null' "$output_file")
+            num_turns=$(jq -c '.num_turns // null' "$output_file")
+            run_subtype=$(jq -r '.subtype // ""' "$output_file")
+        else
+            output_text=$(cat "$output_file")
+        fi
     fi
     local output_length=${#output_text}
-    # Rough token estimate: ~4 chars per token
+    # Rough token estimate kept for continuity with pre-telemetry runs: ~4 chars/token
     local output_tokens_approx=$((output_length / 4))
+
+    # Arm-injection overhead: the merged system prompt is the arm's own recurring cost.
+    # Netting this out is what makes "arm X saves tokens" an honest claim (arm parity:
+    # measured identically for every arm; 0 for arms that inject nothing).
+    local injected_chars=0
+    if [ -f "$merged_sp" ]; then
+        injected_chars=$(wc -c < "$merged_sp" | tr -d ' ')
+    fi
+    local injected_tokens_approx=$((injected_chars / 4))
 
     # Get competitor version from VERSION file if it exists
     local comp_version="unknown"
@@ -119,6 +142,12 @@ collect_run() {
         --argjson exit_code "$exit_code" \
         --argjson output_length "$output_length" \
         --argjson output_tokens "$output_tokens_approx" \
+        --argjson usage "$usage_json" \
+        --argjson cost_usd "$cost_usd" \
+        --argjson num_turns "$num_turns" \
+        --arg run_subtype "$run_subtype" \
+        --argjson injected_chars "$injected_chars" \
+        --argjson injected_tokens "$injected_tokens_approx" \
         --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
         --arg competitor_id "$competitor_id" \
         --arg test_id "$test_id" \
@@ -133,8 +162,16 @@ collect_run() {
             timestamp: $timestamp,
             latency_ms: $latency,
             exit_code: $exit_code,
+            run_subtype: $run_subtype,
             output_length_chars: $output_length,
             output_length_tokens_approx: $output_tokens,
+            usage: $usage,
+            total_cost_usd: $cost_usd,
+            num_turns: $num_turns,
+            arm_injection: {
+                chars: $injected_chars,
+                tokens_approx: $injected_tokens
+            },
             versions: {
                 competitor: $competitor_version,
                 claude: $claude_version,
